@@ -1,0 +1,9 @@
+displayName = Celestial Skies
+author = Elizabeth Yamamoto
+version = 1.0
+includePDB = true
+buildIgnore = *.csproj, *.user, obj\*, bin\*, lib\*, .vs\*, *.gif, *.piskel, Unused\*
+hideCode = true
+hideResources = true
+includeSource = false
+homepage = https://discord.gg/u7uZnet
