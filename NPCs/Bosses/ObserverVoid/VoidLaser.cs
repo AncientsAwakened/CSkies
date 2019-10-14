@@ -35,7 +35,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             {
                 projectile.velocity = -Vector2.UnitY;
             }
-            if (Main.npc[(int)projectile.ai[1]].active && Main.npc[(int)projectile.ai[1]].type == mod.NPCType<ObserverVoid>())
+            if (Main.npc[(int)projectile.ai[1]].active && Main.npc[(int)projectile.ai[1]].type == ModContent.NPCType<ObserverVoid>())
             {
                 Vector2 offset = new Vector2(30f, 30f);
                 Vector2 offsetElipse = Utils.Vector2FromElipse(Main.npc[(int)projectile.ai[1]].localAI[0].ToRotationVector2(), offset * Main.npc[(int)projectile.ai[1]].localAI[1]);

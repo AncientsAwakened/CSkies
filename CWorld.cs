@@ -11,16 +11,17 @@ namespace CSkies
 {
     public class CWorld : ModWorld
     {
-        public static bool firstMeteor = false;
+        public static bool MeteorMessage = false;
         public static bool downedObserver = false;
         public static bool downedObserverV = false;
+        public static bool downedVoid = false;
         public static int CometTiles = 0;
 
         public override void Initialize()
         {
-            firstMeteor = NPC.downedBoss3;
             downedObserver = false;
             downedObserverV = false;
+            downedVoid = false;
         }
 
         #region saving/loading
@@ -29,7 +30,8 @@ namespace CSkies
             var downed = new List<string>();
             if (downedObserver) downed.Add("O1");
             if (downedObserverV) downed.Add("02");
-            if (firstMeteor) downed.Add("Comet");
+            if (downedVoid) downed.Add("VOID");
+            if (MeteorMessage) downed.Add("Comet");
 
             return new TagCompound
             {
@@ -41,14 +43,16 @@ namespace CSkies
             var downed = tag.GetList<string>("downed");
             downedObserver = downed.Contains("O1");
             downedObserverV = downed.Contains("O2");
-            firstMeteor = downed.Contains("Comet");
+            downedVoid = downed.Contains("VOID");
+            MeteorMessage = downed.Contains("Comet");
         }
         public override void NetSend(BinaryWriter writer)
         {
             BitsByte flags = new BitsByte();
             flags[0] = downedObserver;
             flags[1] = downedObserverV;
-            flags[2] = firstMeteor;
+            flags[2] = MeteorMessage;
+            flags[3] = downedVoid;
             writer.Write(flags);
         }
         public override void NetReceive(BinaryReader reader)
@@ -56,13 +60,14 @@ namespace CSkies
             BitsByte flags = reader.ReadByte();
             downedObserver = flags[0];
             downedObserverV = flags[1];
-            firstMeteor = flags[2];
+            MeteorMessage = flags[2];
+            downedVoid = flags[3];
         }
         #endregion
 
         public override void TileCountsAvailable(int[] tileCounts)
         {
-            CometTiles = tileCounts[mod.TileType<Tiles.CometOre>()];
+            CometTiles = tileCounts[ModContent.TileType<Tiles.CometOre>()];
         }
 
         public override void PostUpdate()
@@ -84,13 +89,8 @@ namespace CSkies
                     num149 = num144 / num149;
                     num147 *= num149;
                     num148 *= num149;
-                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, mod.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
                 }
-            }
-
-            if ((Main.time == 100 & !Main.dayTime && Main.rand.Next(5) == 0) || (NPC.downedBoss3 && !firstMeteor))
-            {
-                DropMeteor();
             }
         }
 
@@ -117,7 +117,7 @@ namespace CSkies
                 int num4 = 5;
                 while (num4 < Main.worldSurface)
                 {
-                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)CSkies.inst.TileType<Tiles.CometOre>())
+                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<Tiles.CometOre>())
                     {
                         num++;
                         if (num > num3)
@@ -132,10 +132,10 @@ namespace CSkies
             while (!flag)
             {
                 float num6 = Main.maxTilesX * 0.08f;
-                int num7 = Main.rand.Next(150, Main.maxTilesX - 150);
+                int num7 = Main.rand.Next(500, Main.maxTilesX - 500);
                 while (num7 > Main.spawnTileX - num6 && num7 < Main.spawnTileX + num6)
                 {
-                    num7 = Main.rand.Next(150, Main.maxTilesX - 150);
+                    num7 = Main.rand.Next(500, Main.maxTilesX - 500);
                 }
                 int k = (int)(Main.worldSurface * 0.3);
                 while (k < Main.maxTilesY)
@@ -247,7 +247,7 @@ namespace CSkies
                             {
                                 Main.tile[num2, num3].active(false);
                             }
-                            Main.tile[num2, num3].type = (ushort)mod.TileType<Tiles.CometOre>();
+                            Main.tile[num2, num3].type = (ushort)ModContent.TileType<Tiles.CometOre>();
                         }
                     }
                 }
@@ -285,7 +285,7 @@ namespace CSkies
                         }
                         Main.tile[num12, num13].liquid = 0;
                     }
-                    if (Main.tile[num12, num13].type == (ushort)mod.TileType<Tiles.CometOre>())
+                    if (Main.tile[num12, num13].type == (ushort)ModContent.TileType<Tiles.CometOre>())
                     {
                         if (!WorldGen.SolidTile(num12 - 1, num13) && !WorldGen.SolidTile(num12 + 1, num13) && !WorldGen.SolidTile(num12, num13 - 1) && !WorldGen.SolidTile(num12, num13 + 1))
                         {
@@ -316,7 +316,7 @@ namespace CSkies
                             {
                                 WorldGen.KillTile(num17, num18, false, false, false);
                             }
-                            Main.tile[num17, num18].type = (ushort)mod.TileType<Tiles.CometOre>();
+                            Main.tile[num17, num18].type = (ushort)ModContent.TileType<Tiles.CometOre>();
                             WorldGen.SquareTileFrame(num17, num18, true);
                         }
                     }
@@ -338,7 +338,7 @@ namespace CSkies
                             {
                                 WorldGen.KillTile(num22, num23, false, false, false);
                             }
-                            Main.tile[num22, num23].type = (ushort)mod.TileType<Tiles.CometOre>();
+                            Main.tile[num22, num23].type = (ushort)ModContent.TileType<Tiles.CometOre>();
                             WorldGen.SquareTileFrame(num22, num23, true);
                         }
                     }

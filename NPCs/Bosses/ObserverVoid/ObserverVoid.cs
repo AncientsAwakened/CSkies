@@ -35,11 +35,12 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/ObserverVoid");
             npc.alpha = 255;
             npc.noTileCollide = true;
+            npc.value = Item.sellPrice(0, 10, 0, 0);
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
-            npc.lifeMax = (int)(npc.lifeMax * 0.8f * bossLifeScale);
+            npc.lifeMax = (int)(npc.lifeMax * 0.7f * bossLifeScale);
             npc.defense = (int)(npc.defense * 1.2f);
             npc.damage = (int)(npc.damage * 0.6f);
         }
@@ -144,16 +145,13 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                 {
                     npc.ai[3]++;
                     npc.netUpdate = true;
-                }
-                else
-                {
                     if (npc.ai[2]++ == (Main.expertMode ? 400 : 500))
                     {
                         internalAI[0] += 1;
                         npc.netUpdate = true;
                     }
                 }
-                if (!CUtils.AnyProjectiles(mod.ProjectileType<BlackHole>()))
+                if (!CUtils.AnyProjectiles(ModContent.ProjectileType<BlackHole>()))
                 {
                     npc.ai[2] = 0;
                     internalAI[0] = 0;
@@ -182,15 +180,15 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                 {
                     VortexScale += .01f;
                 }
-                VortexRotation += .01f;
+                VortexRotation += .3f;
 
                 for (int u = 0; u < Main.maxPlayers; u++)
                 {
                     Player target = Main.player[u];
 
-                    if (target.active && Vector2.Distance(npc.Center, target.Center) < 300 * VortexScale)
+                    if (target.active && Vector2.Distance(npc.Center, target.Center) < 260 * VortexScale)
                     {
-                        float num3 = 3f;
+                        float num3 = 6f;
                         Vector2 vector = new Vector2(target.position.X + target.width / 4, target.position.Y + target.height / 4);
                         float num4 = npc.Center.X - vector.X;
                         float num5 = npc.Center.Y - vector.Y;
@@ -198,7 +196,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                         num6 = num3 / num6;
                         num4 *= num6;
                         num5 *= num6;
-                        int num7 = 6;
+                        int num7 = 4;
                         target.velocity.X = (target.velocity.X * (num7 - 1) + num4) / num7;
                         target.velocity.Y = (target.velocity.Y * (num7 - 1) + num5) / num7;
                     }
@@ -226,7 +224,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
         public void FireLaser(NPC npc)
         {
             Player player = Main.player[npc.target];
-            int projType = mod.ProjectileType<ShadowBlast>();
+            int projType = ModContent.ProjectileType<ShadowBlast>();
             if (internalAI[0] == 0)
             {
                 if (Main.expertMode)
@@ -297,8 +295,8 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             {
                 npc.DropLoot(mod.ItemType("ObserverVoidMask"));
             }
-            npc.DropLoot(mod.ItemType<Items.Void.VoidFragment>(), Main.rand.Next(8, 12));
-            string[] lootTable = { };
+            npc.DropLoot(ModContent.ItemType<Items.Void.VoidFragment>(), Main.rand.Next(8, 12));
+            string[] lootTable = { "Singularity", "VoidFan", "VoidShot", "VoidJavelin", "VoidWings", "VoidPortal" };
             int loot = Main.rand.Next(lootTable.Length);
             npc.DropLoot(mod.ItemType(lootTable[loot]));
         }

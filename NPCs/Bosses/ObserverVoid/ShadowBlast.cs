@@ -89,7 +89,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
 
         public override void Kill(int timeleft)
         {
-            Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<ShadowBoom1>(), projectile.damage, projectile.knockBack, projectile.owner, 0, 0);
+            Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<ShadowBoom1>(), projectile.damage, projectile.knockBack, projectile.owner, 0, 0);
             Main.PlaySound(SoundID.Item14, projectile.position);
         }
     }

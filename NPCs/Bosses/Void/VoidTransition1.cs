@@ -37,7 +37,7 @@ namespace CSkies.NPCs.Bosses.Void
             {
                 if (++npc.ai[1] >= 8)
                 {
-                    int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<VoidTransition2>());
+                    int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<VoidTransition2>());
                     Main.npc[n].Center = npc.Center;
                     Main.npc[n].velocity = npc.velocity;
                     npc.active = false;

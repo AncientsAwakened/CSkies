@@ -7,6 +7,10 @@ namespace CSkies.Projectiles
 {
     public class CometShot : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[projectile.type] = 4;
+        }
         public override void SetDefaults()
         {
             projectile.width = 20;
@@ -24,6 +28,14 @@ namespace CSkies.Projectiles
 
         public override void AI()
         {
+            if (projectile.frameCounter++ > 5)
+            {
+                projectile.frameCounter = 0;
+                if (projectile.frame++ > 3)
+                {
+                    projectile.frame = 0;
+                }
+            }
             int dustId3 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y + 2f), projectile.width, projectile.height + 5, 17, projectile.velocity.X * 0.2f,
                 projectile.velocity.Y * 0.2f, 100);
             Main.dust[dustId3].noGravity = true;

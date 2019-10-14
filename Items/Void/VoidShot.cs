@@ -9,7 +9,7 @@ namespace CSkies.Items.Void
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Abyss Tome");
-			Tooltip.SetDefault("Releases a homing quazar that drags in enemies and explodes on contact");
+			Tooltip.SetDefault("Releases a homing singularity that drags in enemies and explodes on contact");
 		}
 
 		public override void SetDefaults()

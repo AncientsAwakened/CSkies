@@ -50,8 +50,8 @@ namespace CSkies.NPCs.Bosses.Void
                     Main.PlaySound(SoundID.Item14, npc.position);
                     for (int i = 0; i < 2; i++)
                     {
-                        Vector2 Pos = new Vector2(npc.position.X + Main.rand.Next(0, 444), npc.position.Y - Main.rand.Next(0, 100));
-                        Projectile.NewProjectile(Pos, Vector2.Zero, mod.ProjectileType<VoidDeathBoom>(), 0, 0, Main.myPlayer);
+                        Vector2 Pos = new Vector2(npc.position.X + Main.rand.Next(0, 230), npc.position.Y - Main.rand.Next(0, 142));
+                        Projectile.NewProjectile(Pos, Vector2.Zero, ModContent.ProjectileType<VoidDeathBoom>(), 0, 0, Main.myPlayer);
                     }
                 }
             }

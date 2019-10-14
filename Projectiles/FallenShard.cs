@@ -66,7 +66,7 @@ namespace CSkies.Projectiles
                 projectile.light = 0.9f;
                 if (Main.rand.Next(10) == 0)
                 {
-                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 58, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 150, default, 1.2f);
+                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 58, projectile.velocity.X * 0.5f, projectile.velocity.Y * 0.5f, 150, Color.Blue, 1.2f);
                 }
                 if (Main.rand.Next(20) == 0)
                 {
@@ -83,7 +83,7 @@ namespace CSkies.Projectiles
             int num536 = 3;
             for (int num537 = 0; num537 < num535; num537++)
             {
-                Dust.NewDust(projectile.position, projectile.width, projectile.height, 17, projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 150, default, 1.2f);
+                Dust.NewDust(projectile.position, projectile.width, projectile.height, 17, projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 150, Color.Blue, 1.2f);
             }
             for (int num538 = 0; num538 < num536; num538++)
             {
@@ -94,7 +94,7 @@ namespace CSkies.Projectiles
             {
                 for (int num540 = 0; num540 < 10; num540++)
                 {
-                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 17, projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 150, default, 1.2f);
+                    Dust.NewDust(projectile.position, projectile.width, projectile.height, 17, projectile.velocity.X * 0.1f, projectile.velocity.Y * 0.1f, 150, Color.Blue, 1.2f);
                 }
                 for (int num541 = 0; num541 < 3; num541++)
                 {
@@ -102,7 +102,7 @@ namespace CSkies.Projectiles
                 }
             }
 
-            Item.NewItem((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height, mod.ItemType<Items.Comet.CometShard>(), 1, false, 0, false, false);
+            Item.NewItem((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height, ModContent.ItemType<Items.Comet.CometShard>(), 1, false, 0, false, false);
         }
     }
 }

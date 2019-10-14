@@ -30,6 +30,25 @@ namespace CSkies.Projectiles
 			return Color.White;
 		}
 
+        public override void Kill(int timeleft)
+        {
+            int pieCut = 20;
+            for (int m = 0; m < pieCut; m++)
+            {
+                int dustID = Dust.NewDust(new Vector2(projectile.Center.X - 1, projectile.Center.Y - 1), 2, 2, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 100, Color.White, 1.6f);
+                Main.dust[dustID].velocity = BaseUtility.RotateVector(default, new Vector2(6f, 0f), m / (float)pieCut * 6.28f);
+                Main.dust[dustID].noLight = false;
+                Main.dust[dustID].noGravity = true;
+            }
+            for (int m = 0; m < pieCut; m++)
+            {
+                int dustID = Dust.NewDust(new Vector2(projectile.Center.X - 1, projectile.Center.Y - 1), 2, 2, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 100, Color.White, 2f);
+                Main.dust[dustID].velocity = BaseUtility.RotateVector(default, new Vector2(9f, 0f), m / (float)pieCut * 6.28f);
+                Main.dust[dustID].noLight = false;
+                Main.dust[dustID].noGravity = true;
+            }
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             for (int u = 0; u < Main.maxNPCs; u++)
@@ -85,7 +104,7 @@ namespace CSkies.Projectiles
             const int aislotHomingCooldown = 0;
             const int homingDelay = 10;
             const float desiredFlySpeedInPixelsPerFrame = 20; //How fast can it go once in homing mode?
-            const float amountOfFramesToLerpBy = 10; // minimum of 1, How quickly can it turn?
+            const float amountOfFramesToLerpBy = 20; // minimum of 1, How quickly can it turn?
 
             projectile.ai[aislotHomingCooldown]++;
             if (projectile.ai[aislotHomingCooldown] > homingDelay)

@@ -47,6 +47,7 @@ namespace CSkies
             instance = this;
             inst = this;
             AccessoryAbilityKey = RegisterHotKey("Celestial Accessory Ability", "V");
+            WeakReferences.PerformModSupport();
             if (!Main.dedServ)
             {
                 LoadClient();

@@ -24,18 +24,27 @@ namespace CSkies.NPCs.Enemies
             npc.lifeMax = 100;
             npc.defense = 5;
             npc.damage = 30;
-            npc.HitSound = SoundID.NPCHit6;
-            npc.DeathSound = SoundID.NPCDeath1;
+            npc.HitSound = SoundID.NPCHit49;
+            npc.DeathSound = SoundID.NPCDeath51;
             npc.knockBackResist = 0.7f;
             npc.alpha = 255;
         }
 
         public override void NPCLoot()
 		{
-            if (!NPC.AnyNPCs(mod.NPCType<Bosses.Void.Void>()))
+            if (!NPC.AnyNPCs(ModContent.NPCType<Bosses.Void.Void>()))
             {
                 BaseAI.DropItem(npc, mod.ItemType("VoidLens"), 1, 1, 50, true);
             }
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid)
+            {
+                return .05f;
+            }
+            return 0;
         }
 
         public override void HitEffect(int hitDirection, double damage)
@@ -93,7 +102,7 @@ namespace CSkies.NPCs.Enemies
             BaseAI.AISkull(npc, ref npc.ai, true, 6, 350, .015f, .02f);
             if (npc.ai[1] <= 400f)
             {
-                BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, mod.ProjectileType<Bosses.ObserverVoid.BlackHoleProj>(), ref npc.ai[2], 100, npc.damage / 2, 7, true);
+                BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Bosses.ObserverVoid.BlackHoleProj>(), ref npc.ai[2], 100, npc.damage / 2, 7, true);
             }
 			if (npc.ai[0] < 200) { BaseAI.LookAt(player.Center, npc, 1); } else { if (npc.timeLeft > 10) { npc.timeLeft = 10; } npc.spriteDirection = -npc.direction; }
 			npc.rotation = 0;

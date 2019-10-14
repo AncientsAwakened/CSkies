@@ -28,7 +28,6 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             projectile.height = 30;
             projectile.aiStyle = -1;
             projectile.penetrate = -1;
-            projectile.friendly = false;
             projectile.hostile = true;
             projectile.ignoreWater = true;
             projectile.timeLeft = 600;
@@ -71,19 +70,19 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                 }
             }
 
-            if (!NPC.AnyNPCs(mod.NPCType<ObserverVoid>()))
+            if (!NPC.AnyNPCs(ModContent.NPCType<ObserverVoid>()))
             {
                 projectile.active = false;
             }
 
             if (body == -1)
             {
-                int npcID = BaseAI.GetNPC(projectile.Center, mod.NPCType<ObserverVoid>(), 400f, null);
+                int npcID = BaseAI.GetNPC(projectile.Center, ModContent.NPCType<ObserverVoid>(), 400f, null);
                 if (npcID >= 0) body = npcID;
             }
             if (body == -1) return;
             NPC observer = Main.npc[body];
-            if (observer == null || observer.life <= 0 || !observer.active || observer.type != mod.NPCType<ObserverVoid>()) { projectile.active = false; return; }
+            if (observer == null || observer.life <= 0 || !observer.active || observer.type != ModContent.NPCType<ObserverVoid>()) { projectile.active = false; return; }
 
             Player player = Main.player[observer.target];
 

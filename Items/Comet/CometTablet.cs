@@ -36,7 +36,7 @@ namespace CSkies.Items.Comet
                 int num4 = 5;
                 while (num4 < Main.worldSurface)
                 {
-                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)CSkies.inst.TileType<Tiles.CometOre>())
+                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<Tiles.CometOre>())
                     {
                         num++;
                         if (num > num3)

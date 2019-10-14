@@ -50,7 +50,7 @@ namespace CSkies.NPCs.Other
                 npc.ai[1] = 0;
                 for (int a = 0; a < Main.rand.Next(4); a++)
                 {
-                    int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<AbyssGazer>());
+                    int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<AbyssGazer>());
                     Main.npc[n].Center = npc.Center;
                 }
             }
@@ -96,7 +96,7 @@ namespace CSkies.NPCs.Other
 			bool anyVoidExist = NPC.AnyNPCs(mod.NPCType("AbyssVoid"));			
 			if (!anyVoidExist)
 			{
-                int whoAmI = NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, mod.NPCType<AbyssVoid>());			
+                int whoAmI = NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<AbyssVoid>());			
 				if (Main.netMode == 2 && whoAmI != -1 && whoAmI < 200)
 				{					
 					NetMessage.SendData(MessageID.SyncNPC, number: whoAmI);

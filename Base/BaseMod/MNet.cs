@@ -1,4 +1,3 @@
-
 using Terraria;
 
 namespace CSkies

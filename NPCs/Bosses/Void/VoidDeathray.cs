@@ -48,7 +48,7 @@ namespace CSkies.NPCs.Bosses.Void
                 projectile.velocity = -Vector2.UnitY;
             }
             int ai1 = (int)projectile.ai[1];
-            if (Main.npc[ai1].active && Main.npc[ai1].type == mod.NPCType<Void>())
+            if (Main.npc[ai1].active && Main.npc[ai1].type == ModContent.NPCType<Void>())
             {
                 projectile.Center = Main.npc[ai1].Center - Vector2.UnitY * 6f;
             }

@@ -68,19 +68,19 @@ namespace CSkies.NPCs.Bosses.Observer
                 damage = projectile.damage / 2;
             }
 
-            if (!NPC.AnyNPCs(mod.NPCType<Observer>()))
+            if (!NPC.AnyNPCs(ModContent.NPCType<Observer>()))
             {
                 projectile.active = false;
             }
 
             if (body == -1)
             {
-                int npcID = BaseAI.GetNPC(projectile.Center, mod.NPCType<Observer>(), 400f, null);
+                int npcID = BaseAI.GetNPC(projectile.Center, ModContent.NPCType<Observer>(), 400f, null);
                 if (npcID >= 0) body = npcID;
             }
             if (body == -1) return;
             NPC observer = Main.npc[body];
-            if (observer == null || observer.life <= 0 || !observer.active || observer.type != mod.NPCType<Observer>()) { projectile.active = false; return; }
+            if (observer == null || observer.life <= 0 || !observer.active || observer.type != ModContent.NPCType<Observer>()) { projectile.active = false; return; }
 
             Player player = Main.player[observer.target];
 

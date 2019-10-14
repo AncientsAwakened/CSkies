@@ -32,7 +32,7 @@ You can only use this ability once every 5 minutes");
             player.nightVision = true;
             player.detectCreature = true;
             
-            player.GetModPlayer<CPlayer>(mod).VoidEye = true;
+            player.GetModPlayer<CPlayer>().VoidEye = true;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace CSkies.Items.Boss
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            DisplayName.SetDefault("VOID0 Mask");
+            DisplayName.SetDefault("VOID Mask");
         }
 
         public override void SetDefaults()

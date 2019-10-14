@@ -92,7 +92,7 @@ Holding down while flying allows you to hover");
                     {
                         num92 = -40;
                     }
-                    int num93 = Dust.NewDust(new Vector2(player.position.X + (float)(player.width / 2) + (float)num92, player.position.Y + (float)(player.height / 2) - 15f), 30, 30, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 2.4f);
+                    int num93 = Dust.NewDust(new Vector2(player.position.X + player.width / 2 + num92, player.position.Y + player.height / 2 - 15f), 30, 30, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 2.4f);
                     Main.dust[num93].noGravity = true;
                     Main.dust[num93].velocity *= 0.3f;
                     if (Main.rand.Next(10) == 0)

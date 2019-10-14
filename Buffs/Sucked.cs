@@ -17,7 +17,7 @@ namespace CSkies.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-            int N = BaseAI.GetNPC(player.Center, mod.NPCType< NPCs.Bosses.Void.Void>(), -1);
+            int N = BaseAI.GetNPC(player.Center, ModContent.NPCType< NPCs.Bosses.Void.Void>(), -1);
             if (N == -1 || Vector2.Distance(player.Center, Main.npc[N].Center) < 700)
             {
                 player.DelBuff(buffIndex);

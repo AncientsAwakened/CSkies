@@ -35,7 +35,7 @@ namespace CSkies.Items.Boss
             {
                 player.QuickSpawnItem(mod.ItemType("ObserverMask"));
             }
-            string[] lootTableA = { "Comet", "CometDagger", "CometFan", "CometJavelin" };
+            string[] lootTableA = { "Comet", "CometDagger", "CometFan", "CometJavelin", "CometPortal", "Comet Shot" };
             int lootA = Main.rand.Next(lootTableA.Length);
             int Drop = mod.ItemType(lootTableA[lootA]);
             if (Drop == mod.ItemType("CometDagger"))
@@ -47,7 +47,7 @@ namespace CSkies.Items.Boss
                 player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
             }
 
-            player.QuickSpawnItem(mod.ItemType<Comet.CometFragment>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<Comet.CometFragment>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("ObserverEye"));
         }

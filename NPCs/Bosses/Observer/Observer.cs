@@ -35,7 +35,8 @@ namespace CSkies.NPCs.Bosses.Observer
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Observer");
             npc.alpha = 255;
             npc.noTileCollide = true;
-            bossBag = mod.ItemType<Items.Boss.ObserverBag>();
+            bossBag = ModContent.ItemType<Items.Boss.ObserverBag>();
+            npc.value = Item.sellPrice(0, 1, 0, 0);
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -141,7 +142,7 @@ namespace CSkies.NPCs.Bosses.Observer
                     internalAI[0] += 1;
                     npc.netUpdate = true;
                 }
-                if (!CUtils.AnyProjectiles(mod.ProjectileType<Star>()))
+                if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Star>()))
                 {
                     npc.ai[2] = 0;
                     internalAI[0] = 0;
@@ -164,7 +165,7 @@ namespace CSkies.NPCs.Bosses.Observer
         public void FireLaser(NPC npc)
         {
             Player player = Main.player[npc.target];
-            int projType = mod.ProjectileType<Starbeam>();
+            int projType = ModContent.ProjectileType<Starbeam>();
             if (internalAI[0] == 0)
             {
                 if (Main.expertMode)
@@ -222,8 +223,8 @@ namespace CSkies.NPCs.Bosses.Observer
                 {
                     npc.DropLoot(mod.ItemType("ObserverMask"));
                 }
-                npc.DropLoot(mod.ItemType<Items.Comet.CometFragment>(), Main.rand.Next(8, 12));
-                string[] lootTable = { "Comet", "CometDagger", "CometFan", "CometJavelin" };
+                npc.DropLoot(ModContent.ItemType<Items.Comet.CometFragment>(), Main.rand.Next(8, 12));
+                string[] lootTable = { "Comet", "CometDagger", "CometFan", "CometJavelin", "CometPortal", "Comet Shot" };
                 int loot = Main.rand.Next(lootTable.Length);
                 int Drop = mod.ItemType(lootTable[loot]);
 

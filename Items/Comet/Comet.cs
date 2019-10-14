@@ -24,7 +24,7 @@ namespace CSkies.Items.Comet
             item.damage = 24;
             item.knockBack = 7;
             item.melee = true;
-            item.shoot = mod.ProjectileType<Projectiles.Comet>();
+            item.shoot = ModContent.ProjectileType<Projectiles.Comet>();
             item.shootSpeed = 12;
             item.noUseGraphic = true;
             item.noMelee = true;

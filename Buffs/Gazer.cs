@@ -15,7 +15,7 @@ namespace CSkies.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-            CPlayer modPlayer = player.GetModPlayer<CPlayer>(mod);
+            CPlayer modPlayer = player.GetModPlayer<CPlayer>();
 			if (player.ownedProjectileCounts[mod.ProjectileType("Gazer")] > 0)
 			{
 				modPlayer.Gazer = true;

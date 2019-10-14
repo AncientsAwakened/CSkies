@@ -26,16 +26,17 @@ namespace CSkies.NPCs.Bosses.Void
             npc.aiStyle = -1;
             npc.lifeMax = 150000;
             npc.defense = 70;
-            npc.damage = 150;
+            npc.damage = 130;
             npc.knockBackResist = 0f;
             npc.noGravity = true;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
+            npc.HitSound = SoundID.NPCHit49;
+            npc.DeathSound = SoundID.NPCDeath51;
             npc.boss = true;
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Void");
-            bossBag = mod.ItemType<Items.Boss.ObserverVoidBag>();
+            bossBag = ModContent.ItemType<Items.Boss.ObserverVoidBag>();
             npc.dontTakeDamage = true;
+            npc.value = Item.sellPrice(0, 30, 0, 0);
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -85,8 +86,8 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(player))
                         break;
                     targetPos = player.Center;
-                    targetPos.X += 500 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 500;
+                    targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
+                    targetPos.Y -= 430;
                     Movement(targetPos, 1f);
                     if (++npc.ai[1] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 100) //initiate dash
                     {
@@ -99,7 +100,7 @@ namespace CSkies.NPCs.Bosses.Void
 
                 case 1: //dashing
                     isCharging = true;
-                    if (npc.Center.Y > player.Center.Y + 500 || Math.Abs(npc.Center.X - player.Center.X) > 1500)
+                    if (npc.Center.Y > player.Center.Y + 500 || Math.Abs(npc.Center.X - player.Center.X) > 1000)
                     {
                         npc.velocity.Y *= 0.5f;
                         npc.ai[1] = 0;
@@ -114,39 +115,16 @@ namespace CSkies.NPCs.Bosses.Void
                     }
                     break;
                 case 2:
-                    targetPos = player.Center;
-                    targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 400;
-                    Movement(targetPos, 1);
+                    npc.velocity *= 0;
                     if (npc.ai[1] < 90)
                     {
-
                         if (npc.ai[3] < Repeats() - 1)
                         {
-                            int damage = 130;
                             if (Main.netMode != 1) { npc.ai[2]++; }
-                            if (npc.ai[2] % 30 == 0) // + lasers
+                            if (npc.ai[2] >= 30) // + lasers
                             {
-                                Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
-                                int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[a].Center = npc.Center;
-                                int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[b].Center = npc.Center;
-                                int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[c].Center = npc.Center;
-                                int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[d].Center = npc.Center;
-                                int e = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[e].Center = npc.Center;
-                                int f = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[f].Center = npc.Center;
-                                int g = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[g].Center = npc.Center;
-                                int h = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
-                                Main.projectile[h].Center = npc.Center;
-                            }
-                            if (Main.netMode != 1 && npc.ai[2] >= 120)
-                            {
+                                Teleport();
+                                Starblast();
                                 npc.ai[3] += 1;
                                 npc.ai[2] = 0;
                                 npc.netUpdate = true;
@@ -180,11 +158,11 @@ namespace CSkies.NPCs.Bosses.Void
                         npc.netUpdate = true;
                     }
 
-                    if (++npc.ai[1] > 30)
+                    if (++npc.ai[1] > 60)
                     {
                         targetPos = player.Center;
-                        targetPos.X += 500 * (npc.Center.X < targetPos.X ? -1 : 1);
-                        Movement(targetPos, 2f);
+                        targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
+                        Movement(targetPos, 1.5f);
                         if (npc.ai[1] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
                         {
                             npc.ai[0]++;
@@ -208,12 +186,17 @@ namespace CSkies.NPCs.Bosses.Void
                         npc.ai[2] = 0;
                         if (++npc.ai[3] >= 3) //repeat dash three times
                         {
+                            Teleport();
                             npc.ai[0]++;
                             npc.ai[3] = 0;
                         }
                         else
                             npc.ai[0]--;
                         npc.netUpdate = true;
+                    }
+                    if (npc.ai[1] % 60 == 0 && npc.life < npc.lifeMax / 3)
+                    {
+                        Starblast();
                     }
                     break;
 
@@ -222,12 +205,12 @@ namespace CSkies.NPCs.Bosses.Void
                         break;
 
                     targetPos = player.Center;
-                    targetPos.X += 500 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 400;
+                    targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
+                    targetPos.Y -= 430;
+                    Movement(targetPos, 1f);
 
-                    if (++npc.ai[2] > 120)
+                    if (++npc.ai[2] > 180)
                     {
-                        Movement(targetPos, 0);
                         npc.ai[0]++;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
@@ -235,10 +218,14 @@ namespace CSkies.NPCs.Bosses.Void
                         if (Main.netMode != 1)
                             npc.TargetClosest(false);
 
-                        Projectile.NewProjectile(npc.Center, new Vector2(10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(10, 0), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(0, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(0, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
 
                         if (npc.life < npc.lifeMax / 2 && Main.netMode != 1)
                         {
@@ -257,25 +244,17 @@ namespace CSkies.NPCs.Bosses.Void
                             }
                             else
                             {
-                                int a = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<Enemies.AbyssGazer>());
+                                int a = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Enemies.AbyssGazer>());
                                 Main.npc[a].Center = npc.Center + new Vector2(0, 60);
-                                int b = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<Enemies.AbyssGazer>());
+                                int b = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Enemies.AbyssGazer>());
                                 Main.npc[b].Center = npc.Center + new Vector2(0, -60);
-                                int c = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<Enemies.AbyssGazer>());
+                                int c = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Enemies.AbyssGazer>());
                                 Main.npc[c].Center = npc.Center + new Vector2(-60, 0);
-                                int d = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType<Enemies.AbyssGazer>());
+                                int d = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Enemies.AbyssGazer>());
                                 Main.npc[d].Center = npc.Center + new Vector2(-60, 0);
                             }
                             npc.netUpdate = true;
                         }
-                    }
-                    else if (npc.ai[2] > 60 && npc.ai[2] <= 120)
-                    {
-                        Movement(targetPos, 0);
-                    }
-                    else
-                    {
-                        Movement(targetPos, 1f);
                     }
                     break;
 
@@ -330,9 +309,9 @@ namespace CSkies.NPCs.Bosses.Void
                         break;
 
                     targetPos = player.Center;
-                    targetPos.X += 500 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 400;
-                    Movement(targetPos, .1f);
+                    targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
+                    targetPos.Y -= 430;
+                    Movement(targetPos, 1f);
 
                     if (++npc.ai[2] > 10)
                     {
@@ -375,7 +354,7 @@ namespace CSkies.NPCs.Bosses.Void
                                 DirectionX += DirectionX == 0 ?  0 : Main.rand.Next(-2, 2);
                                 DirectionY += DirectionY == 0 ? 0 : Main.rand.Next(-2, 2);
 
-                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, mod.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, vel.ToRotation(), 0f);
+                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, vel.ToRotation(), 0f);
                             }
                         }
                     }
@@ -412,16 +391,112 @@ namespace CSkies.NPCs.Bosses.Void
             npc.rotation = 0;
         }
 
+        public void Starblast(int damage = 130)
+        {
+            Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
+            int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[a].Center = npc.Center;
+            int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[b].Center = npc.Center;
+            int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[c].Center = npc.Center;
+            int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[d].Center = npc.Center;
+            int e = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[e].Center = npc.Center;
+            int f = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[f].Center = npc.Center;
+            int g = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[g].Center = npc.Center;
+            int h = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            Main.projectile[h].Center = npc.Center;
+        }
+
+        public void Teleport()
+        {
+            Player player = Main.player[npc.target];
+            Vector2 targetPos = player.Center;
+            int posX = Main.rand.Next(3);
+            switch (posX)
+            {
+                case 0:
+                    posX = -400;
+                    break;
+                case 1:
+                    posX = 0;
+                    break;
+                case 2:
+                    posX = 400;
+                    break;
+            }
+            int posY = Main.rand.Next(posX == 0 ? 2 : 1);
+            switch (posY)
+            {
+                case 0:
+                    posY = -400;
+                    break;
+                case 1:
+                    posY = 0;
+                    break;
+            }
+
+            npc.position = new Vector2(targetPos.X + posX, targetPos.Y + posY);
+
+            Vector2 position = npc.Center + (Vector2.One * -20f);
+            int num84 = 40;
+            int height3 = num84;
+            for (int num85 = 0; num85 < 3; num85++)
+            {
+                int num86 = Dust.NewDust(position, num84, height3, 240, 0f, 0f, 100, default, 1.5f);
+                Main.dust[num86].position = npc.Center + (Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * num84 / 2f);
+            }
+            for (int num87 = 0; num87 < 15; num87++)
+            {
+                int num88 = Dust.NewDust(position, num84, height3, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 50, default, 3.7f);
+                Main.dust[num88].position = npc.Center + (Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * num84 / 2f);
+                Main.dust[num88].noGravity = true;
+                Main.dust[num88].noLight = true;
+                Main.dust[num88].velocity *= 3f;
+                Main.dust[num88].velocity += npc.DirectionTo(Main.dust[num88].position) * (2f + (Main.rand.NextFloat() * 4f));
+                num88 = Dust.NewDust(position, num84, height3, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 25, default, 1.5f);
+                Main.dust[num88].position = npc.Center + (Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * num84 / 2f);
+                Main.dust[num88].velocity *= 2f;
+                Main.dust[num88].noGravity = true;
+                Main.dust[num88].fadeIn = 1f;
+                Main.dust[num88].color = Color.Black * 0.5f;
+                Main.dust[num88].noLight = true;
+                Main.dust[num88].velocity += npc.DirectionTo(Main.dust[num88].position) * 8f;
+            }
+            for (int num89 = 0; num89 < 10; num89++)
+            {
+                int num90 = Dust.NewDust(position, num84, height3, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 2.7f);
+                Main.dust[num90].position = npc.Center + (Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(npc.velocity.ToRotation(), default) * num84 / 2f);
+                Main.dust[num90].noGravity = true;
+                Main.dust[num90].noLight = true;
+                Main.dust[num90].velocity *= 3f;
+                Main.dust[num90].velocity += npc.DirectionTo(Main.dust[num90].position) * 2f;
+            }
+            for (int num91 = 0; num91 < 30; num91++)
+            {
+                int num92 = Dust.NewDust(position, num84, height3, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1.5f);
+                Main.dust[num92].position = npc.Center + (Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(npc.velocity.ToRotation(), default) * num84 / 2f);
+                Main.dust[num92].noGravity = true;
+                Main.dust[num92].velocity *= 3f;
+                Main.dust[num92].velocity += npc.DirectionTo(Main.dust[num92].position) * 3f;
+            }
+
+        }
+
         public void SuckPlayer()
         {
             bool V = false;
             Player target = Main.player[Main.myPlayer];
 
-            if (Vector2.Distance(target.Center, npc.Center) > 3000 && !target.dead && target.active)
+            if (Vector2.Distance(target.Center, npc.Center) > 4000 && !target.dead && target.active)
             {
-                target.AddBuff(mod.BuffType<Buffs.Sucked>(), 2);
+                target.AddBuff(ModContent.BuffType<Buffs.Sucked>(), 2);
             }
-            if (target.HasBuff(mod.BuffType<Buffs.Sucked>()))
+            if (target.HasBuff(ModContent.BuffType<Buffs.Sucked>()))
             {
                 V = true;
             }
@@ -482,7 +557,7 @@ namespace CSkies.NPCs.Bosses.Void
                 {
                     for (int spawnDust = 0; spawnDust < 2; spawnDust++)
                     {
-                        int dust = mod.DustType<Dusts.VoidDust>();
+                        int dust = ModContent.DustType<Dusts.VoidDust>();
                         int num935 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, dust, 0f, 0f, 100, default, 2f);
                         Main.dust[num935].noGravity = true;
                         Main.dust[num935].noLight = true;
@@ -531,6 +606,8 @@ namespace CSkies.NPCs.Bosses.Void
 
         public override void NPCLoot()
         {
+            CWorld.downedObserverV = true;
+            CWorld.downedVoid = true;
             int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, mod.NPCType("VoidDeath"), 0, 0);
             Main.npc[n].Center = npc.Center;
             Main.npc[n].velocity = npc.velocity;
@@ -563,7 +640,7 @@ namespace CSkies.NPCs.Bosses.Void
             base.HitEffect(hitDirection, npc.damage / 2);
             for (int Loop = 0; Loop < 3; Loop++)
             {
-                int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0);
+                int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0);
                 Main.dust[dust].velocity.Y = hitDirection * 0.1f;
                 Main.dust[dust].noGravity = false;
             }
@@ -571,7 +648,7 @@ namespace CSkies.NPCs.Bosses.Void
             {
                 for (int Loop = 0; Loop < 5; Loop++)
                 {
-                    int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0);
+                    int dust = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0);
                     Main.dust[dust].noGravity = false;
                 }
             }

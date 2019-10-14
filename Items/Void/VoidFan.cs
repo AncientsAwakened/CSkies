@@ -15,13 +15,13 @@ namespace CSkies.Items.Void
 		
 		public override void SetDefaults()
 		{
-			item.rare = 10;
+			item.rare = 11;
 			item.noUseGraphic = true;
 			item.UseSound = SoundID.Item1;
 			item.useStyle = 1;
 			item.damage = 110;
-			item.useAnimation = 21;
-			item.useTime = 21;
+			item.useAnimation = 16;
+			item.useTime = 16;
 			item.width = 26;
 			item.height = 26;
 			item.shoot = mod.ProjectileType("VoidKnife");

@@ -49,7 +49,7 @@ namespace CSkies.Projectiles
                     if (Main.rand.Next(2) == 0)
                     {
                         Vector2 vector124 = Vector2.UnitY.RotatedByRandom(6.2831854820251465);
-                        Dust dust27 = Main.dust[Dust.NewDust(projectile.Center - vector124 * 30f, 0, 0, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
+                        Dust dust27 = Main.dust[Dust.NewDust(projectile.Center - vector124 * 30f, 0, 0, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
                         dust27.noGravity = true;
                         dust27.position = projectile.Center - vector124 * Main.rand.Next(10, 21);
                         dust27.velocity = vector124.RotatedBy(1.5707963705062866, default) * 6f;
@@ -60,7 +60,7 @@ namespace CSkies.Projectiles
                     else
                     {
                         Vector2 vector125 = Vector2.UnitY.RotatedByRandom(6.2831854820251465);
-                        Dust dust28 = Main.dust[Dust.NewDust(projectile.Center - vector125 * 30f, 0, 0, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
+                        Dust dust28 = Main.dust[Dust.NewDust(projectile.Center - vector125 * 30f, 0, 0, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
                         dust28.noGravity = true;
                         dust28.position = projectile.Center - vector125 * 30f;
                         dust28.velocity = vector125.RotatedBy(-1.5707963705062866, default) * 3f;
@@ -94,7 +94,7 @@ namespace CSkies.Projectiles
                     if (Main.rand.Next(2) == 0)
                     {
                         Vector2 vector126 = Vector2.UnitY.RotatedByRandom(6.2831854820251465);
-                        Dust dust29 = Main.dust[Dust.NewDust(projectile.Center - vector126 * 30f, 0, 0, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
+                        Dust dust29 = Main.dust[Dust.NewDust(projectile.Center - vector126 * 30f, 0, 0, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
                         dust29.noGravity = true;
                         dust29.position = projectile.Center - vector126 * Main.rand.Next(10, 21);
                         dust29.velocity = vector126.RotatedBy(1.5707963705062866, default) * 6f;
@@ -102,7 +102,7 @@ namespace CSkies.Projectiles
                         dust29.fadeIn = 0.5f;
                         dust29.customData = this;
                         vector126 = Vector2.UnitY.RotatedByRandom(6.2831854820251465);
-                        dust29 = Main.dust[Dust.NewDust(projectile.Center - vector126 * 30f, 0, 0, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
+                        dust29 = Main.dust[Dust.NewDust(projectile.Center - vector126 * 30f, 0, 0, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
                         dust29.noGravity = true;
                         dust29.position = projectile.Center - vector126 * Main.rand.Next(10, 21);
                         dust29.velocity = vector126.RotatedBy(1.5707963705062866, default) * 6f;
@@ -113,7 +113,7 @@ namespace CSkies.Projectiles
                     else
                     {
                         Vector2 vector127 = Vector2.UnitY.RotatedByRandom(6.2831854820251465);
-                        Dust dust30 = Main.dust[Dust.NewDust(projectile.Center - vector127 * 30f, 0, 0, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
+                        Dust dust30 = Main.dust[Dust.NewDust(projectile.Center - vector127 * 30f, 0, 0, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1f)];
                         dust30.noGravity = true;
                         dust30.position = projectile.Center - vector127 * Main.rand.Next(20, 31);
                         dust30.velocity = vector127.RotatedBy(-1.5707963705062866, default) * 5f;
@@ -239,16 +239,16 @@ namespace CSkies.Projectiles
             Main.PlaySound(SoundID.Item14, projectile.position);
             for (int num93 = 0; num93 < 4; num93++)
             {
-                int num94 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 1.5f);
+                int num94 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 1.5f);
                 Main.dust[num94].position = projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * projectile.width / 2f;
             }
             for (int num95 = 0; num95 < 30; num95++)
             {
-                int num96 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 200, default, 3.7f);
+                int num96 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 200, default, 3.7f);
                 Main.dust[num96].position = projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * projectile.width / 2f;
                 Main.dust[num96].noGravity = true;
                 Main.dust[num96].velocity *= 3f;
-                num96 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 1.5f);
+                num96 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 100, default, 1.5f);
                 Main.dust[num96].position = projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * projectile.width / 2f;
                 Main.dust[num96].velocity *= 2f;
                 Main.dust[num96].noGravity = true;
@@ -256,14 +256,14 @@ namespace CSkies.Projectiles
             }
             for (int num97 = 0; num97 < 10; num97++)
             {
-                int num98 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 2.7f);
+                int num98 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 2.7f);
                 Main.dust[num98].position = projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(projectile.velocity.ToRotation(), default) * projectile.width / 2f;
                 Main.dust[num98].noGravity = true;
                 Main.dust[num98].velocity *= 3f;
             }
             for (int num99 = 0; num99 < 10; num99++)
             {
-                int num100 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, mod.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1.5f);
+                int num100 = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, default, 1.5f);
                 Main.dust[num100].position = projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(projectile.velocity.ToRotation(), default) * projectile.width / 2f;
                 Main.dust[num100].noGravity = true;
                 Main.dust[num100].velocity *= 3f;
@@ -289,7 +289,7 @@ namespace CSkies.Projectiles
                 }
                 int num104 = Main.rand.Next(5, 9);
                 int num105 = Main.rand.Next(5, 9);
-                int num106 = Utils.SelectRandom<int>(Main.rand, new int[]
+                int num106 = Utils.SelectRandom(Main.rand, new int[]
                 {
                         86,
                         90

@@ -38,7 +38,7 @@ namespace CSkies.Projectiles.Minions
         {
             bool flag64 = projectile.type == mod.ProjectileType("Gazer");
             Player player = Main.player[projectile.owner];
-            CPlayer modPlayer = player.GetModPlayer<CPlayer>(mod);
+            CPlayer modPlayer = player.GetModPlayer<CPlayer>();
             player.AddBuff(mod.BuffType("Gazer"), 3600);
             if (flag64)
             {
@@ -211,7 +211,7 @@ namespace CSkies.Projectiles.Minions
             if (projectile.ai[0] == 0f)
             {
                 float scaleFactor3 = 8f;
-                int num658 = mod.ProjectileType<AbyssBall>();
+                int num658 = ModContent.ProjectileType<AbyssBall>();
                 if (flag25 && projectile.ai[1] == 0f)
                 {
                     projectile.ai[1] += 1f;

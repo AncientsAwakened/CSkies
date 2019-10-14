@@ -24,7 +24,7 @@ namespace CSkies.NPCs.Enemies
             npc.lifeMax = 100;
             npc.defense = 5;
             npc.damage = 30;
-            npc.HitSound = SoundID.NPCHit6;
+            npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 0.7f;	
         }
@@ -70,7 +70,7 @@ namespace CSkies.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.GetModPlayer<CPlayer>(mod).ZoneComet)
+            if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneComet)
             {
                 return .05f;
             }
@@ -90,7 +90,7 @@ namespace CSkies.NPCs.Enemies
             BaseAI.AISkull(npc, ref npc.ai, true, 4, 350, .015f, .02f);
             if (npc.ai[1] <= 600f)
             {
-                BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, mod.ProjectileType<Bosses.Observer.Starbeam>(), ref npc.ai[2], 100, npc.damage / 2, 7, true);
+                BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Bosses.Observer.Starbeam>(), ref npc.ai[2], 100, npc.damage / 2, 7, true);
             }
 			if (npc.ai[0] < 200) { BaseAI.LookAt(player.Center, npc, 1); } else { if (npc.timeLeft > 10) { npc.timeLeft = 10; } npc.spriteDirection = -npc.direction; }
 			npc.rotation = 0;

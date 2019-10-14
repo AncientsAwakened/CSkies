@@ -3,6 +3,8 @@ using Terraria.ModLoader;
 using CSkies.NPCs.Other;
 using Terraria.GameInput;
 using Microsoft.Xna.Framework;
+using CSkies.NPCs.Bosses.Void;
+using CSkies.NPCs.Bosses.ObserverVoid;
 
 namespace CSkies
 {
@@ -50,9 +52,9 @@ namespace CSkies
 
         public bool NearVoid()
         {
-            if (NPC.AnyNPCs(mod.NPCType<AbyssVoid>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<AbyssVoid>()))
             {
-                int v = BaseAI.GetNPC(player.Center, mod.NPCType<AbyssVoid>(), 2500);
+                int v = BaseAI.GetNPC(player.Center, ModContent.NPCType<AbyssVoid>(), 2500);
                 if (v != -1)
                 {
                     return true;
@@ -63,10 +65,13 @@ namespace CSkies
 
         public bool NearVoidBoss()
         {
-            if (NPC.AnyNPCs(mod.NPCType<NPCs.Bosses.Void.Void>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<Void>()) || NPC.AnyNPCs(ModContent.NPCType<VoidTransition1>()) || NPC.AnyNPCs(ModContent.NPCType<VoidTransition2>()) || NPC.AnyNPCs(ModContent.NPCType<ObserverVoid>()))
             {
-                int v = BaseAI.GetNPC(player.Center, mod.NPCType<NPCs.Bosses.Void.Void>(), 2500);
-                if (v != -1)
+                int v = BaseAI.GetNPC(player.Center, ModContent.NPCType<Void>(), 2500);
+                int vt1 = BaseAI.GetNPC(player.Center, ModContent.NPCType<VoidTransition1>(), 2500);
+                int vt2 = BaseAI.GetNPC(player.Center, ModContent.NPCType<VoidTransition2>(), 2500);
+                int ov = BaseAI.GetNPC(player.Center, ModContent.NPCType<ObserverVoid>(), 2500);
+                if (v != -1 || vt1 != -1 || vt2 != -1 || ov != -1)
                 {
                     return true;
                 }
@@ -88,10 +93,10 @@ namespace CSkies
         {
             if (VoidEye)
             {
-                if (CSkies.AccessoryAbilityKey.JustPressed && !player.HasBuff(mod.BuffType<Buffs.VECooldown>()))
+                if (CSkies.AccessoryAbilityKey.JustPressed && !player.HasBuff(ModContent.BuffType<Buffs.VECooldown>()))
                 {
-                    player.AddBuff(mod.BuffType<Buffs.VECooldown>(), 3000);
-                    Projectile.NewProjectile(player.Center, Vector2.Zero, mod.ProjectileType<Projectiles.VoidEyeVortex>(), 60, 0, Main.myPlayer);
+                    player.AddBuff(ModContent.BuffType<Buffs.VECooldown>(), 3000);
+                    Projectile.NewProjectile(player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.VoidEyeVortex>(), 60, 0, Main.myPlayer);
                 }
             }
         }

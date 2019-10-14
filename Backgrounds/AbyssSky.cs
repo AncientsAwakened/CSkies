@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace CSkies.Backgrounds
@@ -49,7 +50,7 @@ namespace CSkies.Backgrounds
                 Intensity = Math.Max(0f, Intensity - 0.01f);
             }
 
-            if (NPC.AnyNPCs(CSkies.inst.NPCType<NPCs.Bosses.Void.Void>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Bosses.Void.Void>()))
             {
                 if (ticksUntilNextBolt <= 0)
                 {
@@ -96,7 +97,7 @@ namespace CSkies.Backgrounds
             {
                 spriteBatch.Draw(Main.blackTileTexture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * Intensity);
             }
-            if (NPC.AnyNPCs(CSkies.inst.NPCType<NPCs.Bosses.Void.Void>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Bosses.Void.Void>()))
             {
                 float scale = Math.Min(1f, (Main.screenPosition.Y - 1000f) / 1000f);
                 Vector2 value3 = Main.screenPosition + new Vector2(Main.screenWidth >> 1, Main.screenHeight >> 1);

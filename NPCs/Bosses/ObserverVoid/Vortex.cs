@@ -65,7 +65,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             {
                 Player target = Main.player[u];
 
-                if (target.active && Vector2.Distance(projectile.Center, target.Center) < 160 * projectile.ai[1])
+                if (target.active && Vector2.Distance(projectile.Center, target.Center) < 160 * projectile.ai[1] && !target.immune)
                 {
                     float num3 = 3f;
                     Vector2 vector = target.Center;

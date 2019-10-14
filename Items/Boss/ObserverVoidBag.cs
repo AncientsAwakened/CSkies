@@ -36,11 +36,11 @@ namespace CSkies.Items.Boss
             {
                 player.QuickSpawnItem(mod.ItemType("VOIDMask"));
             }
-            string[] lootTableA = { "Singularity", "VoidFan", "VoidShot", "VoidJavelin", "VoidWings" };
+            string[] lootTableA = { "Singularity", "VoidFan", "VoidShot", "VoidJavelin", "VoidWings", "VoidPortal" };
             int lootA = Main.rand.Next(lootTableA.Length);
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
 
-            player.QuickSpawnItem(mod.ItemType<Void.VoidFragment>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<Void.VoidFragment>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("ObserverVoidEye"));
         }

@@ -35,7 +35,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override void AI()
         {
             Lighting.AddLight(projectile.Center, 0, .1f, .3f);
-            if (!NPC.AnyNPCs(mod.NPCType<Void>()))
+            if (!NPC.AnyNPCs(ModContent.NPCType<Void>()))
             {
                 projectile.active = false;
             }
@@ -44,12 +44,12 @@ namespace CSkies.NPCs.Bosses.Void
 
             if (body == -1)
             {
-                int npcID = BaseAI.GetNPC(projectile.Center, mod.NPCType<Void>(), 400f, null);
+                int npcID = BaseAI.GetNPC(projectile.Center, ModContent.NPCType<Void>(), 400f, null);
                 if (npcID >= 0) body = npcID;
             }
             if (body == -1) return;
             NPC observer = Main.npc[body];
-            if (observer == null || observer.life <= 0 || !observer.active || observer.type != mod.NPCType<Void>()) { projectile.active = false; return; }
+            if (observer == null || observer.life <= 0 || !observer.active || observer.type != ModContent.NPCType<Void>()) { projectile.active = false; return; }
 
             pos = observer.Center;
 
@@ -73,7 +73,7 @@ namespace CSkies.NPCs.Bosses.Void
             {
                 Player target = Main.player[u];
 
-                if (target.active && Vector2.Distance(projectile.Center, target.Center) < 100)
+                if (target.active && Vector2.Distance(projectile.Center, target.Center) < 100 && !target.immune)
                 {
                     float num3 = 6f;
                     Vector2 vector = new Vector2(target.position.X + target.width / 2, target.position.Y + target.height / 2);
@@ -89,7 +89,7 @@ namespace CSkies.NPCs.Bosses.Void
                 }
             }
 
-            if (observer.ai[0] < 4 || observer.ai[0] > 5)
+            if (observer.ai[0] < 3 || observer.ai[0] > 4)
             {
                 projectile.scale -= .05f;
                 if (projectile.scale <= 0)

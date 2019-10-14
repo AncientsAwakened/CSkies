@@ -8,3 +8,53 @@ Currently Celestial Skies adds:
 -1 Meteor Biome
 -1 Post-Moon Lord sub-biome in space
 -2 Weapon sets
+
+-----
+
+V 1.0.0.5
+
+Fixed the mod not being downloadable from the browser (Hopefully)
+
+V 1.0.0.4
+
+Fixed the mod not playing music
+
+-----
+
+Note: *THIS MOD CONTAINS COPYRIGHTED MUSIC FROM THE KIRBY FRANCHISE*
+
+As of late, nintendo has been lax on copyright, but I just wanted to mention this just in case ^
+
+Music will be replaced by original tracks eventually
+
+-----
+
+Check out our Discord by clicking the mod homepage button if you have any questions, would like to contribute, show off fan work, or just meme around
+
+-----
+
+Credits:
+
+Me (Elizabeth Yamamoto) - Coding, Design, Sprites, and Direction
+
+Sumenora - Testing
+
+Governor Gibs - Testing
+
+OverlordCMD - Testing
+
+Alphakip - Coding help & Testing
+
+Terry N. Muse - Coding help + bits of AI code + Testing
+
+PoisX - Sprites
+
+Darkpuppey - Sprites
+
+Ryanlolz1 - Sprites
+
+Fazer Gamer - Animations
+
+Spectral Aves - Dark Nebula Remix
+
+The Ancients Awakened testing team - Volunteer Testing
