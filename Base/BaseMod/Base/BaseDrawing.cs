@@ -724,14 +724,15 @@ namespace CSkies
             xOffset *= direction;
             SpriteEffects spriteEffect = direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (gravDir == -1f) { yOffset *= -1; spriteEffect |= SpriteEffects.FlipVertically; }
-			if(entity is Player)
-			{
-				Player drawPlayer = (Player)entity; yOffset -= drawPlayer.gfxOffY;			
-			}else
-			if(entity is NPC)
-			{
-				NPC drawNPC = (NPC)entity; yOffset -= drawNPC.gfxOffY;
-			}
+            if (entity is Player drawPlayer)
+            {
+                yOffset -= drawPlayer.gfxOffY;
+            }
+            else
+            if (entity is NPC drawNPC)
+            {
+                yOffset -= drawNPC.gfxOffY;
+            }
             int drawType = item.type;
 
             Vector2 drawPos = position - Main.screenPosition;
@@ -820,14 +821,15 @@ namespace CSkies
             int type = item.type;
             int fakeType = type;
             Vector2 texOrigin = new Vector2(tex.Width / 2, (float)(tex.Height / 2) / frameCount);
-			if(entity is Player)
-			{
-				Player drawPlayer = (Player)entity; yOffset += drawPlayer.gfxOffY;
-			}else
-			if(entity is NPC)
-			{
-				NPC drawNPC = (NPC)entity; yOffset += drawNPC.gfxOffY;
-			}			
+            if (entity is Player drawPlayer)
+            {
+                yOffset += drawPlayer.gfxOffY;
+            }
+            else
+            if (entity is NPC drawNPC)
+            {
+                yOffset += drawNPC.gfxOffY;
+            }
             Vector2 rotOrigin = new Vector2(-xOffset, ((float)(tex.Height / 2) / frameCount) - yOffset);
             if(direction == -1)
             {
@@ -1213,7 +1215,7 @@ namespace CSkies
                 Vector2 texCenter;
                 Vector2 v;
                 Color lightColor;
-                Action drawEnds = () =>
+                void drawEnds()
                 {
                     if (textures[0] != null && Way == 0f)
                     {
@@ -1225,16 +1227,17 @@ namespace CSkies
                         if (OnDrawTex != null && !OnDrawTex(textures[0], start + texCenter2, v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -1)) { }
                         else
                         {
-							if (sb is List<DrawData>)
-							{
-								DrawData dd = new DrawData(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-								dd.shader = shader;
-								((List<DrawData>)sb).Add(dd);
-							}else
-							if (sb is SpriteBatch)
-							{
-								((SpriteBatch)sb).Draw(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-							}
+                            if (sb is List<DrawData>)
+                            {
+                                DrawData dd = new DrawData(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                                dd.shader = shader;
+                                ((List<DrawData>)sb).Add(dd);
+                            }
+                            else
+                            if (sb is SpriteBatch)
+                            {
+                                ((SpriteBatch)sb).Draw(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                            }
                         }
                     }
                     if (textures[maxTextures + 1] != null && Way + Jump >= length)
@@ -1244,22 +1247,23 @@ namespace CSkies
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = end - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(end + texCenter2));
-                        if (OnDrawTex != null && !OnDrawTex(textures[maxTextures + 1], end + texCenter2,  v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -2)) { }
+                        if (OnDrawTex != null && !OnDrawTex(textures[maxTextures + 1], end + texCenter2, v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -2)) { }
                         else
                         {
-							if (sb is List<DrawData>)
-							{
-								DrawData dd = new DrawData(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-								dd.shader = shader;
-								((List<DrawData>)sb).Add(dd);
-							}else
-							if (sb is SpriteBatch)
-							{
-								((SpriteBatch)sb).Draw(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-							}
-						}
+                            if (sb is List<DrawData>)
+                            {
+                                DrawData dd = new DrawData(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                                dd.shader = shader;
+                                ((List<DrawData>)sb).Add(dd);
+                            }
+                            else
+                            if (sb is SpriteBatch)
+                            {
+                                ((SpriteBatch)sb).Draw(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                            }
+                        }
                     }
-                };
+                }
                 texWidth = textures[1].Width;
                 texHeight = textures[1].Height;
                 texCenter = new Vector2(texWidth / 2f, texHeight / 2f) * scale;
@@ -1319,7 +1323,7 @@ namespace CSkies
                 Vector2 texCenter;
                 Vector2 v;
                 Color lightColor;
-                Action drawEnds = () =>
+                void drawEnds()
                 {
                     if (textures[0] != null && Way == 0f)
                     {
@@ -1331,16 +1335,17 @@ namespace CSkies
                         if (OnDrawTex != null && !OnDrawTex(textures[0], start + texCenter2, v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -1)) { }
                         else
                         {
-							if (sb is List<DrawData>)
-							{
-								DrawData dd = new DrawData(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-								dd.shader = shader;
-								((List<DrawData>)sb).Add(dd);
-							}else
-							if (sb is SpriteBatch)
-							{
-								((SpriteBatch)sb).Draw(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-							}
+                            if (sb is List<DrawData>)
+                            {
+                                DrawData dd = new DrawData(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                                dd.shader = shader;
+                                ((List<DrawData>)sb).Add(dd);
+                            }
+                            else
+                            if (sb is SpriteBatch)
+                            {
+                                ((SpriteBatch)sb).Draw(textures[0], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                            }
                         }
                     }
                     if (textures[maxTextures + 1] != null && Way + Jump >= length)
@@ -1350,22 +1355,23 @@ namespace CSkies
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = end - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(end + texCenter2));
-                        if (OnDrawTex != null && !OnDrawTex(textures[maxTextures + 1], end + texCenter2,  v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -2)) { }
+                        if (OnDrawTex != null && !OnDrawTex(textures[maxTextures + 1], end + texCenter2, v2 - texCenter2, texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, scale, -2)) { }
                         else
                         {
-							if (sb is List<DrawData>)
-							{
-								DrawData dd = new DrawData(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-								dd.shader = shader;
-								((List<DrawData>)sb).Add(dd);
-							}else
-							if (sb is SpriteBatch)
-							{
-								((SpriteBatch)sb).Draw(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
-							}
-						}
+                            if (sb is List<DrawData>)
+                            {
+                                DrawData dd = new DrawData(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                                dd.shader = shader;
+                                ((List<DrawData>)sb).Add(dd);
+                            }
+                            else
+                            if (sb is SpriteBatch)
+                            {
+                                ((SpriteBatch)sb).Draw(textures[maxTextures + 1], v2 - texCenter2, new Rectangle(0, 0, (int)texWidth2, (int)texHeight2), lightColor2, rotation, texCenter2, scale, SpriteEffects.None, 0);
+                            }
+                        }
                     }
-                };
+                }
                 texWidth = textures[1].Width;
                 texHeight = textures[1].Height;
                 texCenter = new Vector2(texWidth / 2f, texHeight / 2f) * scale;
@@ -1891,29 +1897,32 @@ namespace CSkies
 							base.Shader.Parameters["uFrame"].SetValue(v4_2);
 						}
 					}else
-					if(ent is Projectile)
-					{					
-						Projectile proj = (Projectile)ent;
-						Vector4 v4 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height);	
-						Vector4 v4_2 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height / Main.projFrames[proj.type]);							
-						base.Shader.Parameters["uTexSize"].SetValue(v4);
-						if(proj.modProjectile is ParentProjectile){ base.Shader.Parameters["uFrame"].SetValue(((ParentProjectile)proj.modProjectile).GetFrameV4()); }else
-						{
-							base.Shader.Parameters["uFrame"].SetValue(v4_2);
-						}
-					}else
-					if(ent is Player)
-					{
-						Vector4 v4 = new Vector4(0, 0, Main.playerTextures[0, 0].Width, Main.playerTextures[0, 0].Height);								
-						Vector4 v4_2 = new Vector4(0, 0, BaseConstants.FRAME_PLAYER.Width, BaseConstants.FRAME_PLAYER.Height + 2);					
-						base.Shader.Parameters["uTexSize"].SetValue(v4);
-						base.Shader.Parameters["uFrame"].SetValue(v4_2);						
-					}else
-					{
-						Vector4 v4 = new Vector4(0, 0, ent.width, ent.height);
-						base.Shader.Parameters["uFrame"].SetValue(v4);					
-					}
-				}else
+                    if (ent is Projectile proj)
+                    {
+                        Vector4 v4 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height);
+                        Vector4 v4_2 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height / Main.projFrames[proj.type]);
+                        base.Shader.Parameters["uTexSize"].SetValue(v4);
+                        if (proj.modProjectile is ParentProjectile) { base.Shader.Parameters["uFrame"].SetValue(((ParentProjectile)proj.modProjectile).GetFrameV4()); }
+                        else
+                        {
+                            base.Shader.Parameters["uFrame"].SetValue(v4_2);
+                        }
+                    }
+                    else
+                    if (ent is Player)
+                    {
+                        Vector4 v4 = new Vector4(0, 0, Main.playerTextures[0, 0].Width, Main.playerTextures[0, 0].Height);
+                        Vector4 v4_2 = new Vector4(0, 0, BaseConstants.FRAME_PLAYER.Width, BaseConstants.FRAME_PLAYER.Height + 2);
+                        base.Shader.Parameters["uTexSize"].SetValue(v4);
+                        base.Shader.Parameters["uFrame"].SetValue(v4_2);
+                    }
+                    else
+                    {
+                        Vector4 v4 = new Vector4(0, 0, ent.width, ent.height);
+                        base.Shader.Parameters["uFrame"].SetValue(v4);
+                    }
+                }
+                else
 				{
 					Color color = BaseDrawing.GetLightColor(Main.screenPosition);
 					base.Shader.Parameters["uLightColor"].SetValue(color.ToVector4());	

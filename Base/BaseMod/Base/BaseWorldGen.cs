@@ -21,7 +21,19 @@ namespace CSkies
         //  Author(s): Grox the Great                           //
         //------------------------------------------------------//
 
-		public static void GenOre(int tileType, int amountInWorld = -1, float oreStrength = 5, int oreSteps = 5, int heightLimit = -1, bool mapDebug = false)
+        public static Tile GetTileSafely(Vector2 position)
+        {
+            return GetTileSafely((int)(position.X / 16f), (int)(position.Y / 16f));
+        }
+
+        public static Tile GetTileSafely(int x, int y)
+        {
+            if (x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY)
+                return new Tile();
+            return Framing.GetTileSafely(x, y);
+        }
+
+        public static void GenOre(int tileType, int amountInWorld = -1, float oreStrength = 5, int oreSteps = 5, int heightLimit = -1, bool mapDebug = false)
 		{
 			if (WorldGen.noTileActions) return;
 			if (heightLimit == -1) heightLimit = (int)Main.worldSurface;

@@ -19,6 +19,8 @@ namespace CSkies
         public bool VoidEye = false;
         public bool VoidCD = false;
 
+        public bool Heartburn = false;
+
         public override void ResetEffects()
         {
             Watcher = false;
@@ -26,16 +28,22 @@ namespace CSkies
 
             VoidEye = false;
             VoidCD = false;
+
+            Heartburn = false;
         }
 
         public override void Initialize()
         {
             Watcher = false;
             Gazer = false;
+
             VoidEye = false;
             VoidCD = false;
+
             ZoneVoid = false;
             ZoneComet = false;
+
+            Heartburn = false;
         }
 
         public override void UpdateBiomes()
@@ -43,6 +51,7 @@ namespace CSkies
             ZoneVoid = NearVoid();
             ZoneComet = CWorld.CometTiles > 30;
         }
+
         public override void UpdateBiomeVisuals()
         {
             bool useVoid = ZoneVoid || NearVoidBoss();
@@ -97,6 +106,21 @@ namespace CSkies
                 {
                     player.AddBuff(ModContent.BuffType<Buffs.VECooldown>(), 3000);
                     Projectile.NewProjectile(player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.VoidEyeVortex>(), 60, 0, Main.myPlayer);
+                }
+            }
+        }
+
+        public override void UpdateBadLifeRegen()
+        {
+            if (Heartburn)
+            {
+                if (player.statLife > player.statLifeMax2 * .8f)
+                {
+                    player.lifeRegen -= 30;
+                }
+                else
+                {
+                    player.lifeRegen = 0;
                 }
             }
         }

@@ -24,7 +24,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
             projectile.tileCollide = false;
             projectile.penetrate = -1;
             Main.projFrames[projectile.type] = 4;
-            projectile.timeLeft = 500;
+            projectile.timeLeft = 400;
         }
 		
 		public override Color? GetAlpha(Color lightColor)

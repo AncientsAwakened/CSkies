@@ -7,8 +7,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.Utilities;
-using Terraria.ModLoader;
-using log4net;
 
 namespace CSkies
 {
@@ -142,16 +140,17 @@ namespace CSkies
 		}
 
 
-		public static void AIMinionFlier(Projectile projectile, ref float[] ai, Entity owner, bool pet = false, bool hover = false, int hoverHeight = 40, int lineDist = 40, int returnDist = 400, int teleportDist = 800, float moveInterval = -1f, float maxSpeed = -1f, float maxSpeedFlying = -1f, bool autoSpriteDir = true, bool dummyTileCollide = false, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
+		public static void AIMinionFlier(Projectile projectile, ref float[] ai, Entity owner, bool pet = false, bool movementFixed = false, bool hover = false, int hoverHeight = 40, int lineDist = 40, int returnDist = 400, int teleportDist = 800, float moveInterval = -1f, float maxSpeed = -1f, float maxSpeedFlying = -1f, bool autoSpriteDir = true, bool dummyTileCollide = false, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
 		{
 			if (moveInterval == -1f) { moveInterval = (0.08f * Main.player[projectile.owner].moveSpeed); }
 			if (maxSpeed == -1f) { maxSpeed = Math.Max(Main.player[projectile.owner].maxRunSpeed, Main.player[projectile.owner].accRunSpeed); }
 			if (maxSpeedFlying == -1f) { maxSpeedFlying = Math.Max(maxSpeed, Math.Max(Main.player[projectile.owner].maxRunSpeed, Main.player[projectile.owner].accRunSpeed)); }
 			projectile.timeLeft = 10;
 			bool tileCollide = projectile.tileCollide;
-			AIMinionFlier(projectile, ref ai, owner, ref tileCollide, ref projectile.netUpdate, pet ? 0 : projectile.minionPos, hover, hoverHeight, lineDist, returnDist, teleportDist, moveInterval, maxSpeed, maxSpeedFlying, GetTarget, ShootTarget);
+			AIMinionFlier(projectile, ref ai, owner, ref tileCollide, ref projectile.netUpdate, pet ? 0 : projectile.minionPos, movementFixed, hover, hoverHeight, lineDist, returnDist, teleportDist, moveInterval, maxSpeed, maxSpeedFlying, GetTarget, ShootTarget);
 			if(!dummyTileCollide) projectile.tileCollide = tileCollide;
 			if (autoSpriteDir) { projectile.spriteDirection = projectile.direction; }
+			float dist = Vector2.Distance(projectile.Center, owner.Center);
 			if (ai[0] == 1) { projectile.spriteDirection = (owner.velocity.X == 0 ? projectile.spriteDirection : owner.velocity.X > 0 ? 1 : -1); }
 			if ((GetTarget == null || GetTarget(projectile, owner) == null || GetTarget(projectile, owner) == owner) && Math.Abs(projectile.velocity.X + projectile.velocity.Y) <= 0.025f) { projectile.spriteDirection = (owner.Center.X > projectile.Center.X ? 1 : -1); }
 		}
@@ -173,7 +172,7 @@ namespace CSkies
 		 * maxSpeedFlying : The maximum speed whist 'flying' back to the player.
 		 * GetTarget : a Func(Entity codable, Entity owner), returns a Vector2 of the a target's position. If GetTarget is null or it returns default(Vector2) the target is assumed to be the owner.
 		 */
-		public static void AIMinionFlier(Entity codable, ref float[] ai, Entity owner, ref bool tileCollide, ref bool netUpdate, int minionPos, bool hover = false, int hoverHeight = 40, int lineDist = 40, int returnDist = 400, int teleportDist = 800, float moveInterval = 0.2f, float maxSpeed = 4.5f, float maxSpeedFlying = 4.5f, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
+		public static void AIMinionFlier(Entity codable, ref float[] ai, Entity owner, ref bool tileCollide, ref bool netUpdate, int minionPos, bool movementFixed, bool hover = false, int hoverHeight = 40, int lineDist = 40, int returnDist = 400, int teleportDist = 800, float moveInterval = 0.2f, float maxSpeed = 4.5f, float maxSpeedFlying = 4.5f, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
 		{
 			float dist = Vector2.Distance(codable.Center, owner.Center);
 			if (dist > teleportDist) { codable.Center = owner.Center; }
@@ -232,6 +231,7 @@ namespace CSkies
 			projectile.timeLeft = 10;
 			AIMinionFighter(projectile, ref ai, owner, ref projectile.tileCollide, ref projectile.netUpdate, ref projectile.gfxOffY, ref projectile.stepSpeed, pet ? 0 : projectile.minionPos, jumpDistX, jumpDistY, lineDist, returnDist, teleportDist, moveInterval, maxSpeed, maxSpeedFlying, GetTarget);
 			projectile.spriteDirection = projectile.direction;
+			float dist = Vector2.Distance(projectile.Center, owner.Center);
 			if (ai[0] == 1) { projectile.spriteDirection = (owner.velocity.X == 0 ? projectile.spriteDirection : owner.velocity.X > 0 ? 1 : -1); }
 			if ((GetTarget == null ||  GetTarget(projectile, owner) == null || GetTarget(projectile, owner) == owner) && (projectile.velocity.X >= -0.025f || projectile.velocity.X <= 0.025f) && projectile.velocity.Y == 0) { projectile.spriteDirection = (owner.Center.X > projectile.Center.X ? 1 : -1); }
 		}
@@ -342,6 +342,7 @@ namespace CSkies
 			projectile.timeLeft = 10;
 			AIMinionSlime(projectile, ref ai, owner, ref projectile.tileCollide, ref projectile.netUpdate, pet ? 0 : projectile.minionPos, lineDist, returnDist, teleportDist, jumpVelX, jumpVelY, maxSpeedFlying, GetTarget);
 			projectile.spriteDirection = projectile.direction;
+			float dist = Vector2.Distance(projectile.Center, owner.Center);
 			if (ai[0] == 1) { projectile.spriteDirection = (owner.velocity.X == 0 ? projectile.spriteDirection : owner.velocity.X > 0 ? 1 : -1); }
 			if ((GetTarget == null ||  GetTarget(projectile, owner) == null || GetTarget(projectile, owner) == owner) && (projectile.velocity.X >= -0.025f || projectile.velocity.X <= 0.025f) && projectile.velocity.Y == 0) { projectile.spriteDirection = (owner.Center.X > projectile.Center.X ? 1 : -1); }
 		}		
@@ -385,7 +386,9 @@ namespace CSkies
 					targetCenter.X += (lineDist + (lineDist * minionPos)) * -owner.direction;
 				}
 				float targetDistX = Math.Abs(codable.Center.X - targetCenter.X);
-				int moveDirection = (targetCenter.X > codable.Center.X ? 1 : -1);					
+				float targetDistY = Math.Abs(codable.Center.Y - targetCenter.Y);
+				int moveDirection = (targetCenter.X > codable.Center.X ? 1 : -1);
+				int moveDirectionY = (targetCenter.Y > codable.Center.Y ? 1 : -1);					
 				if (isOwner && owner.velocity.X < 0.025f && codable.velocity.Y == 0f && targetDistX < 8f)
 				{
 					codable.velocity.X *= (Math.Abs(codable.velocity.X) > 0.01f ? 0.8f : 0f);
@@ -726,9 +729,112 @@ namespace CSkies
          * means npcs can use the method too.
          * 
          * ----------------------------------------
-         */		
+         */
+	 
+		public static void AILightningBolt(Projectile projectile, ref float[] ai, float changeAngleAt = 40)
+		{
+			int projFrameCounter = projectile.frameCounter;
+			projectile.frameCounter = projFrameCounter + 1;
+			if (projectile.velocity == Vector2.Zero)
+			{
+				if (projectile.frameCounter >= projectile.extraUpdates * 2)
+				{
+					projectile.frameCounter = 0;
+					bool shouldKillProjectile = true;
+					for (int m = 1; m < projectile.oldPos.Length; m = projFrameCounter + 1)
+					{
+						if (projectile.oldPos[m] != projectile.oldPos[0])
+						{
+							shouldKillProjectile = false;
+						}
+						projFrameCounter = m;
+					}
+					if (shouldKillProjectile)
+					{
+						projectile.Kill();
+						return;
+					}
+				}
+				/*if (Main.rand.Next(projectile.extraUpdates) == 0)
+				{
+					for (int m2 = 0; m2 < 2; m2 = projFrameCounter + 1)
+					{
+						float newRot = projectile.rotation + ((Main.rand.Next(2) == 1) ? -1f : 1f) * 1.57079637f;
+						float rotMultiplier = (float)Main.rand.NextDouble() * 0.8f + 1f;
+						Vector2 dustVel = new Vector2((float)Math.Cos((double)newRot) * rotMultiplier, (float)Math.Sin((double)newRot) * rotMultiplier);
+						int dustID = Dust.NewDust(projectile.Center, 0, 0, 226, dustVel.X, dustVel.Y, 0, default(Color), 1f);
+						Main.dust[dustID].noGravity = true;
+						Main.dust[dustID].scale = 1.2f;
+						projFrameCounter = m2;
+					}
+					if (Main.rand.Next(5) == 0)
+					{
+						Vector2 dustPos = projectile.velocity.RotatedBy(1.5707963705062866, default(Vector2)) * ((float)Main.rand.NextDouble() - 0.5f) * (float)projectile.width;
+						int dustID = Dust.NewDust(projectile.Center + dustPos - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default(Color), 1.5f);
+						Dust dust = Main.dust[dustID];
+						dust.velocity *= 0.5f;
+						Main.dust[dustID].velocity.Y = -Math.Abs(Main.dust[dustID].velocity.Y);
+						return;
+					}
+				}*/
+			}
+			else if (projectile.frameCounter >= projectile.extraUpdates * 2)
+			{
+				projectile.frameCounter = 0;
+				float velSpeed = projectile.velocity.Length();
+				UnifiedRandom unifiedRandom = new UnifiedRandom((int)projectile.ai[1]);
+				int newFrameCounter = 0;
+				Vector2 projVelocity = -Vector2.UnitY;
+				Vector2 angleVector;
+				do
+				{
+					int percentile = unifiedRandom.Next();
+					projectile.ai[1] = percentile;
+					percentile %= 100;
+					float f = percentile / 100f * 6.28318548f;
+					angleVector = f.ToRotationVector2();
+					if (angleVector.Y > 0f)
+					{
+						angleVector.Y *= -1f;
+					}
+					bool moreFrames = false;
+					if (angleVector.Y > -0.02f)
+					{
+						moreFrames = true;
+					}
+					if (angleVector.X * (projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] > changeAngleAt)
+					{
+						moreFrames = true;
+					}
+					if (angleVector.X * (projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] < -changeAngleAt)
+					{
+						moreFrames = true;
+					}
+					if (!moreFrames)
+					{
+						goto IL_2608D;
+					}
+					projFrameCounter = newFrameCounter;
+					newFrameCounter = projFrameCounter + 1;
+				}
+				while (projFrameCounter < 100);
+				projectile.velocity = Vector2.Zero;
+				projectile.localAI[1] = 1f;
+				goto IL_26099;
+				IL_2608D:
+				projVelocity = angleVector;
+				IL_26099:
+				if (projectile.velocity != Vector2.Zero)
+				{
+					projectile.localAI[0] += projVelocity.X * (projectile.extraUpdates + 1) * 2f * velSpeed;
+					projectile.velocity = projVelocity.RotatedBy(projectile.ai[0] + 1.57079637f, default) * velSpeed;
+					projectile.rotation = projectile.velocity.ToRotation() + 1.57079637f;
+					return;
+				}
+			}
+		}
 
-		public static void AIProjWorm(Projectile p, int[] wormTypes, int wormLength, float velScalar = 1f, float velScalarIdle = 1f, float velocityMax = 30f, float velocityMaxIdle = 15f)
+		public static void AIProjWorm(Projectile p, ref float[] ai, int[] wormTypes, int wormLength, float velScalar = 1f, float velScalarIdle = 1f, float velocityMax = 30f, float velocityMaxIdle = 15f)
 		{
             int[] wtypes = new int[(wormTypes.Length == 1 ? 1 : wormLength)];
             wtypes[0] = wormTypes[0];
@@ -741,10 +847,10 @@ namespace CSkies
 				}
 			}
 			int dummyNPC = -1;
-			AIProjWorm(p, ref dummyNPC, wtypes, velScalar, velScalarIdle, velocityMax, velocityMaxIdle);
+			AIProjWorm(p, ref ai, ref dummyNPC, wtypes, velScalar, velScalarIdle, velocityMax, velocityMaxIdle);
 		}
 
-		public static void AIProjWorm(Projectile p,  ref int npcTargetToAttack, int[] wormTypes, float velScalar = 1f, float velScalarIdle = 1f, float velocityMax = 30f, float velocityMaxIdle = 15f)
+		public static void AIProjWorm(Projectile p, ref float[] ai, ref int npcTargetToAttack, int[] wormTypes, float velScalar = 1f, float velScalarIdle = 1f, float velocityMax = 30f, float velocityMaxIdle = 15f)
 		{
 			Player plrOwner = Main.player[p.owner];
 			if ((int)Main.time % 120 == 0) p.netUpdate = true;
@@ -802,6 +908,7 @@ namespace CSkies
 								if (npcTargetDist < minAttackDist)
 								{
 									target = m;
+									bool boss = npcTarget.boss;
 								}
 							}
 							dummy = m;
@@ -910,6 +1017,7 @@ namespace CSkies
 					float projScale = MathHelper.Clamp(Main.projectile[byUUID].scale, 0f, 50f);
 					projectileScale = projScale;
 					tileScalar = 16f;
+					int num1064 = Main.projectile[byUUID].alpha;
 					Main.projectile[byUUID].localAI[0] = p.localAI[0] + 1f;
 					if (Main.projectile[byUUID].type != wormTypes[0])
 					{
@@ -2112,6 +2220,142 @@ namespace CSkies
 
 		#region Vanilla NPC AI Copy Methods
 
+		/*
+		 * A cleaned up (and edited) copy of Shadowflame Ghost AI. (aiStyle 86) (Shadowflame Apparition, etc.)
+		 * 
+		 * speedupOverTime: Wether or not to speed up when aligned to the player over time.
+		 * distanceBeforeTakeoff: The distance from the target player before the NPC turns around.
+		 */		
+		public static void AIShadowflameGhost(NPC npc, ref float[] ai, bool speedupOverTime = false, float distanceBeforeTakeoff = 660f, float velIntervalX = 0.3f, float velMaxX = 7f, float velIntervalY = 0.2f, float velMaxY = 4f, float velScalarY = 4f, float velScalarYMax = 15f, float velIntervalXTurn = 0.4f, float velIntervalYTurn = 0.4f, float velIntervalScalar = 0.95f, float velIntervalMaxTurn = 5f)
+		{
+			int npcAvoidCollision;
+			for (int m = 0; m < 200; m = npcAvoidCollision + 1)
+			{
+				if (m != npc.whoAmI && Main.npc[m].active && Main.npc[m].type == npc.type)
+				{
+					Vector2 dist = Main.npc[m].Center - npc.Center;
+					if (dist.Length() < 50f)
+					{
+						dist.Normalize();
+						if (dist.X == 0f && dist.Y == 0f)
+						{
+							if (m > npc.whoAmI)
+								dist.X = 1f;
+							else
+								dist.X = -1f;
+						}
+						dist *= 0.4f;
+						npc.velocity -= dist;
+						Main.npc[m].velocity += dist;
+					}
+				}
+				npcAvoidCollision = m;
+			}
+			if (speedupOverTime)
+			{
+				float timerMax = 120f;
+				if (npc.localAI[0] < timerMax)
+				{
+					if (npc.localAI[0] == 0f)
+					{
+						Main.PlaySound(SoundID.Item8, npc.Center);
+						npc.TargetClosest(true);
+						if (npc.direction > 0)
+						{
+							npc.velocity.X += 2f;
+						}
+						else
+						{
+							npc.velocity.X -= 2f;
+						}
+						for (int m = 0; m < 20; m = npcAvoidCollision + 1)
+						{
+							npcAvoidCollision = m;
+						}
+					}
+					npc.localAI[0] += 1f;
+					float timerPartial = 1f - npc.localAI[0] / timerMax;
+					float timerPartialTimes20 = timerPartial * 20f;
+					int nextNPC = 0;
+					while (nextNPC < timerPartialTimes20)
+					{
+						npcAvoidCollision = nextNPC;
+						nextNPC = npcAvoidCollision + 1;
+					}
+				}
+			}
+			if (npc.ai[0] == 0f)
+			{
+				npc.TargetClosest(true);
+				npc.ai[0] = 1f;
+				npc.ai[1] = npc.direction;
+			}
+			else if (npc.ai[0] == 1f)
+			{
+				npc.TargetClosest(true);
+				npc.velocity.X += npc.ai[1] * velIntervalX;
+				
+				if (npc.velocity.X > velMaxX)
+					npc.velocity.X = velMaxX;
+				else if (npc.velocity.X < -velMaxX)
+					npc.velocity.X = -velMaxX;
+
+				float playerDistY = Main.player[npc.target].Center.Y - npc.Center.Y;
+				if (Math.Abs(playerDistY) > velMaxY)
+					velScalarY = velScalarYMax;
+
+				if (playerDistY > velMaxY) 
+					playerDistY = velMaxY;
+				else if (playerDistY < -velMaxY) 
+					playerDistY = -velMaxY;
+				
+				npc.velocity.Y = (npc.velocity.Y * (velScalarY - 1f) + playerDistY) / velScalarY;
+				if ((npc.ai[1] > 0f && Main.player[npc.target].Center.X - npc.Center.X < -distanceBeforeTakeoff) || (npc.ai[1] < 0f && Main.player[npc.target].Center.X - npc.Center.X > distanceBeforeTakeoff))
+				{
+					npc.ai[0] = 2f;
+					npc.ai[1] = 0f;
+					if (npc.Center.Y + 20f > Main.player[npc.target].Center.Y)
+						npc.ai[1] = -1f;
+					else
+						npc.ai[1] = 1f;
+				}
+			}
+			else if (npc.ai[0] == 2f)
+			{
+				npc.velocity.Y += npc.ai[1] * velIntervalYTurn;
+				
+				if (npc.velocity.Length() > velIntervalMaxTurn)
+					npc.velocity *= velIntervalScalar;
+				
+				if (npc.velocity.X > -1f && npc.velocity.X < 1f)
+				{
+					npc.TargetClosest(true);
+					npc.ai[0] = 3f;
+					npc.ai[1] = npc.direction;
+				}
+			}
+			else if (npc.ai[0] == 3f)
+			{
+				npc.velocity.X += npc.ai[1] * velIntervalXTurn;
+				
+				if (npc.Center.Y > Main.player[npc.target].Center.Y)
+					npc.velocity.Y -= velIntervalY;
+				else
+					npc.velocity.Y += velIntervalY;
+				
+				if (npc.velocity.Length() > velIntervalMaxTurn)
+					npc.velocity *= velIntervalScalar;
+				
+				if (npc.velocity.Y > -1f && npc.velocity.Y < 1f)
+				{
+					npc.TargetClosest(true);
+					npc.ai[0] = 0f;
+					npc.ai[1] = npc.direction;
+				}
+			}																
+		}
+		
+		
 		public static void AISpaceOctopus(NPC npc, ref float[] ai, float moveSpeed = 0.15f, float velMax = 5f, float hoverDistance = 250f, float shootProjInterval = 70f, Action<NPC, Vector2> FireProj = null)
 		{
 			npc.TargetClosest(true);		
@@ -2186,7 +2430,8 @@ namespace CSkies
 			if(noDmg) npc.dontTakeDamage = false;
 			Player targetPlayer = (npc.target < 0 ? null : Main.player[npc.target]);
 			Vector2 playerCenter = (targetPlayer == null ? npc.Center + new Vector2(0, 5f) : targetPlayer.Center);
-
+			Vector2 dist = playerCenter - npc.Center;
+			
 			if (npc.justHit && Main.netMode != 1 && noDmg && Main.rand.Next(6) == 0)
 			{
 				npc.netUpdate = true;
@@ -2210,6 +2455,7 @@ namespace CSkies
 				npc.TargetClosest(true);
 				targetPlayer = Main.player[npc.target];
 				playerCenter = targetPlayer.Center;
+				dist = playerCenter - npc.Center;
 				if (Collision.CanHit(npc.Center, 1, 1, playerCenter, 1, 1))
 				{
 					ai[0] = 1f;
@@ -2606,10 +2852,10 @@ namespace CSkies
 			}
 		}
 
-		public static void AISpore(NPC npc, float moveIntervalX = 0.1f, float moveIntervalY = 0.02f, float maxSpeedX = 5f)
+		public static void AISpore(NPC npc, ref float[] ai, float moveIntervalX = 0.1f, float moveIntervalY = 0.02f, float maxSpeedX = 5f, float maxSpeedY = 1f)
 		{
 			npc.TargetClosest(true);
-			AISpore(npc, Main.player[npc.target].Center, Main.player[npc.target].width, moveIntervalX, moveIntervalY, maxSpeedX);
+			AISpore(npc, ref ai, Main.player[npc.target].Center, Main.player[npc.target].width, moveIntervalX, moveIntervalY, maxSpeedX, maxSpeedY);
 		}
 
 		/*
@@ -2623,7 +2869,7 @@ namespace CSkies
 		 * maxSpeedX : The maximum speed of the codable on the X axis.
 		 * maxSpeedY : The maximum speed of the codable on the Y axis.
          */
-		public static void AISpore(Entity codable, Vector2 target, int targetWidth = 16, float moveIntervalX = 0.1f, float moveIntervalY = 0.02f, float maxSpeedX = 5f)
+		public static void AISpore(Entity codable, ref float[] ai, Vector2 target, int targetWidth = 16, float moveIntervalX = 0.1f, float moveIntervalY = 0.02f, float maxSpeedX = 5f, float maxSpeedY = 1f)
 		{
 			codable.velocity.Y += moveIntervalY;
 			if (codable.velocity.Y < 0f) codable.velocity.Y *= 0.99f;
@@ -3675,67 +3921,99 @@ namespace CSkies
 		public static void AIWorm(NPC npc, ref bool isDigging, int[] wormTypes, float partDistanceAddon = 0f, float maxSpeed = 8f, float gravityResist = 0.07f, bool fly = false, bool split = false, bool ignoreTiles = false, bool spawnTileDust = true, bool soundEffects = true, bool rotateAverage = false, Action<NPC, int, bool> onChangeType = null)
         {
 			bool singlePiece = wormTypes.Length == 1;
+			bool isHead = npc.type == wormTypes[0];
+			bool isTail = npc.type == wormTypes[wormTypes.Length - 1];
+			bool isBody = !isHead && !isTail;		
             int wormLength = wormTypes.Length;
+			
             if (split)
             {
                 npc.realLife = -1;
             }else
-            if (npc.ai[3] > 0f) { npc.realLife = (int)npc.ai[3]; }
-
-            if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead) { npc.TargetClosest(true); }
-            if (Main.player[npc.target].dead && npc.timeLeft > 300) { npc.timeLeft = 300; }
+            if (npc.ai[3] > 0f)
+				npc.realLife = (int)npc.ai[3];
+			
+			if(npc.ai[0] == -1f)
+				npc.ai[0] = npc.whoAmI;
+            if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead)
+				npc.TargetClosest(true);
+			if(isHead)
+			{
+				if((npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead) && npc.timeLeft > 300)
+					npc.timeLeft = 300;
+			}else
+			{
+				npc.timeLeft = 50;
+			}
             if (Main.netMode != 1)
             {
 				if (!singlePiece)
 				{
 					//spawn pieces (flying)
-					if (fly && npc.type == wormTypes[0] && npc.ai[0] == 0f)
+					if (fly && isHead && npc.ai[0] == 0f)
 					{
 						npc.ai[3] = npc.whoAmI;
 						npc.realLife = npc.whoAmI;
 						int npcID = npc.whoAmI;
-
 						for (int m = 1; m < wormLength - 1; m++)
 						{
-							int npcType = (m == wormLength ? wormTypes[wormTypes.Length - 1] : wormTypes[m]);
+							int npcType = wormTypes[m];
+							
+							float ai0 = 0;
+							float ai1 = npcID;
+							float ai2 = 0;
+							float ai3 = npc.ai[3];							
 
-							int newnpcID = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), npcType, npc.whoAmI);
-							Main.npc[newnpcID].ai[3] = npc.whoAmI;
-							Main.npc[newnpcID].realLife = npc.whoAmI;
-							Main.npc[newnpcID].ai[1] = npcID;
+							int newnpcID = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), npcType, npc.whoAmI, ai0, ai1, ai2, ai3);
 							Main.npc[npcID].ai[0] = newnpcID;
-							NetMessage.SendData(23, -1, -1, NetworkText.FromLiteral(""), newnpcID, 0f, 0f, 0f, 0);
+							Main.npc[npcID].netUpdate = true;
+							//Main.npc[newnpcID].ai[3] = (float)npc.whoAmI;
+							//Main.npc[newnpcID].realLife = npc.whoAmI;
+							//Main.npc[newnpcID].ai[1] = (float)npcID;
+							//Main.npc[npcID].ai[0] = (float)newnpcID;
+							//Main.npc[newnpcID].netUpdate = true;							
+							//NetMessage.SendData(23, -1, -1, NetworkText.FromLiteral(""), newnpcID, 0f, 0f, 0f, 0);
 							npcID = newnpcID;
 						}
 						npc.netUpdate = true;
 					}else //spawn pieces
-					if ((npc.type == wormTypes[0] || (npc.type != wormTypes[0] && npc.type != wormTypes[wormTypes.Length - 1])) && npc.ai[0] == 0f)
+					if ((isHead || isBody) && npc.ai[0] == 0f)
 					{
-						if (npc.type == wormTypes[0])
+						if(isHead)
 						{
 							if (!split)
 							{
 								npc.ai[3] = npc.whoAmI;
 								npc.realLife = npc.whoAmI;
 							}
-							npc.ai[2] = wormLength - 1;
-							int nextPiece = (wormTypes.Length <= 2 ? wormTypes[wormTypes.Length - 1] : wormTypes[1]);
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), nextPiece, npc.whoAmI);
-						}else
-						if ((npc.type != wormTypes[0] && npc.type != wormTypes[wormTypes.Length - 1]) && npc.ai[2] > 0f)
-						{
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormLength - (int)npc.ai[2]], npc.whoAmI);
-						}else
-						{
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormTypes.Length - 1], npc.whoAmI);
+							npc.ai[2] = wormLength - 1;							
 						}
-						if (!split)
+						float ai0 = 0;
+						float ai1 = npc.whoAmI;
+						float ai2 = npc.ai[2] - 1f;
+						float ai3 = npc.ai[3];
+						if(split)
+							npc.ai[3] = 0f;
+						
+						if (isHead)
+						{
+							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[1], npc.whoAmI, ai0, ai1, ai2, ai3);
+						}else
+						if (isBody && npc.ai[2] > 0f)
+						{
+							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormLength - (int)npc.ai[2]], npc.whoAmI, ai0, ai1, ai2, ai3);
+						}else
+						{
+							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormTypes.Length - 1], npc.whoAmI, ai0, ai1, ai2, ai3);
+						}
+						/*if (!split)
 						{
 							Main.npc[(int)npc.ai[0]].ai[3] = npc.ai[3];
 							Main.npc[(int)npc.ai[0]].realLife = npc.realLife;
 						}
-						Main.npc[(int)npc.ai[0]].ai[1] = npc.whoAmI;
-						Main.npc[(int)npc.ai[0]].ai[2] = npc.ai[2] - 1f;
+						Main.npc[(int)npc.ai[0]].ai[1] = (float)npc.whoAmI;
+						Main.npc[(int)npc.ai[0]].ai[2] = npc.ai[2] - 1f;*/
+						Main.npc[(int)npc.ai[0]].netUpdate = true;				
 						npc.netUpdate = true;
 					}
 				}
@@ -3760,7 +4038,7 @@ namespace CSkies
                         npc.HitEffect(0, 10.0);
                         npc.active = false;
                     }
-                    if ((npc.type != wormTypes[0] && npc.type != wormTypes[wormTypes.Length - 1]) && !Main.npc[(int)npc.ai[1]].active) //if the body was just split, turn it into a head
+                    if (isBody && !Main.npc[(int)npc.ai[1]].active) //if the body was just split, turn it into a head
                     {
 						int oldType = npc.type;
                         npc.type = wormTypes[0];
@@ -3776,19 +4054,19 @@ namespace CSkies
                         onChangeType?.Invoke(npc, oldType, true);
                     }
                     else
-                        if ((npc.type != wormTypes[0] && npc.type != wormTypes[wormTypes.Length - 1]) && !Main.npc[(int)npc.ai[0]].active) //if the body was just split, turn it into a tail
-                        {
-							int oldType = npc.type;				
-                            npc.type = wormTypes[wormTypes.Length - 1];
-                            int npcID = npc.whoAmI;
-                            float lifePercent = npc.life / (float)npc.lifeMax;
-                            float lastPiece = npc.ai[1];
-                            npc.SetDefaults(npc.type, -1f);
-                            npc.life = (int)(npc.lifeMax * lifePercent);
-                            npc.ai[1] = lastPiece;
-                            npc.TargetClosest(true);
-                            npc.netUpdate = true;
-                            npc.whoAmI = npcID;
+					if (isBody && !Main.npc[(int)npc.ai[0]].active) //if the body was just split, turn it into a tail
+					{
+						int oldType = npc.type;				
+						npc.type = wormTypes[wormTypes.Length - 1];
+						int npcID = npc.whoAmI;
+						float lifePercent = npc.life / (float)npc.lifeMax;
+						float lastPiece = npc.ai[1];
+						npc.SetDefaults(npc.type, -1f);
+						npc.life = (int)(npc.lifeMax * lifePercent);
+						npc.ai[1] = lastPiece;
+						npc.TargetClosest(true);
+						npc.netUpdate = true;
+						npc.whoAmI = npcID;
                         onChangeType?.Invoke(npc, oldType, false);
                     }
                 }
@@ -3808,7 +4086,8 @@ namespace CSkies
                         npc.active = false;
                     }
                 }
-                if (!npc.active && Main.netMode == 2) { NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, 0f, 0f, -1); }
+                if (!npc.active && Main.netMode == 2) 
+					NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, 0f, 0f, -1);
             }
             int tileX = (int)(npc.position.X / 16f) - 1;
             int tileCenterX = (int)((npc.Center.X) / 16f) + 2;
@@ -3824,7 +4103,8 @@ namespace CSkies
                 {
                     for (int tY = tileY; tY < tileCenterY; tY++)
                     {
-                        if (Main.tile[tX, tY] != null && ((Main.tile[tX, tY].nactive() && (Main.tileSolid[Main.tile[tX, tY].type] || (Main.tileSolidTop[Main.tile[tX, tY].type] && Main.tile[tX, tY].frameY == 0))) || Main.tile[tX, tY].liquid > 64))
+						Tile checkTile = BaseWorldGen.GetTileSafely(tX, tY);						
+                        if (checkTile != null && ((checkTile.nactive() && (Main.tileSolid[checkTile.type] || (Main.tileSolidTop[checkTile.type] && checkTile.frameY == 0))) || checkTile.liquid > 64))
                         {
                             Vector2 tPos;
                             tPos.X = tX * 16;
@@ -3832,7 +4112,7 @@ namespace CSkies
                             if (npc.position.X + npc.width > tPos.X && npc.position.X < tPos.X + 16f && npc.position.Y + npc.height > tPos.Y && npc.position.Y < tPos.Y + 16f)
                             {
                                 canMove = true;
-                                if (spawnTileDust && Main.rand.Next(100) == 0 && Main.tile[tX, tY].nactive())
+                                if (spawnTileDust && Main.rand.Next(100) == 0 && checkTile.nactive())
                                 {
                                     WorldGen.KillTile(tX, tY, true, true, false);
                                 }
@@ -4049,7 +4329,7 @@ namespace CSkies
 		 * CanTeleportTo<int, int> : Action that can be used to check if the npc can teleport to a specific place.
 		 * Attack : Action that can be used to have the npc periodically attack.
 		 */
-		public static void AITeleporter(NPC npc, ref float[] ai, bool checkGround = true, bool immobile = true, int distFromPlayer = 20, int teleportInterval = 650, int attackInterval = 100, int stopAttackInterval = 500, Action<bool> TeleportEffects = null, Func<int, int, bool> CanTeleportTo = null, Action Attack = null)
+		public static void AITeleporter(NPC npc, ref float[] ai, bool checkGround = true, bool immobile = true, int distFromPlayer = 20, int teleportInterval = 650, int attackInterval = 100, int stopAttackInterval = 500, bool delayOnHit = true, Action<bool> TeleportEffects = null, Func<int, int, bool> CanTeleportTo = null, Action Attack = null)
         {
             npc.TargetClosest(true);
             if (immobile)
@@ -4330,7 +4610,7 @@ namespace CSkies
          * velMaxX, velMaxY : the maximum velocity on the X and Y axis, respectively.
          * bounceScalarX, bounceScalarY : scalars to increase the amount of velocity from bouncing on the X and Y axis, respectively.
          */
-        public static void AIEye(NPC npc, bool fleeWhenDay = true, bool ignoreWet = false, float moveIntervalX = 0.1f, float moveIntervalY = 0.04f, float velMaxX = 4f, float velMaxY = 1.5f, float bounceScalarX = 1f, float bounceScalarY = 1f)
+        public static void AIEye(NPC npc, ref float[] ai, bool fleeWhenDay = true, bool ignoreWet = false, float moveIntervalX = 0.1f, float moveIntervalY = 0.04f, float velMaxX = 4f, float velMaxY = 1.5f, float bounceScalarX = 1f, float bounceScalarY = 1f)
         {
             //controls the npc's bouncing when it hits a wall.
             if (npc.collideX)
@@ -4423,7 +4703,7 @@ namespace CSkies
          * ai : A float array that stores AI data. (Note projectile array should be synced!)
          * jumpTime : the amount of cooldown after the slime has jumped.
          */
-        public static void AISlime(NPC npc, ref float[] ai, bool fleeWhenDay = false, int jumpTime = 200, float jumpVelX = 2f, float jumpVelY = 6f, float jumpVelHighX = 3f, float jumpVelHighY = 8f)
+        public static void AISlime(NPC npc, ref float[] ai, bool fleeWhenDay = false, int jumpTime = 200, float jumpVelX = 2f, float jumpVelY = -6f, float jumpVelHighX = 3f, float jumpVelHighY = -8f)
         {
             //ai[0] is a timer that iterates after the npc has jumped. If it is >= 0, the npc will attempt to jump again.
             //ai[1] is used to determine what jump type to do. (if 2, large jump, else smaller jump.)
@@ -4504,12 +4784,9 @@ namespace CSkies
         #endregion
 
         #region Vanilla NPC AI Code Excerpts
-
-        internal static ILog Logging = LogManager.GetLogger("CSkies");
-
         //Code Excerpts are pieces of code from vanilla AI that were converted into standalone methods.
 
-        public static void WalkupHalfBricks(NPC npc)
+		public static void WalkupHalfBricks(NPC npc)
 		{
 			WalkupHalfBricks(npc, ref npc.gfxOffY, ref npc.stepSpeed);
 		}
@@ -4519,6 +4796,8 @@ namespace CSkies
 		 */
 		public static void WalkupHalfBricks(Entity codable, ref float gfxOffY, ref float stepSpeed)
 		{
+			if(codable == null)
+				return;
 			if (codable.velocity.Y >= 0f)
 			{
 				int offset = 0;
@@ -4528,6 +4807,7 @@ namespace CSkies
 				pos.X += codable.velocity.X;
 				int tileX = (int)((pos.X + (double)(codable.width / 2) + (codable.width / 2 + 1) * offset) / 16.0);
 				int tileY = (int)((pos.Y + (double)codable.height - 1.0) / 16.0);
+
 				if (Main.tile[tileX, tileY] == null) Main.tile[tileX, tileY] = new Tile();
 				if (Main.tile[tileX, tileY - 1] == null) Main.tile[tileX, tileY - 1] = new Tile();
 				if (Main.tile[tileX, tileY - 2] == null) Main.tile[tileX, tileY - 2] = new Tile();
@@ -4606,11 +4886,9 @@ namespace CSkies
 						{
 							if (!Main.tileSolidTop[tile.type])
 							{
-                                Rectangle tileHitbox = new Rectangle(tileX * 16, y * 16, 16, 16)
-                                {
-                                    Y = hitbox.Y
-                                };
-                                if (tileHitbox.Intersects(hitbox)) { newVelocity = velocity; break; }
+								Rectangle tileHitbox = new Rectangle(tileX * 16, y * 16, 16, 16);
+								tileHitbox.Y = hitbox.Y;
+								if (tileHitbox.Intersects(hitbox)) { newVelocity = velocity; break; }
 							}			
 							if (tileNear.nactive() && Main.tileSolid[tileNear.type] && !Main.tileSolidTop[tileNear.type]){ newVelocity = velocity; break; }
 							if (target != null && y * 16 < target.Center.Y){ continue; }								
@@ -4663,7 +4941,11 @@ namespace CSkies
                     }
                 }
                 return newVelocity;
-            }catch(Exception e) { Logging.DebugFormat(e.Message); Logging.DebugFormat(e.StackTrace); return velocity; }
+            }catch(Exception e)
+			{
+				BaseUtility.LogFancy("BASEMOD~ ATTEMPT JUMP ERROR:", e);
+				return velocity; 
+			}
         }
 
 
@@ -4944,96 +5226,97 @@ namespace CSkies
             if (damager == null)
             {
                 int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByOther(-1), parsedDamage, hitDirection, false, false, false, 0);
                 if (Main.netMode != 0)
                 {
                     NetMessage.SendData(26, -1, -1, PlayerDeathReason.LegacyDefault().GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                 }
             }else
-            if (damager is Player)
+            if (damager is Player subPlayer)
             {
-                Player subPlayer = (Player)damager;
-				//bool crit = false;
-				//if (critChance > 0) { crit = Main.rand.Next(1, 101) <= critChance; }
-				//float mult = 2f;
+                //bool crit = false;
+                //if (critChance > 0) { crit = Main.rand.Next(1, 101) <= critChance; }
+                //float mult = 2f;
                 //TODO: fix these by adding in the tmodloader equivilants
 
-				//player.ItemDamagePVP(subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult);
-				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); });
-				//ItemDef.RunEquipMethod(player, (item) => { item.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
+                //player.ItemDamagePVP(subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult);
+                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); });
+                //ItemDef.RunEquipMethod(player, (item) => { item.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
 
-                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
 
-				int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByPlayer(subPlayer.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
+                int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByPlayer(subPlayer.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
 
-				//crit = false;
-				//player.ItemDealtPVP(subPlayer, hitDirection, dmgAmt, crit);
-				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); });
-				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); }, true, true, false, true);
+                //crit = false;
+                //player.ItemDealtPVP(subPlayer, hitDirection, dmgAmt, crit);
+                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); });
+                //ItemDef.RunEquipMethod(player, (item) => { item.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
                 if (Main.netMode != 0)
                 {
                     NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByPlayer(subPlayer.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                 }
                 subPlayer.attackCD = (int)(subPlayer.itemAnimationMax * 0.33f);
-            }else
-            if (damager is Projectile)
+            }
+            else
+            if (damager is Projectile p)
             {
-                Projectile p = (Projectile)damager;
-                if(p.friendly)
+                if (p.friendly)
                 {
-					//bool crit = false; float mult = 2f;
+                    //bool crit = false; float mult = 2f;
                     //TODO: fix these by adding in the tmodloader equivilants
 
-					//p.DamagePVP(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+                    //p.DamagePVP(player, hitDirection, ref dmgAmt, ref crit, ref mult);
 
                     int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
                     int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByProjectile(p.owner, p.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
-					
-					//crit = false;
-					//p.DealtPVP(player, hitDirection, dmgDealt, crit);
+
+                    //crit = false;
+                    //p.DealtPVP(player, hitDirection, dmgDealt, crit);
                     if (Main.netMode != 0)
                     {
                         NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                     }
                     p.playerImmune[player.whoAmI] = 40;
-                }else
-                if(p.hostile)
+                }
+                else
+                if (p.hostile)
                 {
-					//bool crit = false; float mult = 2f;
-					//p.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
-                    
-					int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+                    //bool crit = false; float mult = 2f;
+                    //p.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+
+                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
                     int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByProjectile(-1, p.whoAmI), parsedDamage, hitDirection, false, false, false, 0);
-					
-					//crit = false;
-					//p.DealtPlayer(player, hitDirection, dmgDealt, crit);
+
+                    //crit = false;
+                    //p.DealtPlayer(player, hitDirection, dmgDealt, crit);
                     if (Main.netMode != 0)
                     {
                         NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                     }
                 }
-            }else
-            if (damager is NPC)
+            }
+            else
+            if (damager is NPC npc)
             {
-                NPC npc = (NPC)damager;
 
-				//bool crit = false; float mult = 2f;
+                //bool crit = false; float mult = 2f;
                 //TODO: fix these by adding in the tmodloader equivilants
 
-				//npc.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
-				//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); });
-				//player.NPCDamagePlayer(npc, hitDirection, ref dmgAmt, ref crit, ref mult);
-				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePlayer(player, npc, hitDirection, ref dmgAmt, ref crit, ref mult); });
-				//ItemDef.RunEquipMethod(player, (item) => { item.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
+                //npc.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+                //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); });
+                //player.NPCDamagePlayer(npc, hitDirection, ref dmgAmt, ref crit, ref mult);
+                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePlayer(player, npc, hitDirection, ref dmgAmt, ref crit, ref mult); });
+                //ItemDef.RunEquipMethod(player, (item) => { item.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
 
-                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
                 int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByNPC(npc.whoAmI), parsedDamage, hitDirection, false, false, false, 0);
 
-				//npc.DealtPlayer(player, hitDirection, dmgDealt, crit);
-				//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); });
-				//player.NPCDealtPlayer(npc, hitDirection, dmgDealt, crit);
-				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPlayer(player, npc, hitDirection, dmgAmt, crit); });
-				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); }, true, true, false, true);
+                //npc.DealtPlayer(player, hitDirection, dmgDealt, crit);
+                //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); });
+                //player.NPCDealtPlayer(npc, hitDirection, dmgDealt, crit);
+                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPlayer(player, npc, hitDirection, dmgAmt, crit); });
+                //ItemDef.RunEquipMethod(player, (item) => { item.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
                 if (Main.netMode != 0)
                 {
@@ -5074,48 +5357,47 @@ namespace CSkies
                     NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
                 }
             }else
-            if (damager is Projectile)
+            if (damager is Projectile p)
             {
-                Projectile p = (Projectile)damager;
                 if (p.owner == Main.myPlayer)
                 {
-					//bool crit = false;
-					//float mult = 1f;
-					//p.DamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+                    //bool crit = false;
+                    //float mult = 1f;
+                    //p.DamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
 
-                    int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
                     int resultDmg = (int)npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
 
-					//p.DealtNPC(npc, hitDirection, resultDmg, knockback, false);
+                    //p.DealtNPC(npc, hitDirection, resultDmg, knockback, false);
                     if (Main.netMode != 0)
                     {
                         NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
                     }
-                    if (p.penetrate != 1){ npc.immune[p.owner] = 10; }
+                    if (p.penetrate != 1) { npc.immune[p.owner] = 10; }
                 }
-            }else
-            if (damager is Player)
+            }
+            else
+            if (damager is Player player)
             {
-                Player player = (Player)damager;
                 if (player.whoAmI == Main.myPlayer)
                 {
-					//bool crit = false;
-					//float mult = 1f;
-					//npc.DamageNPC(player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
-					//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamageNPC(npc, player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
-					//player.ItemDamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
-					//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
-					//ItemDef.RunEquipMethod(player, (item) => { item.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); }, true, true, false, true);
-                    
-					int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                    //bool crit = false;
+                    //float mult = 1f;
+                    //npc.DamageNPC(player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+                    //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamageNPC(npc, player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
+                    //player.ItemDamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+                    //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
+                    //ItemDef.RunEquipMethod(player, (item) => { item.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); }, true, true, false, true);
+
+                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
                     int dmgDealt = (int)npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
 
-					//crit = false;
-					//npc.DealtNPC(player, hitDirection, dmgDealt, knockback, crit);
-					//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtNPC(npc, player, hitDirection, dmgAmt, knockback, crit); });
-					//player.ItemDealtNPC(npc, hitDirection, dmgDealt, knockback, crit);
-					//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); });
-					//ItemDef.RunEquipMethod(player, (item) => { item.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); }, true, true, false, true);
+                    //crit = false;
+                    //npc.DealtNPC(player, hitDirection, dmgDealt, knockback, crit);
+                    //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtNPC(npc, player, hitDirection, dmgAmt, knockback, crit); });
+                    //player.ItemDealtNPC(npc, hitDirection, dmgDealt, knockback, crit);
+                    //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); });
+                    //ItemDef.RunEquipMethod(player, (item) => { item.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); }, true, true, false, true);
 
                     if (Main.netMode != 0)
                     {
@@ -5535,14 +5817,13 @@ namespace CSkies
          */
         public static bool CanTarget(Player player, Entity codable)
         {
-            if (codable is NPC)
+            if (codable is NPC npc)
             {
-                NPC npc = (NPC)codable;
                 return npc.life > 0 && (!npc.friendly || (npc.type == 22 && player.killGuide)) && !npc.dontTakeDamage;
-            }else
-            if (codable is Player)
+            }
+            else
+            if (codable is Player player2)
             {
-                Player player2 = (Player)codable;
                 return player2.statLife > 0 && !player2.immune && (player2.hostile && (player.team == 0 || player2.team == 0 || player.team != player2.team));
             }
             return false;
@@ -5669,6 +5950,7 @@ namespace CSkies
 				if (Main.netMode != 0) { MNet.SendBaseNetMessage(0, proj.owner, proj.identity, proj.friendly, proj.hostile); }
             }
 			proj.netUpdate2 = true;
+			Main.projectile[projectileID] = proj;
             return projectileID;
         }
 
@@ -5902,7 +6184,10 @@ namespace CSkies
                 }
                 Way += Jump;
             }
-			}catch(Exception e){ ErrorLogger.Log("TRACE ERROR: " + e.Message); ErrorLogger.Log(e.StackTrace); ErrorLogger.Log("--------"); }
+			}catch(Exception e)
+			{
+				BaseUtility.LogFancy("BASEMOD~ TRACE ERROR:", e);				
+			}
             return end;
         }
 

@@ -7,18 +7,23 @@ using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CSkies.NPCs.Bosses.Heartcore;
 
-namespace CSkies.NPCs.Bosses.Heartcore
+namespace CSkies.NPCs.Bosses.FurySoul
 {
-    public class Heartcore : ModNPC
+    public class FurySoul : ModNPC
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Fury Soul");
+        }
         public override void SetDefaults()
         {
             npc.npcSlots = 100;
-            npc.width = 50;
-            npc.height = 50;
+            npc.width = 82;
+            npc.height = 82;
             npc.aiStyle = -1;
-            npc.damage = 90;
+            npc.damage = 120;
             npc.defense = 60;
             npc.lifeMax = 150000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
@@ -29,10 +34,18 @@ namespace CSkies.NPCs.Bosses.Heartcore
             npc.netAlways = true;
             npc.boss = true;
             npc.noTileCollide = true;
-            music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Heartcore");
+            music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/FurySoul");
+        }
+
+        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        {
+            npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
+            npc.damage = (int)(npc.damage * 0.5f);
         }
 
         public float[] Shoot = new float[1];
+        public float[] Move = new float[1];
+        public float[] Movement = new float[4];
 
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -40,6 +53,11 @@ namespace CSkies.NPCs.Bosses.Heartcore
             if (Main.netMode == NetmodeID.Server || Main.dedServ)
             {
                 writer.Write(Shoot[0]);
+                writer.Write(Move[0]);
+                writer.Write(Movement[0]);
+                writer.Write(Movement[1]);
+                writer.Write(Movement[2]);
+                writer.Write(Movement[3]);
             }
         }
 
@@ -49,6 +67,11 @@ namespace CSkies.NPCs.Bosses.Heartcore
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 Shoot[0] = reader.ReadFloat();
+                Move[0] = reader.ReadFloat();
+                Movement[0] = reader.ReadFloat();
+                Movement[1] = reader.ReadFloat();
+                Movement[2] = reader.ReadFloat();
+                Movement[3] = reader.ReadFloat();
             }
         }
 
@@ -64,35 +87,53 @@ namespace CSkies.NPCs.Bosses.Heartcore
 
         public static Color Flame => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.Orange, Color.Red, Color.Orange);
 
-        bool Rage = false;
+        float scale = 0;
+        float rot = 0;
+
 
         public override void AI()
         {
-            int speed = 9;
-            float interval = .02f;
-
-            if (npc.life < npc.lifeMax / 3)
-            {
-                if (!Rage)
-                {
-                    Rage = true;
-                }
-                speed = 11;
-                interval = .03f;
-            }
-
-            RingEffects();
 
             Lighting.AddLight(npc.Center, Flame.R / 150, Flame.G / 150, Flame.B / 150);
-
 
             if (!npc.HasPlayerTarget)
             {
                 npc.TargetClosest();
             }
+
             Player player = Main.player[npc.target];
 
-            BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .025f);
+            if (Vector2.Distance(player.Center, npc.Center) < 204 && !player.dead && player.active)
+            {
+                player.AddBuff(ModContent.BuffType<Buffs.Heartburn>(), 2);
+            }
+
+            switch (Move[0])
+            {
+                case 0:
+                    BaseAI.AISpaceOctopus(npc, ref Movement, 0.3f, 12f, 350f, 70f, null);
+                    if (npc.ai[0]++ > 600)
+                    {
+                        Move[0] = Main.rand.Next(2) == 0 ? 1 : 2;
+                    }
+                    break;
+                case 1:
+                    BaseAI.AIWeapon(npc, ref Movement, ref npc.rotation, player.position, false, 120, 120, 10f, 3f, 2f);
+                    if (npc.ai[0]++ > 900)
+                    {
+                        npc.ai[0] = 0;
+                        Move[0] = 0;
+                    }
+                    break;
+                case 2:
+                    BaseAI.AIShadowflameGhost(npc, ref Movement, false, 330f, 0.6f, 12f, 0.3f, 7f, 4f, 15f, 0.4f, 0.4f, 0.95f, 5f);
+                    if (npc.ai[0]++ > 900)
+                    {
+                        npc.ai[0] = 0;
+                        Move[0] = 0;
+                    }
+                    break;
+            }
 
             if (npc.ai[2]++ > (Main.expertMode ? 150 : 220))
             {
@@ -154,8 +195,8 @@ namespace CSkies.NPCs.Bosses.Heartcore
                         for (int i = 0; i < 10; i++)
                         {
                             double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 6);
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 6);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), mod.ProjectileType("BrimstoneBarrage"), npc.damage / 4, 6);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), mod.ProjectileType("BrimstoneBarrage"), npc.damage / 4, 6);
                         }
                         npc.ai[2] = 0;
                         Shoot[0] = Main.rand.Next(4);
@@ -208,65 +249,47 @@ namespace CSkies.NPCs.Bosses.Heartcore
                     BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
                 }
             }
-        }
 
-        float scale = 0;
-        float rot = 0;
-
-        private void RingEffects()
-        {
             rot += .3f;
-            if (npc.life < npc.lifeMax / 3)
+
+            if (scale >= 1f)
             {
-                if (scale >= 1f)
-                {
-                    scale = 1f;
-                }
-                else
-                {
-                    scale += .02f;
-                }
+                scale = 1f;
             }
             else
             {
-                if (scale > .1f)
-                {
-                    scale -= .02f;
-                }
-                else
-                {
-                    scale = 0;
-                }
+                scale += .02f;
             }
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        public float auraPercent = 0f;
+        public bool auraDirection = true;
+
+        public override bool PreDraw(SpriteBatch sb, Color lightColor)
         {
+            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
+
+            if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
+            else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
+
             Texture2D texture2D13 = Main.npcTexture[npc.type];
-            Texture2D BladeTex = mod.GetTexture("NPCs/Bosses/Heartcore/HeartcoreBack");
-            Texture2D BladeGlowTex = mod.GetTexture("Glowmasks/HeartcoreBack_Glow");
-            Texture2D GlowTex = mod.GetTexture("Glowmasks/Heartcore_Glow");
-            Texture2D Heart = mod.GetTexture("Glowmasks/Heart_Glow");
+            Texture2D RingTex = mod.GetTexture("NPCs/Bosses/FurySoul/FuryRing");
 
             Texture2D RingTex1 = mod.GetTexture("NPCs/Bosses/Heartcore/Ring1");
             Texture2D RingTex2 = mod.GetTexture("NPCs/Bosses/Heartcore/Ring2");
             Texture2D RitualTex = mod.GetTexture("NPCs/Bosses/Heartcore/Ritual");
 
-            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
 
             if (scale > 0)
             {
-                BaseDrawing.DrawTexture(spriteBatch, RitualTex, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RitualTex.Width, RitualTex.Height), drawColor, true);
-                BaseDrawing.DrawTexture(spriteBatch, RingTex1, r, npc.position, npc.width, npc.height, scale, -rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
-                BaseDrawing.DrawTexture(spriteBatch, RingTex2, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
+                BaseDrawing.DrawTexture(sb, RitualTex, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RitualTex.Width, RitualTex.Height), lightColor, true);
+                BaseDrawing.DrawTexture(sb, RingTex1, r, npc.position, npc.width, npc.height, scale, -rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), lightColor, true);
+                BaseDrawing.DrawTexture(sb, RingTex2, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), lightColor, true);
             }
 
-            BaseDrawing.DrawTexture(spriteBatch, BladeTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, BladeTex.Width, BladeTex.Height), drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, BladeGlowTex, r, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, BladeTex.Width, BladeTex.Height), Color.White, true);
-
-            BaseDrawing.DrawTexture(spriteBatch, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, GlowTex, r, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), Color.White, true);
-            BaseDrawing.DrawTexture(spriteBatch, Heart, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), Colors.COLOR_GLOWPULSE, true);
+            BaseDrawing.DrawTexture(sb, RingTex, r, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), Color.White, true);
+            BaseDrawing.DrawTexture(sb, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), lightColor, true);
+            BaseDrawing.DrawAura(sb, texture2D13, 0, npc.position, npc.width, npc.height, auraPercent, 1.5f, 1f, 0, npc.direction, 4, npc.frame, 0f, 0f, npc.GetAlpha(Color.White));
 
             return false;
         }

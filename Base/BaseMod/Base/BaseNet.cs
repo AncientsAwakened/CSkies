@@ -29,15 +29,19 @@ namespace CSkies
             {
                 object obj = param[m];
 
-				if(obj is byte[])
-				{
-					byte[] array = (byte[])obj;
-					foreach(byte b in array) packet.Write(b); 
-				}else
-                if (obj is bool) packet.Write((bool)obj); else
-                if (obj is byte) packet.Write((byte)obj); else
-                if (obj is short) packet.Write((short)obj); else
-                if (obj is int) packet.Write((int)obj); else
+                if (obj is byte[] array)
+                {
+                    foreach (byte b in array) packet.Write(b);
+                }
+                else
+                if (obj is bool) packet.Write((bool)obj);
+                else
+                if (obj is byte) packet.Write((byte)obj);
+                else
+                if (obj is short) packet.Write((short)obj);
+                else
+                if (obj is int) packet.Write((int)obj);
+                else
                 if (obj is float) packet.Write((float)obj);
             }
             return packet;
