@@ -22,7 +22,6 @@ namespace CSkies.NPCs.Bosses.Heartcore
 			projectile.height = 24;
 			projectile.hostile = true;
 			projectile.tileCollide = false;
-			projectile.magic = true;
 			projectile.extraUpdates = 2;
 		}
 

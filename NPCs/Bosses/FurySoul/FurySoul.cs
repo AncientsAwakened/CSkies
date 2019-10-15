@@ -124,9 +124,14 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 player.AddBuff(ModContent.BuffType<Buffs.Heartburn>(), 10);
             }
 
-
-            BaseAI.AISkull(npc, ref Movement, true, 14, 350, .03f, .025f);
-
+            if (npc.ai[0] == 2 || npc.ai[0] == 4)
+            {
+                npc.velocity *= .8f;
+            }
+            else
+            {
+                BaseAI.AISkull(npc, ref Movement, true, 14, 350, .03f, .025f);
+            }
 
             if (npc.ai[2]++ > 150)
             {
@@ -135,17 +140,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 switch (npc.ai[0])
                 {
                     case 0:
-                        float spread = 45f * 0.0174f;
-                        Vector2 dir = Vector2.Normalize(player.Center - npc.Center);
-                        dir *= 12f;
-                        float baseSpeed = (float)Math.Sqrt((dir.X * dir.X) + (dir.Y * dir.Y));
-                        double startAngle = Math.Atan2(dir.X, dir.Y) - .1d;
-                        double deltaAngle = spread / 6f;
-                        for (int i = 0; i < 3; i++)
-                        {
-                            double offsetAngle = startAngle + (deltaAngle * i);
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
-                        }
+                       
                         AIChange();
                         break;
                     case 1:
@@ -254,7 +249,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
             else
             {
                 npc.rotation -= .03f;
-                if (npc.life < npc.lifeMax / 2)
+                if (Main.rand.Next(2) == 0)
+                {
+                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
+                }
+                else
                 {
                     BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
                 }
