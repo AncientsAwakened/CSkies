@@ -66,7 +66,7 @@ namespace CSkies.NPCs.Bosses.Starcore
                     Main.projectile[num293].netUpdate = true;
                 }
             }
-            Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 0f, ModContent.ProjectileType<StormRing>(), projectile.damage, 0f, projectile.owner, 0f, 0f);
+            Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 0f, ModContent.ProjectileType<StormRing>(), projectile.damage / 4, 0f, projectile.owner, 0f, 0f);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

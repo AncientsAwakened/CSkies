@@ -22,7 +22,7 @@ namespace CSkies.NPCs.Bosses.Starcore
             npc.width = 50;
             npc.height = 50;
             npc.aiStyle = -1;
-            npc.damage = 35;
+            npc.damage = 45;
             npc.defense = 25;
             npc.lifeMax = 12000;
             npc.value = Item.sellPrice(0, 0, 50, 0);

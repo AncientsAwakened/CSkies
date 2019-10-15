@@ -13,8 +13,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
 	{
         public override void SetDefaults()
         {
-            projectile.width = 32;
-            projectile.height = 32;
+            projectile.width = 66;
+            projectile.height = 66;
             projectile.aiStyle = -1;
             projectile.timeLeft = 3600;
             projectile.hostile = true;

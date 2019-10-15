@@ -102,7 +102,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 npc.velocity *= 0;
                 if (start[0]++ > 60)
                 {
-                    AIChange();
+                    if (Main.netMode != 1)
+                    {
+                        npc.ai[0] = 0;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+                        npc.netUpdate = true;
+                    }
                 }
             }
 
@@ -123,7 +129,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
 
 
-            BaseAI.AISkull(npc, ref npc.ai, true, 14, 350, .03f, .025f);
+            BaseAI.AISkull(npc, ref npc.ai, true, 14, 200, .03f, .025f);
 
 
             if (npc.ai[2]++ > 150)
@@ -139,29 +145,17 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         float baseSpeed = (float)Math.Sqrt((dir.X * dir.X) + (dir.Y * dir.Y));
                         double startAngle = Math.Atan2(dir.X, dir.Y) - .1d;
                         double deltaAngle = spread / 6f;
-                        if (npc.life < npc.lifeMax / 3)
+                        for (int i = 0; i < 3; i++)
                         {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (npc.ai[2] % 30 == 0)
-                                {
-                                    double offsetAngle = startAngle + (deltaAngle * i);
-                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
-                                }
-                            }
-                            if (npc.ai[2] > 271)
-                            {
-                                AIChange();
-                            }
+                            double offsetAngle = startAngle + (deltaAngle * i);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
                         }
-                        else
+                        if (Main.netMode != 1)
                         {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                double offsetAngle = startAngle + (deltaAngle * i);
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
-                            }
-                            AIChange();
+                            npc.ai[0] = 1;
+                            npc.ai[1] = 0;
+                            npc.ai[2] = 0;
+                            npc.netUpdate = true;
                         }
                         break;
                     case 1:
@@ -180,7 +174,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (npc.ai[2] > 240)
                         {
-                            AIChange();
+                            if (Main.netMode != 1)
+                            {
+                                npc.ai[0] = 2;
+                                npc.ai[1] = 0;
+                                npc.ai[2] = 0;
+                                npc.netUpdate = true;
+                            }
                         }
                         break;
                     case 2:
@@ -194,7 +194,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (npc.ai[2] > 310)
                         {
-                            AIChange();
+                            if (Main.netMode != 1)
+                            {
+                                npc.ai[0] = 3;
+                                npc.ai[1] = 0;
+                                npc.ai[2] = 0;
+                                npc.netUpdate = true;
+                            }
                         }
                         break;
                     case 3:
@@ -212,7 +218,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (npc.ai[2] > 240)
                         {
-                            AIChange();
+                            if (Main.netMode != 1)
+                            {
+                                npc.ai[0] = 4;
+                                npc.ai[1] = 0;
+                                npc.ai[2] = 0;
+                                npc.netUpdate = true;
+                            }
                         }
                         break;
                     case 4:
@@ -259,11 +271,16 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-9, 9), ModContent.ProjectileType<Furyrang>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(9, -9), ModContent.ProjectileType<Furyrang>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-9, -9), ModContent.ProjectileType<Furyrang>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            AIChange();
+                            if (Main.netMode != 1)
+                            {
+                                npc.ai[0] = 0;
+                                npc.ai[1] = 0;
+                                npc.ai[2] = 0;
+                                npc.netUpdate = true;
+                            }
+                            break;
                         }
                         break;
-                    default:
-                        goto case 0;
                 }
             }
             else
@@ -273,17 +290,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
                 }
-            }
-        }
-
-        private void AIChange()
-        {
-            if (Main.netMode != 1)
-            {
-                npc.ai[0] = Main.rand.Next(5);
-                npc.ai[1] = 0;
-                npc.ai[2] = 0;
-                npc.netUpdate = true;
             }
         }
 

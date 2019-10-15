@@ -61,6 +61,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
         public override bool PreDraw(SpriteBatch sb, Color dColor)
         {
             Texture2D tex = Main.npcTexture[npc.type];
+
+            if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
+            else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
+
             BaseDrawing.DrawAura(sb, tex, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
             return false;
         }
