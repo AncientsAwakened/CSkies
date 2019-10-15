@@ -24,7 +24,12 @@ namespace CSkies.NPCs.Bosses.FurySoul
             projectile.melee = true;
         }
 
-		public int master = -1;
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Colors.COLOR_GLOWPULSE;
+        }
+
+        public int master = -1;
 		
 		public int dustDelay = 0;
 
@@ -45,7 +50,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 Main.dust[dustnumber].velocity *= 0.3f;
             }
 
-            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 20, 35, 4f, .3f) ;
+            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 40, 35, 4f, .3f, true);
 		}
 	}
 }
