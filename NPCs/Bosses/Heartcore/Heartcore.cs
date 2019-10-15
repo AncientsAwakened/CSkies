@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CSkies.NPCs.Bosses.FurySoul;
 
 namespace CSkies.NPCs.Bosses.Heartcore
 {
@@ -19,7 +20,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
             npc.height = 50;
             npc.aiStyle = -1;
             npc.damage = 90;
-            npc.defense = 60;
+            npc.defense = 40;
             npc.lifeMax = 150000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
             npc.HitSound = new LegacySoundStyle(21, 1);
@@ -30,6 +31,12 @@ namespace CSkies.NPCs.Bosses.Heartcore
             npc.boss = true;
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Heartcore");
+        }
+
+        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        {
+            npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
+            npc.damage = (int)(npc.damage * 0.5f);
         }
 
         public float[] Shoot = new float[1];
@@ -54,11 +61,28 @@ namespace CSkies.NPCs.Bosses.Heartcore
 
         public override void NPCLoot()
         {
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore1"), 1f);
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore2"), 1f);
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore3"), 1f);
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore4"), 1f);
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGoreHalf1"), 1f);
+            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGoreHalf2"), 1f);
             for (int num468 = 0; num468 < 12; num468++)
             {
                 int num469 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.SolarFlare, -npc.velocity.X * 0.2f,
                     -npc.velocity.Y * 0.2f, 100, default, 2f);
                 Main.dust[num469].noGravity = true;
+            }
+            if (Main.expertMode)
+            {
+                int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<FurySoulTransition>());
+                Main.npc[n].Center = npc.Center;
+                return;
+            }
+            else
+            {
+                int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<HeartcoreDefeat>());
+                Main.npc[n].Center = npc.Center;
             }
         }
 
@@ -120,14 +144,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                                 if (npc.ai[2] % 30 == 0)
                                 {
                                     double offsetAngle = startAngle + (deltaAngle * i);
-                                    if (npc.life < (int)(npc.lifeMax * .4f) && Main.rand.Next(2) == 0)
-                                    {
-                                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
-                                    }
-                                    else
-                                    {
-                                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<Heartshot>(), npc.damage / 4, 5, Main.myPlayer);
-                                    }
+                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
                                 }
                             }
                             if (npc.ai[2] > (Main.expertMode ? 271 : 331))
@@ -141,7 +158,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                             for (int i = 0; i < 3; i++)
                             {
                                 double offsetAngle = startAngle + (deltaAngle * i);
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<Heartshot>(), npc.damage / 4, 12, Main.myPlayer);
+                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
                             }
                             npc.ai[2] = 0;
                             Shoot[0] = Main.rand.Next(4);
@@ -151,6 +168,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                         float spread1 = 12f * 0.0174f;
                         double startAngle1 = Math.Atan2(npc.velocity.X, npc.velocity.Y) - spread1 / 2;
                         double deltaAngle1 = spread1 / 10f;
+                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                         for (int i = 0; i < 10; i++)
                         {
                             double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
@@ -161,6 +179,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                         Shoot[0] = Main.rand.Next(4);
                         break;
                     case 2:
+                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
                         Projectile.NewProjectile(npc.Center, new Vector2(7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                         Projectile.NewProjectile(npc.Center, new Vector2(-7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                         Projectile.NewProjectile(npc.Center, new Vector2(7, -7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -176,6 +195,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                     case 3:
                         if (npc.ai[2] % 20 == 0)
                         {
+                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(9, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -211,11 +231,9 @@ namespace CSkies.NPCs.Bosses.Heartcore
         }
 
         float scale = 0;
-        float rot = 0;
 
         private void RingEffects()
         {
-            rot += .3f;
             if (npc.life < npc.lifeMax / 3)
             {
                 if (scale >= 1f)
@@ -256,9 +274,9 @@ namespace CSkies.NPCs.Bosses.Heartcore
 
             if (scale > 0)
             {
-                BaseDrawing.DrawTexture(spriteBatch, RitualTex, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RitualTex.Width, RitualTex.Height), drawColor, true);
-                BaseDrawing.DrawTexture(spriteBatch, RingTex1, r, npc.position, npc.width, npc.height, scale, -rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
-                BaseDrawing.DrawTexture(spriteBatch, RingTex2, r, npc.position, npc.width, npc.height, scale, rot, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
+                BaseDrawing.DrawTexture(spriteBatch, RitualTex, r, npc.position, npc.width, npc.height, scale, -npc.rotation, 0, 1, new Rectangle(0, 0, RitualTex.Width, RitualTex.Height), drawColor, true);
+                BaseDrawing.DrawTexture(spriteBatch, RingTex1, r, npc.position, npc.width, npc.height, scale, npc.rotation, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
+                BaseDrawing.DrawTexture(spriteBatch, RingTex2, r, npc.position, npc.width, npc.height, scale, npc.rotation, 0, 1, new Rectangle(0, 0, RingTex1.Width, RingTex1.Height), drawColor, true);
             }
 
             BaseDrawing.DrawTexture(spriteBatch, BladeTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, BladeTex.Width, BladeTex.Height), drawColor, true);

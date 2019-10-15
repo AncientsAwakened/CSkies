@@ -39,13 +39,13 @@ namespace CSkies.NPCs.Bosses.Heartcore
 			projectile.scale = projectile.ai[1];
 			projectile.rotation += projectile.velocity.X * 2f;
 			Vector2 position = projectile.Center + Vector2.Normalize(projectile.velocity) * 10f;
-			Dust dust20 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 107, 0f, 0f, 0, default, 1f)];
+			Dust dust20 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SolarFlare, 0f, 0f, 0, default, 1f)];
 			dust20.position = position;
 			dust20.velocity = projectile.velocity.RotatedBy(1.5707963705062866, default) * 0.33f + projectile.velocity / 4f;
 			dust20.position += projectile.velocity.RotatedBy(1.5707963705062866, default);
 			dust20.fadeIn = 0.5f;
 			dust20.noGravity = true;
-			dust20 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, 107, 0f, 0f, 0, default, 1f)];
+			dust20 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SolarFlare, 0f, 0f, 0, default, 1f)];
 			dust20.position = position;
 			dust20.velocity = projectile.velocity.RotatedBy(-1.5707963705062866, default) * 0.33f + projectile.velocity / 4f;
 			dust20.position += projectile.velocity.RotatedBy(-1.5707963705062866, default);

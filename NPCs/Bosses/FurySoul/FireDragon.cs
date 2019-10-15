@@ -314,7 +314,15 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         public override void FindFrame(int frameHeight)
         {
-            base.FindFrame(frameHeight);
+            npc.frame.Y = 0;
+            if (Fire[0] > 150)
+            {
+                npc.frame.Y = frameHeight;
+            }
+            if (Fire[0] > 200)
+            {
+                npc.frame.Y = frameHeight * 2;
+            }
         }
 
         public override void NPCLoot()

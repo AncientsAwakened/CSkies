@@ -12,11 +12,9 @@ namespace CSkies.NPCs.Bosses.Heartcore
 		{
 			projectile.width = 32;
             projectile.height = 32;
-			projectile.aiStyle = 1;
 			projectile.hostile = true;
 			projectile.penetrate = 1;
-			projectile.aiStyle = 27;
-			projectile.magic = true;
+			projectile.aiStyle = -1;
 			projectile.timeLeft = 300;
 			ProjectileID.Sets.TrailCacheLength[projectile.type] = 5;
 			ProjectileID.Sets.TrailingMode[projectile.type] = 2;
@@ -43,8 +41,8 @@ namespace CSkies.NPCs.Bosses.Heartcore
 				int dustnumber = Dust.NewDust(projectile.position, projectile.width, projectile.height, ModContent.DustType<Dusts.HeartDust>(), 0f, 0f, 200, default, 0.5f);
 				Main.dust[dustnumber].velocity *= 0.3f;
 			}
-            const int aislotHomingCooldown = 60;
-            const int homingDelay = 0;
+            const int aislotHomingCooldown = 0;
+            const int homingDelay = 30;
             const float desiredFlySpeedInPixelsPerFrame = 15;
             const float amountOfFramesToLerpBy = 30; // minimum of 1, please keep in full numbers even though it's a float!
 
