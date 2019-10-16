@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace CSkies.Items.Boss
 {
-    [AutoloadEquip(EquipType.Shield)]
+    //[AutoloadEquip(EquipType.Shield)]
     public class StarcoreShield : ModItem
     {
         public override void SetDefaults()
