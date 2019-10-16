@@ -19,6 +19,11 @@ namespace CSkies
         public static bool downedObserver = false;
         public static bool downedObserverV = false;
         public static bool downedVoid = false;
+
+        public static bool downedStarcore = false;
+        public static bool downedHeartcore = false;
+        public static bool downedSoul = false;
+
         public static int CometTiles = 0;
         public static int VaultTiles = 0;
 
@@ -35,6 +40,9 @@ namespace CSkies
             downedObserver = false;
             downedObserverV = false;
             downedVoid = false;
+            downedStarcore = false;
+            downedHeartcore = false;
+            downedSoul = false;
             Altar1 = false;
             Altar2 = false;
             Altar3 = false;
@@ -48,6 +56,11 @@ namespace CSkies
             if (downedObserver) downed.Add("O1");
             if (downedObserverV) downed.Add("02");
             if (downedVoid) downed.Add("VOID");
+
+            if (downedStarcore) downed.Add("Star");
+            if (downedHeartcore) downed.Add("Heart");
+            if (downedSoul) downed.Add("Soul");
+
             if (MeteorMessage) downed.Add("Comet");
             if (KillDoors) downed.Add("door");
 
@@ -62,6 +75,11 @@ namespace CSkies
             downedObserver = downed.Contains("O1");
             downedObserverV = downed.Contains("O2");
             downedVoid = downed.Contains("VOID");
+
+            downedStarcore = downed.Contains("Star");
+            downedHeartcore = downed.Contains("Heart");
+            downedSoul = downed.Contains("Soul");
+
             MeteorMessage = downed.Contains("Comet");
             KillDoors = downed.Contains("door");
         }
@@ -73,6 +91,9 @@ namespace CSkies
             flags[2] = MeteorMessage;
             flags[3] = downedVoid;
             flags[4] = KillDoors;
+            flags[5] = downedStarcore;
+            flags[6] = downedHeartcore;
+            flags[7] = downedSoul;
             writer.Write(flags);
         }
         public override void NetReceive(BinaryReader reader)
@@ -83,6 +104,9 @@ namespace CSkies
             MeteorMessage = flags[2];
             downedVoid = flags[3];
             KillDoors = flags[4];
+            downedStarcore = flags[5];
+            downedHeartcore = flags[6];
+            downedSoul = flags[7];
         }
         #endregion
 

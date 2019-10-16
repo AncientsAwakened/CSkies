@@ -18,8 +18,11 @@ namespace CSkies
             if (bossChecklist != null)
             {
                 bossChecklist.Call("AddBossWithInfo", "The Observer", 5.5, (Func<bool>)(() => CWorld.downedObserver), "Use a [i:" + ModContent.ItemType<CosmicEye>() + "] at night");
+                bossChecklist.Call("AddBossWithInfo", "Starcore", 5.5, (Func<bool>)(() => CWorld.downedStarcore), "Use a [i:" + ModContent.ItemType<Transmitter>() + "] at night");
                 bossChecklist.Call("AddBossWithInfo", "Observer Void", 14, (Func<bool>)(() => CWorld.downedObserverV), "Use a [i:" + ModContent.ItemType<VoidEye>() + "] at night");
-                bossChecklist.Call("AddBossWithInfo", "VOID", 14, (Func<bool>)(() => CWorld.downedObserverV), "Get Observer Void to half health in Expert Mode", CWorld.downedVoid);
+                bossChecklist.Call("AddBossWithInfo", "VOID", 14, (Func<bool>)(() => CWorld.downedVoid), "Get Observer Void to half health in Expert Mode", CWorld.downedVoid);
+                bossChecklist.Call("AddBossWithInfo", "Heartcore", 14, (Func<bool>)(() => CWorld.downedHeartcore), "Use a [i:" + ModContent.ItemType<PassionRune>() + "] at night");
+                bossChecklist.Call("AddBossWithInfo", "Fury Soul", 14, (Func<bool>)(() => CWorld.downedSoul), "Defeat Heartcore in Expert Mode", CWorld.downedSoul);
 
                 // SlimeKing = 1f;
                 // EyeOfCthulhu = 2f;
