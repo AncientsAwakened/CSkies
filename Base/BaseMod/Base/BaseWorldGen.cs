@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ObjectData;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.World.Generation;
 
 namespace CSkies
@@ -20,26 +19,26 @@ namespace CSkies
         //------------------------------------------------------//
         //  Author(s): Grox the Great                           //
         //------------------------------------------------------//
+		
+		public static Tile GetTileSafely(Vector2 position)
+		{
+			return GetTileSafely((int)(position.X / 16f), (int)(position.Y / 16f));
+		}
+		
+		public static Tile GetTileSafely(int x, int y)
+		{
+			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY)
+				return new Tile();
+			return Framing.GetTileSafely(x, y);
+		}
 
-        public static Tile GetTileSafely(Vector2 position)
-        {
-            return GetTileSafely((int)(position.X / 16f), (int)(position.Y / 16f));
-        }
-
-        public static Tile GetTileSafely(int x, int y)
-        {
-            if (x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY)
-                return new Tile();
-            return Framing.GetTileSafely(x, y);
-        }
-
-        public static void GenOre(int tileType, int amountInWorld = -1, float oreStrength = 5, int oreSteps = 5, int heightLimit = -1, bool mapDebug = false)
+		public static void GenOre(int tileType, int amountInWorld = -1, float oreStrength = 5, int oreSteps = 5, int heightLimit = -1, bool mapDebug = false)
 		{
 			if (WorldGen.noTileActions) return;
 			if (heightLimit == -1) heightLimit = (int)Main.worldSurface;
 			if(amountInWorld == -1)
 			{
-				float oreCount = Main.maxTilesX / 4200;
+				float oreCount = (float)(Main.maxTilesX / 4200);
 				oreCount *= 50f;
 				amountInWorld = (int)oreCount;
 			}
@@ -81,12 +80,13 @@ namespace CSkies
          */
         public static int GetFirstTileFloor(int x, int startY, bool solid = true)
         {
-            for(int y = startY; y < Main.maxTilesY; y++)
+			if(!WorldGen.InWorld(x, startY)) return startY;			
+            for(int y = startY; y < Main.maxTilesY - 10; y++)
             {
-                Tile tile = Main.tile[x, y];
-                if(tile != null && tile.nactive() && (!solid || Main.tileSolid[tile.type])){ return y; }
+                Tile tile = Framing.GetTileSafely(x, y);
+                if(tile != null && tile.nactive() && (!solid || Main.tileSolid[(int)tile.type])){ return y; }
             }
-            return Main.maxTilesY;
+            return Main.maxTilesY - 10;
         }
 
         /*
@@ -96,33 +96,35 @@ namespace CSkies
          */
         public static int GetFirstTileCeiling(int x, int startY, bool solid = true)
         {
-            for (int y = startY; y > 0; y--)
+			if(!WorldGen.InWorld(x, startY)) return startY;
+            for (int y = startY; y > 10; y--)
             {
-                Tile tile = Main.tile[x, y];
-                if (tile != null && tile.nactive() && (!solid || Main.tileSolid[tile.type])) { return y; }
+                Tile tile = Framing.GetTileSafely(x, y);
+                if (tile != null && tile.nactive() && (!solid || Main.tileSolid[(int)tile.type])) { return y; }
             }
-            return 0;
+            return 10;
         }
 		
 		
         public static int GetFirstTileSide(int startX, int y, bool left, bool solid = true)
         {
+			if(!WorldGen.InWorld(startX, y)) return startX;			
 			if(left)
 			{
-				for(int x = startX; x > 0; x--)
+				for(int x = startX; x > 10; x--)
 				{
-					Tile tile = Main.tile[x, y];
-					if(tile != null && tile.nactive() && (!solid || Main.tileSolid[tile.type])){ return x; }
+					Tile tile = Framing.GetTileSafely(x, y);
+					if(tile != null && tile.nactive() && (!solid || Main.tileSolid[(int)tile.type])){ return x; }
 				}			
-				return 0;
+				return 10;
 			}else
 			{
-				for(int x = startX; x < Main.maxTilesX; x++)
+				for(int x = startX; x < Main.maxTilesX - 10; x++)
 				{
-					Tile tile = Main.tile[x, y];
-					if(tile != null && tile.nactive() && (!solid || Main.tileSolid[tile.type])){ return x; }
+					Tile tile = Framing.GetTileSafely(x, y);
+					if(tile != null && tile.nactive() && (!solid || Main.tileSolid[(int)tile.type])){ return x; }
 				}
-				return Main.maxTilesX;				
+				return Main.maxTilesX - 10;				
 			}
         }		
 
@@ -142,7 +144,7 @@ namespace CSkies
         public static int GetWorldSize()
         {
             if (Main.maxTilesX == 4200) { return 1; }
-            else if (Main.maxTilesX == 6300) { return 2; }
+            else if (Main.maxTilesX == 6400) { return 2; }
             else if (Main.maxTilesX == 8400) { return 3; }
             return 1; //unknown size, assume small
         }
@@ -159,10 +161,10 @@ namespace CSkies
          */
         public static void ReplaceTiles(Vector2 position, int radius, int[] tiles, int[] replacements, bool silent = false, bool sync = true)
         {
-            int radiusLeft = (int)(position.X / 16f - radius);
-            int radiusRight = (int)(position.X / 16f + radius);
-            int radiusUp = (int)(position.Y / 16f - radius);
-            int radiusDown = (int)(position.Y / 16f + radius);
+            int radiusLeft = (int)(position.X / 16f - (float)radius);
+            int radiusRight = (int)(position.X / 16f + (float)radius);
+            int radiusUp = (int)(position.Y / 16f - (float)radius);
+            int radiusDown = (int)(position.Y / 16f + (float)radius);
             if(radiusLeft < 0){ radiusLeft = 0; } if(radiusRight > Main.maxTilesX) { radiusRight = Main.maxTilesX; }
             if(radiusUp < 0){ radiusUp = 0; } if(radiusDown > Main.maxTilesY) { radiusDown = Main.maxTilesY; }
 
@@ -171,7 +173,8 @@ namespace CSkies
             {
                 for(int y1 = radiusUp; y1 <= radiusDown; y1++)
                 {
-                    double dist = Vector2.Distance(new Vector2(x1 * 16f + 8f, y1 * 16f + 8f), position);				
+                    double dist = Vector2.Distance(new Vector2(x1 * 16f + 8f, y1 * 16f + 8f), position);	
+					if(!WorldGen.InWorld(x1, y1, 0)) continue;					
                     if(dist < distRad && Main.tile[x1, y1] != null && Main.tile[x1, y1].active())
                     {
                         int currentType = Main.tile[x1, y1].type;
@@ -214,6 +217,8 @@ namespace CSkies
          */
         public static void GenerateLiquid(int x, int y, int liquidType, bool updateFlow = true, int liquidHeight = 255, bool sync = true)
         {
+			if(!WorldGen.InWorld(x, y, 0)) return;
+			if(Main.tile[x, y] == null) Main.tile[x, y] = new Tile();
             liquidHeight = (int)MathHelper.Clamp(liquidHeight, 0, 255);
             Main.tile[x, y].liquid = (byte)liquidHeight;
 			if (liquidType == 0) { Main.tile[x, y].lava(false); Main.tile[x, y].honey(false); }else
@@ -258,6 +263,7 @@ namespace CSkies
         {
 			try
 			{
+			if(!WorldGen.InWorld(x, y, 0)) return;	
             if(Main.tile[x, y] == null){ Main.tile[x, y] = new Tile(); }		
             TileObjectData data = (tile <= -1 ? null : TileObjectData.GetTileData(tile, tileStyle, 0));			
             int width = (data == null ? 1 : data.Width);
@@ -356,12 +362,15 @@ namespace CSkies
             }
             if (sync && Main.netMode != 0)
             {
-                int sizeWidth = tileWidth + Math.Max(0, (width - 1));
-                int sizeHeight = tileHeight + Math.Max(0, (height - 1));
+                int sizeWidth = tileWidth + (int)Math.Max(0, (width - 1));
+                int sizeHeight = tileHeight + (int)Math.Max(0, (height - 1));
                 int size = sizeWidth > sizeHeight ? sizeWidth : sizeHeight;
                 NetMessage.SendTileSquare(-1, x + (int)(size * 0.5F), y + (int)(size * 0.5F), size + 1);
             }
-			}catch(Exception e){ ErrorLogger.Log("TILEGEN ERROR: " + e.Message); ErrorLogger.Log(e.StackTrace); ErrorLogger.Log("--------"); }
+			}catch(Exception e)
+			{
+				BaseUtility.LogFancy("CSkies~ TILEGEN ERROR:", e);
+			}
         }
 
 		#region worldgen
@@ -416,7 +425,7 @@ namespace CSkies
 				{
 					int size = ((endY - y) > (endX - x) ? (endY - y) : (endX - x));
 					if (thickness > size) size = thickness;
-					NetMessage.SendData(20, -1, -1, NetworkText.FromLiteral(""), size, x, y, 0f, 0);
+					NetMessage.SendData(20, -1, -1, NetworkText.FromLiteral(""), size, (float)x, (float)y, 0f, 0);
 				}
 			}else //genning a line that isn't straight
 			{
@@ -425,7 +434,7 @@ namespace CSkies
 				float length = Vector2.Distance(start, end);
 				float way = 0f;
 
-				float rot = BaseUtility.RotationTo(start, end); if(rot < 0f) rot = (float)(Math.PI * 2f) - Math.Abs(rot);
+				float rot = (float)BaseUtility.RotationTo(start, end); if(rot < 0f) rot = (float)(Math.PI * 2f) - Math.Abs(rot);
 				float rotPercent = MathHelper.Lerp(0f, 1f, rot / (float)(Math.PI * 2f));
 				bool horizontal = rotPercent < 0.125f || (rotPercent > 0.375f && rotPercent < 0.625f) || rotPercent > 0.825f;
 				int tileIndex = -1, wallIndex = -1;
@@ -454,7 +463,7 @@ namespace CSkies
 					}
 					if (sync && Main.netMode != 0 && ((!horizontal && Math.Abs(lastY - point.Y) >= 5) || (horizontal && Math.Abs(lastY - point.Y) >= 5) || (way + 1 > length)))
 					{
-						int size = Math.Max(5, thickness);
+						int size = (int)Math.Max(5, thickness);
 						NetMessage.SendData(10, -1, -1, NetworkText.FromLiteral(""), lastX, lastY, size, size, 0);
 						lastX = point.X; lastY = point.Y;
 					}
@@ -716,7 +725,7 @@ namespace CSkies
 							{
 								if (Main.tile[x + 1, y].type != 190 && Main.tile[x + 1, y].type != 48 && Main.tile[x + 1, y].type != 232 && WorldGen.SolidTile(x - 1, y + 1) && WorldGen.SolidTile(x + 1, y) && !Main.tile[x - 1, y].active() && !Main.tile[x + 1, y - 1].active())
 								{
-									WorldGen.PlaceTile(x, y, Main.tile[x, y + 1].type, false, false, -1, 0);
+									WorldGen.PlaceTile(x, y, (int)Main.tile[x, y + 1].type, false, false, -1, 0);
 									if (WorldGen.genRand.Next(2) == 0)
 									{
 										WorldGen.SlopeTile(x, y, 2);
@@ -728,7 +737,7 @@ namespace CSkies
 								}
 								if (Main.tile[x - 1, y].type != 190 && Main.tile[x - 1, y].type != 48 && Main.tile[x - 1, y].type != 232 && WorldGen.SolidTile(x + 1, y + 1) && WorldGen.SolidTile(x - 1, y) && !Main.tile[x + 1, y].active() && !Main.tile[x - 1, y - 1].active())
 								{
-									WorldGen.PlaceTile(x, y, Main.tile[x, y + 1].type, false, false, -1, 0);
+									WorldGen.PlaceTile(x, y, (int)Main.tile[x, y + 1].type, false, false, -1, 0);
 									if (WorldGen.genRand.Next(2) == 0)
 									{
 										WorldGen.SlopeTile(x, y, 1);
@@ -784,7 +793,7 @@ namespace CSkies
 			Main.tileSolid[137] = true;
 		}
 
-		//fuck it, this is broken
+		//screw it, this is broken
 		public class GenHelper
 		{
 			public List<TileData> tiles = new List<TileData>();
@@ -937,10 +946,10 @@ namespace CSkies
 			Point trueOrigin = origin;
 			for(int m = 0; m < length; m++)
 			{
-				int height = (int)MathHelper.Lerp(startheight, endheight, m / (float)length);
+				int height = (int)MathHelper.Lerp((float)startheight, (float)endheight, (float)m / (float)length);
 				if(heightVariance != null)
 				{
-					height = Math.Max(endheight, (int)(startheight * BaseUtility.MultiLerp(m / (float)length, heightVariance)));
+					height = Math.Max(endheight, (int)((float)startheight * BaseUtility.MultiLerp((float)m / (float)length, heightVariance)));
 				}
 				int x = trueOrigin.X + (dir ? m : -m);
 				int y = trueOrigin.Y + (startheight - height);
@@ -1005,10 +1014,10 @@ namespace CSkies
 			Point trueOrigin = origin;
 			for(int m = 0; m < depth; m++)
 			{
-				int width = (int)MathHelper.Lerp(startwidth, endwidth, m / (float)depth);
+				int width = (int)MathHelper.Lerp((float)startwidth, (float)endwidth, (float)m / (float)depth);
 				if(widthVariance != null)
 				{
-					width = Math.Max(endwidth, (int)(startwidth * BaseUtility.MultiLerp(m / (float)depth, widthVariance)));
+					width = Math.Max(endwidth, (int)((float)startwidth * BaseUtility.MultiLerp((float)m / (float)depth, widthVariance)));
 				}
 				int x = trueOrigin.X + (startwidth - width);
 				int y = trueOrigin.Y + (dir ? m : -m);
@@ -1042,9 +1051,25 @@ namespace CSkies
 	#endregion
 	
 	#region Custom GenActions
+	public class IsInWorld : GenAction
+	{
+		public IsInWorld()
+		{
+		}
+
+		public override bool Apply(Point origin, int x, int y, params object[] args)
+		{
+			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY)
+				return base.Fail();
+			return base.UnitApply(origin, x, y, args);
+		}
+	}	
+	
 	public class SetModTile : GenAction
 	{
 		public ushort _type;
+		public short _frameX = -1;
+		public short _frameY = -1;
 		public bool _doFraming;
 		public bool _doNeighborFraming;
 		public Func<int, int, Tile, bool> _canReplace;
@@ -1056,19 +1081,26 @@ namespace CSkies
 			this._doNeighborFraming = setNeighborFrames;
 		}
 		
-		public SetModTile ExtraParams(Func<int, int, Tile, bool> canReplace)
+		public SetModTile ExtraParams(Func<int, int, Tile, bool> canReplace, int frameX = -1, int frameY = -1)
 		{
 			_canReplace = canReplace;
+			_frameX = (short)frameX;
+			_frameY = (short)frameY;
 			return this;
 		}
 
 		public override bool Apply(Point origin, int x, int y, params object[] args)
 		{
-			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) return false;
+			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) 
+				return false;
 			if(GenBase._tiles[x, y] == null) GenBase._tiles[x, y] = new Tile();		
 			if(_canReplace == null || (_canReplace != null && _canReplace(x, y, GenBase._tiles[x, y])))
 			{
 				GenBase._tiles[x, y].ResetToType(this._type);
+				if(_frameX > -1)
+					GenBase._tiles[x, y].frameX = _frameX;
+				if(_frameY > -1)
+					GenBase._tiles[x, y].frameY = _frameY;				
 				if (this._doFraming)
 				{
 					WorldUtils.TileFrame(x, y, this._doNeighborFraming);
@@ -1091,7 +1123,7 @@ namespace CSkies
 		{
 			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) return false;
 			if(GenBase._tiles[x, y] == null) GenBase._tiles[x, y] = new Tile();
-			Main.Map.UpdateLighting(x, y, Math.Max(Main.Map[x, y].Light, _brightness));
+			Main.Map.UpdateLighting(x, y, (byte)Math.Max(Main.Map[x, y].Light, _brightness));
 			return base.UnitApply(origin, x, y, args);
 		}
 	}	
@@ -1150,16 +1182,43 @@ namespace CSkies
 
 		public override bool Apply(Point origin, int x, int y, params object[] args)
 		{
-			Vector2 value = new Vector2((float)origin.X + (_width / 2), origin.Y);
-			Vector2 value2 = new Vector2(x, y);
+			Vector2 value = new Vector2((float)origin.X + (_width / 2), (float)origin.Y);
+			Vector2 value2 = new Vector2((float)x, (float)y);
 			float num = Vector2.Distance(value2, value);
 			float num2 = Math.Max(0f, Math.Min(1f, (num - this._innerRadius) / (this._outerRadius - this._innerRadius)));
-			if (GenBase._random.NextDouble() > num2)
+			if (GenBase._random.NextDouble() > (double)num2)
 			{
 				return base.UnitApply(origin, x, y, args);
 			}
 			return base.Fail();
 		}
+	}
+	
+	public class ClearTileSafely : GenAction
+	{
+		private bool _frameNeighbors;
+
+		public ClearTileSafely(bool frameNeighbors = false)
+		{
+			this._frameNeighbors = frameNeighbors;
+		}
+
+		public override bool Apply(Point origin, int x, int y, params object[] args)
+		{
+			if(x < 0 || x >= Main.maxTilesX || y < 0 || y >= Main.maxTilesY)
+				return false;
+			if(GenBase._tiles[x, y] == null)
+				GenBase._tiles[x, y] = new Tile();
+			GenBase._tiles[x, y].ClearTile();
+			if (_frameNeighbors)
+			{
+				WorldGen.TileFrame(x + 1, y, false, false);
+				WorldGen.TileFrame(x - 1, y, false, false);
+				WorldGen.TileFrame(x, y + 1, false, false);
+				WorldGen.TileFrame(x, y - 1, false, false);
+			}
+			return base.UnitApply(origin, x, y, args);
+		}		
 	}
 	#endregion
 

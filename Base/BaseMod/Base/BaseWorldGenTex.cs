@@ -8,9 +8,10 @@ namespace CSkies
     public class BaseWorldGenTex
     {
 		public static Dictionary<Color, int> colorToLiquid = null;
-		
+		public static Dictionary<Color, int> colorToSlope = null;	
+
 		//NOTE: all textures MUST be the same size or horrible things happen!
-		public static TexGen GetTexGenerator(Texture2D tileTex, Dictionary<Color, int> colorToTile, Texture2D wallTex = null, Dictionary<Color, int> colorToWall = null, Texture2D liquidTex = null, Texture2D wireTex = null)
+		public static TexGen GetTexGenerator(Texture2D tileTex, Dictionary<Color, int> colorToTile, Texture2D wallTex = null, Dictionary<Color, int> colorToWall = null, Texture2D liquidTex = null, Texture2D slopeTex = null)
 		{
 			if(colorToLiquid == null)
 			{
@@ -18,6 +19,14 @@ namespace CSkies
 				colorToLiquid[new Color(0, 0, 255)] = 0;
 				colorToLiquid[new Color(255, 0, 0)] = 1;
 				colorToLiquid[new Color(255, 255, 0)] = 2;
+
+				colorToSlope = new Dictionary<Color, int>();
+				colorToSlope[new Color(255, 0, 0)] = 1; // |\ //
+				colorToSlope[new Color(0, 255, 0)] = 2; // /| //
+				colorToSlope[new Color(0, 0, 255)] = 3; // |/ //				
+				colorToSlope[new Color(255, 255, 0)] = 4; // \| //
+				colorToSlope[new Color(255, 255, 255)] = -1; // HALFBRICK //
+				colorToSlope[new Color(0, 0, 0)] = -2; // FULLBLOCK //			
 			}
 			Color[] tileData = new Color[tileTex.Width * tileTex.Height];
 			tileTex.GetData(0, tileTex.Bounds, tileData, 0, tileTex.Width * tileTex.Height);
@@ -25,16 +34,19 @@ namespace CSkies
 			if(wallData != null) wallTex.GetData(0, wallTex.Bounds, wallData, 0, wallTex.Width * wallTex.Height);			
 			Color[] liquidData = (liquidTex != null ? new Color[liquidTex.Width * liquidTex.Height] : null);
 			if(liquidData != null) liquidTex.GetData(0, liquidTex.Bounds, liquidData, 0, liquidTex.Width * liquidTex.Height);				
+			Color[] slopeData = (slopeTex != null ? new Color[slopeTex.Width * slopeTex.Height] : null);
+			if(slopeData != null) slopeTex.GetData(0, slopeTex.Bounds, slopeData, 0, slopeTex.Width * slopeTex.Height);
 			
 			int x = 0, y = 0;
 			TexGen gen = new TexGen(tileTex.Width, tileTex.Height);
 			for(int m = 0; m < tileData.Length; m++)
 			{
-				Color tileColor = tileData[m], wallColor = (wallTex == null ? Color.Black : wallData[m]), liquidColor = (liquidTex == null ? Color.Black : liquidData[m]);
+				Color tileColor = tileData[m], wallColor = (wallTex == null ? Color.Black : wallData[m]), liquidColor = (liquidTex == null ? Color.Black : liquidData[m]), slopeColor = (slopeTex == null ? Color.Black : slopeData[m]);
 				int tileID = (colorToTile.ContainsKey(tileColor) ? colorToTile[tileColor] : -1); //if no key assume no action
 				int wallID = (colorToWall != null && colorToWall.ContainsKey(wallColor) ? colorToWall[wallColor] : -1);
 				int liquidID = (colorToLiquid != null && colorToLiquid.ContainsKey(liquidColor) ? colorToLiquid[liquidColor] : -1);
-				gen.tileGen[x, y] = new TileInfo(tileID, 0, wallID, liquidID, liquidID == -1 ? 0 : 255);
+				int slopeID = (colorToSlope != null && colorToSlope.ContainsKey(slopeColor) ? colorToSlope[slopeColor] : -1);
+				gen.tileGen[x, y] = new TileInfo(tileID, 0, wallID, liquidID, liquidID == -1 ? 0 : 255, slopeID);
 				x++;
 				if(x >= tileTex.Width){ x = 0; y++; }
 				if(y >= tileTex.Height) break; //you've somehow reached the end of the texture! (this shouldn't happen!)

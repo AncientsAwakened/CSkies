@@ -26,13 +26,13 @@ namespace CSkies
 
 		public static void AIDive(Projectile projectile, ref int chargeTime, int chargeTimeMax, Vector2 targetCenter)
 		{
-			chargeTime = Math.Max(0, chargeTime - 1);
+			chargeTime = (int)Math.Max(0, chargeTime - 1);
 			if (chargeTime > 0)
 			{
 				//while this is running, the velocity of the proj should not be touched, as doing so will break this AI.
 				//this AI also ignores tile collision, just a quick concept
 				Vector2 positionOld = projectile.position - projectile.velocity;
-				float percent = (chargeTime / (float)chargeTimeMax);
+				float percent = ((float)chargeTime / (float)chargeTimeMax);
 				float place = (float)Math.Sin((float)Math.PI * percent); //where on the sin path it is
 				float distX = Math.Abs(targetCenter.X - projectile.Center.X), distY = Math.Abs(targetCenter.Y - projectile.Center.Y);
 				float distPercentX = distX / chargeTimeMax, distPercentY = distY / chargeTimeMax;
@@ -41,7 +41,7 @@ namespace CSkies
 			}
 		}
 
-		public static void AIMinionPlant(Projectile projectile, ref float[] ai, Entity owner, Vector2 endPoint, bool setTime = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
+		public static void AIMinionPlant(Projectile projectile, ref float[] ai, Entity owner, Vector2 endPoint, bool setTime = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default(Vector2), Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
 		{
 			if (setTime){ projectile.timeLeft = 10; }
 			Entity target = (GetTarget == null ? null : GetTarget(projectile, owner));
@@ -53,12 +53,12 @@ namespace CSkies
 				vineLength = vineLengthLong;
 				if (ai[0] > vineTimeMax) { ai[0] = 0f; }
 			}
-			Vector2 targetCenter = target.Center + targetOffset + (target == owner ? new Vector2(0f, (owner is Player ? ((Player)owner).gfxOffY : owner is NPC ? ((NPC)owner).gfxOffY : ((Projectile)owner).gfxOffY)) : default);
+			Vector2 targetCenter = target.Center + targetOffset + (target == owner ? new Vector2(0f, (owner is Player ? ((Player)owner).gfxOffY : owner is NPC ? ((NPC)owner).gfxOffY : ((Projectile)owner).gfxOffY)) : default(Vector2));
 			if (!targetOwner)
 			{
 				float distTargetX = targetCenter.X - endPoint.X;
 				float distTargetY = targetCenter.Y - endPoint.Y;
-				float distTarget = (float)Math.Sqrt(distTargetX * distTargetX + distTargetY * distTargetY);
+				float distTarget = (float)Math.Sqrt((double)(distTargetX * distTargetX + distTargetY * distTargetY));
 				if (distTarget > vineLength)
 				{
 					projectile.velocity *= 0.85f;
@@ -72,23 +72,23 @@ namespace CSkies
 				{
 					if (projectile.position.X < endPoint.X + distTargetX)
 					{
-						projectile.velocity.X += moveInterval;
-						if (projectile.velocity.X < 0f && distTargetX > 0f) { projectile.velocity.X += moveInterval * 1.5f; }
+						projectile.velocity.X = projectile.velocity.X + moveInterval;
+						if (projectile.velocity.X < 0f && distTargetX > 0f) { projectile.velocity.X = projectile.velocity.X + moveInterval * 1.5f; }
 					}else
 					if (projectile.position.X > endPoint.X + distTargetX)
 					{
-						projectile.velocity.X -= moveInterval;
-						if (projectile.velocity.X > 0f && distTargetX < 0f) { projectile.velocity.X -= moveInterval * 1.5f; }
+						projectile.velocity.X = projectile.velocity.X - moveInterval;
+						if (projectile.velocity.X > 0f && distTargetX < 0f) { projectile.velocity.X = projectile.velocity.X - moveInterval * 1.5f; }
 					}
 					if (projectile.position.Y < endPoint.Y + distTargetY)
 					{
-						projectile.velocity.Y += moveInterval;
-						if (projectile.velocity.Y < 0f && distTargetY > 0f) { projectile.velocity.Y += moveInterval * 1.5f; }
+						projectile.velocity.Y = projectile.velocity.Y + moveInterval;
+						if (projectile.velocity.Y < 0f && distTargetY > 0f) { projectile.velocity.Y = projectile.velocity.Y + moveInterval * 1.5f; }
 					}else
 					if (projectile.position.Y > endPoint.Y + distTargetY)
 					{
-						projectile.velocity.Y -= moveInterval;
-						if (projectile.velocity.Y > 0f && distTargetY < 0f) { projectile.velocity.Y -= moveInterval * 1.5f; }
+						projectile.velocity.Y = projectile.velocity.Y - moveInterval;
+						if (projectile.velocity.Y > 0f && distTargetY < 0f) { projectile.velocity.Y = projectile.velocity.Y - moveInterval * 1.5f; }
 					}
 				}else
 				{
@@ -98,8 +98,8 @@ namespace CSkies
 				}
 				projectile.velocity.X = MathHelper.Clamp(projectile.velocity.X, -speedMax, speedMax);
 				projectile.velocity.Y = MathHelper.Clamp(projectile.velocity.Y, -speedMax, speedMax);
-				if (distTargetX > 0f) { projectile.spriteDirection = 1; projectile.rotation = (float)Math.Atan2(distTargetY, distTargetX); }else
-				if (distTargetX < 0f) { projectile.spriteDirection = -1; projectile.rotation = (float)Math.Atan2(distTargetY, distTargetX) + 3.14f; }
+				if (distTargetX > 0f) { projectile.spriteDirection = 1; projectile.rotation = (float)Math.Atan2((double)distTargetY, (double)distTargetX); }else
+				if (distTargetX < 0f) { projectile.spriteDirection = -1; projectile.rotation = (float)Math.Atan2((double)distTargetY, (double)distTargetX) + 3.14f; }
 				if (projectile.tileCollide)
 				{
 					Vector4 slopeVec = Collision.SlopeCollision(projectile.position, projectile.velocity, projectile.width, projectile.height);
@@ -128,13 +128,13 @@ namespace CSkies
 			if (projectile.velocity.X != velocity.X)
 			{
 				projectile.netUpdate = true;
-				projectile.velocity.X *= -0.7f;
+				projectile.velocity.X = projectile.velocity.X * -0.7f;
 				projectile.velocity.X = MathHelper.Clamp(projectile.velocity.X, -speedMax, speedMax);
 			}
 			if (projectile.velocity.Y != velocity.Y)
 			{
 				projectile.netUpdate = true;
-				projectile.velocity.Y *= -0.7f;
+				projectile.velocity.Y = projectile.velocity.Y * -0.7f;
 				projectile.velocity.Y = MathHelper.Clamp(projectile.velocity.Y, -speedMax, speedMax);
 			}
 		}
@@ -180,7 +180,7 @@ namespace CSkies
 			Tile tile = Main.tile[tileX, tileY];
 			bool inTile = (tile != null && tile.nactive() && Main.tileSolid[tile.type]);
 			float prevAI = ai[0];
-			ai[0] = (((ai[0] == 1 && (dist > Math.Max(lineDist, returnDist / 2f) || !BaseUtility.CanHit(codable.Hitbox, owner.Hitbox))) || dist > returnDist || inTile) ? 1 : 0);
+			ai[0] = (((ai[0] == 1 && (dist > (float)Math.Max(lineDist, (float)returnDist / 2f) || !BaseUtility.CanHit(codable.Hitbox, owner.Hitbox))) || dist > returnDist || inTile) ? 1 : 0);
 			if (ai[0] != prevAI) { netUpdate = true; }
 			if (ai[0] == 0 || ai[0] == 1)
 			{
@@ -208,8 +208,8 @@ namespace CSkies
 				}
 				float targetDistX = Math.Abs(codable.Center.X - targetCenter.X);
 				float targetDistY = Math.Abs(codable.Center.Y - targetCenter.Y);
-				bool slowdownX = hover && owner.velocity.X < 0.025f && targetDistX < 8f * Math.Max(1f, (maxSpeed / 4f));
-				bool slowdownY = hover && owner.velocity.Y < 0.025f && targetDistY < 8f * Math.Max(1f, (maxSpeed / 4f));
+				bool slowdownX = hover && owner.velocity.X < 0.025f && targetDistX < 8f * (float)Math.Max(1f, (maxSpeed / 4f));
+				bool slowdownY = hover && owner.velocity.Y < 0.025f && targetDistY < 8f * (float)Math.Max(1f, (maxSpeed / 4f));
 				Vector2 vel = AIVelocityLinear(codable, targetCenter, moveInterval, (ai[0] == 0 ? maxSpeed : maxSpeedFlying), true);
 				if(!dontMove && !slowdownX){ codable.velocity.X += vel.X * 0.125f; }
 				if(!dontMove && !slowdownY){ codable.velocity.Y += vel.Y * 0.125f; }
@@ -264,15 +264,15 @@ namespace CSkies
 			Tile tile = Main.tile[tileX, tileY];
 			bool inTile = (tile != null && tile.nactive() && Main.tileSolid[tile.type]);
 			float prevAI = ai[0];
-			ai[0] = (((ai[0] == 1 && (owner.velocity.Y != 0 || dist > Math.Max(lineDist, returnDist / 10f))) || dist > returnDist || inTile) ? 1 : 0);
+			ai[0] = (((ai[0] == 1 && (owner.velocity.Y != 0 || dist > (float)Math.Max(lineDist, (float)returnDist / 10f))) || dist > returnDist || inTile) ? 1 : 0);
 			if (ai[0] != prevAI) { netUpdate = true; }
 			if (ai[0] == 0) //walking
 			{
 				tileCollide = true;
 				Entity target = (GetTarget == null ? null : GetTarget(codable, owner));
-				Vector2 targetCenter = (target == null ? default : target.Center);
+				Vector2 targetCenter = (target == null ? default(Vector2) : target.Center);
 				bool isOwner = (target == null || targetCenter == owner.Center);
-				if (targetCenter == default)
+				if (targetCenter == default(Vector2))
 				{
 					targetCenter = owner.Center;
 					targetCenter.X += (owner.width + 10 + (lineDist * minionPos)) * -owner.direction;
@@ -324,9 +324,9 @@ namespace CSkies
 				Vector2 targetCenter = owner.Center;
 				if (owner.velocity.Y != 0f && dist < 80)
 				{
-					targetCenter = owner.Center + BaseUtility.RotateVector(default, new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
+					targetCenter = owner.Center + BaseUtility.RotateVector(default(Vector2), new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
 				}
-				Vector2 newVel = BaseUtility.RotateVector(default, new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
+				Vector2 newVel = BaseUtility.RotateVector(default(Vector2), new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
 				if (owner.velocity.Y != 0f && ((newVel.X > 0 && codable.velocity.X < 0) || (newVel.X < 0 && codable.velocity.X > 0)))
 				{
 					codable.velocity *= 0.98f; newVel *= 0.02f; codable.velocity += newVel;
@@ -372,15 +372,15 @@ namespace CSkies
 			Tile tile = Main.tile[tileX, tileY];
 			bool inTile = (tile != null && tile.nactive() && Main.tileSolid[tile.type]);
 			float prevAI = ai[0];
-			ai[0] = (((ai[0] == 1 && (owner.velocity.Y != 0 || dist > Math.Max(lineDist, returnDist / 10f))) || dist > returnDist || inTile) ? 1 : 0);
+			ai[0] = (((ai[0] == 1 && (owner.velocity.Y != 0 || dist > (float)Math.Max(lineDist, (float)returnDist / 10f))) || dist > returnDist || inTile) ? 1 : 0);
 			if (ai[0] != prevAI) { netUpdate = true; }
 			if (ai[0] == 0) //walking
 			{
 				tileCollide = true;
 				Entity target = (GetTarget == null ? null : GetTarget(codable, owner));
-				Vector2 targetCenter = (target == null ? default : target.Center);
+				Vector2 targetCenter = (target == null ? default(Vector2) : target.Center);
 				bool isOwner = (target == null || targetCenter == owner.Center);
-				if (targetCenter == default)
+				if (targetCenter == default(Vector2))
 				{
 					targetCenter = owner.Center;
 					targetCenter.X += (lineDist + (lineDist * minionPos)) * -owner.direction;
@@ -395,7 +395,7 @@ namespace CSkies
 				}else
 				if (codable.velocity.Y == 0f)
 				{
-					codable.velocity.X *= 0.8f;
+					codable.velocity.X = codable.velocity.X * 0.8f;
 					if (codable.velocity.X > -0.1f && codable.velocity.X < 0.1f){ codable.velocity.X = 0f; }
 					codable.velocity.Y = -jumpVelY;
 					codable.velocity.X += jumpVelX * moveDirection;
@@ -458,9 +458,9 @@ namespace CSkies
 				Vector2 targetCenter = owner.Center;
 				if (owner.velocity.Y != 0f && dist < 80)
 				{
-					targetCenter = owner.Center + BaseUtility.RotateVector(default, new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
+					targetCenter = owner.Center + BaseUtility.RotateVector(default(Vector2), new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
 				}
-				Vector2 newVel = BaseUtility.RotateVector(default, new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
+				Vector2 newVel = BaseUtility.RotateVector(default(Vector2), new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
 				if (owner.velocity.Y != 0f && ((newVel.X > 0 && codable.velocity.X < 0) || (newVel.X < 0 && codable.velocity.X > 0)))
 				{
 					codable.velocity *= 0.98f; newVel *= 0.02f; codable.velocity += newVel;
@@ -487,7 +487,7 @@ namespace CSkies
 			if (absolute)
 			{
 				moveRot += rotAmount;
-				Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+				Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 				codable.Center = rotVec;
 				rotVec.Normalize();
 				rotation = BaseUtility.RotationTo(codable.Center, rotateCenter) - 1.57f;
@@ -500,16 +500,16 @@ namespace CSkies
 					if (rotDistance - dist > rotThreshold) //too close, get back into position
 					{
 						moveRot += rotAmount;
-						Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+						Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 						float rot2 = BaseUtility.RotationTo(codable.Center, rotVec);
-						codable.velocity = BaseUtility.RotateVector(default, new Vector2(5f, 0f), rot2);
+						codable.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(5f, 0f), rot2);
 						rotation = BaseUtility.RotationTo(codable.Center, codable.Center + codable.velocity);
 					}else
 					{
 						moveRot += rotAmount;
-						Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+						Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 						float rot2 = BaseUtility.RotationTo(codable.Center, rotVec);
-						codable.velocity = BaseUtility.RotateVector(default, new Vector2(5f, 0f), rot2);
+						codable.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(5f, 0f), rot2);
 						rotation = BaseUtility.RotationTo(codable.Center, codable.Center + codable.velocity);
 					}
 				}else
@@ -566,14 +566,14 @@ namespace CSkies
         public static void AIPath(NPC npc, ref float[] ai, Vector2[] points, float moveInterval = 0.11f, float maxSpeed = 3f, bool direct = false)
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
-            if (Main.netMode != 1 && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
+            if (Main.netMode != 1 && destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
             {
-                ai[0] = 0f; ai[1] = 0f; destVec = default;
+                ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
             }
             if (npc.ai[2] < points.Length)
             {
                 //if the destination vec is default (0, 0), get the current point.
-                if (destVec == default)
+                if (destVec == default(Vector2))
                 {
                     npc.velocity *= 0.95f;
                     if(Main.netMode != 1)
@@ -603,12 +603,12 @@ namespace CSkies
         public static void AITackle(NPC npc, ref float[] ai, Vector2 point, float moveInterval = 0.11f, float maxSpeed = 3f, bool direct = false, int tackleDelay = 50, float drift = 0.95f)
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
-            if (destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
+            if (destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
             {
-                ai[0] = 0f; ai[1] = 0f; destVec = default;
+                ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
             }
             //if the destination vec is default (0, 0), get the current point.
-            if (destVec == default)
+            if (destVec == default(Vector2))
             {
                 npc.velocity *= drift;
                 ai[2]--;
@@ -649,19 +649,19 @@ namespace CSkies
             if (Main.netMode != 1)
             {
                 //used to prevent the npc from getting 'stuck' trying to reach a point
-                if (!idleTooLong && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(12f, ((npc.width + npc.height) / 2f) * 3f * (moveInterval / 0.06f)))
+                if (!idleTooLong && destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(12f, ((npc.width + npc.height) / 2f) * 3f * (moveInterval / 0.06f)))
                 {
                     ai[2]++;
                     if (ai[2] > 100) { ai[2] = 0; idleTooLong = true; }
                 }
                 //if the destination vec is not null and the npc is close to the point (or has been idle too long), set it to default.
-                if (idleTooLong || (destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.75f)))
+                if (idleTooLong || (destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.75f)))
                 {
-                    ai[0] = 0f; ai[1] = 0f; destVec = default;
+                    ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
                 }
             }
             //if the destination vec is default (0, 0)...
-            if (destVec == default)
+            if (destVec == default(Vector2))
             {
                 if (npc.velocity.X > 0.3f || npc.velocity.Y > 0.3f) { npc.velocity.X *= 0.95f; }
                 if (canCrossCenter)
@@ -675,7 +675,7 @@ namespace CSkies
                     Vector2 bottomLeft = new Vector2(topLeft.X, point.Y + (minDistance + rand.Next(distance)));
                     Vector2 bottomRight = new Vector2(topRight.X, bottomLeft.Y);
                     float tempDist = 9999999f;
-                    Vector2 closestPoint = default;
+                    Vector2 closestPoint = default(Vector2);
                     for (int m = 0; m < 4; m++)
                     {
                         Vector2 corner = (m == 0 ? topLeft : m == 1 ? topRight : m == 2 ? bottomLeft : bottomRight);
@@ -691,7 +691,7 @@ namespace CSkies
                 ai[0] = destVec.X; ai[1] = destVec.Y;
                 if(Main.netMode == 2){ npc.netUpdate = true; }
             }else
-            if (destVec != default) //otherwise move towards the point.
+            if (destVec != default(Vector2)) //otherwise move towards the point.
             {
                 npc.velocity = AIVelocityLinear(npc, destVec, moveInterval, maxSpeed, direct);
             }
@@ -789,9 +789,9 @@ namespace CSkies
 				do
 				{
 					int percentile = unifiedRandom.Next();
-					projectile.ai[1] = percentile;
+					projectile.ai[1] = (float)percentile;
 					percentile %= 100;
-					float f = percentile / 100f * 6.28318548f;
+					float f = (float)percentile / 100f * 6.28318548f;
 					angleVector = f.ToRotationVector2();
 					if (angleVector.Y > 0f)
 					{
@@ -802,11 +802,11 @@ namespace CSkies
 					{
 						moreFrames = true;
 					}
-					if (angleVector.X * (projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] > changeAngleAt)
+					if (angleVector.X * (float)(projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] > changeAngleAt)
 					{
 						moreFrames = true;
 					}
-					if (angleVector.X * (projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] < -changeAngleAt)
+					if (angleVector.X * (float)(projectile.extraUpdates + 1) * 2f * velSpeed + projectile.localAI[0] < -changeAngleAt)
 					{
 						moreFrames = true;
 					}
@@ -826,8 +826,8 @@ namespace CSkies
 				IL_26099:
 				if (projectile.velocity != Vector2.Zero)
 				{
-					projectile.localAI[0] += projVelocity.X * (projectile.extraUpdates + 1) * 2f * velSpeed;
-					projectile.velocity = projVelocity.RotatedBy(projectile.ai[0] + 1.57079637f, default) * velSpeed;
+					projectile.localAI[0] += projVelocity.X * (float)(projectile.extraUpdates + 1) * 2f * velSpeed;
+					projectile.velocity = projVelocity.RotatedBy((double)(projectile.ai[0] + 1.57079637f), default(Vector2)) * velSpeed;
 					projectile.rotation = projectile.velocity.ToRotation() + 1.57079637f;
 					return;
 				}
@@ -955,11 +955,11 @@ namespace CSkies
 					{
 						if (Math.Abs(plrCenter.X - p.Center.X) > 20f)
 						{
-							p.velocity.X += velocityScalarIdle * Math.Sign(plrCenter.X - p.Center.X);
+							p.velocity.X = p.velocity.X + velocityScalarIdle * (float)Math.Sign(plrCenter.X - p.Center.X);
 						}
 						if (Math.Abs(plrCenter.Y - p.Center.Y) > 10f)
 						{
-							p.velocity.Y += velocityScalarIdle * Math.Sign(plrCenter.Y - p.Center.Y);
+							p.velocity.Y = p.velocity.Y + velocityScalarIdle * (float)Math.Sign(plrCenter.Y - p.Center.Y);
 						}
 					}
 					else if (p.velocity.Length() > 2f)
@@ -968,7 +968,7 @@ namespace CSkies
 					}
 					if (Math.Abs(p.velocity.Y) < 1f)
 					{
-						p.velocity.Y -= 0.1f;
+						p.velocity.Y = p.velocity.Y - 0.1f;
 					}
 					if (p.velocity.Length() > velocityMaxIdle)
 					{
@@ -985,7 +985,7 @@ namespace CSkies
 				float scaleChange = MathHelper.Clamp(p.localAI[0], 0f, 50f);
 				p.position = p.Center;
 				p.scale = 1f + scaleChange * 0.01f;
-				p.width = (p.height = (int)(wormWidthHeight * p.scale));
+				p.width = (p.height = (int)((float)wormWidthHeight * p.scale));
 				p.Center = p.position;
 				if (p.alpha > 0)
 				{
@@ -1021,7 +1021,7 @@ namespace CSkies
 					Main.projectile[byUUID].localAI[0] = p.localAI[0] + 1f;
 					if (Main.projectile[byUUID].type != wormTypes[0])
 					{
-						Main.projectile[byUUID].localAI[1] = p.whoAmI;
+						Main.projectile[byUUID].localAI[1] = (float)p.whoAmI;
 					}
 					if (p.owner == Main.myPlayer && Main.projectile[byUUID].type == wormTypes[0] && p.type == wormTypes[wormTypes.Length - 1])
 					{
@@ -1044,12 +1044,12 @@ namespace CSkies
 				if (projRot != p.rotation)
 				{
 					float rotDist = MathHelper.WrapAngle(projRot - p.rotation);
-					centerDist = centerDist.RotatedBy(rotDist * 0.1f, default);
+					centerDist = centerDist.RotatedBy((double)(rotDist * 0.1f), default(Vector2));
 				}
 				p.rotation = centerDist.ToRotation() + 1.57079637f;
 				p.position = p.Center;
 				p.scale = projectileScale;
-				p.width = (p.height = (int)(wormWidthHeight * p.scale));
+				p.width = (p.height = (int)((float)wormWidthHeight * p.scale));
 				p.Center = p.position;
 				if (centerDist != Vector2.Zero)
 				{
@@ -1087,14 +1087,14 @@ namespace CSkies
 				}
 				if (parentAlive && !noParentHover)
 				{
-					projectile.velocity += new Vector2(Math.Sign(Main.npc[parentID].Center.X - projectile.Center.X), Math.Sign(Main.npc[parentID].Center.Y - projectile.Center.Y)) * new Vector2(xMult, yMult);
+					projectile.velocity += new Vector2((float)Math.Sign(Main.npc[parentID].Center.X - projectile.Center.X), (float)Math.Sign(Main.npc[parentID].Center.Y - projectile.Center.Y)) * new Vector2(xMult, yMult);
 					if (projectile.velocity.Length() > 6f)
 					{
 						projectile.velocity *= 6f / projectile.velocity.Length();
 					}
 				}
-                SpawnDust?.Invoke(0, projectile);
-                projectile.rotation = projectile.velocity.X * 0.1f;
+				if(SpawnDust != null) SpawnDust(0, projectile);
+				projectile.rotation = projectile.velocity.X * 0.1f;
 			}
 			if (ai[0] == hoverTime)
 			{
@@ -1116,13 +1116,13 @@ namespace CSkies
 				}
 				if (!hasParentTarget)
 				{
-					parentTarget = Player.FindClosest(projectile.position, projectile.width, projectile.height);
+					parentTarget = (int)Player.FindClosest(projectile.position, projectile.width, projectile.height);
 				}
 				Vector2 distanceVec = Main.player[parentTarget].Center - projectile.Center;
-				distanceVec.X += Main.rand.Next(-50, 51);
-				distanceVec.Y += Main.rand.Next(-50, 51);
-				distanceVec.X *= Main.rand.Next(80, 121) * 0.01f;
-				distanceVec.Y *= Main.rand.Next(80, 121) * 0.01f;
+				distanceVec.X += (float)Main.rand.Next(-50, 51);
+				distanceVec.Y += (float)Main.rand.Next(-50, 51);
+				distanceVec.X *= (float)Main.rand.Next(80, 121) * 0.01f;
+				distanceVec.Y *= (float)Main.rand.Next(80, 121) * 0.01f;
 				Vector2 distVecNormal = Vector2.Normalize(distanceVec);
 				if (distVecNormal.HasNaNs())
 				{
@@ -1144,8 +1144,8 @@ namespace CSkies
 			if (ai[0] >= hoverTime)
 			{
 				projectile.rotation = projectile.rotation.AngleLerp(projectile.velocity.ToRotation() + 1.57079637f, 0.4f);
-                SpawnDust?.Invoke(1, projectile);
-            }
+				if(SpawnDust != null) SpawnDust(1, projectile);
+			}
 		}
 		 
 		public static void AIYoyo(Projectile p, ref float[] ai, ref float[] localAI, float yoyoTimeMax = -1, float maxRange = -1, float topSpeed = -1, bool dontChannel = false, float rotAmount = 0.45f)
@@ -1153,16 +1153,16 @@ namespace CSkies
 			if(yoyoTimeMax == -1) yoyoTimeMax = ProjectileID.Sets.YoyosLifeTimeMultiplier[p.type];
 			if(maxRange == -1) maxRange = ProjectileID.Sets.YoyosMaximumRange[p.type];
 			if(topSpeed == -1) topSpeed = ProjectileID.Sets.YoyosTopSpeed[p.type];	
-			AIYoyo(p, ref ai, ref localAI, Main.player[p.owner], Main.player[p.owner].channel, default, yoyoTimeMax, maxRange, topSpeed, dontChannel, rotAmount);
+			AIYoyo(p, ref ai, ref localAI, Main.player[p.owner], Main.player[p.owner].channel, default(Vector2), yoyoTimeMax, maxRange, topSpeed, dontChannel, rotAmount);
 		}
 
-		public static void AIYoyo(Projectile p, ref float[] ai, ref float[] localAI, Entity owner, bool isChanneling, Vector2 targetPos = default, float yoyoTimeMax = 120, float maxRange = 150, float topSpeed = 8f, bool dontChannel = false, float rotAmount = 0.45f)
+		public static void AIYoyo(Projectile p, ref float[] ai, ref float[] localAI, Entity owner, bool isChanneling, Vector2 targetPos = default(Vector2), float yoyoTimeMax = 120, float maxRange = 150, float topSpeed = 8f, bool dontChannel = false, float rotAmount = 0.45f)
 		{
 			bool playerYoyo = owner is Player;
 			Player powner = (playerYoyo ? (Player)owner : null);
 			float meleeSpeed = (playerYoyo ? powner.meleeSpeed : 1f);
 			Vector2 targetP = targetPos;
-			if(playerYoyo && Main.myPlayer == p.owner && targetPos == default) targetP = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
+			if(playerYoyo && Main.myPlayer == p.owner && targetPos == default(Vector2)) targetP = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
 
 			bool yoyoFound = false;
 			if(owner is Player)
@@ -1175,7 +1175,7 @@ namespace CSkies
 			if ((playerYoyo && p.owner == Main.myPlayer) || (!playerYoyo && Main.netMode != 1))
 			{
 				localAI[0] += 1f;
-				if (yoyoFound) localAI[0] += Main.rand.Next(10, 31) * 0.1f;
+				if (yoyoFound) localAI[0] += (float)Main.rand.Next(10, 31) * 0.1f;
 				float yoyoTimeLeft = localAI[0] / 60f;
 				yoyoTimeLeft /= (1f + meleeSpeed) / 2f;
 				if (yoyoTimeMax != -1f && yoyoTimeLeft > yoyoTimeMax) ai[0] = -1f;
@@ -1186,7 +1186,7 @@ namespace CSkies
 				powner.heldProj = p.whoAmI;
 				powner.itemAnimation = 2;
 				powner.itemTime = 2;
-				if (p.position.X + p.width / 2 > powner.position.X + powner.width / 2)
+				if (p.position.X + (float)(p.width / 2) > powner.position.X + (float)(powner.width / 2))
 				{
 					powner.ChangeDir(1);
 					p.direction = 1;
@@ -1224,7 +1224,7 @@ namespace CSkies
 				if (centerDist.Length() > pMaxRange)
 				{
 					yoyoTooFar = true;
-					if (centerDist.Length() > pMaxRange * 1.3)
+					if ((double)centerDist.Length() > (double)pMaxRange * 1.3)
 					{
 						yoyoWayTooFar = true;
 					}
@@ -1279,10 +1279,10 @@ namespace CSkies
 					{
 						topSpeedX /= 2f;
 						pTopSpeed *= 2f;
-						if (p.Center.X > owner.Center.X && p.velocity.X > 0f) p.velocity.X *= 0.5f;
-						if (p.Center.Y > owner.Center.Y && p.velocity.Y > 0f) p.velocity.Y *= 0.5f;
-						if (p.Center.X < owner.Center.X && p.velocity.X > 0f) p.velocity.X *= 0.5f;
-						if (p.Center.Y < owner.Center.Y && p.velocity.Y > 0f) p.velocity.Y *= 0.5f;
+						if (p.Center.X > owner.Center.X && p.velocity.X > 0f) p.velocity.X = p.velocity.X * 0.5f;
+						if (p.Center.Y > owner.Center.Y && p.velocity.Y > 0f) p.velocity.Y = p.velocity.Y * 0.5f;
+						if (p.Center.X < owner.Center.X && p.velocity.X > 0f) p.velocity.X = p.velocity.X * 0.5f;
+						if (p.Center.Y < owner.Center.Y && p.velocity.Y > 0f) p.velocity.Y = p.velocity.Y * 0.5f;
 					}
 					Vector2 coord = new Vector2(ai[0], ai[1]);
 					Vector2 coordDist = coord - p.Center;
@@ -1296,7 +1296,7 @@ namespace CSkies
 						p.velocity = (p.velocity * (topSpeedX - 1f) + coordDist) / topSpeedX;
 					}else if (yoyoFound)
 					{
-						if (p.velocity.Length() < pTopSpeed * 0.6)
+						if ((double)p.velocity.Length() < (double)pTopSpeed * 0.6)
 						{
 							coordDist = p.velocity;
 							coordDist.Normalize();
@@ -1307,7 +1307,7 @@ namespace CSkies
 					{
 						p.velocity *= 0.8f;
 					}
-					if (yoyoFound && !yoyoTooFar && p.velocity.Length() < pTopSpeed * 0.6)
+					if (yoyoFound && !yoyoTooFar && (double)p.velocity.Length() < (double)pTopSpeed * 0.6)
 					{
 						p.velocity.Normalize();
 						p.velocity *= pTopSpeed * 0.6f;
@@ -1315,7 +1315,7 @@ namespace CSkies
 				}
 			}else
 			{
-				topSpeedX = (int)(topSpeedX * 0.8);
+				topSpeedX = (float)((int)((double)topSpeedX * 0.8));
 				pTopSpeed *= 1.5f;
 				p.tileCollide = false;
 				Vector2 posDist = owner.position - p.Center;
@@ -1697,7 +1697,7 @@ namespace CSkies
 				}
 				if (ai[0] != 0f) p.tileCollide = true;
 			}
-			if(fadein) p.alpha = Math.Max(0, p.alpha - 25);
+			if(fadein) p.alpha = (int)Math.Max(0, p.alpha - 25);
 		}
 
 		/*
@@ -1721,11 +1721,11 @@ namespace CSkies
 				if (p.velocity.X < 0f)
 				{
 					p.spriteDirection = -1;
-					p.rotation = (float)Math.Atan2(-p.velocity.Y, -p.velocity.X) - 1.57f;
+					p.rotation = (float)Math.Atan2((double)(-(double)p.velocity.Y), (double)(-(double)p.velocity.X)) - 1.57f;
 				}else
 				{
 					p.spriteDirection = 1;
-					p.rotation = (float)Math.Atan2(p.velocity.Y, p.velocity.X) + 1.57f;
+					p.rotation = (float)Math.Atan2((double)p.velocity.Y, (double)p.velocity.X) + 1.57f;
 				}
 			}else
 			if (ai[0] > beginGravity)
@@ -1733,14 +1733,14 @@ namespace CSkies
 				ai[0] = beginGravity;
 				if (p.velocity.Y == 0f && p.velocity.X != 0f)
 				{
-					p.velocity.X *= slowdownX;
+					p.velocity.X = p.velocity.X * slowdownX;
 					if (p.velocity.X > -0.01f && p.velocity.X < 0.01f)
 					{
 						p.velocity.X = 0f;
 						p.netUpdate = true;
 					}
 				}
-				p.velocity.Y += gravity;
+				p.velocity.Y = p.velocity.Y + gravity;
 			}
 			if (rotate){ p.rotation += p.velocity.X * 0.1f; }
 		}
@@ -1780,8 +1780,8 @@ namespace CSkies
 		 */
 		public static void AIDemonScythe(Entity codable, ref float[] ai, int startSpeedupInterval = 30, int stopSpeedupInterval = 100, float rotateScalar = 0.8f, float speedupScalar = 1.06f, float maxSpeed = 8f)
 		{
-			if (codable is Projectile) { ((Projectile)codable).rotation += codable.direction * rotateScalar; }
-			if (codable is NPC) { ((NPC)codable).rotation += codable.direction * rotateScalar; } 		
+			if (codable is Projectile) { ((Projectile)codable).rotation += (float)codable.direction * rotateScalar; }
+			if (codable is NPC) { ((NPC)codable).rotation += (float)codable.direction * rotateScalar; } 		
 			ai[0] += 1f;
 			if (ai[0] >= startSpeedupInterval)
 			{
@@ -1804,7 +1804,7 @@ namespace CSkies
         {
             if (p.ai[0] == 0f)
             {
-                p.rotation = (float)System.Math.Atan2(p.velocity.Y, p.velocity.X) + 1.57f;
+                p.rotation = (float)System.Math.Atan2((double)p.velocity.Y, (double)p.velocity.X) + 1.57f;
                 p.alpha -= alphaInterval;
                 if (p.alpha <= 0)
                 {
@@ -1846,15 +1846,15 @@ namespace CSkies
 				p.scale -= scaleReduce;
 				if (p.scale <= 0f){ p.Kill(); }
 				if (p.ai[0] <= start){ p.ai[0] += 1f; return; }
-				p.velocity.Y += gravity;
+				p.velocity.Y = p.velocity.Y + gravity;
 				if (Main.netMode != 2 && SpawnDust != null)
 				{
 					for (int m = 0; m < 3; m++)
 					{
-						float dustX = p.velocity.X / 3f * m;
-						float dustY = p.velocity.Y / 3f * m;
+						float dustX = p.velocity.X / 3f * (float)m;
+						float dustY = p.velocity.Y / 3f * (float)m;
 						int offset = 1;
-						Vector2 pos = new Vector2(p.position.X - offset, p.position.Y - offset);
+						Vector2 pos = new Vector2(p.position.X - (float)offset, p.position.Y - (float)offset);
 						int width = p.width + offset * 2; int height = p.height + offset * 2;
 						int dustID = SpawnDust(p, pos, width, height);
 						if (dustID != -1)
@@ -1869,7 +1869,7 @@ namespace CSkies
 					if (Main.rand.Next(8) == 0)
 					{
 						int offset = 1;
-						Vector2 pos = new Vector2(p.position.X - offset, p.position.Y - offset);
+						Vector2 pos = new Vector2(p.position.X - (float)offset, p.position.Y - (float)offset);
 						int width = p.width + offset * 2; int height = p.height + offset * 2;
 						int dustID = SpawnDust(p, pos, width, height);
 						if (dustID != -1)
@@ -1883,7 +1883,7 @@ namespace CSkies
 			{
 				p.scale -= scaleReduce;
 				if (p.scale <= 0f) { p.Kill(); }
-				p.velocity.Y += gravity;
+				p.velocity.Y = p.velocity.Y + gravity;
 				if (Main.netMode != 2 && SpawnDust != null) SpawnDust(p, p.position, p.width, p.height);
 			}
         }
@@ -1900,12 +1900,12 @@ namespace CSkies
          */
         public static void AIThrownWeapon(Projectile p, ref float[] ai, bool spin = false, int timeUntilDrop = 10, float xScalar = 0.99f, float yIncrement = 0.25f, float maxSpeedY = 16f)
         {
-            p.rotation += (Math.Abs(p.velocity.X) + Math.Abs(p.velocity.Y)) * 0.03f * p.direction;
+            p.rotation += (Math.Abs(p.velocity.X) + Math.Abs(p.velocity.Y)) * 0.03f * (float)p.direction;
             ai[0] += 1f;
             if (ai[0] >= timeUntilDrop)
             {
-                p.velocity.Y += yIncrement;
-                p.velocity.X *= xScalar;
+                p.velocity.Y = p.velocity.Y + yIncrement;
+                p.velocity.X = p.velocity.X * xScalar;
             }else
             if (!spin){ p.rotation = BaseUtility.RotationTo(p.Center, p.Center + p.velocity) + 1.57f; }
             if (p.velocity.Y > maxSpeedY){ p.velocity.Y = maxSpeedY; }
@@ -1939,8 +1939,8 @@ namespace CSkies
         public static void AISpear(Projectile p, ref float[] ai, Vector2 center, int ownerDirection, int itemAnimation, int itemAnimationMax, float initialSpeed = 3f, float moveOutward = 1.4f, float moveInward = 1.6f, bool overrideKill = false, bool frozen = false)
         {
             p.direction = ownerDirection;
-            p.position.X = center.X - p.width * 0.5f;
-            p.position.Y = center.Y - p.height * 0.5f;
+            p.position.X = center.X - (float)(p.width * 0.5f);
+            p.position.Y = center.Y - (float)(p.height * 0.5f);
             if (ai[0] == 0f){ ai[0] = initialSpeed; p.netUpdate = true; }
 			if (!frozen)
 			{
@@ -1948,7 +1948,7 @@ namespace CSkies
 			}
 			p.position += p.velocity * ai[0];
             if (!overrideKill && Main.player[p.owner].itemAnimation == 0){ p.Kill(); }
-            p.rotation = (float)Math.Atan2(p.velocity.Y, p.velocity.X) + 2.355f;
+            p.rotation = (float)Math.Atan2((double)p.velocity.Y, (double)p.velocity.X) + 2.355f;
 			if (p.direction == -1) { p.rotation -= 0f; }else
 			if (p.direction == 1) { p.rotation -= 1.57f; }
         }
@@ -1965,9 +1965,9 @@ namespace CSkies
          * rotationInterval : the amount for the projectile to rotate by each tick.
          * direct : If true, when returning simply reverses the boomerang velocity.
          */
-        public static void AIBoomerang(Projectile p, ref float[] ai, Vector2 position = default, int width = -1, int height = -1, bool playSound = true, float maxDistance = 9f, int returnDelay = 35, float speedInterval = 0.4f, float rotationInterval = 0.4f, bool direct = false)
+        public static void AIBoomerang(Projectile p, ref float[] ai, Vector2 position = default(Vector2), int width = -1, int height = -1, bool playSound = true, float maxDistance = 9f, int returnDelay = 35, float speedInterval = 0.4f, float rotationInterval = 0.4f, bool direct = false)
         {
-            if (position == default) { position = Main.player[p.owner].position; }
+            if (position == default(Vector2)) { position = Main.player[p.owner].position; }
             if (width == -1) { width = Main.player[p.owner].width; }
             if (height == -1) { height = Main.player[p.owner].height; }
             Vector2 center = position + new Vector2(width * 0.5f, height * 0.5f);
@@ -1990,14 +1990,14 @@ namespace CSkies
                 p.tileCollide = false;
                 float distPlayerX = center.X - p.Center.X;
                 float distPlayerY = center.Y - p.Center.Y;
-                float distPlayer = (float)Math.Sqrt(distPlayerX * distPlayerX + distPlayerY * distPlayerY);
+                float distPlayer = (float)Math.Sqrt((double)(distPlayerX * distPlayerX + distPlayerY * distPlayerY));
                 if (distPlayer > 3000f)
                 {
                     p.Kill();
                 }
                 if (direct)
                 {
-                    p.velocity = BaseUtility.RotateVector(default, new Vector2(speedInterval, 0f), BaseUtility.RotationTo(p.Center, center));
+                    p.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(speedInterval, 0f), BaseUtility.RotationTo(p.Center, center));
                 }else
                 {
                     distPlayer = maxDistance / distPlayer;
@@ -2031,7 +2031,7 @@ namespace CSkies
                     if (rectangle.Intersects(value)) { p.Kill(); }
                 }
             }
-            p.rotation += rotationInterval * p.direction;
+            p.rotation += rotationInterval * (float)p.direction;
         }
 
         /*
@@ -2081,7 +2081,7 @@ namespace CSkies
             p.direction = (p.Center.X > connectedPoint.X ? 1 : -1);
             float pointX = connectedPoint.X - p.Center.X;
             float pointY = connectedPoint.Y - p.Center.Y;
-            float pointDist = (float)Math.Sqrt(pointX * pointX + pointY * pointY);
+            float pointDist = (float)Math.Sqrt((double)(pointX * pointX + pointY * pointY));
             if (ai[0] == 0f)
             {
                 p.tileCollide = true;
@@ -2126,25 +2126,25 @@ namespace CSkies
                     new Vector2(p.velocity.X, p.velocity.Y);
                     float pointX2 = pointX - p.velocity.X;
                     float pointY2 = pointY - p.velocity.Y;
-                    float pointDist2 = (float)Math.Sqrt(pointX2 * pointX2 + pointY2 * pointY2);
+                    float pointDist2 = (float)Math.Sqrt((double)(pointX2 * pointX2 + pointY2 * pointY2));
                     pointDist2 = meleeSpeed2 / pointDist2;
                     pointX2 *= pointDist2;
                     pointY2 *= pointDist2;
-                    p.velocity.X *= 0.98f;
-                    p.velocity.Y *= 0.98f;
-                    p.velocity.X += pointX2;
-                    p.velocity.Y += pointY2;
+                    p.velocity.X = p.velocity.X * 0.98f;
+                    p.velocity.Y = p.velocity.Y * 0.98f;
+                    p.velocity.X = p.velocity.X + pointX2;
+                    p.velocity.Y = p.velocity.Y + pointY2;
                 }else
                 {
                     if (Math.Abs(p.velocity.X) + Math.Abs(p.velocity.Y) < 6f)
                     {
-                        p.velocity.X *= 0.96f;
-                        p.velocity.Y += 0.2f;
+                        p.velocity.X = p.velocity.X * 0.96f;
+                        p.velocity.Y = p.velocity.Y + 0.2f;
                     }
-                    if (connectedPointVelocity.X == 0f) { p.velocity.X *= 0.96f; }
+                    if (connectedPointVelocity.X == 0f) { p.velocity.X = p.velocity.X * 0.96f; }
                 }
             }
-            p.rotation = (float)Math.Atan2(pointY, pointX) - p.velocity.X * 0.1f;
+            p.rotation = (float)Math.Atan2((double)pointY, (double)pointX) - p.velocity.X * 0.1f;
         }
 
         /*
@@ -2158,13 +2158,13 @@ namespace CSkies
                 if (velocity.X != p.velocity.X)
                 {
                     if (Math.Abs(velocity.X) > 4f) { updateAndCollide = true; }
-                    p.position.X += p.velocity.X;
+                    p.position.X = p.position.X + p.velocity.X;
                     p.velocity.X = -velocity.X * 0.2f;
                 }
                 if (velocity.Y != p.velocity.Y)
                 {
                     if (Math.Abs(velocity.Y) > 4f) { updateAndCollide = true; }
-                    p.position.Y += p.velocity.Y;
+                    p.position.Y = p.position.Y + p.velocity.Y;
                     p.velocity.Y = -velocity.Y * 0.2f;
                 }
                 p.ai[0] = 1f;
@@ -2191,9 +2191,9 @@ namespace CSkies
 		public static bool StickToTiles(Vector2 position, ref Vector2 velocity, int width, int height, Func<int, int, bool> CanStick = null)
 		{
 			int tileLeftX = (int)(position.X / 16f) - 1;
-			int tileRightX = (int)((position.X + width) / 16f) + 2;
+			int tileRightX = (int)((position.X + (float)width) / 16f) + 2;
 			int tileLeftY = (int)(position.Y / 16f) - 1;
-			int tileRightY = (int)((position.Y + height) / 16f) + 2;
+			int tileRightY = (int)((position.Y + (float)height) / 16f) + 2;
 			if (tileLeftX < 0) { tileLeftX = 0; } if (tileRightX > Main.maxTilesX) { tileRightX = Main.maxTilesX; }
 			if (tileLeftY < 0) { tileLeftY = 0; } if (tileRightY > Main.maxTilesY) { tileRightY = Main.maxTilesY; }
 			bool stick = false;
@@ -2201,10 +2201,10 @@ namespace CSkies
 			{
 				for (int y = tileLeftY; y < tileRightY; y++)
 				{
-					if (Main.tile[x, y] != null && Main.tile[x, y].nactive() && (CanStick != null ? CanStick(x, y) : (Main.tileSolid[Main.tile[x, y].type] || (Main.tileSolidTop[Main.tile[x, y].type] && Main.tile[x, y].frameY == 0))))
+					if (Main.tile[x, y] != null && Main.tile[x, y].nactive() && (CanStick != null ? CanStick(x, y) : (Main.tileSolid[(int)Main.tile[x, y].type] || (Main.tileSolidTop[(int)Main.tile[x, y].type] && Main.tile[x, y].frameY == 0))))
 					{
-						Vector2 pos = new Vector2(x * 16, y * 16);
-						if (position.X + width - 4f > pos.X && position.X + 4f < pos.X + 16f && position.Y + height - 4f > pos.Y && position.Y + 4f < pos.Y + 16f)
+						Vector2 pos = new Vector2((float)(x * 16), (float)(y * 16));
+						if (position.X + (float)width - 4f > pos.X && position.X + 4f < pos.X + 16f && position.Y + (float)height - 4f > pos.Y && position.Y + 4f < pos.Y + 16f)
 						{
 							stick = true; velocity *= 0f; break;
 						}
@@ -2262,11 +2262,11 @@ namespace CSkies
 						npc.TargetClosest(true);
 						if (npc.direction > 0)
 						{
-							npc.velocity.X += 2f;
+							npc.velocity.X = npc.velocity.X + 2f;
 						}
 						else
 						{
-							npc.velocity.X -= 2f;
+							npc.velocity.X = npc.velocity.X - 2f;
 						}
 						for (int m = 0; m < 20; m = npcAvoidCollision + 1)
 						{
@@ -2277,7 +2277,7 @@ namespace CSkies
 					float timerPartial = 1f - npc.localAI[0] / timerMax;
 					float timerPartialTimes20 = timerPartial * 20f;
 					int nextNPC = 0;
-					while (nextNPC < timerPartialTimes20)
+					while ((float)nextNPC < timerPartialTimes20)
 					{
 						npcAvoidCollision = nextNPC;
 						nextNPC = npcAvoidCollision + 1;
@@ -2288,12 +2288,12 @@ namespace CSkies
 			{
 				npc.TargetClosest(true);
 				npc.ai[0] = 1f;
-				npc.ai[1] = npc.direction;
+				npc.ai[1] = (float)npc.direction;
 			}
 			else if (npc.ai[0] == 1f)
 			{
 				npc.TargetClosest(true);
-				npc.velocity.X += npc.ai[1] * velIntervalX;
+				npc.velocity.X = npc.velocity.X + npc.ai[1] * velIntervalX;
 				
 				if (npc.velocity.X > velMaxX)
 					npc.velocity.X = velMaxX;
@@ -2322,7 +2322,7 @@ namespace CSkies
 			}
 			else if (npc.ai[0] == 2f)
 			{
-				npc.velocity.Y += npc.ai[1] * velIntervalYTurn;
+				npc.velocity.Y = npc.velocity.Y + npc.ai[1] * velIntervalYTurn;
 				
 				if (npc.velocity.Length() > velIntervalMaxTurn)
 					npc.velocity *= velIntervalScalar;
@@ -2331,17 +2331,17 @@ namespace CSkies
 				{
 					npc.TargetClosest(true);
 					npc.ai[0] = 3f;
-					npc.ai[1] = npc.direction;
+					npc.ai[1] = (float)npc.direction;
 				}
 			}
 			else if (npc.ai[0] == 3f)
 			{
-				npc.velocity.X += npc.ai[1] * velIntervalXTurn;
+				npc.velocity.X = npc.velocity.X + npc.ai[1] * velIntervalXTurn;
 				
 				if (npc.Center.Y > Main.player[npc.target].Center.Y)
-					npc.velocity.Y -= velIntervalY;
+					npc.velocity.Y = npc.velocity.Y - velIntervalY;
 				else
-					npc.velocity.Y += velIntervalY;
+					npc.velocity.Y = npc.velocity.Y + velIntervalY;
 				
 				if (npc.velocity.Length() > velIntervalMaxTurn)
 					npc.velocity *= velIntervalScalar;
@@ -2350,7 +2350,7 @@ namespace CSkies
 				{
 					npc.TargetClosest(true);
 					npc.ai[0] = 0f;
-					npc.ai[1] = npc.direction;
+					npc.ai[1] = (float)npc.direction;
 				}
 			}																
 		}
@@ -2362,7 +2362,7 @@ namespace CSkies
 			AISpaceOctopus(npc, ref ai, Main.player[npc.target].Center, moveSpeed, velMax, hoverDistance, shootProjInterval, FireProj);
 		}
 
-		public static void AISpaceOctopus(NPC npc, ref float[] ai, Vector2 targetCenter = default, float moveSpeed = 0.15f, float velMax = 5f, float hoverDistance = 250f, float shootProjInterval = 70f, Action<NPC, Vector2> FireProj = null)
+		public static void AISpaceOctopus(NPC npc, ref float[] ai, Vector2 targetCenter = default(Vector2), float moveSpeed = 0.15f, float velMax = 5f, float hoverDistance = 250f, float shootProjInterval = 70f, Action<NPC, Vector2> FireProj = null)
 		{
 			Vector2 wantedVelocity = targetCenter - npc.Center + new Vector2(0f, -hoverDistance);
 			float dist = wantedVelocity.Length();
@@ -2442,7 +2442,7 @@ namespace CSkies
 			{
 				if(noDmg) npc.dontTakeDamage = true;
 				if(gravityChange) npc.noGravity = false;
-				npc.velocity.X *= 0.98f;
+				npc.velocity.X = npc.velocity.X * 0.98f;
 				ai[1] += 1f;
 				if (ai[1] >= noDamageTimeMax)
 				{
@@ -2462,7 +2462,7 @@ namespace CSkies
 					return;
 				}
 				Vector2 centerDiff = playerCenter - npc.Center;
-				centerDiff.Y -= targetPlayer.height / 4;
+				centerDiff.Y -= (float)(targetPlayer.height / 4);
 				float centerDist = centerDiff.Length();
 				if (centerDist > startPhaseDist)
 				{
@@ -2515,7 +2515,7 @@ namespace CSkies
 				float speedAdjuster = 50f;
 				distDiff.Normalize();
 				distDiff *= velSpeed2;
-				npc.velocity = (npc.velocity * (speedAdjuster - 1) + distDiff) / speedAdjuster;
+				npc.velocity = (npc.velocity * (float)(speedAdjuster - 1) + distDiff) / speedAdjuster;
 				if (!Collision.CanHit(npc.Center, 1, 1, playerCenter, 1, 1))
 				{
 					ai[0] = 0f;
@@ -2532,7 +2532,7 @@ namespace CSkies
 				float speedAdjusterPhase = 4f;
 				distDiff.Normalize();
 				distDiff *= velSpeedPhase;
-				npc.velocity = (npc.velocity * (speedAdjusterPhase - 1) + distDiff) / speedAdjusterPhase;
+				npc.velocity = (npc.velocity * (float)(speedAdjusterPhase - 1) + distDiff) / speedAdjusterPhase;
 				if (distLength < stopPhaseDist && !Collision.SolidCollision(npc.position, npc.width, npc.height))
 				{
 					ai[0] = 0f;
@@ -2562,13 +2562,13 @@ namespace CSkies
 			}
 			else if (ai[0] == 4f) //idle floating
 			{
-				if (npc.collideX) npc.velocity.X *= -0.8f;
-				if (npc.collideY) npc.velocity.Y *= -0.8f;
+				if (npc.collideX) npc.velocity.X = npc.velocity.X * -0.8f;
+				if (npc.collideY) npc.velocity.Y = npc.velocity.Y * -0.8f;
 				Vector2 velVec;
 				if (npc.velocity.X == 0f && npc.velocity.Y == 0f)
 				{
 					velVec = playerCenter - npc.Center;
-					velVec.Y -= targetPlayer.height / 4;
+					velVec.Y -= (float)(targetPlayer.height / 4);
 					velVec.Normalize();
 					npc.velocity = velVec * 0.1f;
 				}
@@ -2670,7 +2670,7 @@ namespace CSkies
 				}
 				codable.velocity *= 0.96f;
 				++ai[1];
-				rotation += ((float)(0.1 + (double)(ai[1] / rotTime) * 0.4f) * codable.direction) * rotScalar;
+				rotation += ((float)(0.1 + (double)(ai[1] / (float)rotTime) * 0.4f) * (float)codable.direction) * rotScalar;
 				if (ai[1] < rotTime) return;
 				if (codable is NPC) { ((NPC)codable).netUpdate = true; } else if (codable is Projectile) { ((Projectile)codable).netUpdate = true; }
 				ai[0] = 0.0f;
@@ -2707,9 +2707,9 @@ namespace CSkies
 			if (ai[2] > 0f)
 			{
 				ai[1] = 0f; ai[0] = 1f; npc.directionY = 1;
-				if (npc.velocity.Y > moveInterval){ npc.rotation += npc.direction * 0.1f; }else{ npc.rotation = 0f; }
+				if (npc.velocity.Y > moveInterval){ npc.rotation += (float)npc.direction * 0.1f; }else{ npc.rotation = 0f; }
 				npc.spriteDirection = npc.direction;
-				npc.velocity.X = moveInterval * npc.direction;
+				npc.velocity.X = moveInterval * (float)npc.direction;
 				npc.noGravity = false;
 				snailStatus = 0;
 				//int tileX = (int)(npc.Center.X + (float)(npc.width / 2 * -npc.direction)) / 16;
@@ -2727,7 +2727,7 @@ namespace CSkies
 						if (npc.localAI[2] > 10f)
 						{
 							npc.direction = 1;
-							npc.velocity.X = npc.direction * moveInterval;
+							npc.velocity.X = (float)npc.direction * moveInterval;
 							npc.localAI[2] = 0f;
 						}
 					}else{ npc.localAI[2] = 0f; npc.localAI[1] = npc.position.X; }
@@ -2822,8 +2822,8 @@ namespace CSkies
 				if(npc.directionY == 1 && !npc.collideX){ snailStatus = 0; }else
 				if(npc.direction == 1 && !npc.collideY){ snailStatus = 3; }else
 				{ snailStatus = 2; }
-				npc.velocity.X = moveInterval * npc.direction;
-				npc.velocity.Y = moveInterval * npc.directionY;
+				npc.velocity.X = moveInterval * (float)npc.direction;
+				npc.velocity.Y = moveInterval * (float)npc.directionY;
 			}
 		}
 
@@ -2965,8 +2965,8 @@ namespace CSkies
 			bool seekHouse = Main.raining;
 			if (!Main.dayTime || Main.eclipse) seekHouse = true;
 			if (seekHome != null) seekHouse = (bool)seekHome;
-			int npcTileX = (int)(npc.position.X + (double)(npc.width / 2)) / 16;
-			int npcTileY = (int)(npc.position.Y + (double)npc.height + 1.0) / 16;
+			int npcTileX = (int)((double)npc.position.X + (double)(npc.width / 2)) / 16;
+			int npcTileY = (int)((double)npc.position.Y + (double)npc.height + 1.0) / 16;
 			if (critter && npc.target == 255)
 			{
 				npc.TargetClosest(true);
@@ -3029,8 +3029,8 @@ namespace CSkies
 					{
 						npc.velocity.X = 0.0f;
 						npc.velocity.Y = 0.0f;
-						npc.position.X = npc.homeTileX * 16 + 8 - npc.width / 2;
-						npc.position.Y = homeTileY * 16 - npc.height - 0.1f;
+						npc.position.X = (float)(npc.homeTileX * 16 + 8 - npc.width / 2);
+						npc.position.Y = (float)(homeTileY * 16 - npc.height) - 0.1f;
 						npc.netUpdate = true;
 					}else //or find a new one
 					if(canFindHouse)
@@ -3058,7 +3058,7 @@ namespace CSkies
 						}else
 						{
 							npc.direction = npcTileX <= npc.homeTileX ? 1 : -1;
-							ai[0] = 1f; ai[1] = 200 + Main.rand.Next(200); ai[2] = 0f;
+							ai[0] = 1f; ai[1] = (float)(200 + Main.rand.Next(200)); ai[2] = 0f;
 							npc.netUpdate = true;
 						}
 					}
@@ -3074,8 +3074,8 @@ namespace CSkies
 						if (ai[1] <= 0)
 						{
 							ai[0] = 1f;
-							ai[1] = 200 + Main.rand.Next(200);
-							if (critter) ai[1] += Main.rand.Next(200, 400);
+							ai[1] = (float)(200 + Main.rand.Next(200));
+							if (critter) ai[1] += (float)Main.rand.Next(200, 400);
 							ai[2] = 0f;
 							npc.netUpdate = true;
 						}
@@ -3100,11 +3100,11 @@ namespace CSkies
 			//move around within the home
 			if (Main.netMode != 1 && !critter && seekHouse && npcTileX == npc.homeTileX && npcTileY == npc.homeTileY)
 			{
-				ai[0] = 0f; ai[1] = 200 + Main.rand.Next(200); ai[2] = 60f;
+				ai[0] = 0f; ai[1] = (float)(200 + Main.rand.Next(200)); ai[2] = 60f;
 				npc.netUpdate = true;
 			}else
 			{
-				if (Main.netMode != 1 && !npc.homeless && !Main.tileDungeon[Main.tile[npcTileX, npcTileY].type] && (npcTileX < npc.homeTileX - 35 || npcTileX > npc.homeTileX + 35))
+				if (Main.netMode != 1 && !npc.homeless && !Main.tileDungeon[(int)Main.tile[npcTileX, npcTileY].type] && (npcTileX < npc.homeTileX - 35 || npcTileX > npc.homeTileX + 35))
 				{
 					if (npc.Center.X < (npc.homeTileX * 16) && npc.direction == -1)
 						ai[1] -= 5f;
@@ -3114,8 +3114,8 @@ namespace CSkies
 				--ai[1];
 				if (ai[1] <= 0f)
 				{
-					ai[0] = 0f; ai[1] = 300 + Main.rand.Next(300);
-					if (critter) ai[1] -= Main.rand.Next(100);
+					ai[0] = 0f; ai[1] = (float)(300 + Main.rand.Next(300));
+					if (critter) ai[1] -= (float)Main.rand.Next(100);
 					ai[2] = 60f; npc.netUpdate = true;
 				}
 				//close doors the npc has opened
@@ -3124,7 +3124,7 @@ namespace CSkies
 					if (WorldGen.CloseDoor(npc.doorX, npc.doorY, false))
 					{
 						npc.closeDoor = false;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 1, npc.doorX, npc.doorY, npc.direction, 0);
+						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 1, (float)npc.doorX, (float)npc.doorY, (float)npc.direction, 0);
 					}
 					if ((npc.Center.X / 16f > npc.doorX + 4) || (npc.Center.X / 16f < npc.doorX - 4) || (npc.Center.Y / 16f > npc.doorY + 4) || (npc.Center.Y / 16f < npc.doorY - 4))
 						npc.closeDoor = false;
@@ -3158,7 +3158,7 @@ namespace CSkies
 				if (Main.tile[tileX2 + npc.direction, tileY2 + 1] == null) Main.tile[tileX2 + npc.direction, tileY2 + 1] = new Tile();
 				#endregion
 				//Main.tile[tileX2 - npc.direction, tileY2 + 1].halfBrick();
-				if (canOpenDoors && Main.tile[tileX2, tileY2 - 2].nactive() && Main.tile[tileX2, tileY2 - 2].type == 10 && (Main.rand.Next(10) == 0 || seekHouse))
+				if (canOpenDoors && Main.tile[tileX2, tileY2 - 2].nactive() && (int)Main.tile[tileX2, tileY2 - 2].type == 10 && (Main.rand.Next(10) == 0 || seekHouse))
 				{
 					if (Main.netMode == 1)
 						return;
@@ -3168,7 +3168,7 @@ namespace CSkies
 						npc.closeDoor = true;
 						npc.doorX = tileX2;
 						npc.doorY = tileY2 - 2;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, npc.direction, 0);
+						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, (float)tileX2, (float)(tileY2 - 2), (float)npc.direction, 0);
 						npc.netUpdate = true;
 						ai[1] += 80f;
 					//if that fails, attempt to open it the other way...
@@ -3177,7 +3177,7 @@ namespace CSkies
 						npc.closeDoor = true;
 						npc.doorX = tileX2;
 						npc.doorY = tileY2 - 2;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, -npc.direction, 0);
+						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, (float)tileX2, (float)(tileY2 - 2), (float)-npc.direction, 0);
 						npc.netUpdate = true;
 						ai[1] += 80f;
 					//if it still fails, you can't open the door, so turn around
@@ -3210,7 +3210,7 @@ namespace CSkies
 							}else{ npc.direction *= -1; npc.netUpdate = true; }
 						}else if (npc.position.Y + npc.height - (tileY2 * 16f) > 20f)
 						{
-							if (Main.tile[tileX2, tileY2].nactive() && Main.tileSolid[Main.tile[tileX2, tileY2].type] && Main.tile[tileX2, tileY2].slope() == 0)
+							if (Main.tile[tileX2, tileY2].nactive() && Main.tileSolid[(int)Main.tile[tileX2, tileY2].type] && (int)Main.tile[tileX2, tileY2].slope() == 0)
 							{
 								if (npc.direction == 1 && !Collision.SolidTiles(tileX2 - 2, tileX2, tileY2 - 3, tileY2 - 1) || npc.direction == -1 && !Collision.SolidTiles(tileX2, tileX2 + 2, tileY2 - 3, tileY2 - 1))
 								{
@@ -3231,7 +3231,7 @@ namespace CSkies
 							if (Main.tile[tileX2, tileY2 + 4] == null) Main.tile[tileX2, tileY2 + 4] = new Tile();
 							if (Main.tile[tileX2 - npc.direction, tileY2 + 4] == null) Main.tile[tileX2 - npc.direction, tileY2 + 4] = new Tile();
 							#endregion
-							if (!critter && npcTileX >= npc.homeTileX - 35 && npcTileX <= npc.homeTileX + 35 && (!Main.tile[tileX2, tileY2 + 1].nactive() || !Main.tileSolid[Main.tile[tileX2, tileY2 + 1].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 1].active() || !Main.tileSolid[Main.tile[tileX2 - npc.direction, tileY2 + 1].type]) && (!Main.tile[tileX2, tileY2 + 2].nactive() || !Main.tileSolid[Main.tile[tileX2, tileY2 + 2].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 2].active() || !Main.tileSolid[Main.tile[tileX2 - npc.direction, tileY2 + 2].type]) && (!Main.tile[tileX2, tileY2 + 3].nactive() || !Main.tileSolid[Main.tile[tileX2, tileY2 + 3].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 3].active() || !Main.tileSolid[Main.tile[tileX2 - npc.direction, tileY2 + 3].type]) && (!Main.tile[tileX2, tileY2 + 4].nactive() || !Main.tileSolid[Main.tile[tileX2, tileY2 + 4].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 4].nactive() || !Main.tileSolid[Main.tile[tileX2 - npc.direction, tileY2 + 4].type]))
+							if (!critter && npcTileX >= npc.homeTileX - 35 && npcTileX <= npc.homeTileX + 35 && (!Main.tile[tileX2, tileY2 + 1].nactive() || !Main.tileSolid[(int)Main.tile[tileX2, tileY2 + 1].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 1].active() || !Main.tileSolid[(int)Main.tile[tileX2 - npc.direction, tileY2 + 1].type]) && (!Main.tile[tileX2, tileY2 + 2].nactive() || !Main.tileSolid[(int)Main.tile[tileX2, tileY2 + 2].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 2].active() || !Main.tileSolid[(int)Main.tile[tileX2 - npc.direction, tileY2 + 2].type]) && (!Main.tile[tileX2, tileY2 + 3].nactive() || !Main.tileSolid[(int)Main.tile[tileX2, tileY2 + 3].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 3].active() || !Main.tileSolid[(int)Main.tile[tileX2 - npc.direction, tileY2 + 3].type]) && (!Main.tile[tileX2, tileY2 + 4].nactive() || !Main.tileSolid[(int)Main.tile[tileX2, tileY2 + 4].type]) && (!Main.tile[tileX2 - npc.direction, tileY2 + 4].nactive() || !Main.tileSolid[(int)Main.tile[tileX2 - npc.direction, tileY2 + 4].type]))
 							{
 								npc.direction *= -1;
 								npc.velocity.X *= -1f;
@@ -3259,7 +3259,7 @@ namespace CSkies
 		 */
 		public static void AIEater(NPC npc, ref float[] ai, float moveInterval = 0.022f, float distanceDivider = 4.2f, float bounceScalar = 0.7f, bool fleeAtDay = false, bool ignoreWet = false)
         {
-            if (npc.target < 0 || npc.target == byte.MaxValue || Main.player[npc.target].dead){ npc.TargetClosest(true); }
+            if (npc.target < 0 || npc.target == (int)byte.MaxValue || Main.player[npc.target].dead){ npc.TargetClosest(true); }
 			float distX = Main.player[npc.target].Center.X;
 			float distY = Main.player[npc.target].Center.Y;
             Vector2 npcCenter = npc.Center;
@@ -3296,7 +3296,7 @@ namespace CSkies
             if (npc.velocity.X > SpeedX1){ npc.velocity.X -= moveInterval; }
 			if (npc.velocity.Y < SpeedY1){ npc.velocity.Y += moveInterval; }else 
             if (npc.velocity.Y > SpeedY1){ npc.velocity.Y -= moveInterval; }
-			npc.rotation = (float) Math.Atan2(SpeedY1, SpeedX1) - 1.57f;
+			npc.rotation = (float) Math.Atan2((double) SpeedY1, (double) SpeedX1) - 1.57f;
 			if (npc.collideX)
 			{
 				npc.netUpdate = true;
@@ -3344,7 +3344,7 @@ namespace CSkies
 			}
 			if (ai[1] == 0f)
 			{
-                if (rotate){ npc.rotation += npc.direction * npc.directionY * 0.13f; }
+                if (rotate){ npc.rotation += (float)(npc.direction * npc.directionY) * 0.13f; }
 				if (npc.collideY) ai[0] = 2f;
 				if (!npc.collideY && ai[0] == 2f)
 				{
@@ -3355,7 +3355,7 @@ namespace CSkies
 				if (npc.collideX){ npc.directionY = -npc.directionY; ai[1] = 1f; }
 			}else
 			{
-                if (rotate){ npc.rotation -= npc.direction * npc.directionY * 0.13f; }
+                if (rotate){ npc.rotation -= (float)(npc.direction * npc.directionY) * 0.13f; }
 				if (npc.collideX) ai[0] = 2f;
 				if (!npc.collideX && ai[0] == 2f)
 				{
@@ -3365,8 +3365,8 @@ namespace CSkies
 				}
 				if (npc.collideY){ npc.direction = -npc.direction; ai[1] = 0.0f; }
 			}
-			npc.velocity.X = moveInterval * npc.direction;
-			npc.velocity.Y = moveInterval * npc.directionY;
+			npc.velocity.X = (float) (moveInterval * npc.direction);
+			npc.velocity.Y = (float) (moveInterval * npc.directionY);
         }
 
 		/*
@@ -3409,7 +3409,7 @@ namespace CSkies
 			}
 			if (Main.player[npc.target].dead)
 			{
-				velX = npc.direction * distanceDivider / 2f;
+				velX = (float)npc.direction * distanceDivider / 2f;
 				velY = -distanceDivider / 2f;
 			}
 			npc.spriteDirection = -1;
@@ -3421,7 +3421,7 @@ namespace CSkies
                 if (ai[0] > 200f){ ai[0] = -200f; }
 				npc.velocity.X += velX * 0.007f;
 				npc.velocity.Y += velY * 0.007f;
-				npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X);
+				npc.rotation = (float)Math.Atan2((double)npc.velocity.Y, (double)npc.velocity.X);
                 if (npc.velocity.X > slowSpeed || npc.velocity.X < -slowSpeed){ npc.velocity.X *= 0.9f; }
 				if (npc.velocity.Y > slowSpeed || npc.velocity.Y < -slowSpeed){ npc.velocity.Y *= 0.9f; }
                 if (npc.velocity.X > maxSpeed){ npc.velocity.X = maxSpeed; }else
@@ -3430,29 +3430,29 @@ namespace CSkies
                 if (npc.velocity.Y < -maxSpeed){ npc.velocity.Y = -maxSpeed; }
 			}else
 			{
-				if (npc.velocity.X < (double)velX)
+				if ((double)npc.velocity.X < (double)velX)
 				{
 					npc.velocity.X += moveInterval;
 					if ((double)npc.velocity.X < 0 && (double)velX > 0)
 						npc.velocity.X += moveInterval;
-				}else if (npc.velocity.X > (double)velX)
+				}else if ((double)npc.velocity.X > (double)velX)
 				{
 					npc.velocity.X -= moveInterval;
 					if ((double)npc.velocity.X > 0 && (double)velX < 0)
 						npc.velocity.X -= moveInterval;
 				}
-				if (npc.velocity.Y < (double)velY)
+				if ((double)npc.velocity.Y < (double)velY)
 				{
 					npc.velocity.Y += moveInterval;
 					if ((double)npc.velocity.Y < 0 && (double)velY > 0)
 						npc.velocity.Y += moveInterval;
-				}else if (npc.velocity.Y > (double)velY)
+				}else if ((double)npc.velocity.Y > (double)velY)
 				{
 					npc.velocity.Y -= moveInterval;
 					if ((double)npc.velocity.Y > 0 && (double)velY < 0)
 						npc.velocity.Y -= moveInterval;
 				}
-				npc.rotation = (float)Math.Atan2(velY, velX);
+				npc.rotation = (float)Math.Atan2((double)velY, (double)velX);
 			}
 			if (npc.collideX)
 			{
@@ -3502,7 +3502,7 @@ namespace CSkies
 		    npc.TargetClosest(true);
 		    float distX = Main.player[npc.target].Center.X - npc.Center.X;
 		    float distY = Main.player[npc.target].Center.Y - npc.Center.Y;
-		    float dist = (float)Math.Sqrt(distX * distX + distY * distY);
+		    float dist = (float)Math.Sqrt((double)(distX * distX + distY * distY));
 		    ai[1] += 1f;
 		    if (ai[1] > 600f)
 		    {
@@ -3516,8 +3516,8 @@ namespace CSkies
 			if (dist < 250f)
 			{
 				ai[0] += 0.9f;
-                if (ai[0] > 0f){ npc.velocity.Y += closeIncrement; }else{ npc.velocity.Y -= closeIncrement; }
-                if (ai[0] < -100f || ai[0] > 100f) { npc.velocity.X += closeIncrement; }else{ npc.velocity.X -= closeIncrement; }
+                if (ai[0] > 0f){ npc.velocity.Y = npc.velocity.Y + closeIncrement; }else{ npc.velocity.Y = npc.velocity.Y - closeIncrement; }
+                if (ai[0] < -100f || ai[0] > 100f) { npc.velocity.X = npc.velocity.X + closeIncrement; }else{ npc.velocity.X = npc.velocity.X - closeIncrement; }
 				if (ai[0] > 200f){ ai[0] = -200f; }
 			}
 		    if (dist > maxDistance)
@@ -3539,13 +3539,13 @@ namespace CSkies
 		    distX *= dist; distY *= dist;
 		    if (Main.player[npc.target].dead)
 		    {
-			    distX = npc.direction * distanceAmt / 2f;
+			    distX = (float)npc.direction * distanceAmt / 2f;
 			    distY = -distanceAmt / 2f;
 		    }
-		    if (npc.velocity.X < distX){ npc.velocity.X += increment; }else
-			if (npc.velocity.X > distX){ npc.velocity.X -= increment; }
-		    if (npc.velocity.Y < distY){ npc.velocity.Y += increment; }else
-			if (npc.velocity.Y > distY){ npc.velocity.Y -= increment; }
+		    if (npc.velocity.X < distX){ npc.velocity.X = npc.velocity.X + increment; }else
+			if (npc.velocity.X > distX){ npc.velocity.X = npc.velocity.X - increment; }
+		    if (npc.velocity.Y < distY){ npc.velocity.Y = npc.velocity.Y + increment; }else
+			if (npc.velocity.Y > distY){ npc.velocity.Y = npc.velocity.Y - increment; }
 	    }
 
 		/*
@@ -3568,11 +3568,11 @@ namespace CSkies
                 int tileDist = 16;
                 bool inRangeX = false;
                 bool inRangeY = false;
-                if (npc.position.X > ai[0] - tileDist && npc.position.X < ai[0] + tileDist) { inRangeX = true; }
+                if (npc.position.X > ai[0] - (float)tileDist && npc.position.X < ai[0] + (float)tileDist) { inRangeX = true; }
                 else
                     if ((npc.velocity.X < 0f && npc.direction > 0) || (npc.velocity.X > 0f && npc.direction < 0)) { inRangeX = true; }
                 tileDist += 24;
-                if (npc.position.Y > ai[1] - tileDist && npc.position.Y < ai[1] + tileDist)
+                if (npc.position.Y > ai[1] - (float)tileDist && npc.position.Y < ai[1] + (float)tileDist)
                 {
                     inRangeY = true;
                 }
@@ -3588,7 +3588,7 @@ namespace CSkies
                     {
                         ai[2] = -200f;
                         npc.direction *= -1;
-                        npc.velocity.X *= -1f;
+                        npc.velocity.X = npc.velocity.X * -1f;
                         npc.collideX = false;
                     }
                 }
@@ -3603,7 +3603,7 @@ namespace CSkies
             else
             {
                 ai[2] += 1f;
-                if (Main.player[npc.target].position.X + Main.player[npc.target].width / 2 > npc.position.X + npc.width / 2)
+                if (Main.player[npc.target].position.X + (float)(Main.player[npc.target].width / 2) > npc.position.X + (float)(npc.width / 2))
                 {
                     npc.direction = -1;
                 }
@@ -3613,7 +3613,7 @@ namespace CSkies
                 }
             }
             int tileX = (int)(npc.Center.X / 16f) + npc.direction * 2;
-            int tileY = (int)((npc.position.Y + npc.height) / 16f);
+            int tileY = (int)((npc.position.Y + (float)npc.height) / 16f);
             bool tileBelowEmpty = true;
             for (int tY = tileY; tY < tileY + hoverHeight; tY++)
             {
@@ -3621,7 +3621,7 @@ namespace CSkies
                 {
                     Main.tile[tileX, tY] = new Tile();
                 }
-                if ((Main.tile[tileX, tY].nactive() && Main.tileSolid[Main.tile[tileX, tY].type]) || Main.tile[tileX, tY].liquid > 0)
+                if ((Main.tile[tileX, tY].nactive() && Main.tileSolid[(int)Main.tile[tileX, tY].type]) || Main.tile[tileX, tY].liquid > 0)
                 {
                     tileBelowEmpty = false;
                     break;
@@ -3661,35 +3661,35 @@ namespace CSkies
             if (npc.direction == -1 && npc.velocity.X > -maxSpeedX)
             {
                 npc.velocity.X -= (moveInterval * 0.5f);
-                if (npc.velocity.X > maxSpeedX) { npc.velocity.X -= 0.1f; }
+                if (npc.velocity.X > maxSpeedX) { npc.velocity.X = npc.velocity.X - 0.1f; }
                 else
-                    if (npc.velocity.X > 0f) { npc.velocity.X += 0.05f; }
+                    if (npc.velocity.X > 0f) { npc.velocity.X = npc.velocity.X + 0.05f; }
                 if (npc.velocity.X < -maxSpeedX) { npc.velocity.X = -maxSpeedX; }
             }
             else
                 if (npc.direction == 1 && npc.velocity.X < maxSpeedX)
                 {
                     npc.velocity.X += (moveInterval * 0.5f);
-                    if (npc.velocity.X < -maxSpeedX) { npc.velocity.X += 0.1f; }
+                    if (npc.velocity.X < -maxSpeedX) { npc.velocity.X = npc.velocity.X + 0.1f; }
                     else
-                        if (npc.velocity.X < 0f) { npc.velocity.X -= 0.05f; }
+                        if (npc.velocity.X < 0f) { npc.velocity.X = npc.velocity.X - 0.05f; }
                     if (npc.velocity.X > maxSpeedX) { npc.velocity.X = maxSpeedX; }
                 }
             if (npc.directionY == -1 && (double)npc.velocity.Y > -hoverMaxSpeed)
             {
-                npc.velocity.Y -= hoverInterval;
-                if ((double)npc.velocity.Y > hoverMaxSpeed) { npc.velocity.Y -= 0.05f; }
+                npc.velocity.Y = npc.velocity.Y - hoverInterval;
+                if ((double)npc.velocity.Y > hoverMaxSpeed) { npc.velocity.Y = npc.velocity.Y - 0.05f; }
                 else
-                    if (npc.velocity.Y > 0f) { npc.velocity.Y += (hoverInterval - 0.01f); }
+                    if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y + (hoverInterval - 0.01f); }
                 if ((double)npc.velocity.Y < -hoverMaxSpeed) { npc.velocity.Y = -hoverMaxSpeed; }
             }
             else
                 if (npc.directionY == 1 && (double)npc.velocity.Y < hoverMaxSpeed)
                 {
-                    npc.velocity.Y += hoverInterval;
-                    if ((double)npc.velocity.Y < -hoverMaxSpeed) { npc.velocity.Y += 0.05f; }
+                    npc.velocity.Y = npc.velocity.Y + hoverInterval;
+                    if ((double)npc.velocity.Y < -hoverMaxSpeed) { npc.velocity.Y = npc.velocity.Y + 0.05f; }
                     else
-                        if (npc.velocity.Y < 0f) { npc.velocity.Y -= (hoverInterval - 0.01f); }
+                        if (npc.velocity.Y < 0f) { npc.velocity.Y = npc.velocity.Y - (hoverInterval - 0.01f); }
                     if ((double)npc.velocity.Y > hoverMaxSpeed) { npc.velocity.Y = hoverMaxSpeed; }
                 }
         }
@@ -3719,43 +3719,37 @@ namespace CSkies
                 if (npc.velocity.Y < 0f && npc.velocity.Y > -max) { npc.velocity.Y = -max; }
             }
             npc.TargetClosest(true);
-            void move()
+            Action move = () =>
             {
                 if (npc.direction == -1 && npc.velocity.X > -maxSpeedX)
                 {
                     npc.velocity.X -= moveIntervalX;
-                    if (npc.velocity.X > maxSpeedX) { npc.velocity.X -= moveIntervalX; }
-                    else
+                    if (npc.velocity.X > maxSpeedX) { npc.velocity.X -= moveIntervalX; }else
                     if (npc.velocity.X > 0f) { npc.velocity.X += moveIntervalX * 0.5f; }
                     if (npc.velocity.X < -maxSpeedX) { npc.velocity.X = -maxSpeedX; }
-                }
-                else
+                }else
                 if (npc.direction == 1 && npc.velocity.X < maxSpeedX)
                 {
                     npc.velocity.X += moveIntervalX;
-                    if (npc.velocity.X < -maxSpeedX) { npc.velocity.X += moveIntervalX; }
-                    else
+                    if (npc.velocity.X < -maxSpeedX) { npc.velocity.X += moveIntervalX; }else
                     if (npc.velocity.X < 0f) { npc.velocity.X -= moveIntervalX * 0.5f; }
                     if (npc.velocity.X > maxSpeedX) { npc.velocity.X = maxSpeedX; }
                 }
                 if (npc.directionY == -1 && (double)npc.velocity.Y > -maxSpeedY)
                 {
                     npc.velocity.Y -= moveIntervalY;
-                    if ((double)npc.velocity.Y > maxSpeedY) { npc.velocity.Y -= moveIntervalY; }
-                    else
+                    if ((double)npc.velocity.Y > maxSpeedY) { npc.velocity.Y -= moveIntervalY; }else
                     if (npc.velocity.Y > 0f) { npc.velocity.Y += moveIntervalY * 0.5f; }
                     if ((double)npc.velocity.Y < -maxSpeedY) { npc.velocity.Y = -maxSpeedY; }
-                }
-                else
+                }else
                 if (npc.directionY == 1 && (double)npc.velocity.Y < maxSpeedY)
                 {
                     npc.velocity.Y += moveIntervalY;
-                    if ((double)npc.velocity.Y < -maxSpeedY) { npc.velocity.Y += moveIntervalY; }
-                    else
+                    if ((double)npc.velocity.Y < -maxSpeedY) { npc.velocity.Y += moveIntervalY; }else
                     if (npc.velocity.Y < 0f) { npc.velocity.Y -= moveIntervalY * 0.5f; }
                     if ((double)npc.velocity.Y > maxSpeedY) { npc.velocity.Y = maxSpeedY; }
                 }
-            }
+            };
             if (canBeBored){ ai[0] += 1f; }
             if (canBeBored && ai[0] > timeUntilBoredom)
             {
@@ -3774,8 +3768,8 @@ namespace CSkies
                 {
                     if (npc.wet)
                     {
-                        if (npc.velocity.Y > 0f) { npc.velocity.Y *= 0.95f; }
-                        npc.velocity.Y -= 0.5f;
+                        if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y * 0.95f; }
+                        npc.velocity.Y = npc.velocity.Y - 0.5f;
                         if (npc.velocity.Y < -maxSpeedX) { npc.velocity.Y = -maxSpeedX; }
                         npc.TargetClosest(true);
                     }
@@ -3798,9 +3792,9 @@ namespace CSkies
 		 * speedMax : the max speed of the npc.
 		 * targetOffset : A vector2 representing an 'offset' from the target, allows for some variation and misaccuracy.
 		 */
-		public static void AIPlant(NPC npc, ref float[] ai, bool checkTilePoint = true, Vector2 endPoint = default, bool isTilePos = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default)
+		public static void AIPlant(NPC npc, ref float[] ai, bool checkTilePoint = true, Vector2 endPoint = default(Vector2), bool isTilePos = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default(Vector2))
         {
-            if (endPoint != default)
+            if (endPoint != default(Vector2))
             {
                 ai[0] = endPoint.X;
                 ai[1] = endPoint.Y;
@@ -3828,9 +3822,9 @@ namespace CSkies
             }
             Vector2 endPointCenter = isTilePos ? new Vector2(ai[0] * 16f + 8f, ai[1] * 16f + 8f) : new Vector2(ai[0], ai[1]);
 			Vector2 playerCenter = Main.player[npc.target].Center + targetOffset;
-            float distPlayerX = playerCenter.X - npc.width / 2 - endPointCenter.X;
-            float distPlayerY = playerCenter.Y - npc.height / 2 - endPointCenter.Y;
-            float distPlayer = (float)Math.Sqrt(distPlayerX * distPlayerX + distPlayerY * distPlayerY);
+            float distPlayerX = playerCenter.X - (float)(npc.width / 2) - endPointCenter.X;
+            float distPlayerY = playerCenter.Y - (float)(npc.height / 2) - endPointCenter.Y;
+            float distPlayer = (float)Math.Sqrt((double)(distPlayerX * distPlayerX + distPlayerY * distPlayerY));
             if (distPlayer > vineLength)
             {
                 distPlayer = vineLength / distPlayer;
@@ -3839,28 +3833,28 @@ namespace CSkies
             }
             if (npc.position.X < endPointCenter.X + distPlayerX)
             {
-                npc.velocity.X += moveInterval;
-                if (npc.velocity.X < 0f && distPlayerX > 0f) { npc.velocity.X += moveInterval * 1.5f; }
+                npc.velocity.X = npc.velocity.X + moveInterval;
+                if (npc.velocity.X < 0f && distPlayerX > 0f) { npc.velocity.X = npc.velocity.X + moveInterval * 1.5f; }
             }else
             if (npc.position.X > endPointCenter.X + distPlayerX)
             {
-                npc.velocity.X -= moveInterval;
-                if (npc.velocity.X > 0f && distPlayerX < 0f) { npc.velocity.X -= moveInterval * 1.5f; }
+                npc.velocity.X = npc.velocity.X - moveInterval;
+                if (npc.velocity.X > 0f && distPlayerX < 0f) { npc.velocity.X = npc.velocity.X - moveInterval * 1.5f; }
             }
             if (npc.position.Y < endPointCenter.Y + distPlayerY)
             {
-                npc.velocity.Y += moveInterval;
-                if (npc.velocity.Y < 0f && distPlayerY > 0f) { npc.velocity.Y += moveInterval * 1.5f; }
+                npc.velocity.Y = npc.velocity.Y + moveInterval;
+                if (npc.velocity.Y < 0f && distPlayerY > 0f) { npc.velocity.Y = npc.velocity.Y + moveInterval * 1.5f; }
             }else
             if (npc.position.Y > endPointCenter.Y + distPlayerY)
             {
-                npc.velocity.Y -= moveInterval;
-                if (npc.velocity.Y > 0f && distPlayerY < 0f) { npc.velocity.Y -= moveInterval * 1.5f; }
+                npc.velocity.Y = npc.velocity.Y - moveInterval;
+                if (npc.velocity.Y > 0f && distPlayerY < 0f) { npc.velocity.Y = npc.velocity.Y - moveInterval * 1.5f; }
             }
             npc.velocity.X = MathHelper.Clamp(npc.velocity.X, -speedMax, speedMax);
             npc.velocity.Y = MathHelper.Clamp(npc.velocity.Y, -speedMax, speedMax);
-            if (distPlayerX > 0f) { npc.spriteDirection = 1; npc.rotation = (float)Math.Atan2(distPlayerY, distPlayerX); }else
-            if (distPlayerX < 0f) { npc.spriteDirection = -1; npc.rotation = (float)Math.Atan2(distPlayerY, distPlayerX) + 3.14f; }
+            if (distPlayerX > 0f) { npc.spriteDirection = 1; npc.rotation = (float)Math.Atan2((double)distPlayerY, (double)distPlayerX); }else
+            if (distPlayerX < 0f) { npc.spriteDirection = -1; npc.rotation = (float)Math.Atan2((double)distPlayerY, (double)distPlayerX) + 3.14f; }
             if (npc.collideX)
             {
                 npc.netUpdate = true;
@@ -3952,7 +3946,7 @@ namespace CSkies
 					//spawn pieces (flying)
 					if (fly && isHead && npc.ai[0] == 0f)
 					{
-						npc.ai[3] = npc.whoAmI;
+						npc.ai[3] = (float)npc.whoAmI;
 						npc.realLife = npc.whoAmI;
 						int npcID = npc.whoAmI;
 						for (int m = 1; m < wormLength - 1; m++)
@@ -3983,10 +3977,10 @@ namespace CSkies
 						{
 							if (!split)
 							{
-								npc.ai[3] = npc.whoAmI;
+								npc.ai[3] = (float)npc.whoAmI;
 								npc.realLife = npc.whoAmI;
 							}
-							npc.ai[2] = wormLength - 1;							
+							npc.ai[2] = (float)(wormLength - 1);							
 						}
 						float ai0 = 0;
 						float ai1 = npc.whoAmI;
@@ -3997,14 +3991,14 @@ namespace CSkies
 						
 						if (isHead)
 						{
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[1], npc.whoAmI, ai0, ai1, ai2, ai3);
+							npc.ai[0] = (float)NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[1], npc.whoAmI, ai0, ai1, ai2, ai3);
 						}else
 						if (isBody && npc.ai[2] > 0f)
 						{
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormLength - (int)npc.ai[2]], npc.whoAmI, ai0, ai1, ai2, ai3);
+							npc.ai[0] = (float)NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormLength - (int)npc.ai[2]], npc.whoAmI, ai0, ai1, ai2, ai3);
 						}else
 						{
-							npc.ai[0] = NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormTypes.Length - 1], npc.whoAmI, ai0, ai1, ai2, ai3);
+							npc.ai[0] = (float)NPC.NewNPC((int)(npc.Center.X), (int)(npc.Center.Y), wormTypes[wormTypes.Length - 1], npc.whoAmI, ai0, ai1, ai2, ai3);
 						}
 						/*if (!split)
 						{
@@ -4043,15 +4037,15 @@ namespace CSkies
 						int oldType = npc.type;
                         npc.type = wormTypes[0];
                         int npcID = npc.whoAmI;
-                        float lifePercent = npc.life / (float)npc.lifeMax;
+                        float lifePercent = (float)npc.life / (float)npc.lifeMax;
                         float lastPiece = npc.ai[0];
                         npc.SetDefaults(npc.type, -1f);
-                        npc.life = (int)(npc.lifeMax * lifePercent);
+                        npc.life = (int)((float)npc.lifeMax * lifePercent);
                         npc.ai[0] = lastPiece;
                         npc.TargetClosest(true);
                         npc.netUpdate = true;
                         npc.whoAmI = npcID;
-                        onChangeType?.Invoke(npc, oldType, true);
+						if(onChangeType != null) onChangeType(npc, oldType, true);
                     }
                     else
 					if (isBody && !Main.npc[(int)npc.ai[0]].active) //if the body was just split, turn it into a tail
@@ -4059,16 +4053,16 @@ namespace CSkies
 						int oldType = npc.type;				
 						npc.type = wormTypes[wormTypes.Length - 1];
 						int npcID = npc.whoAmI;
-						float lifePercent = npc.life / (float)npc.lifeMax;
+						float lifePercent = (float)npc.life / (float)npc.lifeMax;
 						float lastPiece = npc.ai[1];
 						npc.SetDefaults(npc.type, -1f);
-						npc.life = (int)(npc.lifeMax * lifePercent);
+						npc.life = (int)((float)npc.lifeMax * lifePercent);
 						npc.ai[1] = lastPiece;
 						npc.TargetClosest(true);
 						npc.netUpdate = true;
 						npc.whoAmI = npcID;
-                        onChangeType?.Invoke(npc, oldType, false);
-                    }
+						if(onChangeType != null) onChangeType(npc, oldType, false);						
+					}
                 }
                 else
 				if (!singlePiece)
@@ -4104,12 +4098,12 @@ namespace CSkies
                     for (int tY = tileY; tY < tileCenterY; tY++)
                     {
 						Tile checkTile = BaseWorldGen.GetTileSafely(tX, tY);						
-                        if (checkTile != null && ((checkTile.nactive() && (Main.tileSolid[checkTile.type] || (Main.tileSolidTop[checkTile.type] && checkTile.frameY == 0))) || checkTile.liquid > 64))
+                        if (checkTile != null && ((checkTile.nactive() && (Main.tileSolid[(int)checkTile.type] || (Main.tileSolidTop[(int)checkTile.type] && checkTile.frameY == 0))) || checkTile.liquid > 64))
                         {
                             Vector2 tPos;
-                            tPos.X = tX * 16;
-                            tPos.Y = tY * 16;
-                            if (npc.position.X + npc.width > tPos.X && npc.position.X < tPos.X + 16f && npc.position.Y + npc.height > tPos.Y && npc.position.Y < tPos.Y + 16f)
+                            tPos.X = (float)(tX * 16);
+                            tPos.Y = (float)(tY * 16);
+                            if (npc.position.X + (float)npc.width > tPos.X && npc.position.X < tPos.X + 16f && npc.position.Y + (float)npc.height > tPos.Y && npc.position.Y < tPos.Y + 16f)
                             {
                                 canMove = true;
                                 if (spawnTileDust && Main.rand.Next(100) == 0 && checkTile.nactive())
@@ -4147,12 +4141,12 @@ namespace CSkies
             Vector2 npcCenter = npc.Center;
             float playerCenterX = Main.player[npc.target].Center.X;
             float playerCenterY = Main.player[npc.target].Center.Y;
-            playerCenterX = (int)(playerCenterX / 16f) * 16; playerCenterY = (int)(playerCenterY / 16f) * 16;
-            npcCenter.X = (int)(npcCenter.X / 16f) * 16; npcCenter.Y = (int)(npcCenter.Y / 16f) * 16;
+            playerCenterX = (float)((int)(playerCenterX / 16f) * 16); playerCenterY = (float)((int)(playerCenterY / 16f) * 16);
+            npcCenter.X = (float)((int)(npcCenter.X / 16f) * 16); npcCenter.Y = (float)((int)(npcCenter.Y / 16f) * 16);
             playerCenterX -= npcCenter.X; playerCenterY -= npcCenter.Y;
-            float dist = (float)Math.Sqrt(playerCenterX * playerCenterX + playerCenterY * playerCenterY);
+            float dist = (float)Math.Sqrt((double)(playerCenterX * playerCenterX + playerCenterY * playerCenterY));
 			isDigging = canMove;
-            if (npc.ai[1] > 0f && npc.ai[1] < Main.npc.Length)
+            if (npc.ai[1] > 0f && npc.ai[1] < (float)Main.npc.Length)
             {
                 try
                 {
@@ -4164,20 +4158,20 @@ namespace CSkies
                 }
                 if (!rotateAverage || npc.type == wormTypes[0])
                 {
-                    npc.rotation = (float)Math.Atan2(playerCenterY, playerCenterX) + 1.57f;
+                    npc.rotation = (float)Math.Atan2((double)playerCenterY, (double)playerCenterX) + 1.57f;
                 }else
                 {
                     NPC frontNPC = Main.npc[(int)npc.ai[1]];
                     Vector2 rotVec = BaseUtility.RotateVector(frontNPC.Center, frontNPC.Center + new Vector2(0f, 30f), frontNPC.rotation);
                     npc.rotation = BaseUtility.RotationTo(npc.Center, rotVec) + 1.57f;
                 }
-                dist = (float)Math.Sqrt(playerCenterX * playerCenterX + playerCenterY * playerCenterY);
-                dist = (dist - npc.width - partDistanceAddon) / dist;
+                dist = (float)Math.Sqrt((double)(playerCenterX * playerCenterX + playerCenterY * playerCenterY));
+                dist = (dist - (float)npc.width - (float)partDistanceAddon) / dist;
                 playerCenterX *= dist;
                 playerCenterY *= dist;
-                npc.velocity = default;
-                npc.position.X += playerCenterX;
-                npc.position.Y += playerCenterY;
+                npc.velocity = default(Vector2);
+                npc.position.X = npc.position.X + playerCenterX;
+                npc.position.Y = npc.position.Y + playerCenterY;
                 if (fly)
                 {
                     if (playerCenterX < 0f) { npc.spriteDirection = 1; return;  }else
@@ -4188,23 +4182,23 @@ namespace CSkies
                 if (!canMove)
                 {
                     npc.TargetClosest(true);
-                    npc.velocity.Y += 0.11f;
+                    npc.velocity.Y = npc.velocity.Y + 0.11f;
                     if (npc.velocity.Y > maxSpeed) { npc.velocity.Y = maxSpeed; }
-                    if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < maxSpeed * 0.4)
+                    if ((double)(Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < (double)maxSpeed * 0.4)
                     {
-                        if (npc.velocity.X < 0f) { npc.velocity.X -= gravityResist * 1.1f; } else { npc.velocity.X += gravityResist * 1.1f; }
+                        if (npc.velocity.X < 0f) { npc.velocity.X = npc.velocity.X - gravityResist * 1.1f; } else { npc.velocity.X = npc.velocity.X + gravityResist * 1.1f; }
                     }
                     else
                         if (npc.velocity.Y == maxSpeed)
                         {
-                            if (npc.velocity.X < playerCenterX) { npc.velocity.X += gravityResist; }
+                            if (npc.velocity.X < playerCenterX) { npc.velocity.X = npc.velocity.X + gravityResist; }
                             else
-                                if (npc.velocity.X > playerCenterX) { npc.velocity.X -= gravityResist; }
+                                if (npc.velocity.X > playerCenterX) { npc.velocity.X = npc.velocity.X - gravityResist; }
                         }
                         else
                             if (npc.velocity.Y > 4f)
                             {
-                                if (npc.velocity.X < 0f) { npc.velocity.X += gravityResist * 0.9f; } else { npc.velocity.X -= gravityResist * 0.9f; }
+                                if (npc.velocity.X < 0f) { npc.velocity.X = npc.velocity.X + gravityResist * 0.9f; } else { npc.velocity.X = npc.velocity.X - gravityResist * 0.9f; }
                             }
                 }else
                 {
@@ -4216,7 +4210,7 @@ namespace CSkies
                         npc.soundDelay = (int)distSoundDelay;
                         Main.PlaySound(15, (int)npc.position.X, (int)npc.position.Y, 1);
                     }
-                    dist = (float)Math.Sqrt(playerCenterX * playerCenterX + playerCenterY * playerCenterY);
+                    dist = (float)Math.Sqrt((double)(playerCenterX * playerCenterX + playerCenterY * playerCenterY));
                     float absPlayerCenterX = Math.Abs(playerCenterX);
                     float absPlayerCenterY = Math.Abs(playerCenterY);
                     float newSpeed = maxSpeed / dist;
@@ -4230,64 +4224,64 @@ namespace CSkies
                             dontFall = true;
                             if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < maxSpeed) { npc.velocity *= 1.1f; }
                         }
-                        if (npc.position.Y > Main.player[npc.target].position.Y || Main.player[npc.target].position.Y / 16f > Main.worldSurface || Main.player[npc.target].dead)
+                        if (npc.position.Y > Main.player[npc.target].position.Y || (double)(Main.player[npc.target].position.Y / 16f) > Main.worldSurface || Main.player[npc.target].dead)
                         {
                             dontFall = true;
                             if (Math.Abs(npc.velocity.X) < maxSpeed / 2f)
                             {
-                                if (npc.velocity.X == 0f) { npc.velocity.X -= npc.direction; }
-                                npc.velocity.X *= 1.1f;
+                                if (npc.velocity.X == 0f) { npc.velocity.X = npc.velocity.X - (float)npc.direction; }
+                                npc.velocity.X = npc.velocity.X * 1.1f;
                             }
                             else
-                                if (npc.velocity.Y > -maxSpeed) { npc.velocity.Y -= gravityResist; }
+                                if (npc.velocity.Y > -maxSpeed) { npc.velocity.Y = npc.velocity.Y - gravityResist; }
                         }
                     }
                     if (!dontFall)
                     {
                         if ((npc.velocity.X > 0f && playerCenterX > 0f) || (npc.velocity.X < 0f && playerCenterX < 0f) || (npc.velocity.Y > 0f && playerCenterY > 0f) || (npc.velocity.Y < 0f && playerCenterY < 0f))
                         {
-                            if (npc.velocity.X < playerCenterX) { npc.velocity.X += gravityResist; }
+                            if (npc.velocity.X < playerCenterX) { npc.velocity.X = npc.velocity.X + gravityResist; }
                             else
-                                if (npc.velocity.X > playerCenterX) { npc.velocity.X -= gravityResist; }
-                            if (npc.velocity.Y < playerCenterY) { npc.velocity.Y += gravityResist; }
+                                if (npc.velocity.X > playerCenterX) { npc.velocity.X = npc.velocity.X - gravityResist; }
+                            if (npc.velocity.Y < playerCenterY) { npc.velocity.Y = npc.velocity.Y + gravityResist; }
                             else
-                                if (npc.velocity.Y > playerCenterY) { npc.velocity.Y -= gravityResist; }
-                            if (Math.Abs(playerCenterY) < maxSpeed * 0.2 && ((npc.velocity.X > 0f && playerCenterX < 0f) || (npc.velocity.X < 0f && playerCenterX > 0f)))
+                                if (npc.velocity.Y > playerCenterY) { npc.velocity.Y = npc.velocity.Y - gravityResist; }
+                            if ((double)Math.Abs(playerCenterY) < (double)maxSpeed * 0.2 && ((npc.velocity.X > 0f && playerCenterX < 0f) || (npc.velocity.X < 0f && playerCenterX > 0f)))
                             {
-                                if (npc.velocity.Y > 0f) { npc.velocity.Y += gravityResist * 2f; } else { npc.velocity.Y -= gravityResist * 2f; }
+                                if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y + gravityResist * 2f; } else { npc.velocity.Y = npc.velocity.Y - gravityResist * 2f; }
                             }
-                            if (Math.Abs(playerCenterX) < maxSpeed * 0.2 && ((npc.velocity.Y > 0f && playerCenterY < 0f) || (npc.velocity.Y < 0f && playerCenterY > 0f)))
+                            if ((double)Math.Abs(playerCenterX) < (double)maxSpeed * 0.2 && ((npc.velocity.Y > 0f && playerCenterY < 0f) || (npc.velocity.Y < 0f && playerCenterY > 0f)))
                             {
-                                if (npc.velocity.X > 0f) { npc.velocity.X += gravityResist * 2f; } else { npc.velocity.X -= gravityResist * 2f; }
+                                if (npc.velocity.X > 0f) { npc.velocity.X = npc.velocity.X + gravityResist * 2f; } else { npc.velocity.X = npc.velocity.X - gravityResist * 2f; }
                             }
                         }
                         else
                             if (absPlayerCenterX > absPlayerCenterY)
                             {
-                                if (npc.velocity.X < playerCenterX) { npc.velocity.X += gravityResist * 1.1f; }
+                                if (npc.velocity.X < playerCenterX) { npc.velocity.X = npc.velocity.X + gravityResist * 1.1f; }
                                 else
-                                    if (npc.velocity.X > playerCenterX) { npc.velocity.X -= gravityResist * 1.1f; }
+                                    if (npc.velocity.X > playerCenterX) { npc.velocity.X = npc.velocity.X - gravityResist * 1.1f; }
 
-                                if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < maxSpeed * 0.5)
+                                if ((double)(Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < (double)maxSpeed * 0.5)
                                 {
-                                    if (npc.velocity.Y > 0f) { npc.velocity.Y += gravityResist; } else { npc.velocity.Y -= gravityResist; }
+                                    if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y + gravityResist; } else { npc.velocity.Y = npc.velocity.Y - gravityResist; }
                                 }
                             }
                             else
                             {
-                                if (npc.velocity.Y < playerCenterY) { npc.velocity.Y += gravityResist * 1.1f; }
+                                if (npc.velocity.Y < playerCenterY) { npc.velocity.Y = npc.velocity.Y + gravityResist * 1.1f; }
                                 else
-                                    if (npc.velocity.Y > playerCenterY) { npc.velocity.Y -= gravityResist * 1.1f; }
-                                if (Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y) < maxSpeed * 0.5)
+                                    if (npc.velocity.Y > playerCenterY) { npc.velocity.Y = npc.velocity.Y - gravityResist * 1.1f; }
+                                if ((double)(Math.Abs(npc.velocity.X) + Math.Abs(npc.velocity.Y)) < (double)maxSpeed * 0.5)
                                 {
-                                    if (npc.velocity.X > 0f) { npc.velocity.X += gravityResist; } else { npc.velocity.X -= gravityResist; }
+                                    if (npc.velocity.X > 0f) { npc.velocity.X = npc.velocity.X + gravityResist; } else { npc.velocity.X = npc.velocity.X - gravityResist; }
                                 }
                             }
                     }
                 }
                 if (!rotateAverage || npc.type == wormTypes[0])
                 {
-                    npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) + 1.57f;
+                    npc.rotation = (float)Math.Atan2((double)npc.velocity.Y, (double)npc.velocity.X) + 1.57f;
                 }else
                 {
                     NPC frontNPC = Main.npc[(int)npc.ai[1]];
@@ -4334,17 +4328,18 @@ namespace CSkies
             npc.TargetClosest(true);
             if (immobile)
             {
-                npc.velocity.X *= 0.93f;
-                if (npc.velocity.X > -0.1 && npc.velocity.X < 0.1) { npc.velocity.X = 0f; }
+                npc.velocity.X = npc.velocity.X * 0.93f;
+                if ((double)npc.velocity.X > -0.1 && (double)npc.velocity.X < 0.1) { npc.velocity.X = 0f; }
             }
             if (ai[0] == 0f) { ai[0] = Math.Max(0, Math.Max(teleportInterval, (teleportInterval - 150))); }
             if (ai[2] != 0f && ai[3] != 0f)
             {
-                TeleportEffects?.Invoke(true); npc.position.X = ai[2] * 16f - npc.width / 2 + 8f;
-                npc.position.Y = ai[3] * 16f - npc.height;
+                if (TeleportEffects != null) { TeleportEffects(true); }
+                npc.position.X = ai[2] * 16f - (float)(npc.width / 2) + 8f;
+                npc.position.Y = ai[3] * 16f - (float)npc.height;
                 npc.velocity.X = 0f; npc.velocity.Y = 0f;
                 ai[2] = 0f; ai[3] = 0f;
-                TeleportEffects?.Invoke(false);
+                if (TeleportEffects != null) { TeleportEffects(false); }
             }
 			if (npc.justHit) { ai[0] = 0; }
 			ai[0]++;
@@ -4377,11 +4372,11 @@ namespace CSkies
                     {
                         if ((tpY < playerTileY - 4 || tpY > playerTileY + 4 || tpTileX < playerTileX - 4 || tpTileX > playerTileX + 4) && (tpY < tileY - 1 || tpY > tileY + 1 || tpTileX < tileX - 1 || tpTileX > tileX + 1) && (!checkGround || Main.tile[tpTileX, tpY].nactive()))
                         {
-                            if ((CanTeleportTo != null && CanTeleportTo(tpTileX, tpY)) || (!Main.tile[tpTileX, tpY - 1].lava() && (!checkGround || Main.tileSolid[Main.tile[tpTileX, tpY].type]) && !Collision.SolidTiles(tpTileX - 1, tpTileX + 1, tpY - 4, tpY - 1)))
+                            if ((CanTeleportTo != null && CanTeleportTo(tpTileX, tpY)) || (!Main.tile[tpTileX, tpY - 1].lava() && (!checkGround || Main.tileSolid[(int)Main.tile[tpTileX, tpY].type]) && !Collision.SolidTiles(tpTileX - 1, tpTileX + 1, tpY - 4, tpY - 1)))
                             {
                                 if (attackInterval != -1) { ai[1] = 20f; }
-                                ai[2] = tpTileX;
-                                ai[3] = tpY;
+                                ai[2] = (float)tpTileX;
+                                ai[3] = (float)tpY;
                                 hasTeleportPoint = true;
                                 break;
                             }
@@ -4441,27 +4436,27 @@ namespace CSkies
                 if (hasTarget)
                 {
                     npc.TargetClosest(true);
-                    npc.velocity.X += npc.direction * 0.1f;
-                    npc.velocity.Y += npc.directionY * 0.1f;
+                    npc.velocity.X = npc.velocity.X + (float)npc.direction * 0.1f;
+                    npc.velocity.Y = npc.velocity.Y + (float)npc.directionY * 0.1f;
                     if (npc.velocity.X > velMaxX) { npc.velocity.X = velMaxX; } if (npc.velocity.X < -velMaxX) { npc.velocity.X = -velMaxX; }
                     if (npc.velocity.Y > velMaxY) { npc.velocity.Y = velMaxY; } if (npc.velocity.Y < -velMaxY) { npc.velocity.Y = -velMaxY; }
                 }
                 else//otherwise, move horizontally, slowly bobbing up and down as well.
                 {
-                    npc.velocity.X += npc.direction * 0.1f;
-                    if (npc.velocity.X < -1f || npc.velocity.X > 1f) { npc.velocity.X *= 0.95f; }
+                    npc.velocity.X = npc.velocity.X + (float)npc.direction * 0.1f;
+                    if (npc.velocity.X < -1f || npc.velocity.X > 1f) { npc.velocity.X = npc.velocity.X * 0.95f; }
                     if (ai[0] == -1f)
                     {
-                        npc.velocity.Y -= 0.01f;
-                        if (npc.velocity.Y < -0.3)
+                        npc.velocity.Y = npc.velocity.Y - 0.01f;
+                        if ((double)npc.velocity.Y < -0.3)
                         {
                             ai[0] = 1f;
                         }
                     }
                     else
                     {
-                        npc.velocity.Y += 0.01f;
-                        if (npc.velocity.Y > 0.3)
+                        npc.velocity.Y = npc.velocity.Y + 0.01f;
+                        if ((double)npc.velocity.Y > 0.3)
                         {
                             ai[0] = -1f;
                         }
@@ -4485,16 +4480,16 @@ namespace CSkies
                 //if y velocity is 0, set the npc's velocity to a random number to get it started.
                 if (Main.netMode != 1 && npc.velocity.Y == 0f)
                 {
-                    npc.velocity.Y = Main.rand.Next(-50, -20) * 0.1f;
-                    npc.velocity.X = Main.rand.Next(-20, 20) * 0.1f;
+                    npc.velocity.Y = (float)Main.rand.Next(-50, -20) * 0.1f;
+                    npc.velocity.X = (float)Main.rand.Next(-20, 20) * 0.1f;
                     npc.netUpdate = true;
                 }
-                npc.velocity.Y += 0.3f;
+                npc.velocity.Y = npc.velocity.Y + 0.3f;
                 if (npc.velocity.Y > 10f) { npc.velocity.Y = 10f; } ai[0] = 1f;
             }
-            npc.rotation = npc.velocity.Y * npc.direction * 0.1f;
-            if (npc.rotation < -0.2) { npc.rotation = -0.2f; }
-            if (npc.rotation > 0.2) { npc.rotation = 0.2f; }
+            npc.rotation = npc.velocity.Y * (float)npc.direction * 0.1f;
+            if ((double)npc.rotation < -0.2) { npc.rotation = -0.2f; }
+            if ((double)npc.rotation > 0.2) { npc.rotation = 0.2f; }
         }
 
         /*
@@ -4520,24 +4515,24 @@ namespace CSkies
             {
                 xVelocityChanged = true;
             }
-            if (npc.position.X == npc.oldPosition.X || ai[3] >= ticksUntilBoredom || xVelocityChanged)
+            if (npc.position.X == npc.oldPosition.X || ai[3] >= (float)ticksUntilBoredom || xVelocityChanged)
             {
                 ai[3] += 1f;
             }else
-            if (Math.Abs(npc.velocity.X) > 0.9 && ai[3] > 0f) { ai[3] -= 1f; }
-            if (ai[3] > ticksUntilBoredom * 10) { ai[3] = 0f; }
+            if ((double)Math.Abs(npc.velocity.X) > 0.9 && ai[3] > 0f) { ai[3] -= 1f; }
+            if (ai[3] > (float)(ticksUntilBoredom * 10)) { ai[3] = 0f; }
             if (npc.justHit) { ai[3] = 0f; }
-            if (ai[3] == ticksUntilBoredom) { npc.netUpdate = true; }
+            if (ai[3] == (float)ticksUntilBoredom) { npc.netUpdate = true; }
 
-            bool notBored = ai[3] < ticksUntilBoredom;
+            bool notBored = ai[3] < (float)ticksUntilBoredom;
             //if npc does not flee when it's day, if is night, or npc is not on the surface and it hasn't updated projectile pass, update target.
-            if (targetPlayers && (!fleeWhenDay || !Main.dayTime || npc.position.Y > Main.worldSurface * 16.0) && (fleeWhenDay && Main.dayTime ? notBored : (!allowBoredom || notBored)))
+            if (targetPlayers && (!fleeWhenDay || !Main.dayTime || (double)npc.position.Y > Main.worldSurface * 16.0) && (fleeWhenDay && Main.dayTime ? notBored : (!allowBoredom || notBored)))
             {
                 npc.TargetClosest(true);
             }else
             if (ai[2] <= 0f)//if 'bored'
             {
-                if (fleeWhenDay && Main.dayTime && npc.position.Y / 16f < Main.worldSurface && npc.timeLeft > 10)
+                if (fleeWhenDay && Main.dayTime && (double)(npc.position.Y / 16f) < Main.worldSurface && npc.timeLeft > 10)
                 {
                     npc.timeLeft = 10;
                 }
@@ -4629,7 +4624,7 @@ namespace CSkies
                 npc.velocity.Y *= bounceScalarY;
             }
             //if it should flee when it's day, and it is day, the npc's position is at or above the surface, it will flee.
-            if (fleeWhenDay && Main.dayTime && npc.position.Y <= Main.worldSurface * 16.0)
+            if (fleeWhenDay && Main.dayTime && (double)npc.position.Y <= Main.worldSurface * 16.0)
             {
                 if (npc.timeLeft > 10) { npc.timeLeft = 10; }
                 npc.directionY = -1;
@@ -4651,46 +4646,46 @@ namespace CSkies
             //controls momentum when going left, and clamps velocity at -velMaxX.
             if (npc.direction == -1 && npc.velocity.X > -velMaxX)
             {
-                npc.velocity.X -= moveIntervalX;
-                if (npc.velocity.X > 4f) { npc.velocity.X -= 0.1f; }
+                npc.velocity.X = npc.velocity.X - moveIntervalX;
+                if (npc.velocity.X > 4f) { npc.velocity.X = npc.velocity.X - 0.1f; }
                 else
-                    if (npc.velocity.X > 0f) { npc.velocity.X += 0.05f; }
+                    if (npc.velocity.X > 0f) { npc.velocity.X = npc.velocity.X + 0.05f; }
                 if (npc.velocity.X < -4f) { npc.velocity.X = -velMaxX; }
             }
             else //controls momentum when going right on the x axis and clamps velocity at velMaxX.
                 if (npc.direction == 1 && npc.velocity.X < velMaxX)
                 {
-                    npc.velocity.X += moveIntervalX;
-                    if (npc.velocity.X < -velMaxX) { npc.velocity.X += 0.1f; }
+                    npc.velocity.X = npc.velocity.X + moveIntervalX;
+                    if (npc.velocity.X < -velMaxX) { npc.velocity.X = npc.velocity.X + 0.1f; }
                     else
-                        if (npc.velocity.X < 0f) { npc.velocity.X -= 0.05f; }
+                        if (npc.velocity.X < 0f) { npc.velocity.X = npc.velocity.X - 0.05f; }
 
                     if (npc.velocity.X > velMaxX) { npc.velocity.X = velMaxX; }
                 }
             //controls momentum when going up on the Y axis and clamps velocity at -velMaxY.
             if (npc.directionY == -1 && (double)npc.velocity.Y > -velMaxY)
             {
-                npc.velocity.Y -= moveIntervalY;
-                if ((double)npc.velocity.Y > velMaxY) { npc.velocity.Y -= 0.05f; }
+                npc.velocity.Y = npc.velocity.Y - moveIntervalY;
+                if ((double)npc.velocity.Y > velMaxY) { npc.velocity.Y = npc.velocity.Y - 0.05f; }
                 else
-                    if (npc.velocity.Y > 0f) { npc.velocity.Y += 0.03f; }
+                    if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y + 0.03f; }
 
                 if ((double)npc.velocity.Y < -velMaxY) { npc.velocity.Y = -velMaxY; }
             }
             else //controls momentum when going down on the Y axis and clamps velocity at velMaxY.
                 if (npc.directionY == 1 && (double)npc.velocity.Y < velMaxY)
                 {
-                    npc.velocity.Y += moveIntervalY;
-                    if ((double)npc.velocity.Y < -velMaxY) { npc.velocity.Y += 0.05f; }
+                    npc.velocity.Y = npc.velocity.Y + moveIntervalY;
+                    if ((double)npc.velocity.Y < -velMaxY) { npc.velocity.Y = npc.velocity.Y + 0.05f; }
                     else
-                        if (npc.velocity.Y < 0f) { npc.velocity.Y -= 0.03f; }
+                        if (npc.velocity.Y < 0f) { npc.velocity.Y = npc.velocity.Y - 0.03f; }
 
                     if ((double)npc.velocity.Y > velMaxY) { npc.velocity.Y = velMaxY; }
                 }
             if (!ignoreWet && npc.wet) //if don't ignore being wet and is wet, accelerate upwards to get out.
             {
-                if (npc.velocity.Y > 0f) { npc.velocity.Y *= 0.95f; }
-                npc.velocity.Y -= 0.5f;
+                if (npc.velocity.Y > 0f) { npc.velocity.Y = npc.velocity.Y * 0.95f; }
+                npc.velocity.Y = npc.velocity.Y - 0.5f;
                 if (npc.velocity.Y < -velMaxY * 1.5f) { npc.velocity.Y = -velMaxY * 1.5f; }
                 npc.TargetClosest(true);
                 return;
@@ -4714,7 +4709,7 @@ namespace CSkies
 			//if (jumpTime < 100) { jumpTime = 100; }
             bool getNewTarget = false; //getNewTarget is used to iterate the 'boredom' scale. If it's night, the npc is hurt, or it's
             //below a certain depth, it will attempt to find the nearest target to it.
-            if ((fleeWhenDay && !Main.dayTime) || npc.life != npc.lifeMax || npc.position.Y > Main.worldSurface * 16.0)
+            if ((fleeWhenDay && !Main.dayTime) || npc.life != npc.lifeMax || (double)npc.position.Y > Main.worldSurface * 16.0)
             {
                 getNewTarget = true;
             }
@@ -4725,8 +4720,8 @@ namespace CSkies
                 if (npc.collideY) { npc.velocity.Y = -2f; }
                 if (npc.velocity.Y < 0f && ai[3] == npc.position.X) { npc.direction *= -1; ai[2] = 200f; }
                 if (npc.velocity.Y > 0f) { ai[3] = npc.position.X; }
-                if (npc.velocity.Y > 2f) { npc.velocity.Y *= 0.9f; }
-                npc.velocity.Y -= 0.5f;
+                if (npc.velocity.Y > 2f) { npc.velocity.Y = npc.velocity.Y * 0.9f; }
+                npc.velocity.Y = npc.velocity.Y - 0.5f;
                 if (npc.velocity.Y < -4f) { npc.velocity.Y = -4f; }
                 //if ai[2] is 1f, and we should get a target, target nearby players.
                 if (ai[2] == 1f && getNewTarget) { npc.TargetClosest(true); }
@@ -4744,7 +4739,7 @@ namespace CSkies
             {
                 if (ai[3] == npc.position.X) { npc.direction *= -1; ai[2] = 200f; }
                 ai[3] = 0f;
-                npc.velocity.X *= 0.8f;
+                npc.velocity.X = npc.velocity.X * 0.8f;
                 if (npc.velocity.X > -0.1f && npc.velocity.X < 0.1f){ npc.velocity.X = 0f; }
                 if (getNewTarget) { ai[0] += 1f; }
                 ai[0] += 1f;
@@ -4771,12 +4766,12 @@ namespace CSkies
             }else //handle moving the npc while in air.
             if (npc.target < 255 && ((npc.direction == 1 && npc.velocity.X < 3f) || (npc.direction == -1 && npc.velocity.X > -3f)))
             {
-                if ((npc.direction == -1 && npc.velocity.X < 0.1) || (npc.direction == 1 && npc.velocity.X > -0.1))
+                if ((npc.direction == -1 && (double)npc.velocity.X < 0.1) || (npc.direction == 1 && (double)npc.velocity.X > -0.1))
                 {
-                    npc.velocity.X += 0.2f * npc.direction;
+                    npc.velocity.X = npc.velocity.X + 0.2f * (float)npc.direction;
                     return;
                 }
-                npc.velocity.X *= 0.93f;
+                npc.velocity.X = npc.velocity.X * 0.93f;
                 return;
             }
         }
@@ -4805,8 +4800,8 @@ namespace CSkies
 				if (codable.velocity.X > 0f) offset = 1;
 				Vector2 pos = codable.position;
 				pos.X += codable.velocity.X;
-				int tileX = (int)((pos.X + (double)(codable.width / 2) + (codable.width / 2 + 1) * offset) / 16.0);
-				int tileY = (int)((pos.Y + (double)codable.height - 1.0) / 16.0);
+				int tileX = (int)(((double)pos.X + (double)(codable.width / 2) + (double)((codable.width / 2 + 1) * offset)) / 16.0);
+				int tileY = (int)(((double)pos.Y + (double)codable.height - 1.0) / 16.0);
 
 				if (Main.tile[tileX, tileY] == null) Main.tile[tileX, tileY] = new Tile();
 				if (Main.tile[tileX, tileY - 1] == null) Main.tile[tileX, tileY - 1] = new Tile();
@@ -4814,22 +4809,22 @@ namespace CSkies
 				if (Main.tile[tileX, tileY - 3] == null) Main.tile[tileX, tileY - 3] = new Tile();
 				if (Main.tile[tileX, tileY + 1] == null) Main.tile[tileX, tileY + 1] = new Tile();
 				if (Main.tile[tileX - offset, tileY - 3] == null) Main.tile[tileX - offset, tileY - 3] = new Tile();
-				if (tileX * 16 < pos.X + (double)codable.width && tileX * 16 + 16 > (double)pos.X && (Main.tile[tileX, tileY].nactive() && Main.tile[tileX, tileY].slope() == 0 && (Main.tile[tileX, tileY - 1].slope() == 0 && Main.tileSolid[Main.tile[tileX, tileY].type]) && !Main.tileSolidTop[Main.tile[tileX, tileY].type] || Main.tile[tileX, tileY - 1].halfBrick() && Main.tile[tileX, tileY - 1].nactive()) && ((!Main.tile[tileX, tileY - 1].nactive() || !Main.tileSolid[Main.tile[tileX, tileY - 1].type] || Main.tileSolidTop[Main.tile[tileX, tileY - 1].type] || Main.tile[tileX, tileY - 1].halfBrick() && (!Main.tile[tileX, tileY - 4].nactive() || !Main.tileSolid[Main.tile[tileX, tileY - 4].type] || Main.tileSolidTop[Main.tile[tileX, tileY - 4].type])) && ((!Main.tile[tileX, tileY - 2].nactive() || !Main.tileSolid[Main.tile[tileX, tileY - 2].type] || Main.tileSolidTop[Main.tile[tileX, tileY - 2].type]) && (!Main.tile[tileX, tileY - 3].nactive() || !Main.tileSolid[Main.tile[tileX, tileY - 3].type] || Main.tileSolidTop[Main.tile[tileX, tileY - 3].type]) && (!Main.tile[tileX - offset, tileY - 3].nactive() || !Main.tileSolid[Main.tile[tileX - offset, tileY - 3].type]))))
+				if ((double)(tileX * 16) < (double)pos.X + (double)codable.width && (double)(tileX * 16 + 16) > (double)pos.X && (Main.tile[tileX, tileY].nactive() && (int)Main.tile[tileX, tileY].slope() == 0 && ((int)Main.tile[tileX, tileY - 1].slope() == 0 && Main.tileSolid[(int)Main.tile[tileX, tileY].type]) && !Main.tileSolidTop[(int)Main.tile[tileX, tileY].type] || Main.tile[tileX, tileY - 1].halfBrick() && Main.tile[tileX, tileY - 1].nactive()) && ((!Main.tile[tileX, tileY - 1].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY - 1].type] || Main.tileSolidTop[(int)Main.tile[tileX, tileY - 1].type] || Main.tile[tileX, tileY - 1].halfBrick() && (!Main.tile[tileX, tileY - 4].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY - 4].type] || Main.tileSolidTop[(int)Main.tile[tileX, tileY - 4].type])) && ((!Main.tile[tileX, tileY - 2].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY - 2].type] || Main.tileSolidTop[(int)Main.tile[tileX, tileY - 2].type]) && (!Main.tile[tileX, tileY - 3].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY - 3].type] || Main.tileSolidTop[(int)Main.tile[tileX, tileY - 3].type]) && (!Main.tile[tileX - offset, tileY - 3].nactive() || !Main.tileSolid[(int)Main.tile[tileX - offset, tileY - 3].type]))))
 				{
-					float tileWorldY = tileY * 16;
+					float tileWorldY = (float)(tileY * 16);
 					if (Main.tile[tileX, tileY].halfBrick())
 						tileWorldY += 8f;
 					if (Main.tile[tileX, tileY - 1].halfBrick())
 						tileWorldY -= 8f;
-					if (tileWorldY < pos.Y + (double)codable.height)
+					if ((double)tileWorldY < (double)pos.Y + (double)codable.height)
 					{
-						float tileWorldYHeight = pos.Y + codable.height - tileWorldY;
+						float tileWorldYHeight = pos.Y + (float)codable.height - tileWorldY;
 						float heightNeeded = 16.1f;
-						if (tileWorldYHeight <= (double)heightNeeded)
+						if ((double)tileWorldYHeight <= (double)heightNeeded)
 						{
-							gfxOffY += codable.position.Y + codable.height - tileWorldY;
-							codable.position.Y = tileWorldY - codable.height;
-							stepSpeed = tileWorldYHeight >= 9.0 ? 2f : 1f;
+							gfxOffY += codable.position.Y + (float)codable.height - tileWorldY;
+							codable.position.Y = tileWorldY - (float)codable.height;
+							stepSpeed = (double)tileWorldYHeight >= 9.0 ? 2f : 1f;
 						}
 					}else
 					{
@@ -4858,8 +4853,8 @@ namespace CSkies
             {
                 tileDistX -= 2;
                 Vector2 newVelocity = velocity;
-                int tileX = Math.Max(10, Math.Min(Main.maxTilesX - 10, (int)((position.X + (width * 0.5f) + ((width * 0.5f) + 8f) * direction) / 16f)));
-                int tileY = Math.Max(10, Math.Min(Main.maxTilesY - 10, (int)((position.Y + height - 15f) / 16f)));
+                int tileX = Math.Max(10, Math.Min(Main.maxTilesX - 10, (int)((position.X + (width * 0.5f) + (float)(((width * 0.5f) + 8f) * direction)) / 16f)));
+                int tileY = Math.Max(10, Math.Min(Main.maxTilesY - 10, (int)((position.Y + (float)height - 15f) / 16f)));
                 int tileItX = Math.Max(10, Math.Min(Main.maxTilesX - 10, tileX + (direction * tileDistX)));
                 int tileItY = Math.Max(10, Math.Min(Main.maxTilesY - 10, tileY - tileDistY));
                 int lastY = tileY;
@@ -4871,7 +4866,7 @@ namespace CSkies
 
 				if(ignoreTiles && target != null && Math.Abs((position.X + (width * 0.5f)) - target.Center.X) < width + 120)
 				{
-					float dist = (int)Math.Abs(position.Y + (height * 0.5f) - target.Center.Y) / 16;
+					float dist = (int)Math.Abs(position.Y + ((float)height * 0.5f) - target.Center.Y) / 16;
 					if (dist < tileDistY + 2){ newVelocity.Y = -8f + (dist * -0.5f); } // dist +=2; newVelocity.Y = -(5f + dist * (dist > 3 ? 1f - ((dist - 2f) * 0.0525f) : 1f)); }
 				}
 				if(newVelocity.Y == velocity.Y)
@@ -4893,7 +4888,7 @@ namespace CSkies
 							if (tileNear.nactive() && Main.tileSolid[tileNear.type] && !Main.tileSolidTop[tileNear.type]){ newVelocity = velocity; break; }
 							if (target != null && y * 16 < target.Center.Y){ continue; }								
 							lastY = y;
-							newVelocity.Y = -(5f + (tileY - y) * (tileY - y > 3 ? 1f - ((tileY - y - 2) * 0.0525f) : 1f));
+							newVelocity.Y = -(5f + (float)(tileY - y) * (tileY - y > 3 ? 1f - ((tileY - y - 2) * 0.0525f) : 1f));
 						}else
 						if (lastY - y >= tileHeight){ break; }
 					}
@@ -4905,9 +4900,9 @@ namespace CSkies
                     if (Main.tile[tileX + direction, tileY + 1] == null) { Main.tile[tileX, tileY + 1] = new Tile(); }
 					if (Main.tile[tileX + direction, tileY + 2] == null) { Main.tile[tileX, tileY + 2] = new Tile(); }
                     //...and there's a gap in front of the npc, attempt to jump across it.
-                    if (directionY < 0 && (!Main.tile[tileX, tileY + 1].nactive() || !Main.tileSolid[Main.tile[tileX, tileY + 1].type]) && (!Main.tile[tileX + direction, tileY + 1].nactive() || !Main.tileSolid[Main.tile[tileX + direction, tileY + 1].type]))
+                    if (directionY < 0 && (!Main.tile[tileX, tileY + 1].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY + 1].type]) && (!Main.tile[tileX + direction, tileY + 1].nactive() || !Main.tileSolid[(int)Main.tile[tileX + direction, tileY + 1].type]))
                     {
-						if (!Main.tile[tileX + direction, tileY + 2].nactive() || !Main.tileSolid[Main.tile[tileX, tileY + 2].type] || (target == null || ((target.Center.Y + (target.height * 0.25f)) < tileY * 16f)))
+						if (!Main.tile[tileX + direction, tileY + 2].nactive() || !Main.tileSolid[(int)Main.tile[tileX, tileY + 2].type] || (target == null || ((target.Center.Y + (target.height * 0.25f)) < tileY * 16f)))
 						{
 							newVelocity.Y = -8f;
 							newVelocity.X *= 1.5f * (1f / maxSpeedX);
@@ -4943,7 +4938,7 @@ namespace CSkies
                 return newVelocity;
             }catch(Exception e)
 			{
-				BaseUtility.LogFancy("BASEMOD~ ATTEMPT JUMP ERROR:", e);
+				BaseUtility.LogFancy("CSkies~ ATTEMPT JUMP ERROR:", e);
 				return velocity; 
 			}
         }
@@ -4964,8 +4959,8 @@ namespace CSkies
             bool hitTile = HitTileOnSide(npc, 3);
             if (hitTile)
             {
-                int tileX = (int)((npc.Center.X + ((npc.width / 2) + 8f) * npc.direction) / 16f);
-                int tileY = (int)((npc.position.Y + npc.height - 15f) / 16f);
+                int tileX = (int)((npc.Center.X + (float)(((npc.width / 2) + 8f) * npc.direction)) / 16f);
+                int tileY = (int)((npc.position.Y + (float)npc.height - 15f) / 16f);
                 for (int m = 1; m >= -3; m--)
                 {
                     if (m == 1 && Main.tile[tileX + npc.direction, tileY + m] == null) { Main.tile[tileX + npc.direction, tileY + m] = new Tile(); }
@@ -4979,7 +4974,7 @@ namespace CSkies
                     tickUpdater = 0f;
                     if (doorCounter >= doorCounterMax)
                     {
-                        npc.velocity.X = 0.5f * -npc.direction;
+                        npc.velocity.X = 0.5f * (float)(-(float)npc.direction);
                         doorBeatCounter += 1f;
                         doorCounter = 0f;
                         bool attemptOpenDoor = false;
@@ -5006,12 +5001,12 @@ namespace CSkies
                             }
                             if (!openedDoor)
                             {
-                                tickUpdater = ticksUntilBoredom;
+                                tickUpdater = (float)ticksUntilBoredom;
                                 npc.netUpdate = true;
                             }
                             if (Main.netMode == 2 && openedDoor)
                             {
-                                NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX, tileY, npc.direction, 0);
+                                NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, (float)tileX, (float)tileY, (float)npc.direction, 0);
                             }
                         }
                     }
@@ -5053,7 +5048,7 @@ namespace CSkies
         {
             if (!noYMovement || codable.velocity.Y == 0f)
             {
-                Vector2 dummyVec = default;
+                Vector2 dummyVec = default(Vector2);
                 return HitTileOnSide(codable.position, codable.width, codable.height, dir, ref dummyVec);
             }
             return false;
@@ -5079,27 +5074,27 @@ namespace CSkies
                 tilePosX = (int)(position.X - 8f) / 16;
                 tilePosY = (int)position.Y / 16;
                 tilePosWidth = tilePosX + 1;
-                tilePosHeight = (int)(position.Y + height) / 16;
+                tilePosHeight = (int)(position.Y + (float)height) / 16;
             }else
             if (dir == 1) //right
             {
-                tilePosX = (int)(position.X + width + 8f) / 16;
+                tilePosX = (int)(position.X + (float)width + 8f) / 16;
                 tilePosY = (int)position.Y / 16;
                 tilePosWidth = tilePosX + 1;
-                tilePosHeight = (int)(position.Y + height) / 16;
+                tilePosHeight = (int)(position.Y + (float)height) / 16;
             }else
             if (dir == 2) //up, ie ceiling
             {
                 tilePosX = (int)position.X / 16;
                 tilePosY = (int)(position.Y - 8f) / 16;
-                tilePosWidth = (int)(position.X + width) / 16;
+                tilePosWidth = (int)(position.X + (float)width) / 16;
                 tilePosHeight = tilePosY + 1;
             }else
             if (dir == 3) //down, ie floor
             {
                 tilePosX = (int)position.X / 16;
-                tilePosY = (int)(position.Y + height + 8f) / 16;
-                tilePosWidth = (int)(position.X + width) / 16;
+                tilePosY = (int)(position.Y + (float)height + 8f) / 16;
+                tilePosWidth = (int)(position.X + (float)width) / 16;
                 tilePosHeight = tilePosY + 1;
             }
             for (int x2 = tilePosX; x2 < tilePosWidth; x2++)
@@ -5107,7 +5102,7 @@ namespace CSkies
                 for (int y2 = tilePosY; y2 < tilePosHeight; y2++)
                 {
                     if (Main.tile[x2, y2] == null) { return false; }
-                    if (Main.tile[x2, y2].nactive() && Main.tileSolid[Main.tile[x2, y2].type])
+                    if (Main.tile[x2, y2].nactive() && Main.tileSolid[(int)Main.tile[x2, y2].type])
                     {
                         hitTilePos = new Vector2(x2, y2);
                         return true;
@@ -5136,7 +5131,7 @@ namespace CSkies
 
 		public static int DropItem(Entity codable, int type, int amt, int maxStack, int chance, bool clusterItem = false)
 		{
-			return DropItem(codable, type, amt, maxStack, chance / 100f, clusterItem);
+			return DropItem(codable, type, amt, maxStack, (float)chance / 100f, clusterItem);
 		}
 
         /*
@@ -5225,102 +5220,102 @@ namespace CSkies
             if(hitThroughDefense){ dmgAmt += (int)(player.statDefense * 0.5f); }
             if (damager == null)
             {
-                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
                 int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByOther(-1), parsedDamage, hitDirection, false, false, false, 0);
                 if (Main.netMode != 0)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.LegacyDefault().GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.LegacyDefault().GetDeathText(player.name), player.whoAmI, (float)hitDirection, (float)1, knockback, parsedDamage);
                 }
             }else
-            if (damager is Player subPlayer)
+            if (damager is Player)
             {
-                //bool crit = false;
-                //if (critChance > 0) { crit = Main.rand.Next(1, 101) <= critChance; }
-                //float mult = 2f;
+                Player subPlayer = (Player)damager;
+				//bool crit = false;
+				//if (critChance > 0) { crit = Main.rand.Next(1, 101) <= critChance; }
+				//float mult = 2f;
                 //TODO: fix these by adding in the tmodloader equivilants
 
-                //player.ItemDamagePVP(subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult);
-                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); });
-                //ItemDef.RunEquipMethod(player, (item) => { item.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
+				//player.ItemDamagePVP(subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult);
+				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); });
+				//ItemDef.RunEquipMethod(player, (item) => { item.DamagePVP(player, subPlayer, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
 
-                int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
 
-                int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByPlayer(subPlayer.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
+				int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByPlayer(subPlayer.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
 
-                //crit = false;
-                //player.ItemDealtPVP(subPlayer, hitDirection, dmgAmt, crit);
-                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); });
-                //ItemDef.RunEquipMethod(player, (item) => { item.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); }, true, true, false, true);
+				//crit = false;
+				//player.ItemDealtPVP(subPlayer, hitDirection, dmgAmt, crit);
+				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); });
+				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
                 if (Main.netMode != 0)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByPlayer(subPlayer.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByPlayer(subPlayer.whoAmI).GetDeathText(player.name), player.whoAmI, (float)hitDirection, (float)1, knockback, parsedDamage);
                 }
                 subPlayer.attackCD = (int)(subPlayer.itemAnimationMax * 0.33f);
-            }
-            else
-            if (damager is Projectile p)
+            }else
+            if (damager is Projectile)
             {
-                if (p.friendly)
+                Projectile p = (Projectile)damager;
+                if(p.friendly)
                 {
-                    //bool crit = false; float mult = 2f;
+					//bool crit = false; float mult = 2f;
                     //TODO: fix these by adding in the tmodloader equivilants
 
-                    //p.DamagePVP(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+					//p.DamagePVP(player, hitDirection, ref dmgAmt, ref crit, ref mult);
 
-                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar((float)dmgAmt); }
                     int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByProjectile(p.owner, p.whoAmI), parsedDamage, hitDirection, true, false, false, 0);
-
-                    //crit = false;
-                    //p.DealtPVP(player, hitDirection, dmgDealt, crit);
+					
+					//crit = false;
+					//p.DealtPVP(player, hitDirection, dmgDealt, crit);
                     if (Main.netMode != 0)
                     {
-                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, (float)hitDirection, (float)1, knockback, parsedDamage);
                     }
                     p.playerImmune[player.whoAmI] = 40;
-                }
-                else
-                if (p.hostile)
+                }else
+                if(p.hostile)
                 {
-                    //bool crit = false; float mult = 2f;
-                    //p.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
-
-                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+					//bool crit = false; float mult = 2f;
+					//p.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+                    
+					int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar((float)dmgAmt); }
                     int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByProjectile(-1, p.whoAmI), parsedDamage, hitDirection, false, false, false, 0);
-
-                    //crit = false;
-                    //p.DealtPlayer(player, hitDirection, dmgDealt, crit);
+					
+					//crit = false;
+					//p.DealtPlayer(player, hitDirection, dmgDealt, crit);
                     if (Main.netMode != 0)
                     {
-                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, (float)hitDirection, (float)1, knockback, parsedDamage);
                     }
                 }
-            }
-            else
-            if (damager is NPC npc)
+            }else
+            if (damager is NPC)
             {
+                NPC npc = (NPC)damager;
 
-                //bool crit = false; float mult = 2f;
+				//bool crit = false; float mult = 2f;
                 //TODO: fix these by adding in the tmodloader equivilants
 
-                //npc.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
-                //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); });
-                //player.NPCDamagePlayer(npc, hitDirection, ref dmgAmt, ref crit, ref mult);
-                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePlayer(player, npc, hitDirection, ref dmgAmt, ref crit, ref mult); });
-                //ItemDef.RunEquipMethod(player, (item) => { item.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
+				//npc.DamagePlayer(player, hitDirection, ref dmgAmt, ref crit, ref mult);
+				//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); });
+				//player.NPCDamagePlayer(npc, hitDirection, ref dmgAmt, ref crit, ref mult);
+				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamagePlayer(player, npc, hitDirection, ref dmgAmt, ref crit, ref mult); });
+				//ItemDef.RunEquipMethod(player, (item) => { item.DamagePlayer(npc, player, hitDirection, ref dmgAmt, ref crit, ref mult); }, true, true, false, true);
 
-                int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
                 int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByNPC(npc.whoAmI), parsedDamage, hitDirection, false, false, false, 0);
 
-                //npc.DealtPlayer(player, hitDirection, dmgDealt, crit);
-                //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); });
-                //player.NPCDealtPlayer(npc, hitDirection, dmgDealt, crit);
-                //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPlayer(player, npc, hitDirection, dmgAmt, crit); });
-                //ItemDef.RunEquipMethod(player, (item) => { item.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); }, true, true, false, true);
+				//npc.DealtPlayer(player, hitDirection, dmgDealt, crit);
+				//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); });
+				//player.NPCDealtPlayer(npc, hitDirection, dmgDealt, crit);
+				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPlayer(player, npc, hitDirection, dmgAmt, crit); });
+				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
                 if (Main.netMode != 0)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByNPC(npc.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByNPC(npc.whoAmI).GetDeathText(player.name), player.whoAmI, (float)hitDirection, (float)1, knockback, parsedDamage);
                 }
             }
         }
@@ -5350,58 +5345,59 @@ namespace CSkies
             if (hitThroughDefense) { dmgAmt += (int)(npc.defense * 0.5f); }
             if (damager == null)
             {
-                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
+                int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
                 npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
                 if (Main.netMode != 0)
                 {
-                    NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                    NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, (float)1, knockback, (float)hitDirection, parsedDamage);
                 }
             }else
-            if (damager is Projectile p)
+            if (damager is Projectile)
             {
+                Projectile p = (Projectile)damager;
                 if (p.owner == Main.myPlayer)
                 {
-                    //bool crit = false;
-                    //float mult = 1f;
-                    //p.DamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+					//bool crit = false;
+					//float mult = 1f;
+					//p.DamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
 
-                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+                    int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
                     int resultDmg = (int)npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
 
-                    //p.DealtNPC(npc, hitDirection, resultDmg, knockback, false);
+					//p.DealtNPC(npc, hitDirection, resultDmg, knockback, false);
                     if (Main.netMode != 0)
                     {
-                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, (float)1, knockback, (float)hitDirection, parsedDamage);
                     }
-                    if (p.penetrate != 1) { npc.immune[p.owner] = 10; }
+                    if (p.penetrate != 1){ npc.immune[p.owner] = 10; }
                 }
-            }
-            else
-            if (damager is Player player)
+            }else
+            if (damager is Player)
             {
+                Player player = (Player)damager;
                 if (player.whoAmI == Main.myPlayer)
                 {
-                    //bool crit = false;
-                    //float mult = 1f;
-                    //npc.DamageNPC(player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
-                    //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamageNPC(npc, player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
-                    //player.ItemDamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
-                    //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
-                    //ItemDef.RunEquipMethod(player, (item) => { item.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); }, true, true, false, true);
-
-                    int parsedDamage = dmgAmt; if (dmgVariation) { parsedDamage = Main.DamageVar(dmgAmt); }
+					//bool crit = false;
+					//float mult = 1f;
+					//npc.DamageNPC(player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+					//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DamageNPC(npc, player, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
+					//player.ItemDamageNPC(npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult);
+					//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); });
+					//ItemDef.RunEquipMethod(player, (item) => { item.DamageNPC(player, npc, hitDirection, ref dmgAmt, ref knockback, ref crit, ref mult); }, true, true, false, true);
+                    
+					int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar((float)dmgAmt); }
                     int dmgDealt = (int)npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
 
-                    //crit = false;
-                    //npc.DealtNPC(player, hitDirection, dmgDealt, knockback, crit);
-                    //BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtNPC(npc, player, hitDirection, dmgAmt, knockback, crit); });
-                    //player.ItemDealtNPC(npc, hitDirection, dmgDealt, knockback, crit);
-                    //BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); });
-                    //ItemDef.RunEquipMethod(player, (item) => { item.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); }, true, true, false, true);
+					//crit = false;
+					//npc.DealtNPC(player, hitDirection, dmgDealt, knockback, crit);
+					//BuffDef.RunBuffMethod(npc, (modbuff) => { modbuff.DealtNPC(npc, player, hitDirection, dmgAmt, knockback, crit); });
+					//player.ItemDealtNPC(npc, hitDirection, dmgDealt, knockback, crit);
+					//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); });
+					//ItemDef.RunEquipMethod(player, (item) => { item.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); }, true, true, false, true);
 
                     if (Main.netMode != 0)
                     {
-                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, (float)hitDirection, parsedDamage);
                     }
                     npc.immune[player.whoAmI] = player.itemAnimation;
                 }
@@ -5437,7 +5433,7 @@ namespace CSkies
         {
             if (p.owner == Main.myPlayer)
             {
-                NetMessage.SendData(BaseConstants.NET_PROJ_MANUALKILL, -1, -1, NetworkText.FromLiteral(""), p.identity, p.owner, 0f, 0f, 0);
+                NetMessage.SendData(BaseConstants.NET_PROJ_MANUALKILL, -1, -1, NetworkText.FromLiteral(""), p.identity, (float)p.owner, 0f, 0f, 0);
             }
             p.active = false;
         }
@@ -5455,33 +5451,33 @@ namespace CSkies
             for (int m = 0; m < loopAmount; m++)
             {
                 Vector2 gorePos = new Vector2(center.X - 24f, center.Y - 24f);
-                Vector2 velocityDefault = default;
+                Vector2 velocityDefault = default(Vector2);
                 int goreID = Gore.NewGore(gorePos, velocityDefault, Main.rand.Next(61, 64), 1f);
                 Gore gore = Main.gore[goreID];
                 gore.scale = scale * 1.5f;
                 gore.velocity.X = rand.Next(2) == 0 ? -(gore.velocity.X + 1.5f) : gore.velocity.X + 1.5f;
-                gore.velocity.Y += 1.5f;
+                gore.velocity.Y = gore.velocity.Y + 1.5f;
                 goreID = Gore.NewGore(gorePos, velocityDefault, Main.rand.Next(61, 64), 1f);
                 gore = Main.gore[goreID];
                 gore.scale = scale * 1.5f;
                 gore.velocity.X = rand.Next(2) == 0 ? -(gore.velocity.X + 1.5f) : gore.velocity.X + 1.5f;
-                gore.velocity.Y += 1.5f;
+                gore.velocity.Y = gore.velocity.Y + 1.5f;
                 goreID = Gore.NewGore(gorePos, velocityDefault, Main.rand.Next(61, 64), 1f);
                 gore = Main.gore[goreID];
                 gore.scale = scale * 1.5f;
                 gore.velocity.X = rand.Next(2) == 0 ? -(gore.velocity.X + 1.5f) : gore.velocity.X + 1.5f;
-                gore.velocity.Y += 1.5f;
+                gore.velocity.Y = gore.velocity.Y + 1.5f;
                 goreID = Gore.NewGore(gorePos, velocityDefault, Main.rand.Next(61, 64), 1f);
                 gore = Main.gore[goreID];
                 gore.scale = scale * 1.5f;
                 gore.velocity.X = rand.Next(2) == 0 ? -(gore.velocity.X + 1.5f) : gore.velocity.X + 1.5f;
-                gore.velocity.Y += 1.5f;
+                gore.velocity.Y = gore.velocity.Y + 1.5f;
             }
         }
 
 		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, float distance = -1, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectile(center, projType, owner, default, distance, CanAdd);
+			return GetProjectile(center, projType, owner, default(int[]), distance, CanAdd);
 		}
 		/*
 		 * Gets the closest Projectile with the given type within the given distance from the center. If distance is -1, it gets the closest Projectile.
@@ -5490,7 +5486,7 @@ namespace CSkies
 		 * projsToExclude : An array of projectile whoAmIs to exclude from the search.
 		 * distance : The distance to check.
 		 */
-		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default, float distance = -1, Func<Projectile, bool> CanAdd = null)
+		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default(int[]), float distance = -1, Func<Projectile, bool> CanAdd = null)
 		{
 			int currentProj = -1;
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5519,7 +5515,7 @@ namespace CSkies
 
 		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectiles(center, projType, owner, default, distance, CanAdd);
+			return GetProjectiles(center, projType, owner, default(int[]), distance, CanAdd);
 		}
 		/*
 		 * Gets the all Projectiles with the given type within the given distance from the center.
@@ -5528,7 +5524,7 @@ namespace CSkies
          * projsToExclude : An array of projectile whoAmIs to exclude from the search.
          * distance : The distance to check.
 		 */
-		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default, float distance = 500f, Func<Projectile, bool> CanAdd = null)
+		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default(int[]), float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
 			List<int> allProjs = new List<int>();
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5554,7 +5550,7 @@ namespace CSkies
 
 		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectiles(center, projTypes, owner, default, distance, CanAdd);
+			return GetProjectiles(center, projTypes, owner, default(int[]), distance, CanAdd);
 		}
 
 		/*
@@ -5564,7 +5560,7 @@ namespace CSkies
          * projsToExclude : An array of projectile whoAmIs to exclude from the search.
          * distance : The distance to check.
 		 */
-		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, int[] projsToExclude = default, float distance = 500f, Func<Projectile, bool> CanAdd = null)
+		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, int[] projsToExclude = default(int[]), float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
 			List<int> allProjs = new List<int>();
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5597,7 +5593,7 @@ namespace CSkies
 		 * npcType : If -1, check for ANY npcs in the area. If not, check for the npcs who match the type given.
 		 * npcsToExclude : An array of npc whoAmIs to exclude from the search.
 		 */
-		public static int[] GetNPCsInBox(Rectangle rect, int npcType = -1, int[] npcsToExclude = default, Func<NPC, bool> CanAdd = null)
+		public static int[] GetNPCsInBox(Rectangle rect, int npcType = -1, int[] npcsToExclude = default(int[]), Func<NPC, bool> CanAdd = null)
 		{
 			List<int> allNPCs = new List<int>();
 			for (int i = 0; i < Main.npc.Length; i++)
@@ -5623,7 +5619,7 @@ namespace CSkies
 
         public static int GetNPC(Vector2 center, int npcType = -1, float distance = -1, Func<NPC, bool> CanAdd = null)
         {
-            return GetNPC(center, npcType, default, distance, CanAdd);
+            return GetNPC(center, npcType, default(int[]), distance, CanAdd);
         }
         /*
          * Gets the closest NPC with the given type within the given distance from the center. If distance is -1, it gets the closest NPC.
@@ -5632,7 +5628,7 @@ namespace CSkies
          * npcsToExclude : An array of npc whoAmIs to exclude from the search.
          * distance : The distance to check.
          */
-		public static int GetNPC(Vector2 center, int npcType = -1, int[] npcsToExclude = default, float distance = -1, Func<NPC, bool> CanAdd = null)
+		public static int GetNPC(Vector2 center, int npcType = -1, int[] npcsToExclude = default(int[]), float distance = -1, Func<NPC, bool> CanAdd = null)
         {
             int currentNPC = -1;
             for (int i = 0; i < Main.npc.Length; i++)
@@ -5670,7 +5666,7 @@ namespace CSkies
          * npcsToExclude : an array of npc whoAmIs to exclude from the search.
          * distance : the distance to check.
          */
-		public static int[] GetNPCs(Vector2 center, int npcType = -1, int[] npcsToExclude = default, float distance = 500F, Func<NPC, bool> CanAdd = null)
+		public static int[] GetNPCs(Vector2 center, int npcType = -1, int[] npcsToExclude = default(int[]), float distance = 500F, Func<NPC, bool> CanAdd = null)
         {
             List<int> allNPCs = new List<int>();
             for (int i = 0; i < Main.npc.Length; i++)
@@ -5699,7 +5695,7 @@ namespace CSkies
          * rect : The rectangle to search.
          * playersToExclude : An array of player whoAmis that will be excluded from the search.
          */
-		public static int[] GetPlayersInBox(Rectangle rect, int[] playersToExclude = default, Func<Player, bool> CanAdd = null)
+		public static int[] GetPlayersInBox(Rectangle rect, int[] playersToExclude = default(int[]), Func<Player, bool> CanAdd = null)
         {
             List<int> allPlayers = new List<int>();
             for (int i = 0; i < Main.player.Length; i++)
@@ -5743,7 +5739,7 @@ namespace CSkies
 
 		public static int GetPlayer(Vector2 center, float distance = -1, Func<Player, bool> CanAdd = null)
         {
-            return GetPlayer(center, default, true, distance, CanAdd);
+            return GetPlayer(center, default(int[]), true, distance, CanAdd);
         }
         /*
          * Gets the closest player within the given distance from the center. If distance is -1, it gets the closest player.
@@ -5752,7 +5748,7 @@ namespace CSkies
          * aliveOnly : If true, it only returns the player whoAmI if the player is not dead.
          * distance : The distance to search.
          */
-		public static int GetPlayer(Vector2 center, int[] playersToExclude = default, bool activeOnly = true, float distance = -1, Func<Player, bool> CanAdd = null)
+		public static int GetPlayer(Vector2 center, int[] playersToExclude = default(int[]), bool activeOnly = true, float distance = -1, Func<Player, bool> CanAdd = null)
         {
             int currentPlayer = -1;
             for (int i = 0; i < Main.player.Length; i++)
@@ -5781,7 +5777,7 @@ namespace CSkies
 
 		public static int[] GetPlayers(Vector2 center, float distance = 500F, Func<Player, bool> CanAdd = null)
         {
-            return GetPlayers(center, default, true, distance, CanAdd);
+            return GetPlayers(center, default(int[]), true, distance, CanAdd);
         }
         /*
          * Gets all players within a given distance from the center.
@@ -5789,7 +5785,7 @@ namespace CSkies
          * playersToExclude is an array of player ids you do not want included in the array.
          * aliveOnly : If true, it only returns the player whoAmI if the player is not dead.
          */
-		public static int[] GetPlayers(Vector2 center, int[] playersToExclude = default, bool aliveOnly = true, float distance = 500F, Func<Player, bool> CanAdd = null)
+		public static int[] GetPlayers(Vector2 center, int[] playersToExclude = default(int[]), bool aliveOnly = true, float distance = 500F, Func<Player, bool> CanAdd = null)
         {
             List<int> allPlayers = new List<int>();
             for (int i = 0; i < Main.player.Length; i++)
@@ -5817,13 +5813,14 @@ namespace CSkies
          */
         public static bool CanTarget(Player player, Entity codable)
         {
-            if (codable is NPC npc)
+            if (codable is NPC)
             {
+                NPC npc = (NPC)codable;
                 return npc.life > 0 && (!npc.friendly || (npc.type == 22 && player.killGuide)) && !npc.dontTakeDamage;
-            }
-            else
-            if (codable is Player player2)
+            }else
+            if (codable is Player)
             {
+                Player player2 = (Player)codable;
                 return player2.statLife > 0 && !player2.immune && (player2.hostile && (player.team == 0 || player2.team == 0 || player.team != player2.team));
             }
             return false;
@@ -5855,7 +5852,7 @@ namespace CSkies
          * checkCanHit : If true, check if the codable can see the target point before firing.
          * offset : offset from the center of the codable that the projectile should spawn at.
          */
-        public static int ShootPeriodic(Entity codable, Vector2 position, int width, int height, int projType, ref float delayTimer, float delayTimerMax = 100f, int damage = -1, float speed = 10f, bool checkCanHit = true, Vector2 offset = default)
+        public static int ShootPeriodic(Entity codable, Vector2 position, int width, int height, int projType, ref float delayTimer, float delayTimerMax = 100f, int damage = -1, float speed = 10f, bool checkCanHit = true, Vector2 offset = default(Vector2))
         {
             int pID = -1;
             if (damage == -1) { Projectile proj = new Projectile(); proj.SetDefaults(projType); damage = proj.damage; }
@@ -5936,7 +5933,7 @@ namespace CSkies
          *             2 -> hurt BOTH Players/Townies and NPCs
          *             3 -> hurt NEITHER Players/Townies and NPCs (inert projectile)
          */
-        public static int FireProjectile(Vector2 fireTarget, Vector2 position, int projectileType, int damage, float knockback, float speedScalar = 1f, int hostility = 0, int owner = -1, Vector2 targetOffset = default)
+        public static int FireProjectile(Vector2 fireTarget, Vector2 position, int projectileType, int damage, float knockback, float speedScalar = 1f, int hostility = 0, int owner = -1, Vector2 targetOffset = default(Vector2))
         {
             Vector2 rotVec = BaseUtility.RotateVector(position, position + new Vector2(speedScalar, 0f), BaseUtility.RotationTo(position, fireTarget));
             rotVec -= position;
@@ -6015,7 +6012,7 @@ namespace CSkies
                 if (flipSpriteDir) { spriteDirection *= -1; }
                 float rotX = lookTarget.X - center.X;
                 float rotY = lookTarget.Y - center.Y;
-                rotation = -((float)Math.Atan2(rotX, rotY) - 1.57f + rotAddon);
+                rotation = -((float)Math.Atan2((double)rotX, (double)rotY) - 1.57f + rotAddon);
                 if (spriteDirection == 1) { rotation -= (float)Math.PI; }
             }else
             if (lookType == 1)
@@ -6027,7 +6024,7 @@ namespace CSkies
             {
                 float rotX = lookTarget.X - center.X;
                 float rotY = lookTarget.Y - center.Y;
-                rotation = -((float)Math.Atan2(rotX, rotY) - 1.57f + rotAddon);
+                rotation = -((float)Math.Atan2((double)rotX, (double)rotY) - 1.57f + rotAddon);
             }else
 			if (lookType == 3 || lookType == 4)
 			{
@@ -6041,7 +6038,7 @@ namespace CSkies
 				float pi2 = (float)Math.PI * 2f;
 				float rotX = lookTarget.X - center.X;
 				float rotY = lookTarget.Y - center.Y;
-				float rot = ((float)Math.Atan2(rotY, rotX) + rotAddon);
+				float rot = ((float)Math.Atan2((double)rotY, (double)rotX) + rotAddon);
 				if (spriteDirection == 1) { rot += (float)Math.PI; }
 				if (rot > pi2) { rot -= pi2; } else if (rot < 0) { rot += pi2; }
 				if (rotation > pi2) { rotation -= pi2; } else if (rotation < 0) { rotation += pi2; }
@@ -6099,7 +6096,7 @@ namespace CSkies
 
         public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, float Jump = 1F, bool ignorePlatforms = true)
         {
-            return Trace(start, end, ignore, ignoreType, dim, npcCheck, tileCheck, playerCheck, returnCenter, (ignorePlatforms ? new int[] { 19 } : default), Jump); //ignores wooden platforms
+            return Trace(start, end, ignore, ignoreType, dim, npcCheck, tileCheck, playerCheck, returnCenter, (ignorePlatforms ? new int[] { 19 } : default(int[])), Jump); //ignores wooden platforms
         }
 
         /* **Code edited from Yoraiz0r's 'Holowires' Mod!**
@@ -6114,7 +6111,7 @@ namespace CSkies
          * tileTypesToIgnore : An array of tile types that it will assume it can trace through.
          * Jump: The amount to iterate by.
          */
-        public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, int[] tileTypesToIgnore = default, float Jump = 1F)
+        public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, int[] tileTypesToIgnore = default(int[]), float Jump = 1F)
         {
 			try
 			{
@@ -6150,7 +6147,7 @@ namespace CSkies
                             if (tile != null && tile.nactive())
                             {
                                 bool ignoreTile = (tileTypesToIgnore == null || tileTypesToIgnore.Length <= 0 ? false : BaseUtility.InArray(tileTypesToIgnore, tile.type));
-                                if (!ignoreTile && Main.tileSolid[tile.type])
+                                if (!ignoreTile && Main.tileSolid[(int)tile.type])
                                 {
                                     return returnCenter ? new Vector2((vecX * 16) + 8, (vecY * 16) + 8) : v;
                                 }
@@ -6166,7 +6163,7 @@ namespace CSkies
                         NPC npc = Main.npc[npcs[i]];
                         if (!npc.active || npc.life <= 0) { continue; }
                         if (ignoreType == 2 && npc.whoAmI == (int)ignore) { continue; }
-                        Rectangle npcRect = new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height);
+                        Rectangle npcRect = new Rectangle((int)npc.position.X, (int)npc.position.Y, (int)npc.width, (int)npc.height);
                         if (posRect.Intersects(npcRect)) { return returnCenter ? npc.Center : v; }
                     }
                 }
@@ -6178,7 +6175,7 @@ namespace CSkies
                         Player player = Main.player[players[i]];
                         if (player.dead || !player.active) { continue; }
                         if (ignoreType == 0 && player.whoAmI == (int)ignore) { continue; }
-                        Rectangle playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height);
+                        Rectangle playerRect = new Rectangle((int)player.position.X, (int)player.position.Y, (int)player.width, (int)player.height);
                         if (posRect.Intersects(playerRect)) { return returnCenter ? player.Center : v; }
                     }
                 }
@@ -6186,7 +6183,7 @@ namespace CSkies
             }
 			}catch(Exception e)
 			{
-				BaseUtility.LogFancy("BASEMOD~ TRACE ERROR:", e);				
+				BaseUtility.LogFancy("CSkies~ TRACE ERROR:", e);				
 			}
             return end;
         }

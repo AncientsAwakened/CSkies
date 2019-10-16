@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Terraria.ModLoader;
 
 namespace CSkies.Items.Boss

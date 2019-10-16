@@ -58,7 +58,7 @@ namespace CSkies
 
         public override void UpdateBiomes()
         {
-            ZoneVoid = NearVoid();
+            ZoneVoid = NearVoid() || CWorld.VaultTiles > 30;
             ZoneComet = CWorld.CometTiles > 30;
         }
 

@@ -52,12 +52,12 @@ namespace CSkies
 		{
 			Rectangle hitbox = (useItemHitbox || Main.netMode == 2 || Main.dedServ ? item.Hitbox : new Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height));
 			player.itemRotation = 0f;
-			player.itemLocation.X = player.position.X + player.width * 0.5f + ((center ? 0f : hitbox.Width * 0.5f) - 9f - player.itemRotation * 14f * player.direction - 4f) * player.direction;
-			player.itemLocation.Y = player.position.Y + hitbox.Height * 0.5f + 4f;
+			player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((center ? 0f : (float)hitbox.Width * 0.5f) - 9f - player.itemRotation * 14f * (float)player.direction - 4f) * (float)player.direction;
+			player.itemLocation.Y = player.position.Y + (float)hitbox.Height * 0.5f + 4f;
 			if (player.gravDir == -1f)
 			{
 				player.itemRotation = -player.itemRotation;
-				player.itemLocation.Y = player.position.Y + player.height + (player.position.Y - player.itemLocation.Y);
+				player.itemLocation.Y = player.position.Y + (float)player.height + (player.position.Y - player.itemLocation.Y);
 			}
 			if (Main.myPlayer == player.whoAmI && Main.netMode != 0)
 			{
@@ -165,8 +165,8 @@ namespace CSkies
          */
         public static Vector2 MoveItemLocationSword(Vector2 position, int width, int height, Vector2 itemLocation, int itemAnimation, int itemAnimationMax, float itemRotation, int direction, float gravDir, Item item, bool basedOnRot = false)
         {
-            float rot30 = !basedOnRot ? 0f : (itemAnimationMax * 0.33f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
-            float rot60 = !basedOnRot ? 0f : (itemAnimationMax * 0.66f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot30 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.33f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot60 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.66f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
             bool is30 = itemRotation > rot30;
             bool is60 = itemRotation > rot60;
 
@@ -243,8 +243,8 @@ namespace CSkies
          */
         public static Rectangle SetFrameSword(Rectangle bodyFrame, int itemAnimation, int itemAnimationMax, float itemRotation, int direction, float gravDir, Item item, bool basedOnRot = false)
         {
-            float rot30 = !basedOnRot ? 0f : (itemAnimationMax * 0.33f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
-            float rot60 = !basedOnRot ? 0f : (itemAnimationMax * 0.66f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot30 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.33f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot60 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.66f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
             bool is30 = itemRotation > rot30;
             bool is60 = itemRotation > rot60;
             if (!basedOnRot ? itemAnimation < itemAnimationMax * 0.33f : ((gravDir == 1f && ((direction == 1 && is30) || (direction == -1 && !is30))) || (gravDir == -1f && ((direction == 1 && !is30) || (direction == -1 && is30)))))
@@ -269,8 +269,8 @@ namespace CSkies
          */
         public static Rectangle UpdateHitBoxSword(int itemAnimation, int itemAnimationMax, float itemRotation, int direction, float gravDir, Item item, Rectangle ItemRect, bool basedOnRot = false)
         {
-            float rot30 = !basedOnRot ? 0f : (itemAnimationMax * 0.33f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
-            float rot60 = !basedOnRot ? 0f : (itemAnimationMax * 0.66f * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot30 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.33f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
+            float rot60 = !basedOnRot ? 0f : ((float)(itemAnimationMax * 0.66f) * 0.75f / itemAnimationMax - 0.5f) * -direction * 3.5f - direction * 0.3f;
             bool is30 = itemRotation > rot30;
             bool is60 = itemRotation > rot60;
             if (!basedOnRot ? itemAnimation < itemAnimationMax * 0.33f : ((gravDir == 1f && ((direction == 1 && is30) || (direction == -1 && !is30))) || (gravDir == -1f && ((direction == 1 && !is30) || (direction == -1 && is30)))))

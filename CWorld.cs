@@ -20,6 +20,7 @@ namespace CSkies
         public static bool downedObserverV = false;
         public static bool downedVoid = false;
         public static int CometTiles = 0;
+        public static int VaultTiles = 0;
 
         public static int VaultCount = 0;
         public static bool KillDoors = false;
@@ -87,7 +88,8 @@ namespace CSkies
 
         public override void TileCountsAvailable(int[] tileCounts)
         {
-            CometTiles = tileCounts[ModContent.TileType<Tiles.CometOre>()];
+            CometTiles = tileCounts[ModContent.TileType<CometOre>()];
+            VaultTiles = tileCounts[ModContent.TileType<AbyssBricks>()];
         }
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
@@ -96,18 +98,18 @@ namespace CSkies
 
             tasks.Insert(shiniesIndex2 + 1, new PassLegacy("Vaults", delegate (GenerationProgress progress)
             {
-                Hoard(progress);
+                Vaults(progress);
             }));
         }
 
-        private void Hoard(GenerationProgress progress)
+        private void Vaults(GenerationProgress progress)
         {
             progress.Message = "Locking Vaults";
             Point POrigin = new Point((int)(Main.maxTilesX * 0.3f), 100);
             VaultPlanet planet = new VaultPlanet();
             planet.Place(POrigin, WorldGen.structures);
 
-            Point origin = new Point((int)(Main.maxTilesX * 0.4f), (int)(Main.maxTilesY * 0.4f));
+            Point origin = new Point((int)(Main.maxTilesX * 0.4f), (int)(Main.maxTilesY * 0.5f));
             Vault a = new Vault();
             a.Place(origin, WorldGen.structures);
 
@@ -116,7 +118,7 @@ namespace CSkies
             Vault b = new Vault();
             b.Place(origin, WorldGen.structures);
 
-            origin = new Point((int)(Main.maxTilesX * 0.7f), (int)(Main.maxTilesY * 0.3f));
+            origin = new Point((int)(Main.maxTilesX * 0.7f), (int)(Main.maxTilesY * 0.35f));
             Vault c = new Vault();
             c.Place(origin, WorldGen.structures);
         }
@@ -128,19 +130,37 @@ namespace CSkies
                 float num143 = Main.maxTilesX / 4200;
                 if (Main.rand.Next(8000) < 10f * num143)
                 {
-                    int num144 = 12;
-                    int num145 = Main.rand.Next(Main.maxTilesX - 50) + 100;
-                    num145 *= 16;
-                    int num146 = Main.rand.Next((int)(Main.maxTilesY * 0.05));
-                    num146 *= 16;
-                    Vector2 vector = new Vector2(num145, num146);
-                    float num147 = Main.rand.Next(-100, 101);
-                    float num148 = Main.rand.Next(200) + 100;
-                    float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
-                    num149 = num144 / num149;
-                    num147 *= num149;
-                    num148 *= num149;
-                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
+                    int num = 0;
+                    float num2 = Main.maxTilesX / 4200;
+                    int num3 = (int)(400f * num2);
+                    for (int j = 5; j < Main.maxTilesX - 5; j++)
+                    {
+                        int num4 = 5;
+                        while (num4 < Main.worldSurface)
+                        {
+                            if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<CometOre>())
+                            {
+                                num++;
+                                if (num < num3)
+                                {
+                                    int num144 = 12;
+                                    int num145 = Main.rand.Next(Main.maxTilesX - 50) + 100;
+                                    num145 *= 16;
+                                    int num146 = Main.rand.Next((int)(Main.maxTilesY * 0.05));
+                                    num146 *= 16;
+                                    Vector2 vector = new Vector2(num145, num146);
+                                    float num147 = Main.rand.Next(-100, 101);
+                                    float num148 = Main.rand.Next(200) + 100;
+                                    float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
+                                    num149 = num144 / num149;
+                                    num147 *= num149;
+                                    num148 *= num149;
+                                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
+                                }
+                            }
+                            num4++;
+                        }
+                    }
                 }
             }
 

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using log4net;
 
 using Terraria;
 using Terraria.Localization;
@@ -21,11 +22,22 @@ namespace CSkies
         //------------------------------------------------------//
         //  Author(s): Grox the Great                           //
         //------------------------------------------------------// 
-		
-		public static void LogFancy(string logText)
+
+		public static string[] GetLoadedMods()
 		{
-			LogFancy("", logText, null);
-		}		
+			return ModLoader.Mods.Reverse().Select(m => m.Name).ToArray();
+		}	
+
+		public static void LogBasic(string logText)
+		{
+			ILog logger = LogManager.GetLogger("Terraria");			
+			logger.Info(logText);			
+		}
+
+		//public static void LogFancy(string logText)
+		//{
+		//	LogFancy("", logText, null);
+		//}		
 	
 		public static void LogFancy(string prefix, Exception e)
 		{
@@ -34,12 +46,20 @@ namespace CSkies
 
 		public static void LogFancy(string prefix, string logText, Exception e = null)
 		{
+			ILog logger = LogManager.GetLogger("Terraria");	
 			if(e != null)
 			{
-				ErrorLogger.Log(prefix + e.Message); ErrorLogger.Log(e.StackTrace);	ErrorLogger.Log(">---------<");	
+				logger.Info(">---------<");			
+				logger.Error(prefix + e.Message);
+				logger.Error(e.StackTrace);		
+				logger.Info(">---------<");				
+				//ErrorLogger.Log(prefix + e.Message); ErrorLogger.Log(e.StackTrace);	ErrorLogger.Log(">---------<");	
 			}else
 			{
-				ErrorLogger.Log(prefix + logText);
+				logger.Info(">---------<");			
+				logger.Info(prefix + logText);	
+				logger.Info(">---------<");					
+				//ErrorLogger.Log(prefix + logText);
 			}		
 		}		
 
@@ -79,7 +99,7 @@ namespace CSkies
 					Main.PlaySound(11, -1, -1, 1);
 				}else
 				{
-					NetMessage.SendData(31, -1, -1, NetworkText.FromLiteral(""), left, top, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(31, -1, -1, NetworkText.FromLiteral(""), left, (float)top, 0f, 0f, 0, 0, 0);
 					Main.stackSplit = 600;
 				}
 			}else
@@ -168,6 +188,89 @@ namespace CSkies
 			item.Tooltip.SetDefault(supertip);
         }			
 
+        #region ByName calls
+        public static NPC NPCByName(string n)
+        {
+            if (n.Contains(":"))
+            {
+                string mName = n.Split(':')[0];
+                string n2 = n.Split(':')[1];
+                return ModLoader.GetMod(mName).GetNPC(n2).npc;
+            }else
+            {
+                string[] modNames = GetLoadedMods();
+                foreach (string name in modNames)
+                {
+                    Mod mod = ModLoader.GetMod(name);
+                    ModNPC m = mod.GetNPC(n);
+                    if (m != null) return m.npc;
+                }
+            }
+            return null;
+        }
+
+        public static Item ItemByName(string n)
+        {
+            if (n.Contains(":"))
+            {
+                string mName = n.Split(':')[0];
+                string n2 = n.Split(':')[1];
+                return ModLoader.GetMod(mName).GetItem(n2).item;
+            }else
+            {
+                string[] modNames = GetLoadedMods();
+                foreach (string name in modNames)
+                {
+                    Mod mod = ModLoader.GetMod(name);
+                    ModItem m = mod.GetItem(n);
+                    if (m != null) return m.item;
+                }
+            }
+            return null;
+        }
+
+        public static Projectile ProjByName(string n)
+        {
+            if (n.Contains(":"))
+            {
+                string mName = n.Split(':')[0];
+                string n2 = n.Split(':')[1];
+                return ModLoader.GetMod(mName).GetProjectile(n2).projectile;
+            }
+            else
+            {
+                string[] modNames = GetLoadedMods();
+                foreach (string name in modNames)
+                {
+                    Mod mod = ModLoader.GetMod(name);
+                    ModProjectile m = mod.GetProjectile(n);
+                    if (m != null) return m.projectile;
+                }
+            }
+            return null;
+        }
+
+        public static ModTile TileByName(string n)
+        {
+            if (n.Contains(":"))
+            {
+                string mName = n.Split(':')[0];
+                string n2 = n.Split(':')[1];
+                return ModLoader.GetMod(mName).GetTile(n2);
+            }else
+            {
+                string[] modNames = GetLoadedMods();
+                foreach (string name in modNames)
+                {
+                    Mod mod = ModLoader.GetMod(name);
+                    ModTile m = mod.GetTile(n);
+                    if (m != null) return m;
+                }
+            }
+            return null;
+        }
+        #endregion
+
         public static bool CanHit(Rectangle rect, Rectangle rect2)
         {
             return Collision.CanHit(new Vector2(rect.X, rect.Y), rect.Width, rect.Height, new Vector2(rect2.X, rect2.Y), rect2.Width, rect2.Height);
@@ -206,7 +309,7 @@ namespace CSkies
         {
 			if (Main.netMode == 2 || Main.dedServ || Main.soundVolume == 0f) return;
 
-			Rectangle screenRect = new Rectangle((int)(Main.screenPosition.X - Main.screenWidth * 2), (int)(Main.screenPosition.Y - Main.screenHeight * 2), Main.screenWidth * 5, Main.screenHeight * 5);
+			Rectangle screenRect = new Rectangle((int)(Main.screenPosition.X - (float)(Main.screenWidth * 2)), (int)(Main.screenPosition.Y - (float)(Main.screenHeight * 2)), Main.screenWidth * 5, Main.screenHeight * 5);
 			Rectangle locRect = new Rectangle(x, y, 1, 1);
 			bool usePan = locRect.Intersects(screenRect);
 			if ((x == -1 && y == -1) || usePan)
@@ -241,19 +344,19 @@ namespace CSkies
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.Item, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundItem;
 						soundInstanceArray = Main.soundInstanceItem;
-						pitch = Main.rand.Next(-6, 7) * 0.01f;
+						pitch = (float)Main.rand.Next(-6, 7) * 0.01f;
 						break;
 					case 3:
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.NPCHit, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundNPCHit;
 						soundInstanceArray = Main.soundInstanceNPCHit;
-						pitch = Main.rand.Next(-10, 11) * 0.01f;
+						pitch = (float)Main.rand.Next(-10, 11) * 0.01f;
 						break;
 					case 4:
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.NPCKilled, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundNPCKilled;
 						soundInstanceArray = Main.soundInstanceNPCKilled;
-						pitch = Main.rand.Next(-10, 11) * 0.01f;
+						pitch = (float)Main.rand.Next(-10, 11) * 0.01f;
 						break;
 					default: return;
 				}
@@ -266,12 +369,12 @@ namespace CSkies
 
 				if(usePan)
 				{
-					Vector2 vector = new Vector2(Main.screenPosition.X + Main.screenWidth * 0.5f, Main.screenPosition.Y + Main.screenHeight * 0.5f);
-					float absX= Math.Abs(x - vector.X);
-					float absY = Math.Abs(y - vector.Y);
-					float absSQ = (float)Math.Sqrt(absX * absX + absY * absY);		
-					soundPan = (x - vector.X) / (Main.screenWidth * 0.5f);
-					soundVol = 1f - absSQ / (Main.screenWidth * 1.5f);
+					Vector2 vector = new Vector2(Main.screenPosition.X + (float)Main.screenWidth * 0.5f, Main.screenPosition.Y + (float)Main.screenHeight * 0.5f);
+					float absX= Math.Abs((float)x - vector.X);
+					float absY = Math.Abs((float)y - vector.Y);
+					float absSQ = (float)Math.Sqrt((double)(absX * absX + absY * absY));		
+					soundPan = ((float)x - vector.X) / ((float)Main.screenWidth * 0.5f);
+					soundVol = 1f - absSQ / ((float)Main.screenWidth * 1.5f);
 				}
 	
 				SoundEffectInstance soundInstance = (newInstance ? soundEffect.CreateInstance() : (soundInstanceArray[soundID].State == SoundState.Playing ? soundInstanceArray[soundID] : soundEffect.CreateInstance()));
@@ -401,7 +504,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<Color> list = array.ToList();
+				List<Color> list = array.ToList<Color>();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}
@@ -419,7 +522,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<string> list = array.ToList();
+				List<string> list = array.ToList<string>();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}
@@ -437,7 +540,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<int> list = array.ToList();
+				List<int> list = array.ToList<int>();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}
@@ -504,6 +607,25 @@ namespace CSkies
             return false;
         }		
 
+
+        /*
+         * Returns a monochrome version of the given color.
+         */
+        public static Color ColorMonochrome(Color color)
+        {
+			int average = color.R + color.G + color.B;
+			average /= 3;
+            return new Color(average, average, average, color.A);
+        }		
+		
+        /*
+         * Alters the coior by the amount of the alpha given.
+         */
+        public static Color ColorAlpha(Color color, int alpha)
+        {
+			return color * (1f - ((float)alpha / 255f));
+        }
+		
         /*
          * Alters the brightness of the color by the amount of the factor. If factor is negative, it darkens it. Else, it brightens it.
          */
@@ -520,9 +642,9 @@ namespace CSkies
 		 */
 		public static Color ColorMult(Color color, float mult)
 		{
-			int r = Math.Max(0, Math.Min(255, (int)(color.R * mult)));
-			int g = Math.Max(0, Math.Min(255, (int)(color.G * mult)));
-			int b = Math.Max(0, Math.Min(255, (int)(color.B * mult)));
+			int r = Math.Max(0, Math.Min(255, (int)((float)color.R * mult)));
+			int g = Math.Max(0, Math.Min(255, (int)((float)color.G * mult)));
+			int b = Math.Max(0, Math.Min(255, (int)((float)color.B * mult)));
 			return new Color(r, g, b, color.A);
 		}
 
@@ -555,7 +677,7 @@ namespace CSkies
 			float b2 = color2.B / 255f;
 			float brightness = r2 > g2 ? r2 : g2 > b2 ? g2 : b2;
 			r *= brightness; g *= brightness; b *= brightness;
-			return new Color(r, g, b, color1.A / 255f);
+			return new Color(r, g, b, (float)(color1.A / 255f));
 		}
 
 		/*
@@ -577,10 +699,10 @@ namespace CSkies
             float b = lightColor.B / 255f;
             float a = lightColor.A / 255f;
             Color newColor = tint;
-            float nr = (byte)(newColor.R * r);
-            float ng = (byte)(newColor.G * g);
-            float nb = (byte)(newColor.B * b);
-            float na = (byte)(newColor.A * a);
+            float nr = (byte)((float)newColor.R * r);
+            float ng = (byte)((float)newColor.G * g);
+            float nb = (byte)((float)newColor.B * b);
+            float na = (byte)((float)newColor.A * a);
 			newColor.R = (byte)(nr);
 			newColor.G = (byte)(ng);
 			newColor.B = (byte)(nb);
@@ -758,13 +880,13 @@ namespace CSkies
          */
         public static void Chat(string s, Color color, bool sync = true)
         {
-            Chat(s, color.R, color.G, color.B, sync);
+            Chat(s, (byte)color.R, (byte)color.G, (byte)color.B, sync);
         }
 
         /*
          * Sends the given string to chat, with the given color values.
          */
-        public static void Chat(string s, byte colorR = 255, byte colorG = 255, byte colorB = 255, bool sync = true)
+        public static void Chat(string s, byte colorR = (byte)255, byte colorG = (byte)255, byte colorB = (byte)255, bool sync = true)
         {
             if (Main.netMode == 0) { Main.NewText(s, colorR, colorG, colorB); }else
 			if (Main.netMode == 1) { Main.NewText(s, colorR, colorG, colorB); }else //if(sync){ NetMessage.BroadcastChatMessage(NetworkText.FromLiteral(s), new Color(colorR, colorG, colorB), Main.myPlayer); } }else

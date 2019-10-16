@@ -103,16 +103,12 @@ namespace CSkies.Tiles.HeartAltars
             Tile tile = Main.tile[x, y];
             Texture2D glowTex = mod.GetTexture("Glowmasks/HeartAltar_Glow");
             Texture2D heart = mod.GetTexture("Glowmasks/HeartAltar_Heart");
-            if (tile != null && tile.active() && tile.type == Type)
+            int frameX = tile != null && tile.active() ? tile.frameX : 0;
+            int frameY = tile != null && tile.active() ? tile.frameY + (Main.tileFrame[Type] * 54) : 0;
+            BaseDrawing.DrawTileTexture(sb, glowTex, x, y, 16, 16, frameX, frameY, false, false, false, null, GetColor);
+            if (!CWorld.Altar4)
             {
-                int width = 16, height = 16;
-                int frameX = tile != null && tile.active() ? tile.frameX : 0;
-                int frameY = tile != null && tile.active() ? tile.frameY + (Main.tileFrame[Type] * 54) : 0;
-                BaseDrawing.DrawTileTexture(sb, glowTex, x, y, width, height, frameX, frameY, false, false, false, null, GetColor);
-                if (CWorld.Altar2)
-                {
-                    BaseDrawing.DrawTileTexture(sb, heart, x, y, width, height, frameX, frameY, false, false, false, null, HeartColor);
-                }
+                BaseDrawing.DrawTileTexture(sb, heart, x, y, 16, 16, frameX, frameY, false, false, false, null, HeartColor);
             }
         }
     }
