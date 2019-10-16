@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using CSkies.NPCs.Bosses.Heartcore;
 
-namespace CSkies.NPCs.Enemies.FuryHeart
+namespace CSkies.NPCs.Enemies
 {
 	public class FuryHeart : ModNPC
 	{

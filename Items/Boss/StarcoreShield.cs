@@ -12,7 +12,7 @@ namespace CSkies.Items.Boss
             item.width = 30;
             item.height = 32;
             item.value = Item.sellPrice(0, 5, 0, 0);
-            item.rare = 2;
+            item.rare = 5;
             item.expert = true; item.expertOnly = true;
             item.accessory = true;
             item.defense = 3;
@@ -31,15 +31,7 @@ Allows you to dash into enemies, damaging them");
             player.GetModPlayer<CPlayer>().StarShield = true;
             player.dash = 2;
         }
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "ClawOfChaos", 1);
-            recipe.AddIngredient(ItemID.EoCShield, 1);
-            recipe.AddTile(TileID.TinkerersWorkbench);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
+
         public override bool CanEquipAccessory(Player player, int slot)
         {
             if (slot < 10)
