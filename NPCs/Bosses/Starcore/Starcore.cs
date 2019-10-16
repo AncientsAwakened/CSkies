@@ -34,6 +34,7 @@ namespace CSkies.NPCs.Bosses.Starcore
             npc.boss = true;
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Starcore");
+            bossBag = mod.ItemType("StarcoreBag");
         }
 
         public float[] Shoot = new float[1];
@@ -58,6 +59,27 @@ namespace CSkies.NPCs.Bosses.Starcore
 
         public override void NPCLoot()
         {
+            if (Main.rand.Next(10) == 0)
+            {
+                npc.DropLoot(mod.ItemType("StarcoreTrophy"));
+            }
+            if (Main.expertMode)
+            {
+                npc.DropBossBags();
+            }
+            else
+            {
+                if (Main.rand.Next(7) == 0)
+                {
+                    npc.DropLoot(mod.ItemType("StarcoreMask"));
+                }
+                string[] lootTableA = { "Starsaber" };
+                int lootA = Main.rand.Next(lootTableA.Length);
+
+                npc.DropLoot(mod.ItemType(lootTableA[lootA]));
+
+                npc.DropLoot(ModContent.ItemType<Items.Star.Stelarite>(), Main.rand.Next(8, 12));
+            }
             for (int num468 = 0; num468 < 12; num468++)
             {
                 int num469 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, ModContent.DustType<Dusts.StarDust>(), -npc.velocity.X * 0.2f,

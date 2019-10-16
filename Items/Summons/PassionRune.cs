@@ -1,11 +1,10 @@
 ﻿using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CSkies.Items.Summons
 {
-	public class PassionRune : ModItem
+    public class PassionRune : ModItem
 	{
 		public override void SetStaticDefaults()
 		{

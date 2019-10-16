@@ -1,15 +1,12 @@
-using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CSkies.NPCs.Bosses.FurySoul
 {
-	public class Furyrang : ModProjectile
+    public class Furyrang : ModProjectile
 	{
         public override void SetDefaults()
         {

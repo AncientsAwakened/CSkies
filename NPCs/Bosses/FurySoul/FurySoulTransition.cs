@@ -28,7 +28,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 npc.buffImmune[k] = true;
             }
-            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
+            music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/FurySoul");
         }
 
         public override void AI()

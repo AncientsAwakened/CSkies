@@ -8,6 +8,15 @@ namespace CSkies
         public static Color COLOR_GLOWPULSE => Color.White * (Main.mouseTextColor / 255f);
 
         public static Color Flash => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.Transparent, Color.White, Color.Transparent);
+        public static Color FlashInverse => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.White, Color.Transparent, Color.White);
+
+        public static Color Rarity12 => new Color(239, 0, 243);
+
+        public static Color Rarity13 => new Color(0, 125, 243);
+
+        public static Color Rarity14 => new Color(255, 22, 0);
+
+        public static Color Rarity15 => new Color(0, 178, 107);
     }
 
     public static class CUtils

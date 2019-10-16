@@ -67,12 +67,23 @@ namespace CSkies.NPCs.Bosses.Heartcore
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore4"), 1f);
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGoreHalf1"), 1f);
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGoreHalf2"), 1f);
+
             for (int num468 = 0; num468 < 12; num468++)
             {
                 int num469 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.SolarFlare, -npc.velocity.X * 0.2f,
                     -npc.velocity.Y * 0.2f, 100, default, 2f);
                 Main.dust[num469].noGravity = true;
             }
+
+            if (Main.rand.Next(10) == 0)
+            {
+                npc.DropLoot(mod.ItemType("HeartcoreTrophy"));
+            }
+            if (Main.rand.Next(7) == 0)
+            {
+                npc.DropLoot(mod.ItemType("HeartcoreMask"));
+            }
+
             if (Main.expertMode)
             {
                 int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<FurySoulTransition>());
@@ -81,6 +92,12 @@ namespace CSkies.NPCs.Bosses.Heartcore
             }
             else
             {
+                string[] lootTableA = { "Sol", "MeteorShower" };
+                int lootA = Main.rand.Next(lootTableA.Length);
+
+                npc.DropLoot(mod.ItemType(lootTableA[lootA]));
+
+                npc.DropLoot(ModContent.ItemType<Items.Heart.HeartSoul>(), Main.rand.Next(8, 12));
                 int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<HeartcoreDefeat>());
                 Main.npc[n].Center = npc.Center;
             }

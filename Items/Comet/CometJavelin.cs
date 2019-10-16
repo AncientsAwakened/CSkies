@@ -20,7 +20,7 @@ namespace CSkies.Items.Comet
 			item.height = 44;
 			item.useTime = 30;
 			item.useAnimation = 30;
-			item.shoot = mod.ProjectileType("Comet_Javelin_Pro");
+			item.shoot = mod.ProjectileType("CometJavelin");
 			item.shootSpeed = 12;
 			item.useStyle = 1;
 			item.knockBack = 2;

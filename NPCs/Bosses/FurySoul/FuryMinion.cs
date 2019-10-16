@@ -114,9 +114,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
 		{
             Texture2D Tex = Main.npcTexture[npc.type];
 
-            Rectangle frame = BaseDrawing.GetFrame(frame, Main.npcTexture[npc.type].Width, Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type], 0, 0);
+            Rectangle f = BaseDrawing.GetFrame(frame, Main.npcTexture[npc.type].Width, Main.npcTexture[npc.type].Height / Main.npcFrameCount[npc.type], 0, 0);
 
-            BaseDrawing.DrawTexture(sb, Main.projectileTexture[npc.type], 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 4, frame, npc.GetAlpha(Colors.COLOR_GLOWPULSE), true);
+            BaseDrawing.DrawTexture(sb, Tex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 4, f, npc.GetAlpha(Colors.COLOR_GLOWPULSE), true);
             return false;
 		}
 	}

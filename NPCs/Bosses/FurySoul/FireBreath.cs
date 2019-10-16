@@ -1,8 +1,6 @@
 ﻿using Terraria;
-using System;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 
 namespace CSkies.NPCs.Bosses.FurySoul

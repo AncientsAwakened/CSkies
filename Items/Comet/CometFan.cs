@@ -24,7 +24,7 @@ namespace CSkies.Items.Comet
 			item.useTime = 21;
 			item.width = 26;
 			item.height = 26;
-			item.shoot = mod.ProjectileType("Comet_Knife");
+			item.shoot = mod.ProjectileType("CometKnife");
 			item.shootSpeed = 18f;
 			item.knockBack = 2.5f;
 			item.ranged = true;

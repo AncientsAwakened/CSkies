@@ -20,7 +20,7 @@ namespace CSkies.Items.Comet
 			item.value = 10;
 			item.rare = 2;
 			item.shootSpeed = 12f;
-			item.shoot = mod.ProjectileType("Comet_Knife");
+			item.shoot = mod.ProjectileType("CometKnife");
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
             item.consumable = true;

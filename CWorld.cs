@@ -6,6 +6,10 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using CSkies.Tiles;
+using Terraria.World.Generation;
+using Terraria.GameContent.Generation;
+using CSkies.Worldgen;
 
 namespace CSkies
 {
@@ -17,11 +21,23 @@ namespace CSkies
         public static bool downedVoid = false;
         public static int CometTiles = 0;
 
+        public static int VaultCount = 0;
+        public static bool KillDoors = false;
+
+        public static bool Altar1 = false;
+        public static bool Altar2 = false;
+        public static bool Altar3 = false;
+        public static bool Altar4 = false;
+
         public override void Initialize()
         {
             downedObserver = false;
             downedObserverV = false;
             downedVoid = false;
+            Altar1 = false;
+            Altar2 = false;
+            Altar3 = false;
+            Altar4 = false;
         }
 
         #region saving/loading
@@ -32,6 +48,7 @@ namespace CSkies
             if (downedObserverV) downed.Add("02");
             if (downedVoid) downed.Add("VOID");
             if (MeteorMessage) downed.Add("Comet");
+            if (KillDoors) downed.Add("door");
 
             return new TagCompound
             {
@@ -45,6 +62,7 @@ namespace CSkies
             downedObserverV = downed.Contains("O2");
             downedVoid = downed.Contains("VOID");
             MeteorMessage = downed.Contains("Comet");
+            KillDoors = downed.Contains("door");
         }
         public override void NetSend(BinaryWriter writer)
         {
@@ -53,6 +71,7 @@ namespace CSkies
             flags[1] = downedObserverV;
             flags[2] = MeteorMessage;
             flags[3] = downedVoid;
+            flags[4] = KillDoors;
             writer.Write(flags);
         }
         public override void NetReceive(BinaryReader reader)
@@ -62,12 +81,44 @@ namespace CSkies
             downedObserverV = flags[1];
             MeteorMessage = flags[2];
             downedVoid = flags[3];
+            KillDoors = flags[4];
         }
         #endregion
 
         public override void TileCountsAvailable(int[] tileCounts)
         {
             CometTiles = tileCounts[ModContent.TileType<Tiles.CometOre>()];
+        }
+
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
+        {
+            int shiniesIndex2 = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
+
+            tasks.Insert(shiniesIndex2 + 1, new PassLegacy("Vaults", delegate (GenerationProgress progress)
+            {
+                Hoard(progress);
+            }));
+        }
+
+        private void Hoard(GenerationProgress progress)
+        {
+            progress.Message = "Locking Vaults";
+            Point POrigin = new Point((int)(Main.maxTilesX * 0.3f), 100);
+            VaultPlanet planet = new VaultPlanet();
+            planet.Place(POrigin, WorldGen.structures);
+
+            Point origin = new Point((int)(Main.maxTilesX * 0.4f), (int)(Main.maxTilesY * 0.4f));
+            Vault a = new Vault();
+            a.Place(origin, WorldGen.structures);
+
+            int DungeonSide = (Main.dungeonX > Main.maxTilesX / 2) ? (-1) : 1;
+            origin = new Point(DungeonSide == 1 ? (Main.maxTilesX - 150) : 150, (int)(Main.maxTilesY * 0.7f));
+            Vault b = new Vault();
+            b.Place(origin, WorldGen.structures);
+
+            origin = new Point((int)(Main.maxTilesX * 0.7f), (int)(Main.maxTilesY * 0.3f));
+            Vault c = new Vault();
+            c.Place(origin, WorldGen.structures);
         }
 
         public override void PostUpdate()
@@ -91,6 +142,29 @@ namespace CSkies
                     num148 *= num149;
                     Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
                 }
+            }
+
+            if (Main.dayTime && Main.time == 5)
+            {
+                Altar1 = false;
+                Altar2 = false;
+                Altar3 = false;
+                Altar4 = false;
+            }
+
+            if (downedObserverV && !KillDoors)
+            {
+                for (int j = 0; j < Main.maxTilesX; j++)
+                {
+                    for (int k = 0; k < Main.maxTilesY; k++)
+                    {
+                        if (Main.tile[j, k].active() && Main.tile[j, k].type == (ushort)ModContent.TileType<AbyssDoor>())
+                        {
+                            WorldGen.KillTile(j, k, false, false, true);
+                        }
+                    }
+                }
+                Main.NewText("The sound of arcane stone cracking echoes across the land...", new Color(61, 41, 81));
             }
         }
 
@@ -117,7 +191,7 @@ namespace CSkies
                 int num4 = 5;
                 while (num4 < Main.worldSurface)
                 {
-                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<Tiles.CometOre>())
+                    if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<CometOre>())
                     {
                         num++;
                         if (num > num3)
@@ -188,7 +262,6 @@ namespace CSkies
 
         public static bool Meteor(int i, int j)
         {
-            Mod mod = CSkies.inst;
             if (i < 50 || i > Main.maxTilesX - 50)
             {
                 return false;
