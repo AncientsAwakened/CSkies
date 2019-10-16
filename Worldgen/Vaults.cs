@@ -25,7 +25,7 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
             {
-                [new Color(255, 255, 255)] = -2,
+                [new Color(255, 255, 255)] = mod.WallType("AbyssWall"),
                 [Color.Black] = -1
             };
 

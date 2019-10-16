@@ -31,7 +31,7 @@ namespace CSkies.Tiles
                 zero = Vector2.Zero;
             }
             int height = tile.frameY == 36 ? 18 : 16;
-            BaseDrawing.DrawWallTexture(spriteBatch, mod.GetTexture("Glowmasks/DoomsdayWall_Glow"), i, j, false, Glow);
+            BaseDrawing.DrawWallTexture(spriteBatch, mod.GetTexture("Glowmasks/AbyssWall_Glow"), i, j, false, Glow);
         }
     }
 }
