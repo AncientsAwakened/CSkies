@@ -62,7 +62,7 @@ namespace CSkies.Items.Heart
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(null, "StarDroneUnit", 1);
-            recipe.AddIngredient(null, "HeartSoul", 6);
+            recipe.AddIngredient(null, "HeartSoul", 8);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -39,9 +39,9 @@ namespace CSkies.Items.Heart
 	    public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-	        recipe.AddIngredient(ItemID.MeteorStaff);
-	        recipe.AddIngredient(ItemID.LunarBar, 5);
-	        recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddIngredient(null, "StormStaff", 1);
+            recipe.AddIngredient(null, "HeartSoul", 8);
+            recipe.AddTile(TileID.LunarCraftingStation);
 	        recipe.SetResult(this);
 	        recipe.AddRecipe();
 		}

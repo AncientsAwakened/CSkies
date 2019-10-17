@@ -40,9 +40,9 @@ namespace CSkies.Items.Heart
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(3546);
-			recipe.AddIngredient(null, "EXSoul");
-			recipe.AddTile(null, "QuantumFusionAccelerator");
+			recipe.AddIngredient(null, "Railscope");
+            recipe.AddIngredient(null, "HeartSoul", 8);
+            recipe.AddTile(null, "QuantumFusionAccelerator");
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

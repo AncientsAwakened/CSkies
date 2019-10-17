@@ -2,10 +2,9 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
-using Terraria.Graphics.Shaders;
 
-namespace CSkies.NPCs.Bosses.Heartcore
-{ 
+namespace CSkies.Projectiles.Heart
+{
     public class ProBoom : ModProjectile
     {
         public override void SetStaticDefaults()

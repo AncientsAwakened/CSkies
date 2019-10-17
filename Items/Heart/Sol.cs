@@ -29,9 +29,9 @@ namespace CSkies.Items.Heart
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ManaCrystal, 5);
-			recipe.AddIngredient(ItemID.SilverBar, 15);
-			recipe.AddTile(TileID.Anvils);
+            recipe.AddIngredient(null, "StarSaber", 1);
+            recipe.AddIngredient(null, "HeartSoul", 8);
+            recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
