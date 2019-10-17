@@ -9,7 +9,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 {
     public class Flameray : ModProjectile
     {
-        private const float maxTime = 90;
+        private const float maxTime = 45;
 
         public override void SetStaticDefaults()
 		{

@@ -9,8 +9,10 @@ namespace CSkies.Items.Boss
         {
             DisplayName.SetDefault("Shield of the Core");
             Tooltip.SetDefault(@"Provides knockback immunity
-Allows you to do a quick dash
-Being stuck while equipped with this causes stars to fall");
+Allows you to do a fiery dash
+Being stuck while equipped with this causes meteors to fall
+Above half health, you are slowed by 10%, but gain 8 defense
+Below half health, you gain 10% speed, 25% damage, but defense is reduced by 8");
         }
 
         public override void SetDefaults()

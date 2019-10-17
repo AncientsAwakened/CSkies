@@ -7,7 +7,7 @@ namespace CSkies.Items.Comet
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Pyrosphere");			
+			DisplayName.SetDefault("The Comet");			
 		}		
 		
         public override void SetDefaults()

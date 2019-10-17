@@ -22,7 +22,6 @@ namespace CSkies.Projectiles.Comet
             projectile.timeLeft = 240;
             projectile.tileCollide = true;
             projectile.aiStyle = 1;
-            aiType = ProjectileID.WoodenArrowFriendly;
             projectile.arrow = true;
         }
 
@@ -31,7 +30,7 @@ namespace CSkies.Projectiles.Comet
             if (projectile.frameCounter++ > 5)
             {
                 projectile.frameCounter = 0;
-                if (projectile.frame++ > 3)
+                if (projectile.frame++ > 2)
                 {
                     projectile.frame = 0;
                 }

@@ -37,6 +37,8 @@ namespace CSkies
         {
             Watcher = false;
             Gazer = false;
+            Drone = false;
+            Rune = false;
 
             VoidEye = false;
             VoidCD = false;
@@ -110,25 +112,41 @@ namespace CSkies
             {
                 CritAll(10);
             }
-            if (HeartShield && player.statLife < player.statLifeMax2)
+            if (HeartShield)
             {
-                player.moveSpeed *= 1.1f;
-                player.allDamage += .25f;
-                player.statDefense -= 10;
-
-                HeartringRot += .02f;
-                if (HeartringScale >= 1f)
+                if (player.statLife < player.statLifeMax2)
                 {
-                    HeartringScale = 1f;
+                    player.moveSpeed *= 1.1f;
+                    player.allDamage += .25f;
+                    player.statDefense -= 8;
+
+                    HeartringRot += .02f;
+                    if (HeartringScale >= 1f)
+                    {
+                        HeartringScale = 1f;
+                    }
+                    else
+                    {
+                        HeartringScale += .02f;
+                    }
                 }
                 else
                 {
-                    HeartringScale += .02f;
+                    player.moveSpeed *= .9f;
+                    player.statDefense += 8;
+                    HeartringRot -= .02f;
+                    if (HeartringScale <= 0)
+                    {
+                        HeartringScale = 0f;
+                    }
+                    else
+                    {
+                        HeartringScale -= .02f;
+                    }
                 }
             }
             else
             {
-                player.moveSpeed *= .9f;
                 HeartringRot -= .02f;
                 if (HeartringScale <= 0)
                 {

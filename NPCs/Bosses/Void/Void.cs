@@ -437,7 +437,7 @@ namespace CSkies.NPCs.Bosses.Void
                     posX = 400;
                     break;
             }
-            int posY = Main.rand.Next(posX == 0 ? 2 : 1);
+            int posY = Main.rand.Next(posX == 0 ? 1 : 2);
             switch (posY)
             {
                 case 0:

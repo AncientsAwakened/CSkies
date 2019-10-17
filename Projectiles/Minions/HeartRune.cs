@@ -33,223 +33,111 @@ namespace CSkies.Projectiles.Minions
             projectile.minion = true;
         }
 
+        public float maxDistToAttack = 360f;
+        public Entity target = null;
+
         public override void AI()
         {
-            bool flag64 = projectile.type == mod.ProjectileType("HeartRune");
-            Player player = Main.player[projectile.owner];
-            CPlayer modPlayer = player.GetModPlayer<CPlayer>();
-            if (flag64)
+            projectile.rotation += .1f;
+            if (scale < 1)
             {
-                if (player.dead)
-                {
-                    modPlayer.Rune = false;
-                }
-                if (modPlayer.Rune)
-                {
-                    projectile.timeLeft = 2;
-                }
-            }
-
-            projectile.rotation += .02f;
-
-            if (scale >= 1f)
-            {
-                scale = 1f;
+                scale += .05f;
             }
             else
             {
-                scale += .02f;
+                scale = 1;
+            }
+            Player player = Main.player[projectile.owner];
+            CPlayer modPlayer = player.GetModPlayer<CPlayer>();
+            if (player.dead || !player.HasBuff(ModContent.BuffType<Buffs.Rune>()))
+            {
+                projectile.Kill();
+                modPlayer.Rune = false;
+            }
+            if (modPlayer.Rune)
+            {
+                projectile.timeLeft = 2;
             }
 
-            float num633 = 700f;
-			float num634 = 800f;
-			float num635 = 1200f;
-			float num636 = 150f;
-			float num637 = 0.05f;
+            Target();
+            BaseAI.AIMinionFlier(projectile, ref projectile.ai, player, false, false, false, 70, 70, 400, 800, .2f, 6f, 6f, !CanShoot(target), false, (proj, owner) => { return (target == player ? null : target); }, Shoot);
+            projectile.position -= (player.oldPosition - player.position);
+        }
 
-			for (int num638 = 0; num638 < 1000; num638++)
-			{
-				bool flag23 = Main.projectile[num638].type == mod.ProjectileType("HeartRune");
-				if (num638 != projectile.whoAmI && Main.projectile[num638].active && Main.projectile[num638].owner == projectile.owner && flag23 && Math.Abs(projectile.position.X - Main.projectile[num638].position.X) + Math.Abs(projectile.position.Y - Main.projectile[num638].position.Y) < projectile.width)
-				{
-					if (projectile.position.X < Main.projectile[num638].position.X)
-					{
-						projectile.velocity.X = projectile.velocity.X - num637;
-					}
-					else
-					{
-						projectile.velocity.X = projectile.velocity.X + num637;
-					}
-					if (projectile.position.Y < Main.projectile[num638].position.Y)
-					{
-						projectile.velocity.Y = projectile.velocity.Y - num637;
-					}
-					else
-					{
-						projectile.velocity.Y = projectile.velocity.Y + num637;
-					}
-				}
-			}
-			bool flag24 = false;
-			if (flag24)
-			{
-				return;
-			}
-			Vector2 vector46 = projectile.position;
-			bool flag25 = false;
-			if (projectile.ai[0] != 1f)
-			{
-				projectile.tileCollide = false;
-			}
-			if (projectile.tileCollide && WorldGen.SolidTile(Framing.GetTileSafely((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16)))
-			{
-				projectile.tileCollide = false;
-			}
-			for (int num645 = 0; num645 < 200; num645++)
-			{
-				NPC nPC2 = Main.npc[num645];
-				if (nPC2.CanBeChasedBy(projectile, false))
-				{
-					float num646 = Vector2.Distance(nPC2.Center, projectile.Center);
-					if (((Vector2.Distance(projectile.Center, vector46) > num646 && num646 < num633) || !flag25) && Collision.CanHitLine(projectile.position, projectile.width, projectile.height, nPC2.position, nPC2.width, nPC2.height))
-					{
-						num633 = num646;
-						vector46 = nPC2.Center;
-						flag25 = true;
-					}
-				}
-			}
-			float num647 = num634;
-			if (flag25)
-			{
-				num647 = num635;
-			}
-			if (Vector2.Distance(player.Center, projectile.Center) > num647)
-			{
-				projectile.ai[0] = 1f;
-				projectile.tileCollide = false;
-				projectile.netUpdate = true;
-			}
-			if (flag25 && projectile.ai[0] == 0f)
-			{
-				Vector2 vector47 = vector46 - projectile.Center;
-				float num648 = vector47.Length();
-				vector47.Normalize();
-				if (num648 > 200f)
-				{
-					float scaleFactor2 = 6f;
-					vector47 *= scaleFactor2;
-					projectile.velocity = (projectile.velocity * 40f + vector47) / 41f;
-				}
-				else
-				{
-					float num649 = 4f;
-					vector47 *= -num649;
-					projectile.velocity = (projectile.velocity * 40f + vector47) / 41f;
-				}
-			}
-			else
-			{
-				bool flag26 = false;
-				if (!flag26)
-				{
-					flag26 = projectile.ai[0] == 1f;
-				}
-				float num650 = 6f;
-				if (flag26)
-				{
-					num650 = 15f;
-				}
-				Vector2 center2 = projectile.Center;
-				Vector2 vector48 = player.Center - center2 + new Vector2(0f, -60f);
-				float num651 = vector48.Length();
-				if (num651 > 200f && num650 < 8f)
-				{
-					num650 = 8f;
-				}
-				if (num651 < num636 && flag26 && !Collision.SolidCollision(projectile.position, projectile.width, projectile.height))
-				{
-					projectile.ai[0] = 0f;
-					projectile.netUpdate = true;
-				}
-				if (num651 > 2000f)
-				{
-					projectile.position.X = Main.player[projectile.owner].Center.X - projectile.width / 2;
-					projectile.position.Y = Main.player[projectile.owner].Center.Y - projectile.height / 2;
-					projectile.netUpdate = true;
-				}
-				if (num651 > 70f)
-				{
-					vector48.Normalize();
-					vector48 *= num650;
-					projectile.velocity = (projectile.velocity * 40f + vector48) / 41f;
-				}
-				else if (projectile.velocity.X == 0f && projectile.velocity.Y == 0f)
-				{
-					projectile.velocity.X = -0.15f;
-					projectile.velocity.Y = -0.05f;
-				}
-			}
-            if (projectile.ai[1] > 0f)
-			{
-				projectile.ai[1] += Main.rand.Next(1, 4);
-			}
-			if (projectile.ai[1] > 120f)
-			{
-				projectile.ai[0] = 0f;
-                projectile.ai[1] = 0f;
-                projectile.netUpdate = true;
-			}
-			if (projectile.ai[0] == 0f)
-			{
-				if (flag25 && projectile.ai[1] == 0f)
-				{
-					projectile.ai[0] += 1f;
+        public bool CanShoot(Entity target)
+        {
+            return target != null && target is NPC && BaseUtility.CanHit(projectile.Hitbox, new Rectangle((int)target.Center.X, (int)target.Center.Y, 1, 1)) && Vector2.Distance(projectile.Center, target.Center) < 350;
+        }
 
-                    if (Main.myPlayer == projectile.owner)
-					{
-                        int Shoot = Main.rand.Next(4);
-                        switch (Shoot)
+        public bool Shoot(Entity proj, Entity owner, Entity target)
+        {
+            if (CanShoot(target))
+            {
+                if (Main.myPlayer == projectile.owner)
+                {
+                    projectile.localAI[0]--;
+                    if (projectile.localAI[0] <= 0)
+                    {
+                        projectile.localAI[0] = 30;
+                        if (Main.rand.Next(4) != 0)
                         {
-                            case 0:
-                            case 1:
-                            case 2:
-                                if (Collision.CanHitLine(projectile.position, projectile.width, projectile.height, vector46, 0, 0))
-                                {
-                                    Main.PlaySound(SoundID.Item20, projectile.position);
-                                    float spread = 45f * 0.0174f;
-                                    Vector2 dir = Vector2.Normalize(vector46 - projectile.Center);
-                                    dir *= 12f;
-                                    float baseSpeed = (float)Math.Sqrt((dir.X * dir.X) + (dir.Y * dir.Y));
-                                    double startAngle = Math.Atan2(dir.X, dir.Y) - .1d;
-                                    double deltaAngle = spread / 6f;
-                                    for (int i = 0; i < 3; i++)
-                                    {
-                                        double offsetAngle = startAngle + (deltaAngle * i);
-                                        int num659 = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<FlameBlast>(), projectile.damage, 5, Main.myPlayer);
-                                        Main.projectile[num659].timeLeft = 300;
-                                        Main.projectile[num659].penetrate = 1;
-                                        Main.projectile[num659].magic = false;
-                                        Main.projectile[num659].minion = true;
-                                    }
-                                }
-                                break;
-                            case 3:
-                                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/FireCast"), projectile.position);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(8, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(-8, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(8, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(-8, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(8, 0), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(-8, 0), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(0, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                Projectile.NewProjectile(projectile.Center, new Vector2(0, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
-                                break;
+                            Main.PlaySound(SoundID.Item20, projectile.position);
+                            Vector2 velocity = BaseUtility.RotateVector(default, new Vector2(5f, 0f), BaseUtility.RotationTo(projectile.Center, target.Center));
+                            int projID = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0f, 0f, ModContent.ProjectileType<Heart.FirePro>(), projectile.damage, 0f, projectile.owner);
+                            Main.projectile[projID].melee = false;
+                            Main.projectile[projID].minion = true;
+                            Main.projectile[projID].velocity = velocity;
+                            Main.projectile[projID].velocity = velocity;
+                            Main.projectile[projID].netUpdate = true;
                         }
-                        projectile.netUpdate = true;
+                        else
+                        {
+                            Main.PlaySound(SoundID.Item20, projectile.position);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(8, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(-8, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(8, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(-8, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(8, 0), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(-8, 0), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(0, -8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                            Projectile.NewProjectile(projectile.Center, new Vector2(0, 8), ModContent.ProjectileType<RuneWave>(), projectile.damage, 0f, Main.myPlayer, 0, projectile.whoAmI);
+                        }
                     }
-				}
-			}
+                }
+                return true;
+            }
+            projectile.localAI[0] = 0;
+            return false;
+        }
+
+        public void Target()
+        {
+            Vector2 startPos = Main.player[projectile.owner].Center;
+            if (target != null && target != Main.player[projectile.owner] && !CanTarget(target, startPos))
+            {
+                target = null;
+            }
+            if (target == null || target == Main.player[projectile.owner])
+            {
+                int[] npcs = BaseAI.GetNPCs(startPos, -1, default, maxDistToAttack);
+                float prevDist = maxDistToAttack;
+                foreach (int i in npcs)
+                {
+                    NPC npc = Main.npc[i];
+                    float dist = Vector2.Distance(startPos, npc.Center);
+                    if (CanTarget(npc, startPos) && dist < prevDist) { target = npc; prevDist = dist; }
+                }
+            }
+            if (target == null) { target = Main.player[projectile.owner]; }
+        }
+
+        public bool CanTarget(Entity codable, Vector2 startPos)
+        {
+            if (codable is NPC npc)
+            {
+                return npc.active && npc.life > 0 && !npc.friendly && !npc.dontTakeDamage && npc.lifeMax > 5 && Vector2.Distance(startPos, npc.Center) < maxDistToAttack && BaseUtility.CanHit(projectile.Hitbox, npc.Hitbox);
+            }
+            return false;
         }
 
         float scale = 0;

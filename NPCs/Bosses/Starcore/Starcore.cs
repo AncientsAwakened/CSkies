@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 
 namespace CSkies.NPCs.Bosses.Starcore
 {
+    [AutoloadBossHead]
     public class Starcore : ModNPC
     {
         public override void SetStaticDefaults()
@@ -181,8 +182,8 @@ namespace CSkies.NPCs.Bosses.Starcore
                         for (int i = 0; i < 10; i++)
                         {
                             double offsetAngle = startAngle1 + deltaAngle1 * (i + i * i) / 2f + 32f * i;
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle) * 10f), (float)(Math.Cos(offsetAngle) * 10f), ModContent.ProjectileType<Starstatic>(), npc.damage, 5);
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle) * 10f), (float)(-Math.Cos(offsetAngle) * 10f), ModContent.ProjectileType<Starstatic>(), npc.damage, 5);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle) * 10f), (float)(Math.Cos(offsetAngle) * 10f), ModContent.ProjectileType<Starstatic>(), npc.damage / 4, 5);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle) * 10f), (float)(-Math.Cos(offsetAngle) * 10f), ModContent.ProjectileType<Starstatic>(), npc.damage / 4, 5);
                         }
                         npc.ai[2] = 0;
                         Shoot[0] = Main.rand.Next(4);

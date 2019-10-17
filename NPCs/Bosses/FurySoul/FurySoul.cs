@@ -11,6 +11,7 @@ using CSkies.NPCs.Bosses.Heartcore;
 
 namespace CSkies.NPCs.Bosses.FurySoul
 {
+    [AutoloadBossHead]
     public class FurySoul : ModNPC
     {
         public override void SetStaticDefaults()
@@ -271,7 +272,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         break;
                     case 3:
-                        if (npc.life < npc.lifeMax / 4 && npc.ai[2] % 30 == 0)
+                        if (npc.life < npc.lifeMax / 4)
                         {
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -291,7 +292,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        else if (npc.ai[2] % 30 == 0)
+                        else if (Main.rand.Next(2) == 0)
                         {
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -303,7 +304,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        else if (npc.ai[2] % 16 == 0)
+                        else
                         {
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(6, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);

@@ -18,9 +18,9 @@ namespace CSkies.Items.Boss
         }
         public override void SetStaticDefaults()
         {            DisplayName.SetDefault("Starsteel Shield");
-            Tooltip.SetDefault(
-@"For every hit you land on an enemy, 5 true damage (damage unassigned to any class) is dealt
-Allows you to dash into enemies, damaging them");
+            Tooltip.SetDefault(@"Provides knockback immunity
+Allows you to do a quick dash
+Being stuck while equipped with this causes stars to fall");
         }
 
         public override void UpdateEquip(Player player)

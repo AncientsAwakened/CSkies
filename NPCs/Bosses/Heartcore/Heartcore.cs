@@ -11,6 +11,7 @@ using CSkies.NPCs.Bosses.FurySoul;
 
 namespace CSkies.NPCs.Bosses.Heartcore
 {
+    [AutoloadBossHead]
     public class Heartcore : ModNPC
     {
         public override void SetDefaults()

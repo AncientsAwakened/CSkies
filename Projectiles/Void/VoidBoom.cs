@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CSkies.Projectiles.Void
@@ -48,7 +49,7 @@ namespace CSkies.Projectiles.Void
             {
                 NPC target = Main.npc[u];
 
-                if (target.active && Vector2.Distance(projectile.Center, target.Center) < 150)
+                if (target.type != NPCID.TargetDummy && target.active && !target.boss && target.chaseable && target.chaseable && Vector2.Distance(projectile.Center, target.Center) < 150)
                 {
                     float num3 = 6f;
                     Vector2 vector = new Vector2(target.position.X + target.width / 2, target.position.Y + target.height / 2);
