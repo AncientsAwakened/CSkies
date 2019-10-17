@@ -18,7 +18,7 @@ namespace CSkies.Projectiles.Void
         {
             projectile.width = 32;
             projectile.height = 32;
-            projectile.aiStyle = 118;
+            projectile.aiStyle = -1;
             projectile.friendly = true;
             projectile.alpha = 255;
             projectile.ignoreWater = true;
@@ -267,56 +267,6 @@ namespace CSkies.Projectiles.Void
                 Main.dust[num100].position = projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(projectile.velocity.ToRotation(), default) * projectile.width / 2f;
                 Main.dust[num100].noGravity = true;
                 Main.dust[num100].velocity *= 3f;
-            }
-            if (Main.myPlayer == projectile.owner)
-            {
-                for (int num103 = 0; num103 < 1000; num103++)
-                {
-                    if (Main.projectile[num103].active && Main.projectile[num103].type == 618 && Main.projectile[num103].ai[1] == projectile.whoAmI)
-                    {
-                        Main.projectile[num103].Kill();
-                    }
-                }
-                int num104 = Main.rand.Next(5, 9);
-                int num105 = Main.rand.Next(5, 9);
-                int num106 = Utils.SelectRandom(Main.rand, new int[]
-                {
-                        86,
-                        90
-                });
-                int num107 = (num106 == 86) ? 90 : 86;
-                for (int num108 = 0; num108 < num104; num108++)
-                {
-                    Vector2 vector3 = projectile.Center + Utils.RandomVector2(Main.rand, -30f, 30f);
-                    Vector2 value7 = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                    while (value7.X == 0f && value7.Y == 0f)
-                    {
-                        value7 = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                    }
-                    value7.Normalize();
-                    if (value7.Y > 0.2f)
-                    {
-                        value7.Y *= -1f;
-                    }
-                    value7 *= Main.rand.Next(70, 101) * 0.1f;
-                    Projectile.NewProjectile(vector3.X, vector3.Y, value7.X, value7.Y, 620, (int)(projectile.damage * 0.65), projectile.knockBack * 0.8f, projectile.owner, num106, 0f);
-                }
-                for (int num109 = 0; num109 < num105; num109++)
-                {
-                    Vector2 vector4 = projectile.Center + Utils.RandomVector2(Main.rand, -30f, 30f);
-                    Vector2 value8 = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                    while (value8.X == 0f && value8.Y == 0f)
-                    {
-                        value8 = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                    }
-                    value8.Normalize();
-                    if (value8.Y > 0.4f)
-                    {
-                        value8.Y *= -1f;
-                    }
-                    value8 *= Main.rand.Next(40, 81) * 0.1f;
-                    Projectile.NewProjectile(vector4.X, vector4.Y, value8.X, value8.Y, 620, (int)(projectile.damage * 0.65), projectile.knockBack * 0.8f, projectile.owner, num107, 0f);
-                }
             }
         }
 
