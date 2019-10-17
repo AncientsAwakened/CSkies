@@ -78,7 +78,7 @@ namespace CSkies.NPCs.Bosses.Void
                 if (!rage)
                 {
                     rage = true;
-                    Main.NewText("VOID's form begins to fade ever so slightly", Color.LightCyan);
+                    Main.NewText("VOID's form begins to destabilize", Color.LightCyan);
                 }
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Pinch");
             }
@@ -133,7 +133,8 @@ namespace CSkies.NPCs.Bosses.Void
                         if (npc.ai[3] < Repeats() - 1)
                         {
                             if (Main.netMode != 1) { npc.ai[2]++; }
-                            if (npc.ai[2] >= 30) // + lasers
+                            int teleportRate = npc.life < npc.lifeMax / 4 ? 15 : 30;
+                            if (npc.ai[2] >= teleportRate) // + lasers
                             {
                                 Teleport();
                                 Starblast();
@@ -206,7 +207,7 @@ namespace CSkies.NPCs.Bosses.Void
                             npc.ai[0]--;
                         npc.netUpdate = true;
                     }
-                    if (npc.ai[1] % 60 == 0 && npc.life < npc.lifeMax / 3)
+                    if (npc.ai[1] % 30 == 0 && npc.life < npc.lifeMax / 3)
                     {
                         Starblast();
                     }
@@ -319,8 +320,9 @@ namespace CSkies.NPCs.Bosses.Void
 
                     npc.velocity *= 0;
 
-                    if (++npc.ai[2] > 10)
+                    if (++npc.ai[2] > 20)
                     {
+                        Teleport();
                         npc.ai[2] = 0;
                         if (Main.netMode != 1) //spawn lightning
                         {
@@ -363,8 +365,6 @@ namespace CSkies.NPCs.Bosses.Void
                                 Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, vel.ToRotation(), 0f);
                             }
                         }
-                        Teleport();
-                        Starblast();
                     }
                     if (++npc.ai[1] > 360)
                     {

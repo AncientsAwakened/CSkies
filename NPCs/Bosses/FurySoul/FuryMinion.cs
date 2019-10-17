@@ -32,14 +32,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.noTileCollide = true;
         }
 
-        public override void NPCLoot()
-		{
-            if (!NPC.AnyNPCs(ModContent.NPCType<Bosses.Void.Void>()))
-            {
-                BaseAI.DropItem(npc, mod.ItemType("VoidLens"), 1, 1, 50, true);
-            }
-        }
-
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid)
@@ -56,10 +48,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
 			{
 				for (int m = 0; m < 20; m++)
 				{
-					int dustID = Dust.NewDust(npc.position, npc.width, npc.height, 17, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 0, Color.White, 1f);
+					int dustID = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Fire, npc.velocity.X * 0.2f, npc.velocity.Y * 0.2f, 0, Color.White, 2f);
                     Main.dust[dustID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
 				}
-			}else
+			}
+            else
 			{
 				for (int m = 0; m < 5; m++)
 				{
@@ -101,7 +94,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 				npc.oldPos[m] = npc.oldPos[m - 1];
 			}
 			npc.oldPos[0] = npc.position;
-            BaseAI.AIEater(npc, ref npc.ai, .03f, 4, 0, false, true);
+            BaseAI.AIEater(npc, ref npc.ai, .08f, 8, 0, false, true);
             if (npc.ai[1] <= 400f)
             {
                 BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Fireshot>(), ref npc.ai[2], Main.rand.Next(80, 130), npc.damage / 2, 7, true);

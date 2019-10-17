@@ -18,8 +18,9 @@ namespace CSkies.Projectiles.Heart
             projectile.width = 98;
             projectile.height = 98;
             projectile.penetrate = -1;
-            projectile.friendly = false;
-            projectile.hostile = true;
+            projectile.friendly = true;
+            projectile.hostile = false;
+            projectile.melee = true;
             projectile.tileCollide = false;
             projectile.ignoreWater = true;
             projectile.timeLeft = 600;

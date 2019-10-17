@@ -11,7 +11,7 @@ namespace CSkies.Items.Heart
 		public override void SetDefaults()
 		{
 			item.damage = 250;
-			item.magic = true;
+			item.melee = true;
 			item.width = 48;
 			item.height = 48;
 			item.useTime = 20;

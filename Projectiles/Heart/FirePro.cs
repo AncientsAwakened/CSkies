@@ -100,7 +100,7 @@ namespace CSkies.Projectiles.Heart
         public override void Kill(int timeleft)
         {
             Main.PlaySound(SoundID.Item14, projectile.position);
-            int b = Projectile.NewProjectile(projectile.position, Vector2.Zero, ModContent.ProjectileType<FirePro>(), projectile.damage, projectile.knockBack, Main.myPlayer);
+            int b = Projectile.NewProjectile(projectile.position, Vector2.Zero, ModContent.ProjectileType<ProBoom>(), projectile.damage, projectile.knockBack, Main.myPlayer);
             Main.projectile[b].Center = projectile.Center;
             int num290 = Main.rand.Next(3, 7);
             for (int num291 = 0; num291 < num290; num291++)
