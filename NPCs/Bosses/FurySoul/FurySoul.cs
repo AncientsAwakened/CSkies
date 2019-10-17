@@ -27,8 +27,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.defense = 35;
             npc.lifeMax = 150000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
-            npc.HitSound = new LegacySoundStyle(21, 1);
-            npc.DeathSound = new LegacySoundStyle(4, 14, Terraria.Audio.SoundType.Sound);
+            npc.HitSound = SoundID.Item20;
+            npc.DeathSound = new LegacySoundStyle(1, 124, Terraria.Audio.SoundType.Sound);
             npc.knockBackResist = 0f;
             npc.noGravity = true;
             npc.netAlways = true;
@@ -111,7 +111,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 if (!rage)
                 {
                     rage = true;
-                    Main.NewText("The soul begins to lash out in a fit of fiery rage.", Color.OrangeRed);
+                    Main.NewText("The soul begins to lash out in a fit of fiery rage.", new Color(253, 62, 3));
                 }
                 music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
             }

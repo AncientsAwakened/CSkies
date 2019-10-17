@@ -16,11 +16,7 @@ namespace CSkies.Projectiles.Heart
 			projectile.penetrate = 1;
 			projectile.aiStyle = -1;
 			projectile.melee = true;
-			projectile.timeLeft = 1200;
-			ProjectileID.Sets.TrailCacheLength[projectile.type] = 5;
-			ProjectileID.Sets.TrailingMode[projectile.type] = 2;
-            projectile.usesLocalNPCImmunity = true;
-            projectile.localNPCHitCooldown = 2;
+			projectile.timeLeft = 300;
 		}
 		
 		public override void SetStaticDefaults()
@@ -79,7 +75,7 @@ namespace CSkies.Projectiles.Heart
 			const int aislotHomingCooldown = 0;
 			const int homingDelay = 30;
 			const float desiredFlySpeedInPixelsPerFrame = 14; 
-			const float amountOfFramesToLerpBy = 5; 
+			const float amountOfFramesToLerpBy = 15; 
 
 			projectile.ai[aislotHomingCooldown]++;
 			if(projectile.ai[aislotHomingCooldown] > homingDelay)
