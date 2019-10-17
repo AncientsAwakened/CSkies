@@ -37,7 +37,6 @@ namespace CSkies.Projectiles.Heart
 			{
 				projectile.tileCollide = true;
 			}
-			projectile.scale = projectile.ai[1];
 			projectile.rotation += projectile.velocity.X * 2f;
 			Vector2 position = projectile.Center + Vector2.Normalize(projectile.velocity) * 10f;
 			Dust dust20 = Main.dust[Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire, 0f, 0f, 0, default, 1f)];

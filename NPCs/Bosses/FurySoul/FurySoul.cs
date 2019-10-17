@@ -24,7 +24,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.height = 82;
             npc.aiStyle = -1;
             npc.damage = 120;
-            npc.defense = 50;
+            npc.defense = 60;
             npc.lifeMax = 150000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
             npc.HitSound = SoundID.Item20;
@@ -86,6 +86,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 npc.DropBossBags();
             }
+            CWorld.downedSoul = true;
+            CWorld.downedHeartcore = true;
             int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<FurySoulDeath>());
             Main.npc[n].Center = npc.Center;
             for (int num468 = 0; num468 < 12; num468++)
@@ -201,9 +203,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
             if (npc.ai[0] == 2 || npc.ai[0] == 4)
             {
                 npc.velocity *= .0f;
+                npc.defense = 9999;
             }
             else
             {
+                npc.defense = 60;
                 BaseAI.AISkull(npc, ref Movement, true, 14, 350, .04f, .05f);
             }
 
@@ -367,7 +371,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
-                        if (npc.ai[2] <= 300 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()))
+                        if (npc.ai[2] <= 360)
                         {
                             AIChange();
                         }
@@ -380,22 +384,25 @@ namespace CSkies.NPCs.Bosses.FurySoul
             else
             {
                 npc.rotation -= .03f;
-                int Frequency = Main.rand.Next(30, 50);
-                if (npc.life < npc.lifeMax / 2)
+                if (npc.ai[0] != 10 && npc.ai[2]++ < Changerate)
                 {
-                    Frequency = Main.rand.Next(20, 50);
-                }
-                if (npc.life < npc.lifeMax / 4)
-                {
-                    Frequency = Main.rand.Next(10, 40);
-                }
-                if (Main.rand.Next(2) == 0)
-                {
-                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
-                }
-                else
-                {
-                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
+                    int Frequency = Main.rand.Next(30, 50);
+                    if (npc.life < npc.lifeMax / 2)
+                    {
+                        Frequency = Main.rand.Next(20, 50);
+                    }
+                    if (npc.life < npc.lifeMax / 4)
+                    {
+                        Frequency = Main.rand.Next(10, 40);
+                    }
+                    if (Main.rand.Next(2) == 0)
+                    {
+                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
+                    }
+                    else
+                    {
+                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
+                    }
                 }
             }
         }

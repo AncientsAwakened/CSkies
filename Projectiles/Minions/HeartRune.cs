@@ -196,14 +196,15 @@ namespace CSkies.Projectiles.Minions
 			}
 			if (projectile.ai[1] > 120f)
 			{
-				projectile.ai[1] = 0f;
-				projectile.netUpdate = true;
+				projectile.ai[0] = 0f;
+                projectile.ai[1] = 0f;
+                projectile.netUpdate = true;
 			}
 			if (projectile.ai[0] == 0f)
 			{
 				if (flag25 && projectile.ai[1] == 0f)
 				{
-					projectile.ai[1] += 1f;
+					projectile.ai[0] += 1f;
 
                     if (Main.myPlayer == projectile.owner)
 					{

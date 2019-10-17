@@ -100,6 +100,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                 npc.DropLoot(ModContent.ItemType<Items.Heart.HeartSoul>(), Main.rand.Next(8, 12));
                 int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<HeartcoreDefeat>());
                 Main.npc[n].Center = npc.Center;
+                CWorld.downedHeartcore = true;
             }
         }
 

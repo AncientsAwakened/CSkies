@@ -94,12 +94,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
 				npc.oldPos[m] = npc.oldPos[m - 1];
 			}
 			npc.oldPos[0] = npc.position;
-            BaseAI.AIEater(npc, ref npc.ai, .08f, 8, 0, false, true);
+            BaseAI.AISkull(npc, ref npc.ai, true, 10, 350, .03f, .04f);
             if (npc.ai[1] <= 400f)
             {
                 BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Fireshot>(), ref npc.ai[2], Main.rand.Next(80, 130), npc.damage / 2, 7, true);
             }
-			if (npc.ai[0] < 200) { BaseAI.LookAt(player.Center, npc, 1); } else { if (npc.timeLeft > 10) { npc.timeLeft = 10; } npc.spriteDirection = -npc.direction; }
 			npc.rotation = 0;
         }
 

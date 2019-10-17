@@ -13,10 +13,9 @@ namespace CSkies.Projectiles.Minions
         public override void SetDefaults()
         {
             projectile.netImportant = true;
-            projectile.CloneDefaults(533);
-            aiType = 533;
-            projectile.width = 62;
-            projectile.height = 62;
+            projectile.aiStyle = -1;
+            projectile.width = 36;
+            projectile.height = 36;
             projectile.friendly = true;
             projectile.minion = true;
             projectile.minionSlots = 1;
@@ -32,6 +31,7 @@ namespace CSkies.Projectiles.Minions
             ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
+            Main.projFrames[projectile.type] = 4;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -46,9 +46,19 @@ namespace CSkies.Projectiles.Minions
             return false;
         }
 
-        float shoot = 0;
         public override void AI()
         {
+            projectile.frameCounter++;
+            if (projectile.frameCounter >= 5)
+            {
+                projectile.frameCounter = 0;
+                projectile.frame++;
+            }
+            if (projectile.frame > 3)
+            {
+                projectile.frame = 0;
+            }
+
             bool flag64 = projectile.type == mod.ProjectileType("StarDrone");
             Player player = Main.player[projectile.owner];
             CPlayer modPlayer = player.GetModPlayer<CPlayer>();
@@ -199,6 +209,7 @@ namespace CSkies.Projectiles.Minions
             }
             if (projectile.ai[1] > 120f)
             {
+                projectile.ai[0] = 0f;
                 projectile.ai[1] = 0f;
                 projectile.netUpdate = true;
             }
@@ -206,7 +217,7 @@ namespace CSkies.Projectiles.Minions
             {
                 if (flag25 && projectile.ai[1] == 0f)
                 {
-                    projectile.ai[1] += 1f;
+                    projectile.ai[0] += 1f;
 
                     if (Main.myPlayer == projectile.owner)
                     {
