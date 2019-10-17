@@ -29,10 +29,10 @@ namespace CSkies.Items.Heart
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "StarSaber", 1);
+            recipe.AddIngredient(null, "Starsaber", 1);
             recipe.AddIngredient(null, "HeartSoul", 8);
-            recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
+            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 

@@ -40,10 +40,11 @@ namespace CSkies.Items.Star
         public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(3546);
-			recipe.AddIngredient(null, "EXSoul");
-			recipe.AddTile(null, "QuantumFusionAccelerator");
-			recipe.SetResult(this);
+            recipe.AddIngredient(ItemID.SpaceGun);
+            recipe.AddIngredient(mod, "Stelarite", 5);
+            recipe.AddIngredient(mod, "CosmicStar", 2);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
 		

@@ -24,12 +24,12 @@ namespace CSkies.Items.Heart
             item.UseSound = SoundID.Item14;
             item.knockBack = 0.75f;
             item.damage = 180;
-            item.shootSpeed = 16f;
+            item.shootSpeed = 5f;
             item.noMelee = true;
             item.rare = 8;
             item.ranged = true;
             item.value = Item.sellPrice(0, 12, 0, 0);
-            item.shoot = ModContent.ProjectileType<Projectiles.Star.Starlaser>();
+            item.shoot = ModContent.ProjectileType<Projectiles.Heart.Blaze>();
         }
 
         public override void HoldItem(Player player)

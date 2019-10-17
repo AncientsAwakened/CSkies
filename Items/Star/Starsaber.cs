@@ -34,9 +34,10 @@ namespace CSkies.Items.Star
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ManaCrystal, 5);
-			recipe.AddIngredient(ItemID.SilverBar, 15);
-			recipe.AddTile(TileID.Anvils);
+            recipe.AddIngredient(ItemID.GreenPhaseblade);
+            recipe.AddIngredient(mod, "Stelarite", 5);
+            recipe.AddIngredient(mod, "CosmicStar", 2);
+            recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

@@ -59,8 +59,8 @@ namespace CSkies.Items.Star
         public override void AddRecipes()  //How to craft this sword
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(null, "Stelarite", 8);
-            recipe.AddIngredient(null, "CosmicStar", 3);
+            recipe.AddIngredient(mod, "Stelarite", 8);
+            recipe.AddIngredient(mod, "CosmicStar", 3);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
