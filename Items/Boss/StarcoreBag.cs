@@ -34,7 +34,7 @@ namespace CSkies.Items.Boss
             {
                 player.QuickSpawnItem(mod.ItemType("StarcoreMask"));
             }
-            string[] lootTableA = { "Starsaber"};
+            string[] lootTableA = { "Starsaber", "StormStaff", "StarDroneUnit", "Railscope" };
             int lootA = Main.rand.Next(lootTableA.Length);
 
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));

@@ -240,8 +240,9 @@ namespace CSkies.Projectiles.Minions
         {
             Texture2D Tex = Main.projectileTexture[projectile.type];
 
-            BaseDrawing.DrawAfterimage(sb, Tex, 0, projectile, 2.5f, 1f, 3, true, 0f, 0f, projectile.GetAlpha(Colors.COLOR_GLOWPULSE));
-            BaseDrawing.DrawTexture(sb, Tex, 0, projectile, projectile.GetAlpha(Colors.COLOR_GLOWPULSE));
+            Rectangle frame = BaseDrawing.GetFrame(projectile.frame, Main.projectileTexture[projectile.type].Width, Main.projectileTexture[projectile.type].Height / 4, 0, 0);
+            BaseDrawing.DrawAfterimage(sb, Tex, 0, projectile.position, projectile.width, projectile.height, projectile.oldPos, 1, 0, projectile.spriteDirection, 4, frame, .8f, 1, 4, true, 0, 0, projectile.GetAlpha(Colors.COLOR_GLOWPULSE));
+            BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], 0, projectile.position, projectile.width, projectile.height, projectile.scale, projectile.rotation, projectile.direction, 4, frame, Color.White, true);
             return false;
         }
     }

@@ -73,7 +73,7 @@ namespace CSkies.NPCs.Bosses.Starcore
                 {
                     npc.DropLoot(mod.ItemType("StarcoreMask"));
                 }
-                string[] lootTableA = { "Starsaber" };
+                string[] lootTableA = { "Starsaber", "StormStaff", "StarDroneUnit", "Railscope" };
                 int lootA = Main.rand.Next(lootTableA.Length);
 
                 npc.DropLoot(mod.ItemType(lootTableA[lootA]));

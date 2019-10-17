@@ -45,46 +45,40 @@ namespace CSkies.Items.Boss
             player.QuickSpawnItem(mod.ItemType("ObserverVoidEye"));
         }
 
-        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-            Texture2D glow = mod.GetTexture("Glowmasks/ObserverVoidBag_Glow"); 
-            spriteBatch.Draw
-            (
-               glow,
-               new Vector2
-               (
-                   item.position.X - Main.screenPosition.X + item.width * 0.5f,
-                   item.position.Y - Main.screenPosition.Y + item.height - glow.Height * 0.5f + 2f
-               ),
-               new Rectangle(0, 0, glow.Width, glow.Height),
-               drawColor,
-               0f,
-               glow.Size() * 0.5f,
-               scale,
-               SpriteEffects.None,
-               0f
-           );
-        }
-
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D glow = mod.GetTexture("Glowmasks/ObserverVoidBag_Glow");
             spriteBatch.Draw
-            (
-               glow,
-               new Vector2
-               (
-                   item.position.X - Main.screenPosition.X + item.width * 0.5f,
-                   item.position.Y - Main.screenPosition.Y + item.height - glow.Height * 0.5f + 2f
-               ),
-               new Rectangle(0, 0, glow.Width, glow.Height),
-               lightColor,
-               rotation,
-               glow.Size() * 0.5f,
-               scale,
-               SpriteEffects.None,
-               0f
-           );
+                (
+                glow,
+                new Vector2
+                (
+                    item.position.X - Main.screenPosition.X + item.width * 0.5f,
+                    item.position.Y - Main.screenPosition.Y + item.height - glow.Height * 0.5f + 2f
+                ),
+                new Rectangle(0, 0, glow.Width, glow.Height),
+                Colors.Flash,
+                rotation,
+                glow.Size() * 0.5f,
+                scale,
+                SpriteEffects.None,
+                0f
+                );
+        }
+
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            Texture2D glow = mod.GetTexture("Glowmasks/ObserverVoidBag_Glow");
+            Texture2D texture2 = Main.itemTexture[item.type];
+            spriteBatch.Draw(texture2, position, null, drawColor, 0, origin, scale, SpriteEffects.None, 0f);
+            for (int i = 0; i < 4; i++)
+            {
+                //Vector2 offsetPositon = Vector2.UnitY.RotatedBy(MathHelper.PiOver2 * i) * 2;
+                spriteBatch.Draw(glow, position, null, Colors.Flash, 0, origin, scale, SpriteEffects.None, 0f);
+
+            }
+
+            return false;
         }
     }
 }

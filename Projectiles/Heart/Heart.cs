@@ -29,6 +29,11 @@ namespace CSkies.Projectiles.Heart
             return Color.White;
         }
 
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.Daybreak, 200);
+        }
+
         public override void AI()
         {
             if (projectile.position.Y > projectile.ai[1])

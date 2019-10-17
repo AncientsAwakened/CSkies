@@ -25,8 +25,8 @@ namespace CSkies.Items.Star
 			item.shoot = mod.ProjectileType("StarPro");
 			item.shootSpeed = 8f;
 			item.knockBack = 5;
-			item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 5;
+            item.value = Item.sellPrice(0, 2, 0, 0);
+            item.rare = 5;
             item.UseSound = SoundID.Item15;
             item.autoReuse = true;
 		}

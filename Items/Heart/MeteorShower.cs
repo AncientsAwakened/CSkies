@@ -20,7 +20,7 @@ namespace CSkies.Items.Heart
 	    {
 	        item.damage = 180;
 	        item.magic = true;
-	        item.mana = 20;
+	        item.mana = 12;
 	        item.width = 50;
 	        item.height = 50;
 	        item.useTime = 10;
@@ -28,11 +28,11 @@ namespace CSkies.Items.Heart
 	        item.useStyle = 5;
 	        item.noMelee = true;
 	        item.knockBack = 6.75f;
-            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.value = Item.sellPrice(0, 12, 0, 0);
             item.rare = 10;
             item.UseSound = SoundID.Item88;
 	        item.autoReuse = true;
-	        item.shoot = mod.ProjectileType("Asteroid");
+	        item.shoot = mod.ProjectileType("Meteor0");
 	        item.shootSpeed = 20f;
 		}
 

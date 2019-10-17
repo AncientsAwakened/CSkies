@@ -17,6 +17,8 @@ namespace CSkies
     {
         public bool Watcher = false;
         public bool Gazer = false;
+        public bool Drone = false;
+        public bool Rune = false;
 
         public bool ZoneComet = false;
         public bool ZoneVoid = false;
@@ -46,6 +48,8 @@ namespace CSkies
         {
             Watcher = false;
             Gazer = false;
+            Drone = false;
+            Rune = false;
 
             VoidEye = false;
             VoidCD = false;

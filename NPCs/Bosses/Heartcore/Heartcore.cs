@@ -92,7 +92,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
             }
             else
             {
-                string[] lootTableA = { "Sol", "MeteorShower" };
+                string[] lootTableA = { "Sol", "MeteorShower", "BlazeBuster", "FlamingSoul" };
                 int lootA = Main.rand.Next(lootTableA.Length);
 
                 npc.DropLoot(mod.ItemType(lootTableA[lootA]));

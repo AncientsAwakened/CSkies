@@ -97,12 +97,21 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         float scale = 0;
 
-
-
         float Changerate;
+
+        bool rage = false;
 
         public override void AI()
         {
+            if (npc.life < npc.lifeMax / 4)
+            {
+                if (!rage)
+                {
+                    rage = true;
+                    Main.NewText("The soul begins to lash out in a fit of fiery rage.", Color.OrangeRed);
+                }
+                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
+            }
             Changerate = npc.life < npc.lifeMax / 2 ? 150 : 120;
             Lighting.AddLight(npc.Center, Flame.R / 150, Flame.G / 150, Flame.B / 150);
 

@@ -1,4 +1,7 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,8 +19,8 @@ Can only be used at night");
 
 		public override void SetDefaults()
 		{
-			item.width = 14;
-			item.height = 24;
+			item.width = 40;
+			item.height = 40;
 			item.rare = 2;
 			item.useAnimation = 45;
 			item.useTime = 45;
@@ -41,12 +44,42 @@ Can only be used at night");
 
 		public override void AddRecipes()
 		{
-			/*ModRecipe recipe = new ModRecipe(mod);
+			ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.SuspiciousLookingEye, 1);
-			recipe.AddIngredient(null, "CosmicLens", 3);
-			recipe.AddTile(TileID.Anvils);
+			recipe.AddIngredient(null, "MoltenHeart", 3);
+			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
-			recipe.AddRecipe();*/
+			recipe.AddRecipe();
 		}
-	}
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
+            Texture2D texture = mod.GetTexture("Glowmasks/" + GetType().Name + "_Glow");
+            BaseDrawing.DrawTexture(spriteBatch, texture, r, item, null, false);
+            /*spriteBatch.Draw
+                (
+                texture,
+                new Vector2
+                (
+                    item.position.X - Main.screenPosition.X + item.width * 0.5f,
+                    item.position.Y - Main.screenPosition.Y + item.height - texture.Height * 0.5f + 2f
+                ),
+                new Rectangle(0, 0, texture.Width, texture.Height),
+                AAColor.Shen3,
+                rotation,
+                texture.Size() * 0.5f,
+                scale,
+                SpriteEffects.None,
+                0f
+                );*/
+        }
+
+        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
+            Texture2D texture = mod.GetTexture("Glowmasks/" + GetType().Name + "_Glow");
+            BaseDrawing.DrawTexture(spriteBatch, texture, r, item, null, false);
+        }
+    }
 }

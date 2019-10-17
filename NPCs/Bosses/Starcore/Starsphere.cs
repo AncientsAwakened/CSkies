@@ -52,7 +52,7 @@ namespace CSkies.NPCs.Bosses.Starcore
             int num290 = Main.rand.Next(3, 7);
             for (int num291 = 0; num291 < num290; num291++)
             {
-                int num292 = Dust.NewDust(projectile.position, projectile.width, projectile.height, 135, 0f, 0f, 100, default, 2.1f);
+                int num292 = Dust.NewDust(projectile.position, projectile.width, projectile.height, ModContent.DustType<Dusts.StarDust>(), 0f, 0f, 100, default, 2.1f);
                 Main.dust[num292].velocity *= 2f;
                 Main.dust[num292].noGravity = true;
             }

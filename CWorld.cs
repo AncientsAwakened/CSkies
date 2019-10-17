@@ -152,39 +152,21 @@ namespace CSkies
             if (!Main.dayTime && NPC.downedBoss3)
             {
                 float num143 = Main.maxTilesX / 4200;
-                if (Main.rand.Next(8000) < 10f * num143)
+                if (Main.rand.Next(8000) < 5f * num143)
                 {
-                    int num = 0;
-                    float num2 = Main.maxTilesX / 4200;
-                    int num3 = (int)(400f * num2);
-                    for (int j = 5; j < Main.maxTilesX - 5; j++)
-                    {
-                        int num4 = 5;
-                        while (num4 < Main.worldSurface)
-                        {
-                            if (Main.tile[j, num4].active() && Main.tile[j, num4].type == (ushort)ModContent.TileType<CometOre>())
-                            {
-                                num++;
-                                if (num < num3)
-                                {
-                                    int num144 = 12;
-                                    int num145 = Main.rand.Next(Main.maxTilesX - 50) + 100;
-                                    num145 *= 16;
-                                    int num146 = Main.rand.Next((int)(Main.maxTilesY * 0.05));
-                                    num146 *= 16;
-                                    Vector2 vector = new Vector2(num145, num146);
-                                    float num147 = Main.rand.Next(-100, 101);
-                                    float num148 = Main.rand.Next(200) + 100;
-                                    float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
-                                    num149 = num144 / num149;
-                                    num147 *= num149;
-                                    num148 *= num149;
-                                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
-                                }
-                            }
-                            num4++;
-                        }
-                    }
+                    int num144 = 12;
+                    int num145 = Main.rand.Next(Main.maxTilesX - 50) + 100;
+                    num145 *= 16;
+                    int num146 = Main.rand.Next((int)(Main.maxTilesY * 0.05));
+                    num146 *= 16;
+                    Vector2 vector = new Vector2(num145, num146);
+                    float num147 = Main.rand.Next(-100, 101);
+                    float num148 = Main.rand.Next(200) + 100;
+                    float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
+                    num149 = num144 / num149;
+                    num147 *= num149;
+                    num148 *= num149;
+                    Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
                 }
             }
 

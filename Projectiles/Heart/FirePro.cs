@@ -14,7 +14,7 @@ namespace CSkies.Projectiles.Heart
 			projectile.aiStyle = 1;
 			projectile.friendly = true;
 			projectile.penetrate = 1;
-			projectile.aiStyle = 27;
+			projectile.aiStyle = -1;
 			projectile.melee = true;
 			projectile.timeLeft = 1200;
 			ProjectileID.Sets.TrailCacheLength[projectile.type] = 5;
@@ -26,6 +26,7 @@ namespace CSkies.Projectiles.Heart
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Fireball");
+            Main.projFrames[projectile.type] = 4;
 		}
 		
 		public override Color? GetAlpha(Color lightColor)
@@ -62,13 +63,22 @@ namespace CSkies.Projectiles.Heart
 		{
 			if (Main.rand.Next(2) == 0)
             {
-                int dustnumber = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SolarFlare, 0f, 0f, 200, default, 0.8f);
+                int dustnumber = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire, 0f, 0f, 200, default, 0.8f);
                 Main.dust[dustnumber].velocity *= 0.3f;
 			}
+
+            if (projectile.frameCounter++ > 5)
+            {
+                projectile.frameCounter = 0;
+                if (projectile.frame++ > 2)
+                {
+                    projectile.frame = 0;
+                }
+            }
 			
 			const int aislotHomingCooldown = 0;
 			const int homingDelay = 30;
-			const float desiredFlySpeedInPixelsPerFrame = 9; 
+			const float desiredFlySpeedInPixelsPerFrame = 14; 
 			const float amountOfFramesToLerpBy = 5; 
 
 			projectile.ai[aislotHomingCooldown]++;
@@ -86,13 +96,20 @@ namespace CSkies.Projectiles.Heart
 			}
 		}
 
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.Daybreak, 200);
+        }
+
         public override void Kill(int timeleft)
         {
             Main.PlaySound(SoundID.Item14, projectile.position);
+            int b = Projectile.NewProjectile(projectile.position, Vector2.Zero, ModContent.ProjectileType<BlazeBoom>(), projectile.damage, projectile.knockBack, Main.myPlayer);
+            Main.projectile[b].Center = projectile.Center;
             int num290 = Main.rand.Next(3, 7);
             for (int num291 = 0; num291 < num290; num291++)
             {
-                int num292 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SolarFlare, 0f, 0f, 100, default, 2.1f);
+                int num292 = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire, 0f, 0f, 100, default, 2.1f);
                 Main.dust[num292].velocity *= 2f;
                 Main.dust[num292].noGravity = true;
             };

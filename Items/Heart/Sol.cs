@@ -20,8 +20,8 @@ namespace CSkies.Items.Heart
 			item.shoot = mod.ProjectileType("FirePro");
 			item.shootSpeed = 9f;
 			item.knockBack = 7;
-			item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 8;
+            item.value = Item.sellPrice(0, 12, 0, 0);
+            item.rare = 8;
             item.UseSound = SoundID.Item15;
             item.autoReuse = true;
 		}
@@ -56,8 +56,7 @@ namespace CSkies.Items.Heart
                 0f
             );
         }
-
-
+        
         public override void ModifyTooltips(System.Collections.Generic.List<TooltipLine> list)
         {
             foreach (TooltipLine line2 in list)

@@ -40,7 +40,7 @@ namespace CSkies.NPCs.Enemies
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid)
+            if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid && NPC.downedMoonlord)
             {
                 return .05f;
             }

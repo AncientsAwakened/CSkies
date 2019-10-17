@@ -236,12 +236,15 @@ namespace CSkies.Projectiles.Minions
 
         public override bool PreDraw(SpriteBatch sb, Color dColor)
         {
-            Texture2D Tex = Main.npcTexture[projectile.type];
+            Texture2D Tex = Main.projectileTexture[projectile.type];
 
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
 
-            BaseDrawing.DrawAura(sb, Tex, 0, projectile, auraPercent, 2f, 0f, 0f, projectile.GetAlpha(Colors.COLOR_GLOWPULSE));
+            Rectangle frame = BaseDrawing.GetFrame(projectile.frame, Main.projectileTexture[projectile.type].Width, Main.projectileTexture[projectile.type].Height / 4, 0, 0);
+            BaseDrawing.DrawAura(sb, Tex, 0, projectile.position, projectile.width, projectile.height, auraPercent, 2f, 0f, 0f, 0, 4, frame, 0, 0, projectile.GetAlpha(Colors.COLOR_GLOWPULSE));
+            BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], 0, projectile.position, projectile.width, projectile.height, projectile.scale, projectile.rotation, projectile.direction, 4, frame, Color.White, true);
+
             return false;
         }
     }

@@ -69,8 +69,20 @@ namespace CSkies.NPCs.Bosses.Void
             }
         }
 
+        bool rage = false;
+
         public override void AI()
         {
+            if (npc.life < npc.lifeMax / 4)
+            {
+                if (!rage)
+                {
+                    rage = true;
+                    Main.NewText("VOID's form begins to fade ever so slightly", Color.LightCyan);
+                }
+                music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Pinch");
+            }
+
             Lighting.AddLight(npc.Center, 0, .1f, .3f);
             isCharging = false;
             Player player = Main.player[npc.target];

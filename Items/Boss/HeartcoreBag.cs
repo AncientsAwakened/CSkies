@@ -32,9 +32,10 @@ namespace CSkies.Items.Boss
         {
             if (Main.rand.Next(7) == 0)
             {
-                player.QuickSpawnItem(mod.ItemType("HeartcoreMask"));
+                player.QuickSpawnItem(mod.ItemType("FurySoulMask"));
             }
-            string[] lootTableA = { "Sol", "MeteorShower"};
+            string[] lootTableA = { "Sol", "MeteorShower", "BlazeBuster", "FlamingSoul" };
+
             int lootA = Main.rand.Next(lootTableA.Length);
 
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));

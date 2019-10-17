@@ -22,9 +22,9 @@ namespace CSkies.NPCs.Minibosses
             npc.width = 26;
             npc.height = 24;
             npc.aiStyle = -1;
-            npc.damage = 100;
-            npc.defense = 50;
-            npc.lifeMax = 50000;
+            npc.damage = 80;
+            npc.defense = 0;
+            npc.lifeMax = 30000;
             npc.value = Item.sellPrice(0, 1, 0, 0);
             npc.HitSound = new LegacySoundStyle(21, 1);
             npc.DeathSound = new LegacySoundStyle(4, 14, Terraria.Audio.SoundType.Sound);
@@ -81,7 +81,7 @@ namespace CSkies.NPCs.Minibosses
 
             if (npc.ai[3]++ < 380)
             {
-                BaseAI.AISkull(npc, ref npc.ai, true, 14, 250, .03f, .025f);
+                BaseAI.AISkull(npc, ref npc.ai, true, 10, 250, .015f, .025f);
                 float spread = 45f * 0.0174f;
                 Vector2 dir = Vector2.Normalize(player.Center - npc.Center);
                 dir *= 12f;
@@ -95,7 +95,8 @@ namespace CSkies.NPCs.Minibosses
                         if (npc.ai[2] % 30 == 0)
                         {
                             double offsetAngle = startAngle + (deltaAngle * i);
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 5, Main.myPlayer);
+                            int p = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 5, Main.myPlayer);
+                            Main.projectile[p].tileCollide = false;
                         }
                     }
                     npc.ai[2] = 0;
@@ -104,7 +105,7 @@ namespace CSkies.NPCs.Minibosses
             else
             {
                 npc.ai[2] = 0;
-                BaseAI.AIFlier(npc, ref npc.ai, true, 0.15f, 0.08f, 8f, 7f, false, 300);
+                BaseAI.AIFlier(npc, ref npc.ai, true, 0.15f, 0.08f, 6f, 4f, false, 300);
             }
 
             if (npc.ai[3] > 500)
@@ -126,8 +127,8 @@ namespace CSkies.NPCs.Minibosses
             Texture2D Glow = mod.GetTexture("Glowmasks/MHeart_Glow");
             Texture2D RingTex = mod.GetTexture("NPCs/Minibosses/HeartRing");
 
-            BaseDrawing.DrawTexture(sb, texture2D13, r, npc.position, npc.width, npc.height, scale, npc.rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), npc.GetAlpha(lightColor), true);
-            BaseDrawing.DrawTexture(sb, Glow, r, npc.position, npc.width, npc.height, scale, npc.rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), npc.GetAlpha(Colors.COLOR_GLOWPULSE), true);
+            BaseDrawing.DrawTexture(sb, texture2D13, r, npc.position, npc.width, npc.height, 1f, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), npc.GetAlpha(lightColor), true);
+            BaseDrawing.DrawTexture(sb, Glow, r, npc.position, npc.width, npc.height, 1f, 0, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), npc.GetAlpha(Colors.COLOR_GLOWPULSE), true);
 
             if (scale > 0)
             {

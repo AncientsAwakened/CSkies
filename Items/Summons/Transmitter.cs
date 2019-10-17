@@ -18,7 +18,7 @@ Can only be used at night");
 		{
 			item.width = 14;
 			item.height = 24;
-			item.rare = 2;
+			item.rare = 5;
 			item.useAnimation = 45;
 			item.useTime = 45;
 			item.useStyle = 4;
@@ -41,12 +41,21 @@ Can only be used at night");
 
 		public override void AddRecipes()
 		{
-			/*ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SuspiciousLookingEye, 1);
-			recipe.AddIngredient(null, "CosmicLens", 3);
-			recipe.AddTile(TileID.Anvils);
+            ModRecipe recipe;
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.MythrilBar, 5);
+            recipe.AddIngredient(ItemID.FallenStar, 5);
+            recipe.AddIngredient(null, "CosmicStar", 3);
+			recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
-			recipe.AddRecipe();*/
-		}
+			recipe.AddRecipe();
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.OrichalcumBar, 5);
+            recipe.AddIngredient(ItemID.FallenStar, 5);
+            recipe.AddIngredient(null, "CosmicStar", 3);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
 	}
 }
