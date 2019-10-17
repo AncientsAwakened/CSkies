@@ -11,19 +11,19 @@ Currently Celestial Skies adds:
 
 -----
 
-V 1.0.0.5
+V 2.0.0.0
 
-Fixed the mod not being downloadable from the browser (Hopefully)
+WARNING: TO EXPERIENCE THIS UPDATE YOU WILL NEED A NEW WORLD
 
-V 1.0.0.4
+1 new Miniboss; Magma Heart; Fought inside the newly generated Abyss Vaults
 
-Fixed the mod not playing music
+2 new bosses; Starcore: An early hardmode boss, and Heartcore, a post-Observer Void boss
 
 -----
 
 Note: *THIS MOD CONTAINS COPYRIGHTED MUSIC FROM THE KIRBY FRANCHISE*
 
-As of late, nintendo has been lax on copyright, but I just wanted to mention this just in case ^
+As of late, Nintendo has been lax on copyright, but I just wanted to mention this just in case ^
 
 Music will be replaced by original tracks eventually
 
