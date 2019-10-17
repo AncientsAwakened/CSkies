@@ -18,6 +18,7 @@ namespace CSkies.Projectiles.Star
             projectile.alpha = 50;
             projectile.scale = 0.8f;
             projectile.tileCollide = false;
+            projectile.extraUpdates = 1;
         }
 		
 		public override void SetStaticDefaults()

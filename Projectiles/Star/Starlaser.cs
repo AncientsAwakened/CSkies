@@ -33,7 +33,7 @@ namespace CSkies.Projectiles.Star
                     int num448 = Dust.NewDust(vector33, projectile.width, projectile.height, ModContent.DustType<Dusts.StarDust>(), 0f, 0f, 200, default, .8f);
                     Main.dust[num448].position = vector33;
                     Main.dust[num448].scale = Main.rand.Next(70, 110) * 0.013f;
-                    Main.dust[num448].velocity *= 0.2f;
+                    Main.dust[num448].velocity *= 0f;
                     Main.dust[num448].noGravity = true;
                 }
             }

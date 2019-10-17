@@ -216,10 +216,7 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(Main.player[npc.target]))
                         break;
 
-                    targetPos = player.Center;
-                    targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 430;
-                    Movement(targetPos, 1f);
+                    npc.velocity *= 0;
 
                     if (++npc.ai[2] > 180)
                     {
@@ -320,10 +317,7 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(player))
                         break;
 
-                    targetPos = player.Center;
-                    targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
-                    targetPos.Y -= 430;
-                    Movement(targetPos, 1f);
+                    npc.velocity *= 0;
 
                     if (++npc.ai[2] > 10)
                     {
@@ -369,6 +363,8 @@ namespace CSkies.NPCs.Bosses.Void
                                 Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, vel.ToRotation(), 0f);
                             }
                         }
+                        Teleport();
+                        Starblast();
                     }
                     if (++npc.ai[1] > 360)
                     {

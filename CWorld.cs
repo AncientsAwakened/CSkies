@@ -191,6 +191,7 @@ namespace CSkies
                     }
                 }
                 Main.NewText("The sound of arcane stone cracking echoes across the land...", new Color(61, 41, 81));
+                KillDoors = true;
             }
         }
 

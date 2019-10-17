@@ -34,6 +34,7 @@ namespace CSkies.Items.Heart
             item.buffType = mod.BuffType("Rune");
             item.autoReuse = true;
             item.value = Item.sellPrice(0, 12, 0, 0);
+            item.noUseGraphic = true;
         }
 		
 		public override void UseStyle(Player player)

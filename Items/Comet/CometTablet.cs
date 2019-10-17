@@ -11,7 +11,7 @@ namespace CSkies.Items.Comet
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Comet Tablet");	
-            BaseUtility.AddTooltips(item, new string[] { "Unleashes the power of Grovite upon your world!" });	
+            BaseUtility.AddTooltips(item, new string[] { "Brings forth a travelling star to your world" });	
 		}
 
         public override void SetDefaults()

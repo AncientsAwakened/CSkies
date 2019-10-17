@@ -268,16 +268,6 @@ namespace CSkies.Projectiles.Void
                 Main.dust[num100].noGravity = true;
                 Main.dust[num100].velocity *= 3f;
             }
-            for (int num101 = 0; num101 < 2; num101++)
-            {
-                int num102 = Gore.NewGore(projectile.position + new Vector2(projectile.width * Main.rand.Next(100) / 100f, projectile.height * Main.rand.Next(100) / 100f) - Vector2.One * 10f, default, Main.rand.Next(61, 64), 1f);
-                Main.gore[num102].position = projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * projectile.width / 2f;
-                Main.gore[num102].velocity *= 0.3f;
-                Gore expr_3CC7_cp_0 = Main.gore[num102];
-                expr_3CC7_cp_0.velocity.X += Main.rand.Next(-10, 11) * 0.05f;
-                Gore expr_3CF5_cp_0 = Main.gore[num102];
-                expr_3CF5_cp_0.velocity.Y += Main.rand.Next(-10, 11) * 0.05f;
-            }
             if (Main.myPlayer == projectile.owner)
             {
                 for (int num103 = 0; num103 < 1000; num103++)

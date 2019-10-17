@@ -24,7 +24,7 @@ namespace CSkies.Items.Star
             item.UseSound = SoundID.Item12;
             item.knockBack = 0.75f;
             item.damage = 20;
-            item.shootSpeed = 16f;
+            item.shootSpeed = 5f;
             item.noMelee = true;
             item.rare = 5;
             item.ranged = true;

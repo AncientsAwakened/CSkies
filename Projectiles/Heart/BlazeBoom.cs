@@ -15,8 +15,8 @@ namespace CSkies.Projectiles.Heart
 
         public override void SetDefaults()
         {
-            projectile.width = 98;
-            projectile.height = 98;
+            projectile.width = 176;
+            projectile.height = 230;
             projectile.penetrate = -1;
             projectile.friendly = false;
             projectile.friendly = true;

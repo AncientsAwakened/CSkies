@@ -23,7 +23,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         public override Color? GetAlpha(Color lightColor)
         {
-            return Colors.COLOR_GLOWPULSE;
+            return Color.White;
         }
 
         public int master = -1;
@@ -43,11 +43,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
             if (Main.rand.Next(2) == 0)
             {
-                int dustnumber = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.SolarFlare, 0f, 0f, 200, default, 0.5f);
+                int dustnumber = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire, 0f, 0f, 200, default, 0.5f);
                 Main.dust[dustnumber].velocity *= 0.3f;
             }
 
-            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 40, 35, 4f, .3f, true);
+            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 40, 35, 8f, .3f, true);
 		}
 	}
 }

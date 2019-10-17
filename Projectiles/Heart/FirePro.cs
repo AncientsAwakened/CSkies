@@ -9,8 +9,8 @@ namespace CSkies.Projectiles.Heart
 	{
 		public override void SetDefaults()
 		{
-			projectile.width = 14;
-			projectile.height = 14;
+			projectile.width = 38;
+			projectile.height = 38;
 			projectile.aiStyle = 1;
 			projectile.friendly = true;
 			projectile.penetrate = 1;
@@ -104,7 +104,7 @@ namespace CSkies.Projectiles.Heart
         public override void Kill(int timeleft)
         {
             Main.PlaySound(SoundID.Item14, projectile.position);
-            int b = Projectile.NewProjectile(projectile.position, Vector2.Zero, ModContent.ProjectileType<BlazeBoom>(), projectile.damage, projectile.knockBack, Main.myPlayer);
+            int b = Projectile.NewProjectile(projectile.position, Vector2.Zero, ModContent.ProjectileType<FirePro>(), projectile.damage, projectile.knockBack, Main.myPlayer);
             Main.projectile[b].Center = projectile.Center;
             int num290 = Main.rand.Next(3, 7);
             for (int num291 = 0; num291 < num290; num291++)

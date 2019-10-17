@@ -64,7 +64,7 @@ namespace CSkies.NPCs.Bosses.Starcore
             const float homingMaximumRangeInPixels = 500;
 
             int selectedTarget = -1;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            for (int i = 0; i < Main.maxPlayers; i++)
             {
                 Player target = Main.player[i];
                 if (target.active && (!target.wet || homingCanAimAtWetEnemies))
@@ -73,7 +73,7 @@ namespace CSkies.NPCs.Bosses.Starcore
                     if (distance <= homingMaximumRangeInPixels &&
                     (
                         selectedTarget == -1 ||
-                        projectile.Distance(Main.npc[selectedTarget].Center) > distance)
+                        projectile.Distance(Main.player[selectedTarget].Center) > distance)
                     )
                         selectedTarget = i;
                 }

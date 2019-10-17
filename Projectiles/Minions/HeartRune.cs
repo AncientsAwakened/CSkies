@@ -35,10 +35,9 @@ namespace CSkies.Projectiles.Minions
 
         public override void AI()
         {
-            bool flag64 = projectile.type == mod.ProjectileType("DemonEater");
+            bool flag64 = projectile.type == mod.ProjectileType("HeartRune");
             Player player = Main.player[projectile.owner];
             CPlayer modPlayer = player.GetModPlayer<CPlayer>();
-            player.AddBuff(mod.BuffType("Rune"), 3600);
             if (flag64)
             {
                 if (player.dead)
@@ -191,15 +190,6 @@ namespace CSkies.Projectiles.Minions
 					projectile.velocity.Y = -0.05f;
 				}
 			}
-			if (flag25)
-			{
-				projectile.rotation = (vector46 - projectile.Center).ToRotation() + 3.14159274f;
-			}
-			else
-			{
-				projectile.rotation = projectile.velocity.ToRotation() + 3.14159274f;
-			}
-
             if (projectile.ai[1] > 0f)
 			{
 				projectile.ai[1] += Main.rand.Next(1, 4);
@@ -225,7 +215,7 @@ namespace CSkies.Projectiles.Minions
                             case 2:
                                 if (Collision.CanHitLine(projectile.position, projectile.width, projectile.height, vector46, 0, 0))
                                 {
-                                    Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/FireCast"), projectile.position);
+                                    Main.PlaySound(SoundID.Item20, projectile.position);
                                     float spread = 45f * 0.0174f;
                                     Vector2 dir = Vector2.Normalize(vector46 - projectile.Center);
                                     dir *= 12f;
@@ -270,7 +260,7 @@ namespace CSkies.Projectiles.Minions
             Texture2D texture2D13 = Main.projectileTexture[projectile.type];
             Texture2D RingTex = mod.GetTexture("Projectiles/Minions/HeartRune_Ring");
 
-            BaseDrawing.DrawTexture(sb, texture2D13, 0, projectile.position, projectile.width, projectile.height, 1f, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), projectile.GetAlpha(lightColor), true);
+            BaseDrawing.DrawTexture(sb, texture2D13, 0, projectile.position, projectile.width, projectile.height, 1f, 0, 0, 1, new Rectangle(0, 0, texture2D13.Width, texture2D13.Height), projectile.GetAlpha(Color.White), true);
 
             if (scale > 0)
             {
