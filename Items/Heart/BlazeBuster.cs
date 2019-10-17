@@ -42,7 +42,7 @@ namespace CSkies.Items.Heart
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(null, "Railscope");
             recipe.AddIngredient(null, "HeartSoul", 8);
-            recipe.AddTile(null, "QuantumFusionAccelerator");
+            recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
