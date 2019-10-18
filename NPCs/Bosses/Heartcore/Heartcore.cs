@@ -21,7 +21,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
             npc.height = 50;
             npc.aiStyle = -1;
             npc.damage = 90;
-            npc.defense = 40;
+            npc.defense = 60;
             npc.lifeMax = 150000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
             npc.HitSound = new LegacySoundStyle(21, 1);
@@ -38,6 +38,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
         {
             npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
             npc.damage = (int)(npc.damage * 0.5f);
+            npc.defense = 70;
         }
 
         public float[] Shoot = new float[1];
@@ -134,6 +135,24 @@ namespace CSkies.NPCs.Bosses.Heartcore
                 npc.TargetClosest();
             }
             Player player = Main.player[npc.target];
+
+            if (player.dead || !player.active || Main.dayTime)
+            {
+                npc.TargetClosest();
+                npc.noTileCollide = true;
+
+                if (npc.timeLeft < 10)
+                    npc.timeLeft = 10;
+                npc.velocity.X *= 0.9f;
+
+                if (npc.ai[1]++ > 300)
+                {
+                    npc.velocity.Y -= 0.2f;
+                    if (npc.velocity.Y > 15f) npc.velocity.Y = 15f;
+                    npc.rotation = 0f;
+                    if (npc.position.Y + npc.velocity.Y <= 0f && Main.netMode != 1) { BaseAI.KillNPC(npc); npc.netUpdate = true; }
+                }
+            }
 
             BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .025f);
 

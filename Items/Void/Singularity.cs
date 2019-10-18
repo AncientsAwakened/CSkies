@@ -6,10 +6,8 @@ namespace CSkies.Items.Void
 {
     public class Singularity : ModItem
     {
-        
         public override void SetStaticDefaults()
         {
-            
             DisplayName.SetDefault("The Singularity");
             Tooltip.SetDefault(@"Throws a vortex on a chain that attracts enemies towards it");
         }

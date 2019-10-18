@@ -27,7 +27,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.damage = 120;
             npc.defense = 60;
             npc.lifeMax = 150000;
-            npc.value = Item.sellPrice(0, 12, 0, 0);
+            npc.value = Item.sellPrice(0, 45, 0, 0);
             npc.HitSound = SoundID.Item20;
             npc.DeathSound = new LegacySoundStyle(1, 124, Terraria.Audio.SoundType.Sound);
             npc.knockBackResist = 0f;
@@ -185,16 +185,53 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 }
             }
 
-            if (scale >= 1f)
+            Player player = Main.player[npc.target];
+
+            if (player.dead || !player.active || Main.dayTime)
             {
-                scale = 1f;
+                npc.TargetClosest();
+
+                npc.velocity *= .95f;
+
+                if (npc.alpha > 255)
+                {
+                    npc.active = false;
+                    npc.netUpdate = true;
+                }
+                else
+                {
+                    npc.alpha += 4;
+                }
+                
+                if (scale < 0)
+                {
+                    scale = 0f;
+                }
+                else
+                {
+                    scale -= .02f;
+                }
+                return;
             }
             else
             {
-                scale += .02f;
+                if (npc.alpha < 0)
+                {
+                    npc.alpha = 0;
+                }
+                else
+                {
+                    npc.alpha -= 4;
+                }
+                if (scale >= 1f)
+                {
+                    scale = 1f;
+                }
+                else
+                {
+                    scale += .02f;
+                }
             }
-
-            Player player = Main.player[npc.target];
 
             if (Vector2.Distance(player.Center, npc.Center) < 204 && !player.dead && player.active)
             {

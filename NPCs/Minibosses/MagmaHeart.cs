@@ -44,6 +44,7 @@ namespace CSkies.NPCs.Minibosses
 
         public override void NPCLoot()
         {
+            CWorld.downedHeart = true;
             npc.DropLoot(ModContent.ItemType<Items.Materials.MoltenHeart>());
             for (int num468 = 0; num468 < 12; num468++)
             {

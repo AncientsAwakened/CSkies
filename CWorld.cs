@@ -21,6 +21,7 @@ namespace CSkies
         public static bool downedVoid = false;
 
         public static bool downedStarcore = false;
+        public static bool downedHeart = false;
         public static bool downedHeartcore = false;
         public static bool downedSoul = false;
 
@@ -41,6 +42,7 @@ namespace CSkies
             downedObserverV = false;
             downedVoid = false;
             downedStarcore = false;
+            downedHeart = false;
             downedHeartcore = false;
             downedSoul = false;
             Altar1 = false;
@@ -58,6 +60,7 @@ namespace CSkies
             if (downedVoid) downed.Add("VOID");
 
             if (downedStarcore) downed.Add("Star");
+            if (downedHeart) downed.Add("Molten");
             if (downedHeartcore) downed.Add("Heart");
             if (downedSoul) downed.Add("Soul");
 
@@ -77,6 +80,7 @@ namespace CSkies
             downedVoid = downed.Contains("VOID");
 
             downedStarcore = downed.Contains("Star");
+            downedHeart = downed.Contains("Molten");
             downedHeartcore = downed.Contains("Heart");
             downedSoul = downed.Contains("Soul");
 
@@ -95,6 +99,10 @@ namespace CSkies
             flags[6] = downedHeartcore;
             flags[7] = downedSoul;
             writer.Write(flags);
+
+            BitsByte flags0 = new BitsByte();
+            flags0[0] = downedHeart;
+            writer.Write(flags0);
         }
         public override void NetReceive(BinaryReader reader)
         {
@@ -107,6 +115,10 @@ namespace CSkies
             downedStarcore = flags[5];
             downedHeartcore = flags[6];
             downedSoul = flags[7];
+
+
+            BitsByte flags0 = reader.ReadByte();
+            downedHeart = flags0[0];
         }
         #endregion
 

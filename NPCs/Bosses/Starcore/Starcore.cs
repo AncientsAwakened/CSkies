@@ -120,6 +120,24 @@ namespace CSkies.NPCs.Bosses.Starcore
             }
             Player player = Main.player[npc.target];
 
+            if (player.dead || !player.active || Main.dayTime)
+            {
+                npc.TargetClosest();
+                npc.noTileCollide = true;
+
+                if (npc.timeLeft < 10)
+                    npc.timeLeft = 10;
+                npc.velocity.X *= 0.9f;
+
+                if (npc.ai[1]++ > 300)
+                {
+                    npc.velocity.Y -= 0.2f;
+                    if (npc.velocity.Y > 15f) npc.velocity.Y = 15f;
+                    npc.rotation = 0f;
+                    if (npc.position.Y + npc.velocity.Y <= 0f && Main.netMode != 1) { BaseAI.KillNPC(npc); npc.netUpdate = true; }
+                }
+            }
+
             BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .025f);
 
             if (npc.ai[2]++ > (Main.expertMode ? 150 : 220))
