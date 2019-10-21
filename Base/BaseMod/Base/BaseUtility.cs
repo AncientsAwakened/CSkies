@@ -99,7 +99,7 @@ namespace CSkies
 					Main.PlaySound(11, -1, -1, 1);
 				}else
 				{
-					NetMessage.SendData(31, -1, -1, NetworkText.FromLiteral(""), left, (float)top, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(31, -1, -1, NetworkText.FromLiteral(""), left, top, 0f, 0f, 0, 0, 0);
 					Main.stackSplit = 600;
 				}
 			}else
@@ -309,7 +309,7 @@ namespace CSkies
         {
 			if (Main.netMode == 2 || Main.dedServ || Main.soundVolume == 0f) return;
 
-			Rectangle screenRect = new Rectangle((int)(Main.screenPosition.X - (float)(Main.screenWidth * 2)), (int)(Main.screenPosition.Y - (float)(Main.screenHeight * 2)), Main.screenWidth * 5, Main.screenHeight * 5);
+			Rectangle screenRect = new Rectangle((int)(Main.screenPosition.X - Main.screenWidth * 2), (int)(Main.screenPosition.Y - Main.screenHeight * 2), Main.screenWidth * 5, Main.screenHeight * 5);
 			Rectangle locRect = new Rectangle(x, y, 1, 1);
 			bool usePan = locRect.Intersects(screenRect);
 			if ((x == -1 && y == -1) || usePan)
@@ -344,19 +344,19 @@ namespace CSkies
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.Item, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundItem;
 						soundInstanceArray = Main.soundInstanceItem;
-						pitch = (float)Main.rand.Next(-6, 7) * 0.01f;
+						pitch = Main.rand.Next(-6, 7) * 0.01f;
 						break;
 					case 3:
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.NPCHit, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundNPCHit;
 						soundInstanceArray = Main.soundInstanceNPCHit;
-						pitch = (float)Main.rand.Next(-10, 11) * 0.01f;
+						pitch = Main.rand.Next(-10, 11) * 0.01f;
 						break;
 					case 4:
 						if(sound is string){ soundID = SoundLoader.GetSoundSlot(SoundType.NPCKilled, (string)sound); }else{ soundID = (int)sound; }
 						soundArray = Main.soundNPCKilled;
 						soundInstanceArray = Main.soundInstanceNPCKilled;
-						pitch = (float)Main.rand.Next(-10, 11) * 0.01f;
+						pitch = Main.rand.Next(-10, 11) * 0.01f;
 						break;
 					default: return;
 				}
@@ -369,12 +369,12 @@ namespace CSkies
 
 				if(usePan)
 				{
-					Vector2 vector = new Vector2(Main.screenPosition.X + (float)Main.screenWidth * 0.5f, Main.screenPosition.Y + (float)Main.screenHeight * 0.5f);
-					float absX= Math.Abs((float)x - vector.X);
-					float absY = Math.Abs((float)y - vector.Y);
-					float absSQ = (float)Math.Sqrt((double)(absX * absX + absY * absY));		
-					soundPan = ((float)x - vector.X) / ((float)Main.screenWidth * 0.5f);
-					soundVol = 1f - absSQ / ((float)Main.screenWidth * 1.5f);
+					Vector2 vector = new Vector2(Main.screenPosition.X + Main.screenWidth * 0.5f, Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					float absX= Math.Abs(x - vector.X);
+					float absY = Math.Abs(y - vector.Y);
+					float absSQ = (float)Math.Sqrt(absX * absX + absY * absY);		
+					soundPan = (x - vector.X) / (Main.screenWidth * 0.5f);
+					soundVol = 1f - absSQ / (Main.screenWidth * 1.5f);
 				}
 	
 				SoundEffectInstance soundInstance = (newInstance ? soundEffect.CreateInstance() : (soundInstanceArray[soundID].State == SoundState.Playing ? soundInstanceArray[soundID] : soundEffect.CreateInstance()));
@@ -623,7 +623,7 @@ namespace CSkies
          */
         public static Color ColorAlpha(Color color, int alpha)
         {
-			return color * (1f - ((float)alpha / 255f));
+			return color * (1f - (alpha / 255f));
         }
 		
         /*
@@ -642,9 +642,9 @@ namespace CSkies
 		 */
 		public static Color ColorMult(Color color, float mult)
 		{
-			int r = Math.Max(0, Math.Min(255, (int)((float)color.R * mult)));
-			int g = Math.Max(0, Math.Min(255, (int)((float)color.G * mult)));
-			int b = Math.Max(0, Math.Min(255, (int)((float)color.B * mult)));
+			int r = Math.Max(0, Math.Min(255, (int)(color.R * mult)));
+			int g = Math.Max(0, Math.Min(255, (int)(color.G * mult)));
+			int b = Math.Max(0, Math.Min(255, (int)(color.B * mult)));
 			return new Color(r, g, b, color.A);
 		}
 
@@ -677,7 +677,7 @@ namespace CSkies
 			float b2 = color2.B / 255f;
 			float brightness = r2 > g2 ? r2 : g2 > b2 ? g2 : b2;
 			r *= brightness; g *= brightness; b *= brightness;
-			return new Color(r, g, b, (float)(color1.A / 255f));
+			return new Color(r, g, b, color1.A / 255f);
 		}
 
 		/*
@@ -699,10 +699,10 @@ namespace CSkies
             float b = lightColor.B / 255f;
             float a = lightColor.A / 255f;
             Color newColor = tint;
-            float nr = (byte)((float)newColor.R * r);
-            float ng = (byte)((float)newColor.G * g);
-            float nb = (byte)((float)newColor.B * b);
-            float na = (byte)((float)newColor.A * a);
+            float nr = (byte)(newColor.R * r);
+            float ng = (byte)(newColor.G * g);
+            float nb = (byte)(newColor.B * b);
+            float na = (byte)(newColor.A * a);
 			newColor.R = (byte)(nr);
 			newColor.G = (byte)(ng);
 			newColor.B = (byte)(nb);
@@ -880,13 +880,13 @@ namespace CSkies
          */
         public static void Chat(string s, Color color, bool sync = true)
         {
-            Chat(s, (byte)color.R, (byte)color.G, (byte)color.B, sync);
+            Chat(s, color.R, color.G, color.B, sync);
         }
 
         /*
          * Sends the given string to chat, with the given color values.
          */
-        public static void Chat(string s, byte colorR = (byte)255, byte colorG = (byte)255, byte colorB = (byte)255, bool sync = true)
+        public static void Chat(string s, byte colorR = 255, byte colorG = 255, byte colorB = 255, bool sync = true)
         {
             if (Main.netMode == 0) { Main.NewText(s, colorR, colorG, colorB); }else
 			if (Main.netMode == 1) { Main.NewText(s, colorR, colorG, colorB); }else //if(sync){ NetMessage.BroadcastChatMessage(NetworkText.FromLiteral(s), new Color(colorR, colorG, colorB), Main.myPlayer); } }else

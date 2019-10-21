@@ -393,7 +393,7 @@ namespace CSkies
 					dustType = 82;
 				}
 			}
-			if (type == 1 || type == 17 || type == 38 || type == 39 || type == 41 || type == 43 || type == 44 || type == 48 || Main.tileStone[(int)type] || type == 85 || type == 90 || type == 92 || type == 96 || type == 97 || type == 99 || type == 117 || type == 130 || type == 131 || type == 132 || type == 135 || type == 135 || type == 142 || type == 143 || type == 144 || type == 210 || type == 207 || type == 235 || type == 247 || type == 272 || type == 273 || type == 283)
+			if (type == 1 || type == 17 || type == 38 || type == 39 || type == 41 || type == 43 || type == 44 || type == 48 || Main.tileStone[type] || type == 85 || type == 90 || type == 92 || type == 96 || type == 97 || type == 99 || type == 117 || type == 130 || type == 131 || type == 132 || type == 135 || type == 135 || type == 142 || type == 143 || type == 144 || type == 210 || type == 207 || type == 235 || type == 247 || type == 272 || type == 273 || type == 283)
 			{
 				dustType = 1;
 			}
@@ -457,7 +457,7 @@ namespace CSkies
 			}
 			if (type == 240)
 			{
-				int num15 = (int)(frameX / 54);
+				int num15 = frameX / 54;
 				if (frameY >= 54)
 				{
 					num15 += 36;
@@ -549,7 +549,7 @@ namespace CSkies
 			}
 			if (type == 19)
 			{
-				int num16 = (int)(frameY / 18);
+				int num16 = frameY / 18;
 				if (num16 == 0 || num16 == 9 || num16 == 10 || num16 == 11 || num16 == 12)
 				{
 					dustType = 7;
@@ -601,7 +601,7 @@ namespace CSkies
 			}
 			if (type == 79)
 			{
-				int num17 = (int)(frameY / 36);
+				int num17 = frameY / 36;
 				if (num17 == 0)
 				{
 					dustType = 7;
@@ -637,7 +637,7 @@ namespace CSkies
 			}
 			if (type == 18)
 			{
-				int num18 = (int)(frameX / 36);
+				int num18 = frameX / 36;
 				if (num18 == 0)
 				{
 					dustType = 7;
@@ -705,7 +705,7 @@ namespace CSkies
 			}
 			if (type >= 255 && type <= 261)
 			{
-				int num19 = (int)(type - 255);
+				int num19 = type - 255;
 				dustType = 86 + num19;
 				if (num19 == 6)
 				{
@@ -714,7 +714,7 @@ namespace CSkies
 			}
 			if (type >= 262 && type <= 268)
 			{
-				int num20 = (int)(type - 262);
+				int num20 = type - 262;
 				dustType = 86 + num20;
 				if (num20 == 6)
 				{
@@ -723,7 +723,7 @@ namespace CSkies
 			}
 			if (type == 178)
 			{
-				int num21 = (int)(frameX / 18);
+				int num21 = frameX / 18;
 				dustType = 86 + num21;
 				if (num21 == 6)
 				{
@@ -818,7 +818,7 @@ namespace CSkies
 			}
 			if (type == 239)
 			{
-				int num22 = (int)(frameX / 18);
+				int num22 = frameX / 18;
 				if (num22 == 0)
 				{
 					dustType = 9;
@@ -908,7 +908,7 @@ namespace CSkies
 			{
 				if (frameY == 18)
 				{
-					int num23 = (int)(frameX / 36);
+					int num23 = frameX / 36;
 					if (num23 < 6)
 					{
 						dustType = 1;
@@ -976,7 +976,7 @@ namespace CSkies
 				}
 				else
 				{
-					int num24 = (int)(frameX / 18);
+					int num24 = frameX / 18;
 					if (num24 < 6)
 					{
 						dustType = 1;
@@ -1009,7 +1009,7 @@ namespace CSkies
 			}
 			if (type == 184)
 			{
-				int num25 = (int)(frameX / 22);
+				int num25 = frameX / 22;
 				dustType = 93 + num25;
 			}
 			if (type == 237)
@@ -1047,7 +1047,7 @@ namespace CSkies
 			if (type == 137)
 			{
 				dustType = 1;
-				int num29 = (int)(frameY / 18);
+				int num29 = frameY / 18;
 				if (num29 > 0)
 				{
 					dustType = 148;
@@ -1198,9 +1198,9 @@ namespace CSkies
 					dustType = 2;
 				}
 			}
-			if (Main.tileMoss[(int)type])
+			if (Main.tileMoss[type])
 			{
-				dustType = (int)(type - 179 + 93);
+				dustType = type - 179 + 93;
 			}
 			if (type == 127)
 			{
@@ -1279,7 +1279,7 @@ namespace CSkies
 			}
 			if (type == 227)
 			{
-				int num30 = (int)(frameX / 34);
+				int num30 = frameX / 34;
 				if (num30 == 0 || num30 == 1)
 				{
 					dustType = 26;
@@ -1675,9 +1675,9 @@ namespace CSkies
 			{
 				dustType = 49;
 			}
-			if (AlchemyFlower((int)type))
+			if (AlchemyFlower(type))
 			{
-				int num31 = (int)(frameX / 18);
+				int num31 = frameX / 18;
 				if (num31 == 0)
 				{
 					dustType = 3;
@@ -1768,7 +1768,7 @@ namespace CSkies
 			}
 			if (type == 20)
 			{
-				int num32 = (int)(frameX / 54);
+				int num32 = frameX / 54;
 				if (num32 == 1)
 				{
 					dustType = 122;
@@ -1822,7 +1822,7 @@ namespace CSkies
 			}
 			if (type == 4)
 			{
-				int num33 = (int)(frameY / 22);
+				int num33 = frameY / 22;
 				if (num33 == 0)
 				{
 					dustType = 6;
@@ -2061,7 +2061,7 @@ namespace CSkies
                     y--;
                     tile = Main.tile[x, y]; type = tile.type;
                 }
-                int i = (int)tile.frameX;
+                int i = tile.frameX;
                 bool frameXOver5000 = i >= 5000;
                 bool cannotBreak = false;
                 if (!frameXOver5000)
@@ -2074,7 +2074,7 @@ namespace CSkies
                 }
                 if (frameXOver5000)
                 {
-                    i = (int)tile.frameX;
+                    i = tile.frameX;
                     int num3 = 0;
                     while (i >= 5000)
                     {
@@ -2119,10 +2119,10 @@ namespace CSkies
                 }
                 if (!doeffects && !dotiles) { return; }
             }
-            int radiusLeft = (int)(position.X / 16f - (float)explosionIntensity);
-            int radiusRight = (int)(position.X / 16f + (float)explosionIntensity);
-            int radiusUp = (int)(position.Y / 16f - (float)explosionIntensity);
-            int radiusDown = (int)(position.Y / 16f + (float)explosionIntensity);
+            int radiusLeft = (int)(position.X / 16f - explosionIntensity);
+            int radiusRight = (int)(position.X / 16f + explosionIntensity);
+            int radiusUp = (int)(position.Y / 16f - explosionIntensity);
+            int radiusDown = (int)(position.Y / 16f + explosionIntensity);
             if (radiusLeft < 0) { radiusLeft = 0; } if (radiusRight > Main.maxTilesX) { radiusRight = Main.maxTilesX; }
             if (radiusUp < 0) { radiusUp = 0; } if (radiusDown > Main.maxTilesY) { radiusDown = Main.maxTilesY; }
 
@@ -2134,10 +2134,10 @@ namespace CSkies
                 {
                     for (int y1 = radiusUp; y1 <= radiusDown; y1++)
                     {
-                        float distX = Math.Abs((float)x1 - position.X / 16f);
-                        float distY = Math.Abs((float)y1 - position.Y / 16f);
-                        double dist = Math.Sqrt((double)(distX * distX + distY * distY));
-                        if (dist < (double)explosionIntensity)
+                        float distX = Math.Abs(x1 - position.X / 16f);
+                        float distY = Math.Abs(y1 - position.Y / 16f);
+                        double dist = Math.Sqrt(distX * distX + distY * distY);
+                        if (dist < explosionIntensity)
                         {
                             Vector2 dustPos = new Vector2(x1 * 16, y1 * 16);
                             Dust.NewDust(dustPos, 1 + rand.Next(16), 1 + rand.Next(16), 31, 0f, 0f, 100, Color.White, 2f);
@@ -2160,10 +2160,10 @@ namespace CSkies
                 {
                     for (int y1 = radiusUp; y1 <= radiusDown; y1++)
                     {
-                        float distX = Math.Abs((float)x1 - position.X / 16f);
-                        float distY = Math.Abs((float)y1 - position.Y / 16f);
-                        double dist = Math.Sqrt((double)(distX * distX + distY * distY));
-                        if (dist < (double)explosionIntensity && Main.tile[x1, y1] != null && Main.tile[x1, y1].wall == 0)
+                        float distX = Math.Abs(x1 - position.X / 16f);
+                        float distY = Math.Abs(y1 - position.Y / 16f);
+                        double dist = Math.Sqrt(distX * distX + distY * distY);
+                        if (dist < explosionIntensity && Main.tile[x1, y1] != null && Main.tile[x1, y1].wall == 0)
                         {
                             updateWalls = true;
                             break;
@@ -2174,15 +2174,15 @@ namespace CSkies
                 {
                     for (int y2 = radiusUp; y2 <= radiusDown; y2++)
                     {
-                        float distX = Math.Abs((float)x2 - position.X / 16f);
-                        float distY = Math.Abs((float)y2 - position.Y / 16f);
-                        double dist = Math.Sqrt((double)(distX * distX + distY * distY));
-                        if (dist < (double)explosionIntensity)
+                        float distX = Math.Abs(x2 - position.X / 16f);
+                        float distY = Math.Abs(y2 - position.Y / 16f);
+                        double dist = Math.Sqrt(distX * distX + distY * distY);
+                        if (dist < explosionIntensity)
                         {
                             bool canExplode = true;
                             if (Main.tile[x2, y2] != null && Main.tile[x2, y2].active())
                             {
-                                if (BaseUtility.InArray(BaseConstants.TILEIDS_DUNGEONSTRICT, (int)Main.tile[x2, y2].type) || Main.tile[x2, y2].type == 21 || Main.tile[x2, y2].type == 26 || Main.tile[x2, y2].type == 107 || Main.tile[x2, y2].type == 108 || Main.tile[x2, y2].type == 111)
+                                if (BaseUtility.InArray(BaseConstants.TILEIDS_DUNGEONSTRICT, Main.tile[x2, y2].type) || Main.tile[x2, y2].type == 21 || Main.tile[x2, y2].type == 26 || Main.tile[x2, y2].type == 107 || Main.tile[x2, y2].type == 108 || Main.tile[x2, y2].type == 111)
                                 {
                                     canExplode = false;
                                 }
@@ -2191,7 +2191,7 @@ namespace CSkies
                                 if (canExplode)
                                 {
                                     WorldGen.KillTile(x2, y2, false, false, false);
-                                    if (sync && !Main.tile[x2, y2].active() && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 0, (float)x2, (float)y2, 0f, 0); }
+                                    if (sync && !Main.tile[x2, y2].active() && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 0, x2, y2, 0f, 0); }
                                 }
                             }
                             if (canExplode)
@@ -2203,7 +2203,7 @@ namespace CSkies
                                         if (Main.tile[x3, y3] != null && Main.tile[x3, y3].wall > 0 && updateWalls)
                                         {
                                             WorldGen.KillWall(x3, y3, false);
-                                            if(sync && Main.tile[x3, y3].wall == 0 && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 2, (float)x3, (float)y3, 0f, 0); }
+                                            if(sync && Main.tile[x3, y3].wall == 0 && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 2, x3, y3, 0f, 0); }
                                         }
                                     }
                                 }
@@ -2246,7 +2246,7 @@ namespace CSkies
             }
             else if (tileType == 127)
                 Main.PlaySound(2, (int)x, (int)y, 27);
-            else if (AlchemyFlower((int)tileType) || tileType == 3 || tileType == 110 || tileType == 24 || tileType == 32 || tileType == 51 || tileType == 52 || tileType == 61 || tileType == 62 || tileType == 69 || tileType == 71 || tileType == 73 || tileType == 74 || tileType == 113 || tileType == 115)
+            else if (AlchemyFlower(tileType) || tileType == 3 || tileType == 110 || tileType == 24 || tileType == 32 || tileType == 51 || tileType == 52 || tileType == 61 || tileType == 62 || tileType == 69 || tileType == 71 || tileType == 73 || tileType == 74 || tileType == 113 || tileType == 115)
                 Main.PlaySound(6, (int)x, (int)y, 1);
             else if (tileType == 1 || tileType == 6 || tileType == 7 || tileType == 8 || tileType == 9 || tileType == 22 || tileType == 140 || tileType == 25 || tileType == 37 || tileType == 38 || tileType == 39 || tileType == 41 || tileType == 43 || tileType == 44 || tileType == 45 || tileType == 46 || tileType == 47 || tileType == 48 || tileType == 56 || tileType == 58 || tileType == 63 || tileType == 64 || tileType == 65 || tileType == 66 || tileType == 67 || tileType == 68 || tileType == 75 || tileType == 76 || tileType == 107 || tileType == 108 || tileType == 111 || tileType == 117 || tileType == 118 || tileType == 119 || tileType == 120 || tileType == 121 || tileType == 122)
                 Main.PlaySound(21, (int)x, (int)y, 1);

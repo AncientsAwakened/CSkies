@@ -66,7 +66,7 @@ namespace CSkies
 
         public override void UpdateBiomes()
         {
-            ZoneVoid = NearVoid() || CWorld.VaultTiles > 30;
+            ZoneVoid = NearVoid() || CWorld.AbyssTiles > 50;
             ZoneComet = CWorld.CometTiles > 30;
             ZoneCSky = CWorld.CSkyTiles > 30;
         }
@@ -77,7 +77,7 @@ namespace CSkies
             bool useCSky = ZoneCSky;
 
             player.ManageSpecialBiomeVisuals("CSkies:AbyssSky", useVoid);
-            player.ManageSpecialBiomeVisuals("CSkies:Csky", useCSky);
+            player.ManageSpecialBiomeVisuals("CSkies:CSky", useCSky);
         }
 
         public bool NearVoid()

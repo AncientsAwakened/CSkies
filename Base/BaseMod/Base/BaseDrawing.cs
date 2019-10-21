@@ -106,18 +106,18 @@ namespace CSkies
 
 			int displayWidth = (int)(200f * displayScalar);
 			int displayHeight = (int)(45f * displayScalar);
-			Vector2 basePosition = new Vector2((float)(Main.screenWidth - 120), (float)(Main.screenHeight - 40)) + offset;
+			Vector2 basePosition = new Vector2(Main.screenWidth - 120, Main.screenHeight - 40) + offset;
 			Rectangle displayRect = new Rectangle((int)basePosition.X - displayWidth / 2, (int)basePosition.Y - displayHeight / 2, displayWidth, displayHeight);
 			Utils.DrawInvBG(Main.spriteBatch, displayRect, new Color(63, 65, 151, 255) * 0.785f);
 			string displayText2;
-			if (progressMax == 0){ displayText2 = progress.ToString(); }else{ displayText2 = ((int)((float)progress * 100f / (float)progressMax)).ToString() + "%"; }
+			if (progressMax == 0){ displayText2 = progress.ToString(); }else{ displayText2 = ((int)(progress * 100f / progressMax)).ToString() + "%"; }
 			if(percentText != null) displayText2 = percentText;
 			//displayText2 = Language.GetTextValue("Game.WaveCleared", displayText2);
 			Texture2D barTex = Main.colorBarTexture;
 			if (progressMax != 0)
 			{
-				Main.spriteBatch.Draw(barTex, basePosition, null, Color.White * displayAlpha, 0f, new Vector2((float)(barTex.Width / 2), 0f), displayScalar, SpriteEffects.None, 0f);
-				float progressPercent = MathHelper.Clamp((float)progress / (float)progressMax, 0f, 1f);
+				Main.spriteBatch.Draw(barTex, basePosition, null, Color.White * displayAlpha, 0f, new Vector2(barTex.Width / 2, 0f), displayScalar, SpriteEffects.None, 0f);
+				float progressPercent = MathHelper.Clamp(progress / (float)progressMax, 0f, 1f);
 				float scalarX = 169f * displayScalar;
 				float scalarY = 8f * displayScalar;
 				Vector2 vector4 = basePosition + Vector2.UnitY * scalarY + Vector2.UnitX * 1f;
@@ -128,11 +128,11 @@ namespace CSkies
 				Main.spriteBatch.Draw(Main.magicPixel, vector4, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, 1, 1)), Microsoft.Xna.Framework.Color.Black * displayAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(scalarX * (1f - progressPercent), scalarY), SpriteEffects.None, 0f);
 			}
 
-			Vector2 center = new Vector2((float)(Main.screenWidth - 120), (float)(Main.screenHeight - 80)) + offset;
+			Vector2 center = new Vector2(Main.screenWidth - 120, Main.screenHeight - 80) + offset;
 			Vector2 stringLength = Main.fontItemStack.MeasureString(displayText);
-			Microsoft.Xna.Framework.Rectangle textRect = Utils.CenteredRectangle(center, (stringLength + new Vector2((float)(iconTex.Width + 20), 10f)) * displayScalar);
+			Microsoft.Xna.Framework.Rectangle textRect = Utils.CenteredRectangle(center, (stringLength + new Vector2(iconTex.Width + 20, 10f)) * displayScalar);
 			Utils.DrawInvBG(Main.spriteBatch, textRect, backgroundColor);
-			Main.spriteBatch.Draw(iconTex, textRect.Left() + Vector2.UnitX * displayScalar * 8f, null, Microsoft.Xna.Framework.Color.White * displayAlpha, 0f, new Vector2(0f, (float)(iconTex.Height / 2)), displayScalar * 0.8f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(iconTex, textRect.Left() + Vector2.UnitX * displayScalar * 8f, null, Microsoft.Xna.Framework.Color.White * displayAlpha, 0f, new Vector2(0f, iconTex.Height / 2), displayScalar * 0.8f, SpriteEffects.None, 0f);
 			Utils.DrawBorderString(Main.spriteBatch, displayText, textRect.Right() + Vector2.UnitX * displayScalar * -8f, Microsoft.Xna.Framework.Color.White * displayAlpha, displayScalar * 0.9f, 1f, 0.4f, -1);
 		}
 		
@@ -201,7 +201,7 @@ namespace CSkies
 			}
 			Main.spriteBatch.End();		
 			Main.instance.GraphicsDevice.SetRenderTarget(null);
-			return (Texture2D)renderTarget;	
+			return renderTarget;	
 		}
 		
 		public static Texture2D GetCroppedTex(Texture2D texture, Rectangle rect)
@@ -412,7 +412,7 @@ namespace CSkies
 				int dustID = Dust.NewDust(codable.position, codable.width, codable.height, 152, 0f, 0f, 150, default(Color), 1f);
 				Main.dust[dustID].velocity.Y = 0.3f;
 				Main.dust[dustID].velocity.X *= 0.1f;
-				Main.dust[dustID].scale += (float)Main.rand.Next(3, 4) * 0.1f;
+				Main.dust[dustID].scale += Main.rand.Next(3, 4) * 0.1f;
 				Main.dust[dustID].alpha = 100;
 				Main.dust[dustID].noGravity = true;
 				Main.dust[dustID].velocity += codable.velocity * 0.1f;
@@ -618,10 +618,10 @@ namespace CSkies
             }
 			if (loveStruck && effects && shadow == 0f && Main.instance.IsActive && !Main.gamePaused && Main.rand.Next(5) == 0)
 			{
-				Vector2 value = new Vector2((float)Main.rand.Next(-10, 11), (float)Main.rand.Next(-10, 11));
+				Vector2 value = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
 				value.Normalize();
 				value.X *= 0.66f;
-				int goreID = Gore.NewGore(codable.position + new Vector2((float)Main.rand.Next(codable.width + 1), (float)Main.rand.Next(codable.height + 1)), value * (float)Main.rand.Next(3, 6) * 0.33f, 331, (float)Main.rand.Next(40, 121) * 0.01f);
+				int goreID = Gore.NewGore(codable.position + new Vector2(Main.rand.Next(codable.width + 1), Main.rand.Next(codable.height + 1)), value * Main.rand.Next(3, 6) * 0.33f, 331, Main.rand.Next(40, 121) * 0.01f);
 				Main.gore[goreID].sticky = false;
 				Main.gore[goreID].velocity *= 0.4f;
 				Main.gore[goreID].velocity.Y -= 0.6f;
@@ -633,19 +633,19 @@ namespace CSkies
 				cb *= 0.55f;
 				if (effects && Main.rand.Next(5) == 0 && Main.instance.IsActive && !Main.gamePaused)
 				{
-					Vector2 value2 = new Vector2((float)Main.rand.Next(-10, 11), (float)Main.rand.Next(-10, 11));
+					Vector2 value2 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
 					value2.Normalize(); value2.X *= 0.66f; value2.Y = Math.Abs(value2.Y);
-					Vector2 vector = value2 * (float)Main.rand.Next(3, 5) * 0.25f;
+					Vector2 vector = value2 * Main.rand.Next(3, 5) * 0.25f;
 					int dustID = Dust.NewDust(codable.position, codable.width, codable.height, 188, vector.X, vector.Y * 0.5f, 100, default(Color), 1.5f);
 					Main.dust[dustID].velocity *= 0.1f;
 					Main.dust[dustID].velocity.Y -= 0.5f;
 					if (codable is Player) Main.playerDrawDust.Add(dustID);
 				}
 			}
-			lightColor.R = (byte)((float)lightColor.R * cr);
-			lightColor.G = (byte)((float)lightColor.G * cg);
-			lightColor.B = (byte)((float)lightColor.B * cb);
-			lightColor.A = (byte)((float)lightColor.A * ca);			
+			lightColor.R = (byte)(lightColor.R * cr);
+			lightColor.G = (byte)(lightColor.G * cg);
+			lightColor.B = (byte)(lightColor.B * cb);
+			lightColor.A = (byte)(lightColor.A * ca);			
 			if(codable is NPC) NPCLoader.DrawEffects((NPC)codable, ref lightColor);			
             if (hunter && (codable is NPC ? ((NPC)codable).lifeMax > 1 : true))
             {
@@ -751,7 +751,7 @@ namespace CSkies
 
             Vector2 drawPos = position - Main.screenPosition;
             Vector2 texOrigin = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f / frameCount);
-            Vector2 rotOrigin = new Vector2((texOrigin.X - texOrigin.X * (float)direction), gravDir == -1f ? 0 : tex.Height) + new Vector2(xOffset, -yOffset);
+            Vector2 rotOrigin = new Vector2((texOrigin.X - texOrigin.X * direction), gravDir == -1f ? 0 : tex.Height) + new Vector2(xOffset, -yOffset);
 
             if (gravDir == -1f) //reverse gravity
             {
@@ -834,7 +834,7 @@ namespace CSkies
             if(gravDir == -1f){ yOffset *= -1; spriteEffect = spriteEffect | SpriteEffects.FlipVertically; }
             int type = item.type;
             int fakeType = type;
-            Vector2 texOrigin = new Vector2((float)(tex.Width / 2), (float)(tex.Height / 2) / frameCount);
+            Vector2 texOrigin = new Vector2(tex.Width / 2, (float)(tex.Height / 2) / frameCount);
 			if(entity is Player)
 			{
 				Player drawPlayer = (Player)entity; yOffset += drawPlayer.gfxOffY;
@@ -843,12 +843,12 @@ namespace CSkies
 			{
 				NPC drawNPC = (NPC)entity; yOffset += drawNPC.gfxOffY;
 			}			
-            Vector2 rotOrigin = new Vector2(-(float)xOffset, ((float)(tex.Height / 2) / frameCount) - yOffset);
+            Vector2 rotOrigin = new Vector2(-xOffset, ((float)(tex.Height / 2) / frameCount) - yOffset);
             if(direction == -1)
             {
-                rotOrigin = new Vector2((float)(tex.Width + xOffset), ((float)(tex.Height / 2) / frameCount) - yOffset);
+                rotOrigin = new Vector2(tex.Width + xOffset, ((float)(tex.Height / 2) / frameCount) - yOffset);
             }
-            Vector2 pos = new Vector2((float)((int)(position.X - Main.screenPosition.X + texOrigin.X)), (float)((int)(position.Y - Main.screenPosition.Y + texOrigin.Y)));
+            Vector2 pos = new Vector2((int)(position.X - Main.screenPosition.X + texOrigin.X), (int)(position.Y - Main.screenPosition.Y + texOrigin.Y));
 
             if (shakeX) { pos.X += shakeScalarX * (Main.rand.Next(-5, 6) / 9f); }
             if (shakeY) { pos.Y += shakeScalarY * (Main.rand.Next(-5, 6) / 9f); }
@@ -882,7 +882,7 @@ namespace CSkies
         {
             offsetX += (-texture.Width * 0.5f);
             Color lightColor = overrideColor != null ? (Color)overrideColor : p.GetAlpha(GetLightColor(Main.player[p.owner].Center));
-            Vector2 origin = new Vector2((float)texture.Width * 0.5f, (float)texture.Height * 0.5f);
+            Vector2 origin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
 			offsetY -= Main.player[p.owner].gfxOffY;		
             Vector2 offset = BaseUtility.RotateVector(p.Center, p.Center + new Vector2(p.direction == -1 ? offsetX : offsetY, p.direction == 1 ? offsetX : offsetY), p.rotation - 2.355f) - p.Center;
 			if (sb is List<DrawData>)
@@ -942,19 +942,19 @@ namespace CSkies
 			if(owner is Player) mountedCenter.Y += Main.player[projectile.owner].gfxOffY;
 			float centerDistX = yoyoLoc.X - mountedCenter.X;
 			float centerDistY = yoyoLoc.Y - mountedCenter.Y;
-			Math.Sqrt((double)(centerDistX * centerDistX + centerDistY * centerDistY));
-			float rotation = (float)Math.Atan2((double)centerDistY, (double)centerDistX) - 1.57f;
+			Math.Sqrt(centerDistX * centerDistX + centerDistY * centerDistY);
+			float rotation = (float)Math.Atan2(centerDistY, centerDistX) - 1.57f;
 			if (owner is Player && !projectile.counterweight)
 			{
 				int projDir = -1;
-				if (projectile.position.X + (float)(projectile.width / 2) < Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2)) projDir = 1;
+				if (projectile.position.X + projectile.width / 2 < Main.player[projectile.owner].position.X + Main.player[projectile.owner].width / 2) projDir = 1;
 				projDir *= -1;
-				((Player)owner).itemRotation = (float)Math.Atan2((double)(centerDistY * (float)projDir), (double)(centerDistX * (float)projDir));
+				((Player)owner).itemRotation = (float)Math.Atan2(centerDistY * projDir, centerDistX * projDir);
 			}
 			bool flag = true;
 			if (centerDistX == 0f && centerDistY == 0f){ flag = false; }else
 			{
-				float sqrtCenter = (float)Math.Sqrt((double)(centerDistX * centerDistX + centerDistY * centerDistY));
+				float sqrtCenter = (float)Math.Sqrt(centerDistX * centerDistX + centerDistY * centerDistY);
 				sqrtCenter = 12f / sqrtCenter;
 				centerDistX *= sqrtCenter;
 				centerDistY *= sqrtCenter;
@@ -966,7 +966,7 @@ namespace CSkies
 			while (flag)
 			{
 				float textureHeight = 12f;
-				float sqrtCenter = (float)Math.Sqrt((double)(centerDistX * centerDistX + centerDistY * centerDistY));
+				float sqrtCenter = (float)Math.Sqrt(centerDistX * centerDistX + centerDistY * centerDistY);
 				float sqrtCenter2 = sqrtCenter;
 				if (float.IsNaN(sqrtCenter) || float.IsNaN(sqrtCenter2)){ flag = false; }
 				else
@@ -1007,7 +1007,7 @@ namespace CSkies
 							centerDistX *= 1f - scalar;
 						}
 					}
-					rotation = (float)Math.Atan2((double)centerDistY, (double)centerDistX) - 1.57f;
+					rotation = (float)Math.Atan2(centerDistY, centerDistX) - 1.57f;
 					int stringColor = Main.player[projectile.owner].stringColor;
 					Color color = (overrideColor != null && stringColor <= 0 ? (Color)overrideColor : WorldGen.paintColor(stringColor));
 					if (color.R < 75) color.R = 75; if (color.G < 75) color.G = 75; if (color.B < 75) color.B = 75;
@@ -1015,16 +1015,16 @@ namespace CSkies
 					else if (stringColor == 14 || stringColor == 0){ color = new Color(200, 200, 200); }
 					else if (stringColor == 28){ color = new Color(163, 116, 91); }
 					else if (stringColor == 27){ color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB); }
-					color.A = (byte)((float)color.A * 0.4f);
+					color.A = (byte)(color.A * 0.4f);
 					float colorScalar = 0.5f;
 					if(overrideColor == null)
 					{
 						color = Lighting.GetColor((int)mountedCenter.X / 16, (int)(mountedCenter.Y / 16f), color);
-						color = new Microsoft.Xna.Framework.Color((int)((byte)((float)color.R * colorScalar)), (int)((byte)((float)color.G * colorScalar)), (int)((byte)((float)color.B * colorScalar)), (int)((byte)((float)color.A * colorScalar)));
+						color = new Microsoft.Xna.Framework.Color((byte)(color.R * colorScalar), (byte)(color.G * colorScalar), (byte)(color.B * colorScalar), (byte)(color.A * colorScalar));
 					}
 					Texture2D tex = (overrideTex != null ? overrideTex : Main.fishingLineTexture);
 					Vector2 texCenter = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);	
-					Main.spriteBatch.Draw(Main.fishingLineTexture, new Vector2(mountedCenter.X - Main.screenPosition.X + texCenter.X, mountedCenter.Y - Main.screenPosition.Y + texCenter.Y) - new Vector2(6f, 0f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, tex.Width, (int)textureHeight)), color, rotation, new Vector2((float)tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(Main.fishingLineTexture, new Vector2(mountedCenter.X - Main.screenPosition.X + texCenter.X, mountedCenter.Y - Main.screenPosition.Y + texCenter.Y) - new Vector2(6f, 0f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, tex.Width, (int)textureHeight)), color, rotation, new Vector2(tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
 				}
 			}
 		}
@@ -1043,34 +1043,34 @@ namespace CSkies
 				int type = Main.player[projectile.owner].inventory[Main.player[projectile.owner].selectedItem].type;
 				float gravDir = Main.player[projectile.owner].gravDir;
 
-				mountedCenterX += (float)(rodLoc.X * Main.player[projectile.owner].direction);
+				mountedCenterX += rodLoc.X * Main.player[projectile.owner].direction;
 				if (Main.player[projectile.owner].direction < 0) mountedCenterX -= 13f;
 				mountedCenterY -= rodLoc.Y * gravDir;
 				
 				if (gravDir == -1f) mountedCenterY -= 12f;
 				Vector2 mountedCenter = new Vector2(mountedCenterX, mountedCenterY);
 				mountedCenter = Main.player[projectile.owner].RotatedRelativePoint(mountedCenter + new Vector2(8f), true) - new Vector2(8f);
-				float projLineCenterX = projectile.position.X + (float)projectile.width * 0.5f - mountedCenter.X;
-				float projLineCenterY = projectile.position.Y + (float)projectile.height * 0.5f - mountedCenter.Y;
+				float projLineCenterX = projectile.position.X + projectile.width * 0.5f - mountedCenter.X;
+				float projLineCenterY = projectile.position.Y + projectile.height * 0.5f - mountedCenter.Y;
                 projLineCenterX += bobberLoc.X; projLineCenterY += bobberLoc.Y;
-				Math.Sqrt((double)(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY));
-				float rotation2 = (float)Math.Atan2((double)projLineCenterY, (double)projLineCenterX) - 1.57f;
+				Math.Sqrt(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY);
+				float rotation2 = (float)Math.Atan2(projLineCenterY, projLineCenterX) - 1.57f;
 				bool flag2 = true;
 				if (projLineCenterX == 0f && projLineCenterY == 0f){ flag2 = false;}else
 				{
-					float num15 = (float)Math.Sqrt((double)(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY));
+					float num15 = (float)Math.Sqrt(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY);
 					num15 = 12f / num15;
 					projLineCenterX *= num15;
 					projLineCenterY *= num15;
 					mountedCenter.X -= projLineCenterX;
 					mountedCenter.Y -= projLineCenterY;
-					projLineCenterX = projectile.position.X + (float)projectile.width * 0.5f - mountedCenter.X;
-					projLineCenterY = projectile.position.Y + (float)projectile.height * 0.5f - mountedCenter.Y;
+					projLineCenterX = projectile.position.X + projectile.width * 0.5f - mountedCenter.X;
+					projLineCenterY = projectile.position.Y + projectile.height * 0.5f - mountedCenter.Y;
 				}
 				while (flag2)
 				{
 					float num16 = 12f;
-					float num17 = (float)Math.Sqrt((double)(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY));
+					float num17 = (float)Math.Sqrt(projLineCenterX * projLineCenterX + projLineCenterY * projLineCenterY);
 					float num18 = num17;
 					if (float.IsNaN(num17) || float.IsNaN(num18)){ flag2 = false; }else
 					{
@@ -1084,8 +1084,8 @@ namespace CSkies
 						projLineCenterY *= num17;
 						mountedCenter.X += projLineCenterX;
 						mountedCenter.Y += projLineCenterY;
-						projLineCenterX = projectile.position.X + (float)projectile.width * 0.5f - mountedCenter.X;
-						projLineCenterY = projectile.position.Y + (float)projectile.height * 0.1f - mountedCenter.Y;
+						projLineCenterX = projectile.position.X + projectile.width * 0.5f - mountedCenter.X;
+						projLineCenterY = projectile.position.Y + projectile.height * 0.1f - mountedCenter.Y;
 						if (num18 > 12f)
 						{
 							float num19 = 0.3f;
@@ -1114,11 +1114,11 @@ namespace CSkies
 								projLineCenterX *= 1f - num19;
 							}
 						}
-						rotation2 = (float)Math.Atan2((double)projLineCenterY, (double)projLineCenterX) - 1.57f;
+						rotation2 = (float)Math.Atan2(projLineCenterY, projLineCenterX) - 1.57f;
 						Color color2 = Lighting.GetColor((int)mountedCenter.X / 16, (int)(mountedCenter.Y / 16f), (overrideColor != null ? (Color)overrideColor : new Color(200, 200, 200, 100)));
 						Texture2D tex = (overrideTex != null ? overrideTex : Main.fishingLineTexture);
 						Vector2 texCenter = new Vector2(tex.Width * 0.5f, tex.Height * 0.5f);
-						sb.Draw(tex, new Vector2(mountedCenter.X - Main.screenPosition.X + (float)texCenter.X * 0.5f, mountedCenter.Y - Main.screenPosition.Y + (float)texCenter.Y * 0.5f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, tex.Width, (int)num16)), color2, rotation2, new Vector2((float)tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
+						sb.Draw(tex, new Vector2(mountedCenter.X - Main.screenPosition.X + texCenter.X * 0.5f, mountedCenter.Y - Main.screenPosition.Y + texCenter.Y * 0.5f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, tex.Width, (int)num16)), color2, rotation2, new Vector2(tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
 					}
 				}
 			}
@@ -1157,7 +1157,7 @@ namespace CSkies
          */
         public static void DrawAfterimage(object sb, Texture2D texture, int shader, Vector2 position, int width, int height, Vector2[] oldPoints, float scale = 1f, float rotation = 0f, int direction = 0, int framecount = 1, Rectangle frame = default(Rectangle), float distanceScalar = 1.0F, float sizeScalar = 1f, int imageCount = 7, bool useOldPos = true, float offsetX = 0f, float offsetY = 0f, Color? overrideColor = null)
         {
-            Vector2 origin = new Vector2((float)(texture.Width / 2), (float)(texture.Height / framecount / 2));
+            Vector2 origin = new Vector2(texture.Width / 2, texture.Height / framecount / 2);
             Color lightColor = overrideColor != null ? (Color)overrideColor : GetLightColor(position + new Vector2(width * 0.5f, height * 0.5f));
             Vector2 velAddon = default(Vector2);
             Vector2 originalpos = position;
@@ -1232,8 +1232,8 @@ namespace CSkies
                 {
                     if (textures[0] != null && Way == 0f)
                     {
-                        float texWidth2 = (float)textures[0].Width;
-                        float texHeight2 = (float)textures[0].Height;
+                        float texWidth2 = textures[0].Width;
+                        float texHeight2 = textures[0].Height;
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = start - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(start + texCenter2));
@@ -1254,8 +1254,8 @@ namespace CSkies
                     }
                     if (textures[maxTextures + 1] != null && Way + Jump >= length)
                     {
-                        float texWidth2 = (float)textures[maxTextures + 1].Width;
-                        float texHeight2 = (float)textures[maxTextures + 1].Height;
+                        float texWidth2 = textures[maxTextures + 1].Width;
+                        float texHeight2 = textures[maxTextures + 1].Height;
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = end - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(end + texCenter2));
@@ -1275,8 +1275,8 @@ namespace CSkies
 						}
                     }
                 };
-                texWidth = (float)textures[1].Width;
-                texHeight = (float)textures[1].Height;
+                texWidth = textures[1].Width;
+                texHeight = textures[1].Height;
                 texCenter = new Vector2(texWidth / 2f, texHeight / 2f) * scale;
 				
 				v = (start + dir * Way) + texCenter;
@@ -1338,8 +1338,8 @@ namespace CSkies
                 {
                     if (textures[0] != null && Way == 0f)
                     {
-                        float texWidth2 = (float)textures[0].Width;
-                        float texHeight2 = (float)textures[0].Height;
+                        float texWidth2 = textures[0].Width;
+                        float texHeight2 = textures[0].Height;
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = start - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(start + texCenter2));
@@ -1360,8 +1360,8 @@ namespace CSkies
                     }
                     if (textures[maxTextures + 1] != null && Way + Jump >= length)
                     {
-                        float texWidth2 = (float)textures[maxTextures + 1].Width;
-                        float texHeight2 = (float)textures[maxTextures + 1].Height;
+                        float texWidth2 = textures[maxTextures + 1].Width;
+                        float texHeight2 = textures[maxTextures + 1].Height;
                         Vector2 texCenter2 = new Vector2(texWidth2 / 2f, texHeight2 / 2f) * scale;
                         Vector2 v2 = end - Main.screenPosition + texCenter2;
                         Color lightColor2 = (overrideColor != null ? (Color)overrideColor : GetLightColor(end + texCenter2));
@@ -1381,8 +1381,8 @@ namespace CSkies
 						}
                     }
                 };
-                texWidth = (float)textures[1].Width;
-                texHeight = (float)textures[1].Height;
+                texWidth = textures[1].Width;
+                texHeight = textures[1].Height;
                 texCenter = new Vector2(texWidth / 2f, texHeight / 2f) * scale;
 
 				v = BaseUtility.MultiLerpVector(Way / length, chain) + texCenter;
@@ -1457,7 +1457,7 @@ namespace CSkies
          */
         public static void DrawTexture(object sb, Texture2D texture, int shader, Vector2 position, int width, int height, float scale, float rotation, int direction, int framecount, int framecountX, Rectangle frame, Color? overrideColor = null, bool drawCentered = false, Vector2 overrideOrigin = default(Vector2))
         {
-            Vector2 origin = overrideOrigin != default(Vector2) ? overrideOrigin : new Vector2((float)(frame.Width / framecountX / 2), (float)(texture.Height / framecount / 2));
+            Vector2 origin = overrideOrigin != default(Vector2) ? overrideOrigin : new Vector2(frame.Width / framecountX / 2, texture.Height / framecount / 2);
             Color lightColor = overrideColor != null ? (Color)overrideColor : GetLightColor(position + new Vector2(width * 0.5f, height * 0.5f));
 			if (sb is List<DrawData>)
 			{
@@ -1519,7 +1519,7 @@ namespace CSkies
 			bool halfBrick = (overrideHalfBrick != null ? (bool)overrideHalfBrick : tile.halfBrick());
 			int halfBrickOffset = halfBrick ? 8 : 0;
 			Color color = Lighting.GetColor(x, y);
-			Vector2 drawOffset = (Main.drawToScreen ? default(Vector2) : new Vector2((float)Main.offScreenRange, (float)Main.offScreenRange)) + offset;
+			Vector2 drawOffset = (Main.drawToScreen ? default(Vector2) : new Vector2(Main.offScreenRange, Main.offScreenRange)) + offset;
 			if (tile.inActive()){ color = tile.actColor(color); }
 			SpriteEffects effects = (flipTex ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 			Vector2 drawPos = GetTileDrawPosition(x, y, fwidth, fheight, drawOffset);
@@ -1540,7 +1540,7 @@ namespace CSkies
 				if (topSlope) sb.Draw(texture, drawPos + new Vector2(0f, 14f), new Rectangle(frameX, frameY + 14, 16, 2), (overrideColor != null ? overrideColor(color) : color), 0f, default(Vector2), 1f, effects, 0f);
 				else sb.Draw(texture, drawPos, new Rectangle(frameX, frameY, 16, 2), (overrideColor != null ? overrideColor(color) : color), 0f, default(Vector2), 1f, effects, 0f);
 			}else //sidebricks
-			if(!ignoreHalfBricks && Main.tileSolid[(int)tile.type] && !halfBrick && (Main.tile[x - 1, y].halfBrick() || Main.tile[x + 1, y].halfBrick()))
+			if(!ignoreHalfBricks && Main.tileSolid[tile.type] && !halfBrick && (Main.tile[x - 1, y].halfBrick() || Main.tile[x + 1, y].halfBrick()))
 			{
 				if (Main.tile[x - 1, y].halfBrick() && Main.tile[x + 1, y].halfBrick())
 				{
@@ -1563,9 +1563,9 @@ namespace CSkies
 					sb.Draw(texture, drawPos, new Rectangle(frameX, frameY, fwidth, fheight), (overrideColor != null ? overrideColor(color) : color), 0f, default(Vector2), 1f, effects, 0f);
 				}
 			}else
-			if (Lighting.lightMode < 2 && Main.tileSolid[(int)tile.type] && !halfBrick && !tile.inActive())
+			if (Lighting.lightMode < 2 && Main.tileSolid[tile.type] && !halfBrick && !tile.inActive())
 			{
-				if ((int)color.R > gfxCheck || (double)color.G > (double)gfxCheck * 1.1 || (double)color.B > (double)gfxCheck * 1.2)
+				if (color.R > gfxCheck || color.G > gfxCheck * 1.1 || color.B > gfxCheck * 1.2)
 				{
 					Color[] lightArray = new Color[9];
 					Lighting.GetColor9Slice(x, y, ref lightArray);
@@ -1591,7 +1591,7 @@ namespace CSkies
 						sb.Draw(texture, drawPos + new Vector2(offsetX, offsetY), new Rectangle(frameX + offsetX, frameY + offsetY, width, height), (overrideColor != null ? overrideColor(mixedColor) : mixedColor), 0f, default(Vector2), 1f, effects, 0f);
 					}
 				}else
-				if ((int)color.R > gfxCheck2 || (double)color.G > (double)gfxCheck2 * 1.1 || (double)color.B > (double)gfxCheck2 * 1.2)
+				if (color.R > gfxCheck2 || color.G > gfxCheck2 * 1.1 || color.B > gfxCheck2 * 1.2)
 				{
 					Color[] lightArray = new Color[4];
 					Lighting.GetColor4Slice(x, y, ref lightArray);
@@ -1614,7 +1614,7 @@ namespace CSkies
 					sb.Draw(texture, drawPos, new Rectangle(frameX, frameY, fwidth, fheight), color, 0f, default(Vector2), 1f, effects, 0f);
 				}
 			}else
-			if (halfBrickOffset == 8 && (!Main.tile[x, y + 1].active() || !Main.tileSolid[(int)Main.tile[x, y + 1].type] || Main.tile[x, y + 1].halfBrick()))
+			if (halfBrickOffset == 8 && (!Main.tile[x, y + 1].active() || !Main.tileSolid[Main.tile[x, y + 1].type] || Main.tile[x, y + 1].halfBrick()))
 			{
 				sb.Draw(texture, drawPos + new Vector2(0, halfBrickOffset), new Rectangle(frameX, frameY, fwidth, fheight - halfBrickOffset - 4), (overrideColor != null ? overrideColor(color) : color), 0f, default(Vector2), 1f, effects, 0f);
 				sb.Draw(texture, drawPos + new Vector2(0, 12f), new Rectangle(144, 66, fwidth, 4), (overrideColor != null ? overrideColor(color) : color), 0f, default(Vector2), 1f, effects, 0f);
@@ -1631,7 +1631,7 @@ namespace CSkies
 			bool hasWall = tile != null && tile.wall > 0;
 			int wallFrameX = (hasWall ? tile.wallFrameX() : 0);
 			int wallFrameY = (hasWall ? tile.wallFrameY() : 0);
-			int frameOffsetY = (hasWall ? (int)(Main.wallFrame[tile.wall] * 180) : 0);
+			int frameOffsetY = (hasWall ? Main.wallFrame[tile.wall] * 180 : 0);
 			DrawWallTexture(sb, texture, x, y, wallFrameX, wallFrameY, frameOffsetY, drawOutline, overrideColor, offset);
 		}
 
@@ -1646,15 +1646,15 @@ namespace CSkies
 		{
 			int gfxCheck = (int)(255f * (1f - Main.gfxQuality) + 100f * Main.gfxQuality);
 			int gfxCheck2 = (int)(120f * (1f - Main.gfxQuality) + 40f * Main.gfxQuality);
-			Vector2 drawOffset = (Main.drawToScreen ? default(Vector2) : new Vector2((float)Main.offScreenRange, (float)Main.offScreenRange)) + offset;
-			int tileColor = (int)((Main.tileColor.R + Main.tileColor.G + Main.tileColor.B) / 3);
-			float tileColorFloat = (float)((double)tileColor * 0.53) / 255f;
-			if (Lighting.lightMode == 2){ tileColorFloat = (float)(Main.tileColor.R - 12) / 255f; }else
-			if (Lighting.lightMode == 3){ tileColorFloat = (float)(tileColor - 12) / 255f; }
+			Vector2 drawOffset = (Main.drawToScreen ? default(Vector2) : new Vector2(Main.offScreenRange, Main.offScreenRange)) + offset;
+			int tileColor = (Main.tileColor.R + Main.tileColor.G + Main.tileColor.B) / 3;
+			float tileColorFloat = (float)(tileColor * 0.53) / 255f;
+			if (Lighting.lightMode == 2){ tileColorFloat = (Main.tileColor.R - 12) / 255f; }else
+			if (Lighting.lightMode == 3){ tileColorFloat = (tileColor - 12) / 255f; }
 			Color color = (overrideColor != null ? overrideColor(default(Color)) : Lighting.GetColor(x, y)); 
 			if (Lighting.lightMode < 2)
 			{
-				if ((int)color.R > gfxCheck || (double)color.G > (double)gfxCheck * 1.1 || (double)color.B > (double)gfxCheck * 1.2)
+				if (color.R > gfxCheck || color.G > gfxCheck * 1.1 || color.B > gfxCheck * 1.2)
 				{
 					Color[] lightArray = new Color[9];
 					Lighting.GetColor9Slice(x, y, ref lightArray);
@@ -1677,10 +1677,10 @@ namespace CSkies
 						color2.R = (byte)((color.R + color3.R) / 2);
 						color2.G = (byte)((color.G + color3.G) / 2);
 						color2.B = (byte)((color.B + color3.B) / 2);
-						sb.Draw(texture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X - 8 + offsetX), (float)(y * 16 - (int)Main.screenPosition.Y - 8 + offsetY)) + drawOffset, new Rectangle(wallFrameX + offsetX, wallFrameY + offsetY + frameOffsetY, width, height), (overrideColor != null ? overrideColor(color2) : color2), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+						sb.Draw(texture, new Vector2(x * 16 - (int)Main.screenPosition.X - 8 + offsetX, y * 16 - (int)Main.screenPosition.Y - 8 + offsetY) + drawOffset, new Rectangle(wallFrameX + offsetX, wallFrameY + offsetY + frameOffsetY, width, height), (overrideColor != null ? overrideColor(color2) : color2), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 					}
 				}else
-				if ((int)color.R > gfxCheck2 || (double)color.G > (double)gfxCheck2 * 1.1 || (double)color.B > (double)gfxCheck2 * 1.2)
+				if (color.R > gfxCheck2 || color.G > gfxCheck2 * 1.1 || color.B > gfxCheck2 * 1.2)
 				{
 					Color[] lightArray = new Color[4];
 					Lighting.GetColor4Slice(x, y, ref lightArray);
@@ -1696,24 +1696,24 @@ namespace CSkies
 						color4.R = (byte)((color.R + color5.R) / 2);
 						color4.G = (byte)((color.G + color5.G) / 2);
 						color4.B = (byte)((color.B + color5.B) / 2);
-						sb.Draw(texture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X - 8 + offsetX), (float)(y * 16 - (int)Main.screenPosition.Y - 8 + offsetY)) + drawOffset, new Rectangle(wallFrameX + offsetX, wallFrameY + offsetY + frameOffsetY, 16, 16), (overrideColor != null ? overrideColor(color4) : color4), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+						sb.Draw(texture, new Vector2(x * 16 - (int)Main.screenPosition.X - 8 + offsetX, y * 16 - (int)Main.screenPosition.Y - 8 + offsetY) + drawOffset, new Rectangle(wallFrameX + offsetX, wallFrameY + offsetY + frameOffsetY, 16, 16), (overrideColor != null ? overrideColor(color4) : color4), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 					}
 				}else
 				{
 					Rectangle rect = new Rectangle(wallFrameX, wallFrameY + frameOffsetY, 32, 32);
-					sb.Draw(texture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X - 8), (float)(y * 16 - (int)Main.screenPosition.Y - 8)) + drawOffset, rect, color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+					sb.Draw(texture, new Vector2(x * 16 - (int)Main.screenPosition.X - 8, y * 16 - (int)Main.screenPosition.Y - 8) + drawOffset, rect, color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 				}
 			}
-			if (drawOutline && ((double)color.R > (double)gfxCheck2 * 0.4 || (double)color.G > (double)gfxCheck2 * 0.35 || (double)color.B > (double)gfxCheck2 * 0.3))
+			if (drawOutline && (color.R > gfxCheck2 * 0.4 || color.G > gfxCheck2 * 0.35 || color.B > gfxCheck2 * 0.3))
 			{
-				bool outlineLeft = Main.tile[x - 1, y].wall > 0 && Main.wallBlend[(int)Main.tile[x - 1, y].wall] != Main.wallBlend[(int)Main.tile[x, y].wall];
-				bool outlineRight = Main.tile[x + 1, y].wall > 0 && Main.wallBlend[(int)Main.tile[x + 1, y].wall] != Main.wallBlend[(int)Main.tile[x, y].wall];
-				bool outlineUp = Main.tile[x, y - 1].wall > 0 && Main.wallBlend[(int)Main.tile[x, y - 1].wall] != Main.wallBlend[(int)Main.tile[x, y].wall];
-				bool outlineDown = Main.tile[x, y + 1].wall > 0 && Main.wallBlend[(int)Main.tile[x, y + 1].wall] != Main.wallBlend[(int)Main.tile[x, y].wall];
-				if (outlineLeft) sb.Draw(Main.wallOutlineTexture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X), (float)(y * 16 - (int)Main.screenPosition.Y)) + drawOffset, new Rectangle(0, 0, 2, 16), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-				if (outlineRight) sb.Draw(Main.wallOutlineTexture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X + 14), (float)(y * 16 - (int)Main.screenPosition.Y)) + drawOffset, new Rectangle(14, 0, 2, 16), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-				if (outlineUp) sb.Draw(Main.wallOutlineTexture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X), (float)(y * 16 - (int)Main.screenPosition.Y)) + drawOffset, new Rectangle(0, 0, 16, 2), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-				if (outlineDown) sb.Draw(Main.wallOutlineTexture, new Vector2((float)(x * 16 - (int)Main.screenPosition.X), (float)(y * 16 - (int)Main.screenPosition.Y + 14)) + drawOffset, new Rectangle(0, 14, 16, 2), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+				bool outlineLeft = Main.tile[x - 1, y].wall > 0 && Main.wallBlend[Main.tile[x - 1, y].wall] != Main.wallBlend[Main.tile[x, y].wall];
+				bool outlineRight = Main.tile[x + 1, y].wall > 0 && Main.wallBlend[Main.tile[x + 1, y].wall] != Main.wallBlend[Main.tile[x, y].wall];
+				bool outlineUp = Main.tile[x, y - 1].wall > 0 && Main.wallBlend[Main.tile[x, y - 1].wall] != Main.wallBlend[Main.tile[x, y].wall];
+				bool outlineDown = Main.tile[x, y + 1].wall > 0 && Main.wallBlend[Main.tile[x, y + 1].wall] != Main.wallBlend[Main.tile[x, y].wall];
+				if (outlineLeft) sb.Draw(Main.wallOutlineTexture, new Vector2(x * 16 - (int)Main.screenPosition.X, y * 16 - (int)Main.screenPosition.Y) + drawOffset, new Rectangle(0, 0, 2, 16), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+				if (outlineRight) sb.Draw(Main.wallOutlineTexture, new Vector2(x * 16 - (int)Main.screenPosition.X + 14, y * 16 - (int)Main.screenPosition.Y) + drawOffset, new Rectangle(14, 0, 2, 16), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+				if (outlineUp) sb.Draw(Main.wallOutlineTexture, new Vector2(x * 16 - (int)Main.screenPosition.X, y * 16 - (int)Main.screenPosition.Y) + drawOffset, new Rectangle(0, 0, 16, 2), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+				if (outlineDown) sb.Draw(Main.wallOutlineTexture, new Vector2(x * 16 - (int)Main.screenPosition.X, y * 16 - (int)Main.screenPosition.Y + 14) + drawOffset, new Rectangle(0, 14, 16, 2), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 			}
 		}
 
@@ -1722,7 +1722,7 @@ namespace CSkies
 		 */
 		public static Vector2 GetTileDrawPosition(int x, int y, int width, int height, Vector2 drawOffset)
 		{
-			return new Vector2((x * 16 - (int)Main.screenPosition.X) - (width - 16f) / 2f, (float)(y * 16 - (int)Main.screenPosition.Y)) + drawOffset;
+			return new Vector2((x * 16 - (int)Main.screenPosition.X) - (width - 16f) / 2f, y * 16 - (int)Main.screenPosition.Y) + drawOffset;
 		}
 
         /*
@@ -1775,7 +1775,7 @@ namespace CSkies
             offsetX = (drawPlayer.direction == -1 ? -offsetX : offsetX);
             offsetY += 4f; //adding y offset to put properly into place.
 
-            Vector2 frameCenter = new Vector2((float)locationFrame.Width * 0.5f, (float)locationFrame.Height * 0.5f);
+            Vector2 frameCenter = new Vector2(locationFrame.Width * 0.5f, locationFrame.Height * 0.5f);
             Color color = (overrideColor != null ? (Color)overrideColor : GetPlayerColor(drawPlayer, drawPlayer.Center));
             Rectangle frame = frameRect != null ? (Rectangle)frameRect : drawPlayer.bodyFrame;
 
@@ -1785,7 +1785,7 @@ namespace CSkies
 			float scale = scaleOverride > 0f ? scaleOverride : 1f;
 			if (sb is List<DrawData>)
 			{
-				DrawData dd = new DrawData(texture, new Vector2((float)((int)(ediPos.X - (int)Main.screenPosition.X - (float)(frame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(ediPos.Y - (int)Main.screenPosition.Y + (float)drawPlayer.height - (float)frame.Height))) + new Vector2(offsetX * scale, offsetY * scale) + locationPos + frameCenter, frame, color, locationRot, frameCenter, scale, effect, 0);
+				DrawData dd = new DrawData(texture, new Vector2((int)(ediPos.X - (int)Main.screenPosition.X - frame.Width / 2 + drawPlayer.width / 2), (int)(ediPos.Y - (int)Main.screenPosition.Y + drawPlayer.height - frame.Height)) + new Vector2(offsetX * scale, offsetY * scale) + locationPos + frameCenter, frame, color, locationRot, frameCenter, scale, effect, 0);
 				dd.shader = shader;
 				((List<DrawData>)sb).Add(dd);
 			}
@@ -1798,7 +1798,7 @@ namespace CSkies
 					((SpriteBatch)sb).Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 					GameShaders.Armor.ApplySecondary(shader, drawPlayer, null);				
 				}
-				((SpriteBatch)sb).Draw(texture, new Vector2((float)((int)(ediPos.X - (int)Main.screenPosition.X - (float)(frame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(ediPos.Y - (int)Main.screenPosition.Y + (float)drawPlayer.height - (float)frame.Height))) + new Vector2(offsetX * scale, offsetY * scale) + locationPos + frameCenter, frame, color, locationRot, frameCenter, scale, effect, 0);
+				((SpriteBatch)sb).Draw(texture, new Vector2((int)(ediPos.X - (int)Main.screenPosition.X - frame.Width / 2 + drawPlayer.width / 2), (int)(ediPos.Y - (int)Main.screenPosition.Y + drawPlayer.height - frame.Height)) + new Vector2(offsetX * scale, offsetY * scale) + locationPos + frameCenter, frame, color, locationRot, frameCenter, scale, effect, 0);
 				if (applyDye)
 				{
 					((SpriteBatch)sb).End();
@@ -1818,7 +1818,7 @@ namespace CSkies
          */
         public static float GetYOffset(Rectangle frame, float gravDir = 0f)
         {
-			int frameID = (int)(frame.Y / frame.Height);
+			int frameID = frame.Y / frame.Height;
             if(frameID == 7 || frameID == 8 || frameID == 9 || frameID == 14 || frameID == 15 || frameID == 16)
             {
                 return gravDir < 0f ? 2f : -2f;

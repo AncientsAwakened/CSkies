@@ -328,6 +328,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            AIChange();
                         }
                         else if (Main.rand.Next(2) == 0)
                         {
@@ -340,6 +341,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            AIChange();
                         }
                         else
                         {
@@ -352,9 +354,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, -6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        }
-                        if (npc.ai[2] > 240)
-                        {
                             AIChange();
                         }
                         break;
@@ -409,7 +408,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
-                        if (npc.ai[2] <= 360)
+                        if (npc.ai[2] >= 360)
                         {
                             AIChange();
                         }

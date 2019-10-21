@@ -27,7 +27,7 @@ namespace CSkies.Buffs
             int impaleDamage = 0;
             for (int i = 0; i < 1000; i++)
             {
-                if (Main.projectile[i].active && Main.projectile[i].GetGlobalProjectile<ImplaingProjectile>().CanImpale && Main.projectile[i].ai[0] == 1f && Main.projectile[i].ai[1] == (float)npc.whoAmI)
+                if (Main.projectile[i].active && Main.projectile[i].GetGlobalProjectile<ImplaingProjectile>().CanImpale && Main.projectile[i].ai[0] == 1f && Main.projectile[i].ai[1] == npc.whoAmI)
                 {
 
                     impaleDamage += Main.projectile[i].GetGlobalProjectile<ImplaingProjectile>().damagePerImpaler;

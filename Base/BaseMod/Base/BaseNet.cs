@@ -24,7 +24,7 @@ namespace CSkies
 
         public static ModPacket WriteToPacket(ModPacket packet, byte msg, params object[] param)
         {
-            packet.Write((byte)msg);
+            packet.Write(msg);
             for (int m = 0; m < param.Length; m++)
             {
                 object obj = param[m];
@@ -32,7 +32,7 @@ namespace CSkies
 				if(obj is byte[])
 				{
 					byte[] array = (byte[])obj;
-					foreach(byte b in array) packet.Write((byte)b); 
+					foreach(byte b in array) packet.Write(b); 
 				}else
                 if (obj is bool) packet.Write((bool)obj); else
                 if (obj is byte) packet.Write((byte)obj); else

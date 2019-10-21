@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace AAMod.Dusts
+namespace CSkies.Dusts
 {
     public class CGrassDust : ModDust
 	{

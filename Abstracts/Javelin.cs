@@ -86,7 +86,7 @@ namespace CSkies.Projectiles
             // If you'd use the example above, you'd do: isStickingToTarget = 1f;
             // and: targetWhoAmI = (float)target.whoAmI;
             IsStickingToTarget = true; // we are sticking to a target
-            TargetWhoAmI = (float)target.whoAmI; // Set the target whoAmI
+            TargetWhoAmI = target.whoAmI; // Set the target whoAmI
             projectile.velocity =
                 (target.Center - projectile.Center) *
                 0.75f; // Change velocity based on delta center of targets (difference between entity centers)
@@ -107,7 +107,7 @@ namespace CSkies.Projectiles
                     && currentProjectile.owner == Main.myPlayer // Make sure the projectile's owner is the client's player
                     && currentProjectile.type == projectile.type // Make sure the projectile is of the same type as projectile javelin
                     && currentProjectile.ai[0] == 1f // Make sure ai0 state is set to 1f (set earlier in ModifyHitNPC)
-                    && currentProjectile.ai[1] == (float)target.whoAmI
+                    && currentProjectile.ai[1] == target.whoAmI
                 ) // Make sure ai1 is set to the target whoAmI (set earlier in ModifyHitNPC)
                 {
                     stickingJavelins[javelinIndex++] =
@@ -194,7 +194,7 @@ namespace CSkies.Projectiles
                 // Every 30 ticks, the javelin will perform a hit effect
                 bool hitEffect = projectile.localAI[0] % 30f == 0f; // if true, perform a hit effect
                 int projTargetIndex = (int)TargetWhoAmI;
-                if (projectile.localAI[0] >= (float)(60 * aiFactor)// If it's time for projectile javelin to die, kill it
+                if (projectile.localAI[0] >= 60 * aiFactor// If it's time for projectile javelin to die, kill it
                     || (projTargetIndex < 0 || projTargetIndex >= 200)) // If the index is past its limits, kill it
                 {
                     killProj = true;
