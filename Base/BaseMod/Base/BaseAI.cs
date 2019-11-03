@@ -1804,7 +1804,7 @@ namespace CSkies
         {
             if (p.ai[0] == 0f)
             {
-                p.rotation = (float)System.Math.Atan2(p.velocity.Y, p.velocity.X) + 1.57f;
+                p.rotation = (float)Math.Atan2(p.velocity.Y, p.velocity.X) + 1.57f;
                 p.alpha -= alphaInterval;
                 if (p.alpha <= 0)
                 {
@@ -5868,7 +5868,7 @@ namespace CSkies
                         Vector2 fireTarget = codable.Center + offset;
                         float rot = BaseUtility.RotationTo(codable.Center, targetCenter);
                         fireTarget = BaseUtility.RotateVector(codable.Center, fireTarget, rot);
-						pID = BaseAI.FireProjectile(targetCenter, fireTarget, projType, damage, 0f, speed);
+						pID = FireProjectile(targetCenter, fireTarget, projType, damage, 0f, speed);
                     }
                     delayTimer = delayTimerMax;
                     if (codable is NPC) { ((NPC)codable).netUpdate = true; }

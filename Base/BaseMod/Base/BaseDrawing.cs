@@ -121,19 +121,19 @@ namespace CSkies
 				float scalarX = 169f * displayScalar;
 				float scalarY = 8f * displayScalar;
 				Vector2 vector4 = basePosition + Vector2.UnitY * scalarY + Vector2.UnitX * 1f;
-				Utils.DrawBorderString(Main.spriteBatch, displayText2, vector4, Microsoft.Xna.Framework.Color.White * displayAlpha, displayScalar, 0.5f, 1f, -1);
+				Utils.DrawBorderString(Main.spriteBatch, displayText2, vector4, Color.White * displayAlpha, displayScalar, 0.5f, 1f, -1);
 				vector4 += Vector2.UnitX * (progressPercent - 0.5f) * scalarX;
 				Main.spriteBatch.Draw(Main.magicPixel, vector4, new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 241, 51) * displayAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(scalarX * progressPercent, scalarY), SpriteEffects.None, 0f);
 				Main.spriteBatch.Draw(Main.magicPixel, vector4, new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 165, 0, 127) * displayAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(2f, scalarY), SpriteEffects.None, 0f);
-				Main.spriteBatch.Draw(Main.magicPixel, vector4, new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, 0, 1, 1)), Microsoft.Xna.Framework.Color.Black * displayAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(scalarX * (1f - progressPercent), scalarY), SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(Main.magicPixel, vector4, new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, 0, 1, 1)), Color.Black * displayAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(scalarX * (1f - progressPercent), scalarY), SpriteEffects.None, 0f);
 			}
 
 			Vector2 center = new Vector2(Main.screenWidth - 120, Main.screenHeight - 80) + offset;
 			Vector2 stringLength = Main.fontItemStack.MeasureString(displayText);
             Rectangle textRect = Utils.CenteredRectangle(center, (stringLength + new Vector2(iconTex.Width + 20, 10f)) * displayScalar);
 			Utils.DrawInvBG(Main.spriteBatch, textRect, backgroundColor);
-			Main.spriteBatch.Draw(iconTex, textRect.Left() + Vector2.UnitX * displayScalar * 8f, null, Microsoft.Xna.Framework.Color.White * displayAlpha, 0f, new Vector2(0f, iconTex.Height / 2), displayScalar * 0.8f, SpriteEffects.None, 0f);
-			Utils.DrawBorderString(Main.spriteBatch, displayText, textRect.Right() + Vector2.UnitX * displayScalar * -8f, Microsoft.Xna.Framework.Color.White * displayAlpha, displayScalar * 0.9f, 1f, 0.4f, -1);
+			Main.spriteBatch.Draw(iconTex, textRect.Left() + Vector2.UnitX * displayScalar * 8f, null, Color.White * displayAlpha, 0f, new Vector2(0f, iconTex.Height / 2), displayScalar * 0.8f, SpriteEffects.None, 0f);
+			Utils.DrawBorderString(Main.spriteBatch, displayText, textRect.Right() + Vector2.UnitX * displayScalar * -8f, Color.White * displayAlpha, displayScalar * 0.9f, 1f, 0.4f, -1);
 		}
 		
 		public static void AddInterfaceLayer(Mod mod, List<GameInterfaceLayer> list, InterfaceLayer layer, string parent, bool first)
@@ -1909,8 +1909,8 @@ namespace CSkies
 		{
 			try
 			{
-				base.Shader.Parameters["uState"].SetValue(_uState);	
-				if(_uExtraTex != null) base.Shader.Parameters["uExtraTex"].SetValue(_uExtraTex);
+                Shader.Parameters["uState"].SetValue(_uState);	
+				if(_uExtraTex != null) Shader.Parameters["uExtraTex"].SetValue(_uExtraTex);
 				Entity ent = entity;
 				if(lastShaderDrawObject != null) ent = lastShaderDrawObject;
 				if(ent != null)
@@ -1918,45 +1918,45 @@ namespace CSkies
 					Color color = BaseDrawing.GetLightColor(ent.Center);
 					if(ent is NPC) color = ((NPC)ent).GetAlpha(color);
 					if(ent is Projectile) color = ((Projectile)ent).GetAlpha(color);				
-					if(ent is Player) color = ((Player)ent).GetImmuneAlpha(color, ((Player)ent).shadow);					
-					base.Shader.Parameters["uLightColor"].SetValue(color.ToVector4());			
+					if(ent is Player) color = ((Player)ent).GetImmuneAlpha(color, ((Player)ent).shadow);
+                    Shader.Parameters["uLightColor"].SetValue(color.ToVector4());			
 					if(ent is NPC)
 					{
 						Vector4 v4 = new Vector4(0, 0, Main.npcTexture[((NPC)ent).type].Width, Main.npcTexture[((NPC)ent).type].Height);
 						Vector4 v4_2 = new Vector4(0, 0, ((NPC)ent).frame.Width, ((NPC)ent).frame.Height);
-						base.Shader.Parameters["uTexSize"].SetValue(v4);			
-						if(((NPC)ent).modNPC is ParentNPC){ base.Shader.Parameters["uFrame"].SetValue(((ParentNPC)((NPC)ent).modNPC).GetFrameV4()); }else
+                        Shader.Parameters["uTexSize"].SetValue(v4);			
+						if(((NPC)ent).modNPC is ParentNPC){ Shader.Parameters["uFrame"].SetValue(((ParentNPC)((NPC)ent).modNPC).GetFrameV4()); }else
 						{
-							base.Shader.Parameters["uFrame"].SetValue(v4_2);
+                            Shader.Parameters["uFrame"].SetValue(v4_2);
 						}
 					}else
 					if(ent is Projectile)
 					{					
 						Projectile proj = (Projectile)ent;
 						Vector4 v4 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height);	
-						Vector4 v4_2 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height / Main.projFrames[proj.type]);							
-						base.Shader.Parameters["uTexSize"].SetValue(v4);
-						if(proj.modProjectile is ParentProjectile){ base.Shader.Parameters["uFrame"].SetValue(((ParentProjectile)proj.modProjectile).GetFrameV4()); }else
+						Vector4 v4_2 = new Vector4(0, 0, Main.projectileTexture[proj.type].Width, Main.projectileTexture[proj.type].Height / Main.projFrames[proj.type]);
+                        Shader.Parameters["uTexSize"].SetValue(v4);
+						if(proj.modProjectile is ParentProjectile){ Shader.Parameters["uFrame"].SetValue(((ParentProjectile)proj.modProjectile).GetFrameV4()); }else
 						{
-							base.Shader.Parameters["uFrame"].SetValue(v4_2);
+                            Shader.Parameters["uFrame"].SetValue(v4_2);
 						}
 					}else
 					if(ent is Player)
 					{
 						Vector4 v4 = new Vector4(0, 0, Main.playerTextures[0, 0].Width, Main.playerTextures[0, 0].Height);								
-						Vector4 v4_2 = new Vector4(0, 0, BaseConstants.FRAME_PLAYER.Width, BaseConstants.FRAME_PLAYER.Height + 2);					
-						base.Shader.Parameters["uTexSize"].SetValue(v4);
-						base.Shader.Parameters["uFrame"].SetValue(v4_2);						
+						Vector4 v4_2 = new Vector4(0, 0, BaseConstants.FRAME_PLAYER.Width, BaseConstants.FRAME_PLAYER.Height + 2);
+                        Shader.Parameters["uTexSize"].SetValue(v4);
+                        Shader.Parameters["uFrame"].SetValue(v4_2);						
 					}else
 					{
 						Vector4 v4 = new Vector4(0, 0, ent.width, ent.height);
-						base.Shader.Parameters["uFrame"].SetValue(v4);					
+                        Shader.Parameters["uFrame"].SetValue(v4);					
 					}
 				}else
 				{
 					Color color = BaseDrawing.GetLightColor(Main.screenPosition);
-					base.Shader.Parameters["uLightColor"].SetValue(color.ToVector4());	
-					base.Shader.Parameters["uFrame"].SetValue(new Vector4(0, 0, 4, 4));					
+                    Shader.Parameters["uLightColor"].SetValue(color.ToVector4());
+                    Shader.Parameters["uFrame"].SetValue(new Vector4(0, 0, 4, 4));					
 				}
 				base.Apply(entity, drawData);
 				secondaryApply = false;

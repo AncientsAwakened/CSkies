@@ -2,9 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CSkies.Projectiles.Star;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace CSkies.Projectiles.Minions
 {

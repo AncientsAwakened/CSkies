@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ModLoader;
 
 namespace CSkies.Projectiles.Void
 {
@@ -41,7 +40,7 @@ namespace CSkies.Projectiles.Void
         {
             if (projectile.ai[0] == 1f)
             {
-                Main.PlaySound(new LegacySoundStyle(2, 89, Terraria.Audio.SoundType.Sound));
+                Main.PlaySound(new LegacySoundStyle(2, 89, SoundType.Sound));
                 int p = Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, projectile.velocity.X, projectile.velocity.Y, mod.ProjectileType("VoidBoom"), projectile.damage, projectile.knockBack, projectile.owner, 0f, 0f);
                 Main.projectile[p].Center = projectile.Center;
             }

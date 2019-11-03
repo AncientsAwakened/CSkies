@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AAMod.Projectiles
+namespace CSkies.NPCs.Bosses.Enigma
 {
     public class EnigmaBeam : ModProjectile
 	{
@@ -20,9 +21,7 @@ namespace AAMod.Projectiles
             projectile.width = 18;
             projectile.height = 18;
             projectile.hostile = true;
-            projectile.tileCollide = false;
-            projectile.usesLocalNPCImmunity = true;
-            projectile.localNPCHitCooldown = 15;
+            projectile.tileCollide = true;
             projectile.penetrate = -1;
             projectile.alpha = 255;
         }
@@ -33,10 +32,12 @@ namespace AAMod.Projectiles
             if (projectile.velocity.HasNaNs() || projectile.velocity == Vector2.Zero)
                 projectile.velocity = -Vector2.UnitY;
 
-            if (Main.projectile[(int)projectile.ai[1]].active && Main.npc[(int)projectile.ai[1]].type == mod.NPCType("Enigma"))
+            NPC Enigma = Main.npc[(int)projectile.ai[1]];
+
+            if (Enigma.active && Enigma.type == mod.NPCType("Enigma") && (Enigma.ai[0] == 3 || Enigma.ai[0] == 4))
             {
-                projectile.Center = Main.projectile[(int)projectile.ai[1]].Center;
-                projectile.velocity = Vector2.Normalize(Main.projectile[(int)projectile.ai[1]].velocity);
+                projectile.Center = Enigma.Center;
+                projectile.velocity = Vector2.Normalize(Enigma.velocity);
             }
             else
             {
@@ -93,7 +94,7 @@ namespace AAMod.Projectiles
                 float num827 = projectile.velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? -1f : 1f) * 1.57079637f;
                 float num828 = (float)Main.rand.NextDouble() * 2f + 2f;
                 Vector2 vector73 = new Vector2((float)Math.Cos(num827) * num828, (float)Math.Sin(num827) * num828);
-                int num829 = Dust.NewDust(vector72, 0, 0, 206, vector73.X, vector73.Y, 0, default, 1f);
+                int num829 = Dust.NewDust(vector72, 0, 0, DustID.Electric, vector73.X, vector73.Y, 0, default, 1f);
                 Main.dust[num829].noGravity = true;
                 Main.dust[num829].scale = 1.7f;
             }

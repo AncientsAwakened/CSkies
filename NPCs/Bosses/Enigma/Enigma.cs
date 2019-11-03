@@ -3,11 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using Terraria;
-using Terraria.Audio;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CSkies.NPCs.Bosses.FurySoul;
 
 namespace CSkies.NPCs.Bosses.Enigma
 {
@@ -31,30 +28,8 @@ namespace CSkies.NPCs.Bosses.Enigma
             npc.netAlways = true;
             npc.boss = true;
             npc.noTileCollide = true;
-            music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Enigma");
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Enigma");
             bossBag = mod.ItemType("EnigmaBag");
-        }
-
-        public float[] Preamble = new float[2];
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            base.SendExtraAI(writer);
-            if (Main.netMode == NetmodeID.Server || Main.dedServ)
-            {
-                writer.Write(Preamble[0]);
-                writer.Write(Preamble[1]);
-            }
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            base.ReceiveExtraAI(reader);
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                Preamble[0] = reader.ReadFloat();
-                Preamble[1] = reader.ReadFloat();
-            }
         }
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
@@ -73,22 +48,194 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
             else
             {
+                music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Enigma");
                 npc.dontTakeDamage = false;
+            }
+
+            if (!npc.HasPlayerTarget)
+            {
+                npc.TargetClosest();
+            }
+
+            Player player = Main.player[npc.target];
+
+            float ChangeRate = Main.expertMode ? 180 : 240;
+
+            if (npc.life < npc.lifeMax / 2)
+            {
+                ChangeRate = Main.expertMode ? 120 : 180;
             }
 
             npc.ai[1]++;
 
+            BaseAI.AISpaceOctopus(npc, ref EAI, .2f, 6, 400); 
+
             switch ((int)npc.ai[0])
             {
                 case 0:
+                    if (npc.ai[1] > ChangeRate * 1.5f)
+                    {
+                        AIChange();
+                    }
+                    break;
+                case 1:
 
+                    if (npc.ai[1] % (ChangeRate / 6) == 0)
+                    {
+                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[a].Center = npc.Center + new Vector2(30, 0);
+                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[b].Center = npc.Center - new Vector2(30, 0);
+                    }
+
+                    if (npc.ai[1] > ChangeRate + 60)
+                    {
+                        AIReset();
+                    }
+                    break;
+                case 2:
+
+                    if (npc.ai[1] % (ChangeRate / 4) == 0)
+                    {
+                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[a].Center = npc.Center + new Vector2(30, 0);
+                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[b].Center = npc.Center - new Vector2(30, 0);
+                    }
+
+                    if (npc.ai[1] > ChangeRate)
+                    {
+                        AIReset();
+                    }
+                    break;
+                case 3:
+
+                    for (int num468 = 0; num468 < 3; num468++)
+                    {
+                        int num469 = Dust.NewDust(npc.Center, 0, 0, DustID.Electric, 0, 0, 100, default, 1f);
+                        Main.dust[num469].noGravity = true;
+                    }
+
+                    if (npc.ai[1] > ChangeRate)
+                    {
+                        Projectile.NewProjectile(npc.Center, new Vector2(0, -10), mod.ProjectileType("EnigmaBeam"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        npc.ai[0] = 4;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+                        npc.ai[3] = 0;
+                    }
+                    break;
+                case 4:
+
+                    if (npc.ai[1] > ChangeRate + 60)
+                    {
+                        AIReset();
+                    }
                     break;
 
+                case 5:
+
+                    if (npc.ai[1] > ChangeRate)
+                    {
+                        npc.ai[0] = 6;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+                        npc.ai[3] = 0;
+                    }
+
+                    break;
+                case 6:
+
+                    Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
+                    float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
+                    float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
+                    float NewRotation = (float)Math.Atan2(num2, num1);
+                    handRot = MathHelper.Lerp(npc.rotation, NewRotation, 1f / 30f);
+
+                    int[] array4 = new int[5];
+                    Vector2[] array5 = new Vector2[5];
+                    int num838 = 0;
+                    float num839 = 2000f;
+                    for (int num840 = 0; num840 < 255; num840++)
+                    {
+                        if (Main.player[num840].active && !Main.player[num840].dead)
+                        {
+                            Vector2 center9 = Main.player[num840].Center;
+                            float num841 = Vector2.Distance(center9, npc.Center);
+                            if (num841 < num839 && Collision.CanHit(npc.Center, 1, 1, center9, 1, 1))
+                            {
+                                array4[num838] = num840;
+                                array5[num838] = center9;
+                                if (++num838 >= array5.Length)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    for (int num842 = 0; num842 < num838; num842++)
+                    {
+                        Vector2 vector82 = array5[num842] - npc.Center;
+                        float ai = Main.rand.Next(100);
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Vector2 vector83 = Vector2.Normalize(vector82.RotatedByRandom(0.78539818525314331)) * 20f;
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, vector83.X, vector83.Y, ModContent.ProjectileType<Enigmashock>(), npc.damage / 2, 0f, Main.myPlayer, vector82.ToRotation(), ai);
+                        }
+                    }
+
+                    if (npc.ai[1] > ChangeRate + 60)
+                    {
+                        AIReset();
+                    }
+
+                    break;
                 default:
                     npc.ai[0] = 0;
                     goto case 0;
             }
 
+        }
+
+        public void AIChange()
+        {
+            if (Main.netMode != 1)
+            {
+                npc.ai[0] = AIType();
+                npc.ai[1] = 0;
+                npc.ai[2] = 0;
+                npc.ai[3] = 0;
+                npc.netUpdate = true;
+            }
+        }
+
+        public void AIReset()
+        {
+            if (Main.netMode != 1)
+            {
+                npc.ai[0] = 0;
+                npc.ai[1] = 0;
+                npc.ai[2] = 0;
+                npc.ai[3] = 0;
+                npc.netUpdate = true;
+            }
+        }
+
+        public int AIType()
+        {
+            int aitype = Main.rand.Next(4);
+
+            switch (aitype)
+            {
+                case 0:
+                    return 1;
+                case 1:
+                    return 2;
+                case 2:
+                    return 3;
+                default:
+                    return 5;
+            }
         }
 
         public override void NPCLoot()
@@ -128,6 +275,8 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         int handCounter = 0;
         int HandFrame = 0;
+        int ChargeFrame = 0;
+        float handRot = 0;
 
         Texture2D body;
         Texture2D hand;
@@ -135,17 +284,27 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Textures(); 
-            Texture2D RingTex = mod.GetTexture("NPCs/Bosses/Heartcore/Ring1");
+            Textures();
+            Texture2D RingTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCircle");
+            Texture2D ChargeTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCharge");
+
+
             Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height, 0, 0);
+            Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, hand.Width, hand.Height, 0, 0);
             if (scale > 0)
             {
                 RingEffects();
                 BaseDrawing.DrawTexture(spriteBatch, RingTex, 0, npc.position, npc.width, npc.height, scale, rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), drawColor, true);
             }
-            BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 6, npc.frame, drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 6, npc.frame, drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 4, handsframe, drawColor, true);
+            if (npc.ai[0] == 5)
+            {
+                BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 4, handsframe, drawColor, true);
+            }
+            BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
+            BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
+            BaseDrawing.DrawTexture(spriteBatch, ChargeTex, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 4, charge, Color.White, true);
+            BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, handRot, 0, 4, handsframe, drawColor, true);
+
             return false;
         }
 
@@ -195,9 +354,14 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 npc.frameCounter = 0;
                 npc.frame.Y += frameHeight;
+                ChargeFrame += 1;
                 if (npc.frame.Y > frameHeight * 5)
                 {
                     npc.frame.Y = 0;
+                }
+                if (ChargeFrame > 3)
+                {
+                    ChargeFrame = 0;
                 }
             }
             var fpt = ((int)npc.ai[0]) switch
@@ -246,6 +410,31 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
         }
 
+        public float[] Preamble = new float[2];
+        public float[] EAI = new float[1];
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            base.SendExtraAI(writer);
+            if (Main.netMode == NetmodeID.Server || Main.dedServ)
+            {
+                writer.Write(Preamble[0]);
+                writer.Write(Preamble[1]);
+                writer.Write(EAI[0]);
+            }
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            base.ReceiveExtraAI(reader);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                Preamble[0] = reader.ReadFloat();
+                Preamble[1] = reader.ReadFloat();
+                EAI[0] = reader.ReadFloat();
+            }
+        }
+
         public void Prefight()
         {
             if (Main.netMode != 1)
@@ -253,7 +442,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 npc.velocity *= 0;
                 if (Preamble[1]++ < 600)
                 {
-                    music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/silence");
+                    music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
                     if (!CWorld.downedEnigma)
                     {
                         if (Preamble[1] == 90)

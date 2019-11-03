@@ -496,11 +496,11 @@ namespace CSkies
 			Vector2 bottomStart = new Vector2((horizontal ? x : x + (((thickness * 2) + height) * nx)), (horizontal ? y + (((thickness * 2) + height) * ny) : y)), bottomEnd = new Vector2((horizontal ? endX : endX + (((thickness * 2) + height) * nx)), (horizontal ? endY + (((thickness * 2) + height)  * ny) : endY));
 			int[] tiles = gen.tiles, walls = gen.walls;
 			gen.tiles = null;
-			BaseWorldGen.GenerateLine(gen, (int)wallStart.X, (int)wallStart.Y, (int)wallEnd.X, (int)wallEnd.Y, (thickness * 3) + height - 2, false);
+            GenerateLine(gen, (int)wallStart.X, (int)wallStart.Y, (int)wallEnd.X, (int)wallEnd.Y, (thickness * 3) + height - 2, false);
 			gen.tiles = tiles;
 			gen.walls = null;
-			BaseWorldGen.GenerateLine(gen, x, y, (int)topEnd.X, (int)topEnd.Y, thickness, false);
-			BaseWorldGen.GenerateLine(gen, (int)bottomStart.X, (int)bottomStart.Y, (int)bottomEnd.X, (int)bottomEnd.Y, thickness, false);
+            GenerateLine(gen, x, y, (int)topEnd.X, (int)topEnd.Y, thickness, false);
+            GenerateLine(gen, (int)bottomStart.X, (int)bottomStart.Y, (int)bottomEnd.X, (int)bottomEnd.Y, thickness, false);
 			gen.walls = walls;
 		}
 
@@ -966,7 +966,7 @@ namespace CSkies
 				for(int m2 = y; m2 < yend; m2++)
 				{
 					int y2 = m2;
-					if (!base.UnitApply(action, trueOrigin, x, y2, new object[0]) && this._quitOnFail)
+					if (!UnitApply(action, trueOrigin, x, y2, new object[0]) && this._quitOnFail)
 					{
 						return false;
 					}					
@@ -1033,7 +1033,7 @@ namespace CSkies
 				for(int m2 = x; m2 < xend; m2++)
 				{
 					int x2 = m2;
-					if (!base.UnitApply(action, trueOrigin, x2, y, new object[0]) && this._quitOnFail)
+					if (!UnitApply(action, trueOrigin, x2, y, new object[0]) && this._quitOnFail)
 					{
 						return false;
 					}					
@@ -1060,8 +1060,8 @@ namespace CSkies
 		public override bool Apply(Point origin, int x, int y, params object[] args)
 		{
 			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY)
-				return base.Fail();
-			return base.UnitApply(origin, x, y, args);
+				return Fail();
+			return UnitApply(origin, x, y, args);
 		}
 	}	
 	
@@ -1093,20 +1093,20 @@ namespace CSkies
 		{
 			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) 
 				return false;
-			if(GenBase._tiles[x, y] == null) GenBase._tiles[x, y] = new Tile();		
-			if(_canReplace == null || (_canReplace != null && _canReplace(x, y, GenBase._tiles[x, y])))
+			if(_tiles[x, y] == null) _tiles[x, y] = new Tile();		
+			if(_canReplace == null || (_canReplace != null && _canReplace(x, y, _tiles[x, y])))
 			{
-				GenBase._tiles[x, y].ResetToType(this._type);
+                _tiles[x, y].ResetToType(this._type);
 				if(_frameX > -1)
-					GenBase._tiles[x, y].frameX = _frameX;
+                    _tiles[x, y].frameX = _frameX;
 				if(_frameY > -1)
-					GenBase._tiles[x, y].frameY = _frameY;				
+                    _tiles[x, y].frameY = _frameY;				
 				if (this._doFraming)
 				{
 					WorldUtils.TileFrame(x, y, this._doNeighborFraming);
 				}
 			}
-			return base.UnitApply(origin, x, y, args);
+			return UnitApply(origin, x, y, args);
 		}
 	}
 
@@ -1122,9 +1122,9 @@ namespace CSkies
 		public override bool Apply(Point origin, int x, int y, params object[] args)
 		{
 			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) return false;
-			if(GenBase._tiles[x, y] == null) GenBase._tiles[x, y] = new Tile();
+			if(_tiles[x, y] == null) _tiles[x, y] = new Tile();
 			Main.Map.UpdateLighting(x, y, Math.Max(Main.Map[x, y].Light, _brightness));
-			return base.UnitApply(origin, x, y, args);
+			return UnitApply(origin, x, y, args);
 		}
 	}	
 	
@@ -1150,10 +1150,10 @@ namespace CSkies
 		public override bool Apply(Point origin, int x, int y, params object[] args)
 		{
 			if(x < 0 || x > Main.maxTilesX || y < 0 || y > Main.maxTilesY) return false;
-			if(GenBase._tiles[x, y] == null) GenBase._tiles[x, y] = new Tile();
-			if(_canReplace == null || (_canReplace != null && _canReplace(x, y, GenBase._tiles[x, y])))
-			{			
-				GenBase._tiles[x, y].wall = this._type;
+			if(_tiles[x, y] == null) _tiles[x, y] = new Tile();
+			if(_canReplace == null || (_canReplace != null && _canReplace(x, y, _tiles[x, y])))
+			{
+                _tiles[x, y].wall = this._type;
 				WorldGen.SquareWallFrame(x, y, true);
 				if (this._neighbors)
 				{
@@ -1163,7 +1163,7 @@ namespace CSkies
 					WorldGen.SquareWallFrame(x, y + 1, true);
 				}
 			}
-			return base.UnitApply(origin, x, y, args);
+			return UnitApply(origin, x, y, args);
 		}
 	}
 	
@@ -1186,11 +1186,11 @@ namespace CSkies
 			Vector2 value2 = new Vector2(x, y);
 			float num = Vector2.Distance(value2, value);
 			float num2 = Math.Max(0f, Math.Min(1f, (num - this._innerRadius) / (this._outerRadius - this._innerRadius)));
-			if (GenBase._random.NextDouble() > num2)
+			if (_random.NextDouble() > num2)
 			{
-				return base.UnitApply(origin, x, y, args);
+				return UnitApply(origin, x, y, args);
 			}
-			return base.Fail();
+			return Fail();
 		}
 	}
 	
@@ -1207,9 +1207,9 @@ namespace CSkies
 		{
 			if(x < 0 || x >= Main.maxTilesX || y < 0 || y >= Main.maxTilesY)
 				return false;
-			if(GenBase._tiles[x, y] == null)
-				GenBase._tiles[x, y] = new Tile();
-			GenBase._tiles[x, y].ClearTile();
+			if(_tiles[x, y] == null)
+                _tiles[x, y] = new Tile();
+            _tiles[x, y].ClearTile();
 			if (_frameNeighbors)
 			{
 				WorldGen.TileFrame(x + 1, y, false, false);
@@ -1217,7 +1217,7 @@ namespace CSkies
 				WorldGen.TileFrame(x, y + 1, false, false);
 				WorldGen.TileFrame(x, y - 1, false, false);
 			}
-			return base.UnitApply(origin, x, y, args);
+			return UnitApply(origin, x, y, args);
 		}		
 	}
 	#endregion
@@ -1227,14 +1227,14 @@ namespace CSkies
 	{
 		protected override bool CheckValidity(int x, int y)
 		{
-			return GenBase._tiles[x, y].active() && GenBase._tiles[x, y].slope() == 0 && !GenBase._tiles[x, y].halfBrick();
+			return _tiles[x, y].active() && _tiles[x, y].slope() == 0 && !_tiles[x, y].halfBrick();
 		}
 	}	
 	public class IsSloped : GenCondition
 	{
 		protected override bool CheckValidity(int x, int y)
 		{
-			return GenBase._tiles[x, y].active() && (GenBase._tiles[x, y].slope() > 0 || GenBase._tiles[x, y].halfBrick());
+			return _tiles[x, y].active() && (_tiles[x, y].slope() > 0 || _tiles[x, y].halfBrick());
 		}
 	}
 	#endregion

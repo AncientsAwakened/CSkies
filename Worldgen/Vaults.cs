@@ -6,7 +6,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.World.Generation;
-using CSkies.Tiles;
 using CSkies.Tiles.Abyss;
 
 namespace CSkies.Worldgen

@@ -685,8 +685,8 @@ namespace CSkies
 		 */
 		public static Color BuffColorize(Color buffColor, Color lightColor)
 		{
-			Color color2 = BaseUtility.ColorBrightnessClamp(buffColor, lightColor);
-			return BaseUtility.ColorClamp(BaseUtility.Colorize(buffColor, lightColor), color2);
+			Color color2 = ColorBrightnessClamp(buffColor, lightColor);
+			return ColorClamp(Colorize(buffColor, lightColor), color2);
 		}
 
         /*
