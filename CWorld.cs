@@ -26,6 +26,10 @@ namespace CSkies
         public static bool downedHeartcore = false;
         public static bool downedSoul = false;
 
+        public static bool downedEnigma = false;
+        public static bool downedEnigmachina = false;
+        public static bool downedLuminoth = false;
+
         public static int CometTiles = 0;
         public static int AbyssTiles = 0;
         public static int CSkyTiles = 0;
@@ -68,6 +72,10 @@ namespace CSkies
             if (downedHeartcore) downed.Add("Heart");
             if (downedSoul) downed.Add("Soul");
 
+            if (downedEnigma) downed.Add("E");
+            if (downedEnigmachina) downed.Add("EM");
+            if (downedLuminoth) downed.Add("L");
+
             if (MeteorMessage) downed.Add("Comet");
             if (KillDoors) downed.Add("door");
             if (AbyssBiome) downed.Add("AB");
@@ -89,6 +97,10 @@ namespace CSkies
             downedHeartcore = downed.Contains("Heart");
             downedSoul = downed.Contains("Soul");
 
+            downedEnigma = downed.Contains("E");
+            downedEnigmachina = downed.Contains("EM");
+            downedLuminoth = downed.Contains("L");
+
             MeteorMessage = downed.Contains("Comet");
             KillDoors = downed.Contains("door");
             AbyssBiome = downed.Contains("AB");
@@ -109,6 +121,9 @@ namespace CSkies
             BitsByte flags0 = new BitsByte();
             flags0[0] = downedHeart;
             flags0[1] = AbyssBiome;
+            flags0[2] = downedEnigma;
+            flags0[3] = downedEnigmachina;
+            flags0[4] = downedLuminoth;
             writer.Write(flags0);
         }
         public override void NetReceive(BinaryReader reader)
@@ -127,6 +142,9 @@ namespace CSkies
             BitsByte flags0 = reader.ReadByte();
             downedHeart = flags0[0];
             AbyssBiome = flags0[1];
+            downedEnigma = flags0[2];
+            downedEnigmachina = flags0[3];
+            downedLuminoth = flags0[4];
         }
         #endregion
 
@@ -134,7 +152,8 @@ namespace CSkies
         {
             CometTiles = tileCounts[ModContent.TileType<CometOre>()];
 
-            AbyssTiles = tileCounts[ModContent.TileType<AbyssSand>()] +
+            AbyssTiles = tileCounts[ModContent.TileType<AbyssBricks>()] +
+                tileCounts[ModContent.TileType<AbyssSand>()] +
                 tileCounts[ModContent.TileType<Abice>()] +
                 tileCounts[ModContent.TileType<AbyssSandstone>()] +
                 tileCounts[ModContent.TileType<HardenedAbyssSand>()] +
@@ -424,7 +443,7 @@ namespace CSkies
                             {
                                 Main.tile[num2, num3].active(false);
                             }
-                            Main.tile[num2, num3].type = (ushort)ModContent.TileType<Tiles.CometOre>();
+                            Main.tile[num2, num3].type = (ushort)ModContent.TileType<CometOre>();
                         }
                     }
                 }
@@ -462,7 +481,7 @@ namespace CSkies
                         }
                         Main.tile[num12, num13].liquid = 0;
                     }
-                    if (Main.tile[num12, num13].type == (ushort)ModContent.TileType<Tiles.CometOre>())
+                    if (Main.tile[num12, num13].type == (ushort)ModContent.TileType<CometOre>())
                     {
                         if (!WorldGen.SolidTile(num12 - 1, num13) && !WorldGen.SolidTile(num12 + 1, num13) && !WorldGen.SolidTile(num12, num13 - 1) && !WorldGen.SolidTile(num12, num13 + 1))
                         {
@@ -493,7 +512,7 @@ namespace CSkies
                             {
                                 WorldGen.KillTile(num17, num18, false, false, false);
                             }
-                            Main.tile[num17, num18].type = (ushort)ModContent.TileType<Tiles.CometOre>();
+                            Main.tile[num17, num18].type = (ushort)ModContent.TileType<CometOre>();
                             WorldGen.SquareTileFrame(num17, num18, true);
                         }
                     }
@@ -515,7 +534,7 @@ namespace CSkies
                             {
                                 WorldGen.KillTile(num22, num23, false, false, false);
                             }
-                            Main.tile[num22, num23].type = (ushort)ModContent.TileType<Tiles.CometOre>();
+                            Main.tile[num22, num23].type = (ushort)ModContent.TileType<CometOre>();
                             WorldGen.SquareTileFrame(num22, num23, true);
                         }
                     }

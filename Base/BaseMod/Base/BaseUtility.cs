@@ -504,7 +504,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<Color> list = array.ToList<Color>();
+				List<Color> list = array.ToList();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}
@@ -522,7 +522,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<string> list = array.ToList<string>();
+				List<string> list = array.ToList();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}
@@ -540,7 +540,7 @@ namespace CSkies
 				array[array.Length - 1] = valueToAdd;
 			}else
 			{
-				List<int> list = array.ToList<int>();
+				List<int> list = array.ToList();
 				list.Insert(indexAt, valueToAdd);
 				array = list.ToArray();
 			}

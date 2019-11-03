@@ -1,6 +1,6 @@
 displayName = Celestial Skies
 author = Elizabeth Yamamoto
-version = 2.0.0.0
+version = 2.0.0.1
 includePDB = true
 buildIgnore = *.csproj, *.user, obj\*, bin\*, lib\*, .vs\*, *.gif, *.piskel, Unused\*
 hideCode = true

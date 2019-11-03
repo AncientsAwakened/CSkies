@@ -21,7 +21,7 @@ namespace CSkies.NPCs.Enemies
             npc.value = BaseUtility.CalcValue(0, 0, 2, 0);
             npc.npcSlots = 1;
             npc.aiStyle = -1;
-            npc.lifeMax = 100;
+            npc.lifeMax = 1200;
             npc.defense = 5;
             npc.damage = 30;
             npc.HitSound = SoundID.NPCHit49;

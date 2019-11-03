@@ -397,6 +397,11 @@ namespace CSkies.NPCs.Bosses.Void
             npc.oldPos[0] = npc.position;
 
             npc.rotation = 0;
+
+            if (npc.dontTakeDamage)
+            {
+                npc.ai[0] = 30;
+            }
         }
 
         public void Starblast(int damage = 130)

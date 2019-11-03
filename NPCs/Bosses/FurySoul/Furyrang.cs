@@ -16,7 +16,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             projectile.timeLeft = 3600;
             projectile.hostile = true;
             projectile.tileCollide = false;
-            projectile.damage = 1;
+            projectile.damage = 200;
             projectile.penetrate = -1;
             projectile.melee = true;
         }

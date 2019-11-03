@@ -36,10 +36,10 @@ namespace CSkies
 		 #region JustChestyThings
 		 public static Chest GetClosestVanillaChest(Vector2 origin, float distance, int chestStyle = -1, int special = -1)
 		 {
-			 return GetClosestVanillaChest(origin, distance, chestStyle == -1 ? default(int[]) : new int[] { chestStyle }, special);
+			 return GetClosestVanillaChest(origin, distance, chestStyle == -1 ? default : new int[] { chestStyle }, special);
 		 }
 
-		 public static Chest GetClosestVanillaChest(Vector2 origin, float distance, int[] chestStyles = default(int[]), int special = -1)
+		 public static Chest GetClosestVanillaChest(Vector2 origin, float distance, int[] chestStyles = default, int special = -1)
 		 {
 			 Chest[] chests = GetVanillaChestsNear(origin, distance, chestStyles, special);
 			 if (chests.Length == 0) { return null; }
@@ -58,10 +58,10 @@ namespace CSkies
 
 		 public static Chest[] GetVanillaChestsNear(Vector2 origin, float distance, int chestStyle = -1, int special = -1)
 		 {
-			 return GetVanillaChestsNear(origin, distance, chestStyle == -1 ? default(int[]) : new int[] { chestStyle }, special);
+			 return GetVanillaChestsNear(origin, distance, chestStyle == -1 ? default : new int[] { chestStyle }, special);
 		 }
 
-		 public static Chest[] GetVanillaChestsNear(Vector2 origin, float distance, int[] chestStyles = default(int[]), int special = -1)
+		 public static Chest[] GetVanillaChestsNear(Vector2 origin, float distance, int[] chestStyles = default, int special = -1)
 		 {
 			 List<Chest> chests = new List<Chest>();
 			 for (int m = 0; m < Main.chest.Length; m++)
@@ -93,7 +93,7 @@ namespace CSkies
 
 		 public static Chest[] GetVanillaChests(int minY, int maxY, int chestStyle = -1, int special = -1)
 		 {
-			 return GetVanillaChests(minY, maxY, chestStyle == -1 ? default(int[]) : new int[] { chestStyle }, special);
+			 return GetVanillaChests(minY, maxY, chestStyle == -1 ? default : new int[] { chestStyle }, special);
 		 }
 
          /*
@@ -107,9 +107,9 @@ namespace CSkies
           *            0 > needs a dungeon tile below it.
           *            1 > needs a sky island brick tile below it.
           */
-        public static Chest[] GetVanillaChests(int minY, int maxY, int[] chestStyles = default(int[]), int special = -1)
+        public static Chest[] GetVanillaChests(int minY, int maxY, int[] chestStyles = default, int special = -1)
         {
-            System.Collections.Generic.List<Chest> chests = new System.Collections.Generic.List<Chest>();
+            List<Chest> chests = new List<Chest>();
             for(int m = 0; m < Main.chest.Length; m++)
             {
                 Chest chest = Main.chest[m];
@@ -214,7 +214,7 @@ namespace CSkies
 			int leftY = Math.Max(10, y - distance);
 			int rightX = Math.Min(Main.maxTilesX - 10, x + distance);
 			int rightY = Math.Min(Main.maxTilesY - 10, y + distance);
-			Vector2 pos = default(Vector2);
+			Vector2 pos = default;
 			float dist = -1;
 			for (int x1 = leftX; x1 < rightX; x1++)
 			{

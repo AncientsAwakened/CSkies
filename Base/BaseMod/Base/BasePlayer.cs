@@ -193,7 +193,7 @@ namespace CSkies
             return stackCount;
         }
 
-        public static bool HasItem(Player player, int[] types, int[] counts = default(int[]), bool includeAmmo = false, bool includeCoins = false)
+        public static bool HasItem(Player player, int[] types, int[] counts = default, bool includeAmmo = false, bool includeCoins = false)
         {
             int dummyIndex = 0;
             bool hasItem = HasItem(player, types, ref dummyIndex, counts, includeAmmo, includeCoins);
@@ -207,7 +207,7 @@ namespace CSkies
          * includeAmmo : true if you wish to include the ammo slots.
          * includeCoins : true if you wish to include the coin slots.
          */
-        public static bool HasItem(Player player, int[] types, ref int index, int[] counts = default(int[]), bool includeAmmo = false, bool includeCoins = false)
+        public static bool HasItem(Player player, int[] types, ref int index, int[] counts = default, bool includeAmmo = false, bool includeCoins = false)
         {
 			if(types == null || types.Length == 0) return false; //no types to check!			
             if(counts == null || counts.Length == 0){ counts = BaseUtility.FillArray(new int[types.Length], 1); }
@@ -236,7 +236,7 @@ namespace CSkies
             return false;
         }
 
-		public static bool HasAllItems(Player player, int[] types, ref int[] indicies, int[] counts = default(int[]), bool includeAmmo = false, bool includeCoins = false)
+		public static bool HasAllItems(Player player, int[] types, ref int[] indicies, int[] counts = default, bool includeAmmo = false, bool includeCoins = false)
 		{
 			if(types == null || types.Length == 0) return false; //no types to check!
             if(counts == null || counts.Length == 0){ counts = BaseUtility.FillArray(new int[types.Length], 1); }			

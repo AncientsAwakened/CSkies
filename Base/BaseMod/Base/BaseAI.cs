@@ -41,7 +41,7 @@ namespace CSkies
 			}
 		}
 
-		public static void AIMinionPlant(Projectile projectile, ref float[] ai, Entity owner, Vector2 endPoint, bool setTime = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default(Vector2), Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
+		public static void AIMinionPlant(Projectile projectile, ref float[] ai, Entity owner, Vector2 endPoint, bool setTime = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default, Func<Entity, Entity, Entity> GetTarget = null, Func<Entity, Entity, Entity, bool> ShootTarget = null)
 		{
 			if (setTime){ projectile.timeLeft = 10; }
 			Entity target = (GetTarget == null ? null : GetTarget(projectile, owner));
@@ -53,7 +53,7 @@ namespace CSkies
 				vineLength = vineLengthLong;
 				if (ai[0] > vineTimeMax) { ai[0] = 0f; }
 			}
-			Vector2 targetCenter = target.Center + targetOffset + (target == owner ? new Vector2(0f, (owner is Player ? ((Player)owner).gfxOffY : owner is NPC ? ((NPC)owner).gfxOffY : ((Projectile)owner).gfxOffY)) : default(Vector2));
+			Vector2 targetCenter = target.Center + targetOffset + (target == owner ? new Vector2(0f, (owner is Player ? ((Player)owner).gfxOffY : owner is NPC ? ((NPC)owner).gfxOffY : ((Projectile)owner).gfxOffY)) : default);
 			if (!targetOwner)
 			{
 				float distTargetX = targetCenter.X - endPoint.X;
@@ -270,9 +270,9 @@ namespace CSkies
 			{
 				tileCollide = true;
 				Entity target = (GetTarget == null ? null : GetTarget(codable, owner));
-				Vector2 targetCenter = (target == null ? default(Vector2) : target.Center);
+				Vector2 targetCenter = (target == null ? default : target.Center);
 				bool isOwner = (target == null || targetCenter == owner.Center);
-				if (targetCenter == default(Vector2))
+				if (targetCenter == default)
 				{
 					targetCenter = owner.Center;
 					targetCenter.X += (owner.width + 10 + (lineDist * minionPos)) * -owner.direction;
@@ -324,9 +324,9 @@ namespace CSkies
 				Vector2 targetCenter = owner.Center;
 				if (owner.velocity.Y != 0f && dist < 80)
 				{
-					targetCenter = owner.Center + BaseUtility.RotateVector(default(Vector2), new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
+					targetCenter = owner.Center + BaseUtility.RotateVector(default, new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
 				}
-				Vector2 newVel = BaseUtility.RotateVector(default(Vector2), new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
+				Vector2 newVel = BaseUtility.RotateVector(default, new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
 				if (owner.velocity.Y != 0f && ((newVel.X > 0 && codable.velocity.X < 0) || (newVel.X < 0 && codable.velocity.X > 0)))
 				{
 					codable.velocity *= 0.98f; newVel *= 0.02f; codable.velocity += newVel;
@@ -378,9 +378,9 @@ namespace CSkies
 			{
 				tileCollide = true;
 				Entity target = (GetTarget == null ? null : GetTarget(codable, owner));
-				Vector2 targetCenter = (target == null ? default(Vector2) : target.Center);
+				Vector2 targetCenter = (target == null ? default : target.Center);
 				bool isOwner = (target == null || targetCenter == owner.Center);
-				if (targetCenter == default(Vector2))
+				if (targetCenter == default)
 				{
 					targetCenter = owner.Center;
 					targetCenter.X += (lineDist + (lineDist * minionPos)) * -owner.direction;
@@ -458,9 +458,9 @@ namespace CSkies
 				Vector2 targetCenter = owner.Center;
 				if (owner.velocity.Y != 0f && dist < 80)
 				{
-					targetCenter = owner.Center + BaseUtility.RotateVector(default(Vector2), new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
+					targetCenter = owner.Center + BaseUtility.RotateVector(default, new Vector2(10, 0f), BaseUtility.RotationTo(codable.Center, owner.Center));
 				}
-				Vector2 newVel = BaseUtility.RotateVector(default(Vector2), new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
+				Vector2 newVel = BaseUtility.RotateVector(default, new Vector2(maxSpeedFlying, 0f), BaseUtility.RotationTo(codable.Center, targetCenter));
 				if (owner.velocity.Y != 0f && ((newVel.X > 0 && codable.velocity.X < 0) || (newVel.X < 0 && codable.velocity.X > 0)))
 				{
 					codable.velocity *= 0.98f; newVel *= 0.02f; codable.velocity += newVel;
@@ -487,7 +487,7 @@ namespace CSkies
 			if (absolute)
 			{
 				moveRot += rotAmount;
-				Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+				Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 				codable.Center = rotVec;
 				rotVec.Normalize();
 				rotation = BaseUtility.RotationTo(codable.Center, rotateCenter) - 1.57f;
@@ -500,16 +500,16 @@ namespace CSkies
 					if (rotDistance - dist > rotThreshold) //too close, get back into position
 					{
 						moveRot += rotAmount;
-						Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+						Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 						float rot2 = BaseUtility.RotationTo(codable.Center, rotVec);
-						codable.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(5f, 0f), rot2);
+						codable.velocity = BaseUtility.RotateVector(default, new Vector2(5f, 0f), rot2);
 						rotation = BaseUtility.RotationTo(codable.Center, codable.Center + codable.velocity);
 					}else
 					{
 						moveRot += rotAmount;
-						Vector2 rotVec = BaseUtility.RotateVector(default(Vector2), new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
+						Vector2 rotVec = BaseUtility.RotateVector(default, new Vector2(rotDistance, 0f), moveRot) + rotateCenter;
 						float rot2 = BaseUtility.RotationTo(codable.Center, rotVec);
-						codable.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(5f, 0f), rot2);
+						codable.velocity = BaseUtility.RotateVector(default, new Vector2(5f, 0f), rot2);
 						rotation = BaseUtility.RotationTo(codable.Center, codable.Center + codable.velocity);
 					}
 				}else
@@ -566,14 +566,14 @@ namespace CSkies
         public static void AIPath(NPC npc, ref float[] ai, Vector2[] points, float moveInterval = 0.11f, float maxSpeed = 3f, bool direct = false)
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
-            if (Main.netMode != 1 && destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
+            if (Main.netMode != 1 && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
             {
-                ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
+                ai[0] = 0f; ai[1] = 0f; destVec = default;
             }
             if (npc.ai[2] < points.Length)
             {
                 //if the destination vec is default (0, 0), get the current point.
-                if (destVec == default(Vector2))
+                if (destVec == default)
                 {
                     npc.velocity *= 0.95f;
                     if(Main.netMode != 1)
@@ -603,12 +603,12 @@ namespace CSkies
         public static void AITackle(NPC npc, ref float[] ai, Vector2 point, float moveInterval = 0.11f, float maxSpeed = 3f, bool direct = false, int tackleDelay = 50, float drift = 0.95f)
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
-            if (destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
+            if (destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
             {
-                ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
+                ai[0] = 0f; ai[1] = 0f; destVec = default;
             }
             //if the destination vec is default (0, 0), get the current point.
-            if (destVec == default(Vector2))
+            if (destVec == default)
             {
                 npc.velocity *= drift;
                 ai[2]--;
@@ -649,19 +649,19 @@ namespace CSkies
             if (Main.netMode != 1)
             {
                 //used to prevent the npc from getting 'stuck' trying to reach a point
-                if (!idleTooLong && destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(12f, ((npc.width + npc.height) / 2f) * 3f * (moveInterval / 0.06f)))
+                if (!idleTooLong && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(12f, ((npc.width + npc.height) / 2f) * 3f * (moveInterval / 0.06f)))
                 {
                     ai[2]++;
                     if (ai[2] > 100) { ai[2] = 0; idleTooLong = true; }
                 }
                 //if the destination vec is not null and the npc is close to the point (or has been idle too long), set it to default.
-                if (idleTooLong || (destVec != default(Vector2) && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.75f)))
+                if (idleTooLong || (destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.75f)))
                 {
-                    ai[0] = 0f; ai[1] = 0f; destVec = default(Vector2);
+                    ai[0] = 0f; ai[1] = 0f; destVec = default;
                 }
             }
             //if the destination vec is default (0, 0)...
-            if (destVec == default(Vector2))
+            if (destVec == default)
             {
                 if (npc.velocity.X > 0.3f || npc.velocity.Y > 0.3f) { npc.velocity.X *= 0.95f; }
                 if (canCrossCenter)
@@ -675,7 +675,7 @@ namespace CSkies
                     Vector2 bottomLeft = new Vector2(topLeft.X, point.Y + (minDistance + rand.Next(distance)));
                     Vector2 bottomRight = new Vector2(topRight.X, bottomLeft.Y);
                     float tempDist = 9999999f;
-                    Vector2 closestPoint = default(Vector2);
+                    Vector2 closestPoint = default;
                     for (int m = 0; m < 4; m++)
                     {
                         Vector2 corner = (m == 0 ? topLeft : m == 1 ? topRight : m == 2 ? bottomLeft : bottomRight);
@@ -691,7 +691,7 @@ namespace CSkies
                 ai[0] = destVec.X; ai[1] = destVec.Y;
                 if(Main.netMode == 2){ npc.netUpdate = true; }
             }else
-            if (destVec != default(Vector2)) //otherwise move towards the point.
+            if (destVec != default) //otherwise move towards the point.
             {
                 npc.velocity = AIVelocityLinear(npc, destVec, moveInterval, maxSpeed, direct);
             }
@@ -827,7 +827,7 @@ namespace CSkies
 				if (projectile.velocity != Vector2.Zero)
 				{
 					projectile.localAI[0] += projVelocity.X * (projectile.extraUpdates + 1) * 2f * velSpeed;
-					projectile.velocity = projVelocity.RotatedBy(projectile.ai[0] + 1.57079637f, default(Vector2)) * velSpeed;
+					projectile.velocity = projVelocity.RotatedBy(projectile.ai[0] + 1.57079637f, default) * velSpeed;
 					projectile.rotation = projectile.velocity.ToRotation() + 1.57079637f;
 					return;
 				}
@@ -1044,7 +1044,7 @@ namespace CSkies
 				if (projRot != p.rotation)
 				{
 					float rotDist = MathHelper.WrapAngle(projRot - p.rotation);
-					centerDist = centerDist.RotatedBy(rotDist * 0.1f, default(Vector2));
+					centerDist = centerDist.RotatedBy(rotDist * 0.1f, default);
 				}
 				p.rotation = centerDist.ToRotation() + 1.57079637f;
 				p.position = p.Center;
@@ -1153,16 +1153,16 @@ namespace CSkies
 			if(yoyoTimeMax == -1) yoyoTimeMax = ProjectileID.Sets.YoyosLifeTimeMultiplier[p.type];
 			if(maxRange == -1) maxRange = ProjectileID.Sets.YoyosMaximumRange[p.type];
 			if(topSpeed == -1) topSpeed = ProjectileID.Sets.YoyosTopSpeed[p.type];	
-			AIYoyo(p, ref ai, ref localAI, Main.player[p.owner], Main.player[p.owner].channel, default(Vector2), yoyoTimeMax, maxRange, topSpeed, dontChannel, rotAmount);
+			AIYoyo(p, ref ai, ref localAI, Main.player[p.owner], Main.player[p.owner].channel, default, yoyoTimeMax, maxRange, topSpeed, dontChannel, rotAmount);
 		}
 
-		public static void AIYoyo(Projectile p, ref float[] ai, ref float[] localAI, Entity owner, bool isChanneling, Vector2 targetPos = default(Vector2), float yoyoTimeMax = 120, float maxRange = 150, float topSpeed = 8f, bool dontChannel = false, float rotAmount = 0.45f)
+		public static void AIYoyo(Projectile p, ref float[] ai, ref float[] localAI, Entity owner, bool isChanneling, Vector2 targetPos = default, float yoyoTimeMax = 120, float maxRange = 150, float topSpeed = 8f, bool dontChannel = false, float rotAmount = 0.45f)
 		{
 			bool playerYoyo = owner is Player;
 			Player powner = (playerYoyo ? (Player)owner : null);
 			float meleeSpeed = (playerYoyo ? powner.meleeSpeed : 1f);
 			Vector2 targetP = targetPos;
-			if(playerYoyo && Main.myPlayer == p.owner && targetPos == default(Vector2)) targetP = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
+			if(playerYoyo && Main.myPlayer == p.owner && targetPos == default) targetP = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
 
 			bool yoyoFound = false;
 			if(owner is Player)
@@ -1965,9 +1965,9 @@ namespace CSkies
          * rotationInterval : the amount for the projectile to rotate by each tick.
          * direct : If true, when returning simply reverses the boomerang velocity.
          */
-        public static void AIBoomerang(Projectile p, ref float[] ai, Vector2 position = default(Vector2), int width = -1, int height = -1, bool playSound = true, float maxDistance = 9f, int returnDelay = 35, float speedInterval = 0.4f, float rotationInterval = 0.4f, bool direct = false)
+        public static void AIBoomerang(Projectile p, ref float[] ai, Vector2 position = default, int width = -1, int height = -1, bool playSound = true, float maxDistance = 9f, int returnDelay = 35, float speedInterval = 0.4f, float rotationInterval = 0.4f, bool direct = false)
         {
-            if (position == default(Vector2)) { position = Main.player[p.owner].position; }
+            if (position == default) { position = Main.player[p.owner].position; }
             if (width == -1) { width = Main.player[p.owner].width; }
             if (height == -1) { height = Main.player[p.owner].height; }
             Vector2 center = position + new Vector2(width * 0.5f, height * 0.5f);
@@ -1997,7 +1997,7 @@ namespace CSkies
                 }
                 if (direct)
                 {
-                    p.velocity = BaseUtility.RotateVector(default(Vector2), new Vector2(speedInterval, 0f), BaseUtility.RotationTo(p.Center, center));
+                    p.velocity = BaseUtility.RotateVector(default, new Vector2(speedInterval, 0f), BaseUtility.RotationTo(p.Center, center));
                 }else
                 {
                     distPlayer = maxDistance / distPlayer;
@@ -2362,7 +2362,7 @@ namespace CSkies
 			AISpaceOctopus(npc, ref ai, Main.player[npc.target].Center, moveSpeed, velMax, hoverDistance, shootProjInterval, FireProj);
 		}
 
-		public static void AISpaceOctopus(NPC npc, ref float[] ai, Vector2 targetCenter = default(Vector2), float moveSpeed = 0.15f, float velMax = 5f, float hoverDistance = 250f, float shootProjInterval = 70f, Action<NPC, Vector2> FireProj = null)
+		public static void AISpaceOctopus(NPC npc, ref float[] ai, Vector2 targetCenter = default, float moveSpeed = 0.15f, float velMax = 5f, float hoverDistance = 250f, float shootProjInterval = 70f, Action<NPC, Vector2> FireProj = null)
 		{
 			Vector2 wantedVelocity = targetCenter - npc.Center + new Vector2(0f, -hoverDistance);
 			float dist = wantedVelocity.Length();
@@ -3792,9 +3792,9 @@ namespace CSkies
 		 * speedMax : the max speed of the npc.
 		 * targetOffset : A vector2 representing an 'offset' from the target, allows for some variation and misaccuracy.
 		 */
-		public static void AIPlant(NPC npc, ref float[] ai, bool checkTilePoint = true, Vector2 endPoint = default(Vector2), bool isTilePos = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default(Vector2))
+		public static void AIPlant(NPC npc, ref float[] ai, bool checkTilePoint = true, Vector2 endPoint = default, bool isTilePos = true, float vineLength = 150f, float vineLengthLong = 200f, int vineTimeExtend = 300, int vineTimeMax = 450, float moveInterval = 0.035f, float speedMax = 2f, Vector2 targetOffset = default)
         {
-            if (endPoint != default(Vector2))
+            if (endPoint != default)
             {
                 ai[0] = endPoint.X;
                 ai[1] = endPoint.Y;
@@ -4169,7 +4169,7 @@ namespace CSkies
                 dist = (dist - npc.width - partDistanceAddon) / dist;
                 playerCenterX *= dist;
                 playerCenterY *= dist;
-                npc.velocity = default(Vector2);
+                npc.velocity = default;
                 npc.position.X = npc.position.X + playerCenterX;
                 npc.position.Y = npc.position.Y + playerCenterY;
                 if (fly)
@@ -5048,7 +5048,7 @@ namespace CSkies
         {
             if (!noYMovement || codable.velocity.Y == 0f)
             {
-                Vector2 dummyVec = default(Vector2);
+                Vector2 dummyVec = default;
                 return HitTileOnSide(codable.position, codable.width, codable.height, dir, ref dummyVec);
             }
             return false;
@@ -5451,7 +5451,7 @@ namespace CSkies
             for (int m = 0; m < loopAmount; m++)
             {
                 Vector2 gorePos = new Vector2(center.X - 24f, center.Y - 24f);
-                Vector2 velocityDefault = default(Vector2);
+                Vector2 velocityDefault = default;
                 int goreID = Gore.NewGore(gorePos, velocityDefault, Main.rand.Next(61, 64), 1f);
                 Gore gore = Main.gore[goreID];
                 gore.scale = scale * 1.5f;
@@ -5477,7 +5477,7 @@ namespace CSkies
 
 		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, float distance = -1, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectile(center, projType, owner, default(int[]), distance, CanAdd);
+			return GetProjectile(center, projType, owner, default, distance, CanAdd);
 		}
 		/*
 		 * Gets the closest Projectile with the given type within the given distance from the center. If distance is -1, it gets the closest Projectile.
@@ -5486,7 +5486,7 @@ namespace CSkies
 		 * projsToExclude : An array of projectile whoAmIs to exclude from the search.
 		 * distance : The distance to check.
 		 */
-		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default(int[]), float distance = -1, Func<Projectile, bool> CanAdd = null)
+		public static int GetProjectile(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default, float distance = -1, Func<Projectile, bool> CanAdd = null)
 		{
 			int currentProj = -1;
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5515,7 +5515,7 @@ namespace CSkies
 
 		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectiles(center, projType, owner, default(int[]), distance, CanAdd);
+			return GetProjectiles(center, projType, owner, default, distance, CanAdd);
 		}
 		/*
 		 * Gets the all Projectiles with the given type within the given distance from the center.
@@ -5524,7 +5524,7 @@ namespace CSkies
          * projsToExclude : An array of projectile whoAmIs to exclude from the search.
          * distance : The distance to check.
 		 */
-		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default(int[]), float distance = 500f, Func<Projectile, bool> CanAdd = null)
+		public static int[] GetProjectiles(Vector2 center, int projType = -1, int owner = -1, int[] projsToExclude = default, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
 			List<int> allProjs = new List<int>();
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5550,7 +5550,7 @@ namespace CSkies
 
 		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
-			return GetProjectiles(center, projTypes, owner, default(int[]), distance, CanAdd);
+			return GetProjectiles(center, projTypes, owner, default, distance, CanAdd);
 		}
 
 		/*
@@ -5560,7 +5560,7 @@ namespace CSkies
          * projsToExclude : An array of projectile whoAmIs to exclude from the search.
          * distance : The distance to check.
 		 */
-		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, int[] projsToExclude = default(int[]), float distance = 500f, Func<Projectile, bool> CanAdd = null)
+		public static int[] GetProjectiles(Vector2 center, int[] projTypes, int owner = -1, int[] projsToExclude = default, float distance = 500f, Func<Projectile, bool> CanAdd = null)
 		{
 			List<int> allProjs = new List<int>();
 			for (int i = 0; i < Main.projectile.Length; i++)
@@ -5593,7 +5593,7 @@ namespace CSkies
 		 * npcType : If -1, check for ANY npcs in the area. If not, check for the npcs who match the type given.
 		 * npcsToExclude : An array of npc whoAmIs to exclude from the search.
 		 */
-		public static int[] GetNPCsInBox(Rectangle rect, int npcType = -1, int[] npcsToExclude = default(int[]), Func<NPC, bool> CanAdd = null)
+		public static int[] GetNPCsInBox(Rectangle rect, int npcType = -1, int[] npcsToExclude = default, Func<NPC, bool> CanAdd = null)
 		{
 			List<int> allNPCs = new List<int>();
 			for (int i = 0; i < Main.npc.Length; i++)
@@ -5619,7 +5619,7 @@ namespace CSkies
 
         public static int GetNPC(Vector2 center, int npcType = -1, float distance = -1, Func<NPC, bool> CanAdd = null)
         {
-            return GetNPC(center, npcType, default(int[]), distance, CanAdd);
+            return GetNPC(center, npcType, default, distance, CanAdd);
         }
         /*
          * Gets the closest NPC with the given type within the given distance from the center. If distance is -1, it gets the closest NPC.
@@ -5628,7 +5628,7 @@ namespace CSkies
          * npcsToExclude : An array of npc whoAmIs to exclude from the search.
          * distance : The distance to check.
          */
-		public static int GetNPC(Vector2 center, int npcType = -1, int[] npcsToExclude = default(int[]), float distance = -1, Func<NPC, bool> CanAdd = null)
+		public static int GetNPC(Vector2 center, int npcType = -1, int[] npcsToExclude = default, float distance = -1, Func<NPC, bool> CanAdd = null)
         {
             int currentNPC = -1;
             for (int i = 0; i < Main.npc.Length; i++)
@@ -5666,7 +5666,7 @@ namespace CSkies
          * npcsToExclude : an array of npc whoAmIs to exclude from the search.
          * distance : the distance to check.
          */
-		public static int[] GetNPCs(Vector2 center, int npcType = -1, int[] npcsToExclude = default(int[]), float distance = 500F, Func<NPC, bool> CanAdd = null)
+		public static int[] GetNPCs(Vector2 center, int npcType = -1, int[] npcsToExclude = default, float distance = 500F, Func<NPC, bool> CanAdd = null)
         {
             List<int> allNPCs = new List<int>();
             for (int i = 0; i < Main.npc.Length; i++)
@@ -5695,7 +5695,7 @@ namespace CSkies
          * rect : The rectangle to search.
          * playersToExclude : An array of player whoAmis that will be excluded from the search.
          */
-		public static int[] GetPlayersInBox(Rectangle rect, int[] playersToExclude = default(int[]), Func<Player, bool> CanAdd = null)
+		public static int[] GetPlayersInBox(Rectangle rect, int[] playersToExclude = default, Func<Player, bool> CanAdd = null)
         {
             List<int> allPlayers = new List<int>();
             for (int i = 0; i < Main.player.Length; i++)
@@ -5739,7 +5739,7 @@ namespace CSkies
 
 		public static int GetPlayer(Vector2 center, float distance = -1, Func<Player, bool> CanAdd = null)
         {
-            return GetPlayer(center, default(int[]), true, distance, CanAdd);
+            return GetPlayer(center, default, true, distance, CanAdd);
         }
         /*
          * Gets the closest player within the given distance from the center. If distance is -1, it gets the closest player.
@@ -5748,7 +5748,7 @@ namespace CSkies
          * aliveOnly : If true, it only returns the player whoAmI if the player is not dead.
          * distance : The distance to search.
          */
-		public static int GetPlayer(Vector2 center, int[] playersToExclude = default(int[]), bool activeOnly = true, float distance = -1, Func<Player, bool> CanAdd = null)
+		public static int GetPlayer(Vector2 center, int[] playersToExclude = default, bool activeOnly = true, float distance = -1, Func<Player, bool> CanAdd = null)
         {
             int currentPlayer = -1;
             for (int i = 0; i < Main.player.Length; i++)
@@ -5777,7 +5777,7 @@ namespace CSkies
 
 		public static int[] GetPlayers(Vector2 center, float distance = 500F, Func<Player, bool> CanAdd = null)
         {
-            return GetPlayers(center, default(int[]), true, distance, CanAdd);
+            return GetPlayers(center, default, true, distance, CanAdd);
         }
         /*
          * Gets all players within a given distance from the center.
@@ -5785,7 +5785,7 @@ namespace CSkies
          * playersToExclude is an array of player ids you do not want included in the array.
          * aliveOnly : If true, it only returns the player whoAmI if the player is not dead.
          */
-		public static int[] GetPlayers(Vector2 center, int[] playersToExclude = default(int[]), bool aliveOnly = true, float distance = 500F, Func<Player, bool> CanAdd = null)
+		public static int[] GetPlayers(Vector2 center, int[] playersToExclude = default, bool aliveOnly = true, float distance = 500F, Func<Player, bool> CanAdd = null)
         {
             List<int> allPlayers = new List<int>();
             for (int i = 0; i < Main.player.Length; i++)
@@ -5852,7 +5852,7 @@ namespace CSkies
          * checkCanHit : If true, check if the codable can see the target point before firing.
          * offset : offset from the center of the codable that the projectile should spawn at.
          */
-        public static int ShootPeriodic(Entity codable, Vector2 position, int width, int height, int projType, ref float delayTimer, float delayTimerMax = 100f, int damage = -1, float speed = 10f, bool checkCanHit = true, Vector2 offset = default(Vector2))
+        public static int ShootPeriodic(Entity codable, Vector2 position, int width, int height, int projType, ref float delayTimer, float delayTimerMax = 100f, int damage = -1, float speed = 10f, bool checkCanHit = true, Vector2 offset = default)
         {
             int pID = -1;
             if (damage == -1) { Projectile proj = new Projectile(); proj.SetDefaults(projType); damage = proj.damage; }
@@ -5933,7 +5933,7 @@ namespace CSkies
          *             2 -> hurt BOTH Players/Townies and NPCs
          *             3 -> hurt NEITHER Players/Townies and NPCs (inert projectile)
          */
-        public static int FireProjectile(Vector2 fireTarget, Vector2 position, int projectileType, int damage, float knockback, float speedScalar = 1f, int hostility = 0, int owner = -1, Vector2 targetOffset = default(Vector2))
+        public static int FireProjectile(Vector2 fireTarget, Vector2 position, int projectileType, int damage, float knockback, float speedScalar = 1f, int hostility = 0, int owner = -1, Vector2 targetOffset = default)
         {
             Vector2 rotVec = BaseUtility.RotateVector(position, position + new Vector2(speedScalar, 0f), BaseUtility.RotationTo(position, fireTarget));
             rotVec -= position;
@@ -6096,7 +6096,7 @@ namespace CSkies
 
         public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, float Jump = 1F, bool ignorePlatforms = true)
         {
-            return Trace(start, end, ignore, ignoreType, dim, npcCheck, tileCheck, playerCheck, returnCenter, (ignorePlatforms ? new int[] { 19 } : default(int[])), Jump); //ignores wooden platforms
+            return Trace(start, end, ignore, ignoreType, dim, npcCheck, tileCheck, playerCheck, returnCenter, (ignorePlatforms ? new int[] { 19 } : default), Jump); //ignores wooden platforms
         }
 
         /* **Code edited from Yoraiz0r's 'Holowires' Mod!**
@@ -6111,7 +6111,7 @@ namespace CSkies
          * tileTypesToIgnore : An array of tile types that it will assume it can trace through.
          * Jump: The amount to iterate by.
          */
-        public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, int[] tileTypesToIgnore = default(int[]), float Jump = 1F)
+        public static Vector2 Trace(Vector2 start, Vector2 end, object ignore, int ignoreType, object dim, bool npcCheck = true, bool tileCheck = true, bool playerCheck = true, bool returnCenter = false, int[] tileTypesToIgnore = default, float Jump = 1F)
         {
 			try
 			{

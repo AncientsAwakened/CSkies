@@ -16,14 +16,14 @@ namespace CSkies.Worldgen
         public override bool Place(Point origin, StructureMap structures)
         {
             Mod mod = CSkies.inst;
-            ushort tileGrass = (ushort)ModContent.TileType<AbyssGrass>(), tileStone = (ushort)ModContent.TileType<AbyssStone>(), tileIce = (ushort)ModContent.TileType<Abice>(),
+            /*ushort tileGrass = (ushort)ModContent.TileType<AbyssGrass>(), tileStone = (ushort)ModContent.TileType<AbyssStone>(), tileIce = (ushort)ModContent.TileType<Abice>(),
             tileSand = (ushort)ModContent.TileType<AbyssSand>(), tileSandHardened = (ushort)ModContent.TileType<HardenedAbyssSand>(), tileSandstone = (ushort)ModContent.TileType<AbyssSandstone>(), 
             tileMoss = (ushort)ModContent.TileType<AbyssMoss>();
 
             byte StoneWall = (byte)ModContent.WallType<AbyssStoneWall>(), SandstoneWall = (byte)ModContent.WallType<AbyssSandstoneWall>(), HardenedSandWall = (byte)ModContent.WallType<HardenedAbyssSandWall>(),
             GrassWall = (byte)ModContent.WallType<AbyssLeafWall>();
 
-            int biomeRadius = 118;
+            int biomeRadius = 118;*/
 
 
 
@@ -43,7 +43,7 @@ namespace CSkies.Worldgen
 
             TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/AbyssVault"), colorToTile, mod.GetTexture("Worldgen/AbyssVaultWall"), colorToWall, null, mod.GetTexture("Worldgen/AbyssVaultSlopes"));
 
-            Point newOrigin = new Point(origin.X, origin.Y);
+            /*Point newOrigin = new Point(origin.X, origin.Y);
 
             WorldUtils.Gen(newOrigin, new Shapes.Circle(biomeRadius), Actions.Chain(new GenAction[] //grass...
 			{
@@ -128,7 +128,7 @@ namespace CSkies.Worldgen
                 new Modifiers.OnlyWalls(new byte[]{ WallID.GrassUnsafe, WallID.CorruptGrassUnsafe, WallID.CrimsonGrassUnsafe }),
                 new Modifiers.RadialDither(biomeRadius - 5, biomeRadius),
                 new PlaceModWall(GrassWall, true)
-            }));
+            }));*/
 
             int genX = origin.X - (gen.width / 2);
             int genY = origin.Y - 30;

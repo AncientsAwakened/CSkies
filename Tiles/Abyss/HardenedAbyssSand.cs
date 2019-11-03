@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace CSkies.Tiles
+namespace CSkies.Tiles.Abyss
 {
     public class HardenedAbyssSand : ModTile
     {
