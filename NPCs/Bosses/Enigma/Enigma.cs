@@ -34,6 +34,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Enigma");
             bossBag = mod.ItemType("EnigmaBag");
+            npc.alpha = 255;
         }
 
         bool Unhooded = false;
@@ -92,7 +93,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             npc.ai[1]++;
 
-            BaseAI.AISpaceOctopus(npc, ref EAI, Movespeed, VelMax, 400); 
+            BaseAI.AISpaceOctopus(npc, ref EAI, Movespeed, VelMax, 300); 
 
             switch ((int)npc.ai[0])
             {
@@ -170,41 +171,38 @@ namespace CSkies.NPCs.Bosses.Enigma
                     break;
                 case 6:
 
-                    Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
-                    float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
-                    float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
-                    float NewRotation = (float)Math.Atan2(num2, num1);
-                    handRot = MathHelper.Lerp(npc.rotation, NewRotation, 1f / 30f);
-
-                    int[] array4 = new int[5];
-                    Vector2[] array5 = new Vector2[5];
-                    int num838 = 0;
-                    float num839 = 2000f;
-                    for (int num840 = 0; num840 < 255; num840++)
+                    if (npc.ai[1] % 10 == 0)
                     {
-                        if (Main.player[num840].active && !Main.player[num840].dead)
+                        int[] array4 = new int[5];
+                        Vector2[] array5 = new Vector2[5];
+                        int num838 = 0;
+                        float num839 = 2000f;
+                        for (int num840 = 0; num840 < 255; num840++)
                         {
-                            Vector2 center9 = Main.player[num840].Center;
-                            float num841 = Vector2.Distance(center9, npc.Center);
-                            if (num841 < num839 && Collision.CanHit(npc.Center, 1, 1, center9, 1, 1))
+                            if (Main.player[num840].active && !Main.player[num840].dead)
                             {
-                                array4[num838] = num840;
-                                array5[num838] = center9;
-                                if (++num838 >= array5.Length)
+                                Vector2 center9 = Main.player[num840].Center;
+                                float num841 = Vector2.Distance(center9, npc.Center);
+                                if (num841 < num839 && Collision.CanHit(npc.Center, 1, 1, center9, 1, 1))
                                 {
-                                    break;
+                                    array4[num838] = num840;
+                                    array5[num838] = center9;
+                                    if (++num838 >= array5.Length)
+                                    {
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    for (int num842 = 0; num842 < num838; num842++)
-                    {
-                        Vector2 vector82 = array5[num842] - npc.Center;
-                        float ai = Main.rand.Next(100);
-                        for (int i = 0; i < 3; i++)
+                        for (int num842 = 0; num842 < num838; num842++)
                         {
-                            Vector2 vector83 = Vector2.Normalize(vector82.RotatedByRandom(0.78539818525314331)) * 20f;
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, vector83.X, vector83.Y, ModContent.ProjectileType<Enigmashock>(), npc.damage / 2, 0f, Main.myPlayer, vector82.ToRotation(), ai);
+                            Vector2 vector82 = array5[num842] - npc.Center;
+                            float ai = Main.rand.Next(100);
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Vector2 vector83 = Vector2.Normalize(vector82.RotatedByRandom(0.78539818525314331)) * 20f;
+                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, vector83.X, vector83.Y, ModContent.ProjectileType<Enigmashock>(), npc.damage / 2, 0f, Main.myPlayer, vector82.ToRotation(), ai);
+                            }
                         }
                     }
 
@@ -234,6 +232,19 @@ namespace CSkies.NPCs.Bosses.Enigma
                 default:
                     npc.ai[0] = 0;
                     goto case 0;
+            }
+
+            if (npc.ai[0] == 6)
+            {
+                Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
+                float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
+                float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
+                float NewRotation = (float)Math.Atan2(num2, num1);
+                handRot = MathHelper.Lerp(npc.rotation, NewRotation, 1f / 30f);
+            }
+            else
+            {
+                handRot = 0;
             }
         }
 
@@ -333,8 +344,8 @@ namespace CSkies.NPCs.Bosses.Enigma
             Texture2D RingTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCircle");
             Texture2D ChargeTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCharge");
 
-            Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, 62, 50, 0, 0);
-            Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height, 0, 0);
+            Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height / 4, 0, 0);
+            Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height / 4, 0, 0);
 
             if (scale > 0)
             {
@@ -357,7 +368,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         {
             body = Main.npcTexture[npc.type];
             glow = mod.GetTexture("Glowmasks/Enigma_Glow");
-            if (npc.life < npc.life / 2)
+            if (npc.life < npc.lifeMax / 2)
             {
                 body = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaUnhooded");
                 glow = mod.GetTexture("Glowmasks/EnigmaUnhooded_Glow");
@@ -419,7 +430,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 }
             }
 
-            int fpt = (int)npc.ai[0] == 0 ? 10 : 3;
+            int fpt = (int)npc.ai[0] == 0 ? 10 : 1;
 
             if (handCounter++ >= fpt)
             {
@@ -490,6 +501,14 @@ namespace CSkies.NPCs.Bosses.Enigma
         public void Prefight()
         {
             npc.ai[0] = 0;
+            if (npc.alpha > 0)
+            {
+                npc.alpha -= 5;
+            }
+            else
+            {
+                npc.alpha = 0;
+            }
             if (Main.netMode != 1)
             {
                 Preamble[1]++;
@@ -498,27 +517,41 @@ namespace CSkies.NPCs.Bosses.Enigma
                 {
                     if (!CWorld.downedEnigma)
                     {
-                        if (Preamble[1] == 90)
+                        if (Preamble[1] == 1)
+                        {
+                            for (int num572 = 0; num572 < 10; num572++)
+                            {
+                                float num573 = npc.velocity.X * 0.2f * num572;
+                                float num574 = -(npc.velocity.Y * 0.2f) * num572;
+                                int num575 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 1f);
+                                Main.dust[num575].velocity *= 0f;
+                                Dust expr_178B4_cp_0 = Main.dust[num575];
+                                expr_178B4_cp_0.position.X -= num573;
+                                Dust expr_178D3_cp_0 = Main.dust[num575];
+                                expr_178D3_cp_0.position.Y -= num574;
+                            }
+                        }
+                        if (Preamble[1] == 120)
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("Well...I've finally found you.", Color.Cyan);
                         }
 
-                        if (Preamble[1] == 180)
+                        if (Preamble[1] == 240)
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("You have been quite the thorn in my side.", Color.Cyan);
                         }
 
-                        if (Preamble[1] == 270)
+                        if (Preamble[1] == 360)
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("Especially after you trashed my beatuiful starcore...", Color.Cyan);
                         }
 
-                        if (Preamble[1] == 360)
+                        if (Preamble[1] == 480)
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("You're too much of a liability for my plans, so...", Color.Cyan);
                         }
 
-                        if (Preamble[1] >= 450)
+                        if (Preamble[1] >= 600)
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("I'll squash you like the insect you are.", Color.Cyan);
                             Preamble[0] = 1;
@@ -556,6 +589,11 @@ namespace CSkies.NPCs.Bosses.Enigma
                     {
                         if (Main.netMode != 1) BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
                         Preamble[0] = 1;
+
+                        npc.ai[0] = 5;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+                        npc.ai[3] = 0;
 
                         npc.netUpdate = true;
                     }

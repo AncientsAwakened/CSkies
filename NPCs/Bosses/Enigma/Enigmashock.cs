@@ -24,7 +24,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.hostile = true;
             projectile.alpha = 255;
             projectile.ignoreWater = true;
-            projectile.tileCollide = false;
+            projectile.tileCollide = true;
             projectile.extraUpdates = 4;
             projectile.timeLeft = 120 * (projectile.extraUpdates + 1);
         }
@@ -80,7 +80,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 }
             }
             projectile.frameCounter++;
-            Lighting.AddLight(projectile.Center, Color.Magenta.R / 255, Color.Magenta.G / 255, Color.Magenta.B / 255);
+            Lighting.AddLight(projectile.Center, Color.Cyan.R / 255, Color.Cyan.G / 255, Color.Cyan.B / 255);
             if (projectile.velocity == Vector2.Zero)
             {
                 if (projectile.frameCounter >= projectile.extraUpdates * 2)
