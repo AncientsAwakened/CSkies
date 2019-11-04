@@ -11,6 +11,10 @@ namespace CSkies.NPCs.Bosses.Enigma
     [AutoloadBossHead]
     public class Enigma : ModNPC
     {
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[npc.type] = 6;
+        }
         public override void SetDefaults()
         {
             npc.npcSlots = 100;
@@ -74,13 +78,13 @@ namespace CSkies.NPCs.Bosses.Enigma
             float ChangeRate = Main.expertMode ? 180 : 240;
 
             float Movespeed = .2f;
-            float VelMax = 6;
+            float VelMax = 8;
 
             if (npc.life < npc.lifeMax / 2)
             {
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/EnigmaU");
                 Movespeed = .25f;
-                VelMax = 8;
+                VelMax = 10;
                 ChangeRate = Main.expertMode ? 120 : 180;
                 npc.damage = 48;
             }
@@ -324,12 +328,13 @@ namespace CSkies.NPCs.Bosses.Enigma
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
             Textures();
+
             Texture2D RingTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCircle");
             Texture2D ChargeTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCharge");
 
-
             Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height, 0, 0);
-            Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, hand.Width, hand.Height, 0, 0);
+            Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height, 0, 0);
+
             if (scale > 0)
             {
                 RingEffects();
@@ -337,13 +342,13 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
             if (npc.ai[0] == 5)
             {
-                BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 4, handsframe, drawColor, true);
+                BaseDrawing.DrawTexture(spriteBatch, ChargeTex, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 4, charge, Color.White, true);
             }
+
             BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
             BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, ChargeTex, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 4, charge, Color.White, true);
-            BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, handRot, 0, 4, handsframe, drawColor, true);
 
+            BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, handRot, 0, 4, handsframe, drawColor, true);
             return false;
         }
 
@@ -398,14 +403,18 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 npc.frameCounter = 0;
                 npc.frame.Y += frameHeight;
-                ChargeFrame += 1;
                 if (npc.frame.Y > frameHeight * 5)
                 {
                     npc.frame.Y = 0;
                 }
-                if (ChargeFrame > 3)
+
+                if (npc.ai[0] == 5)
                 {
-                    ChargeFrame = 0;
+                    ChargeFrame += 1;
+                    if (ChargeFrame > 3)
+                    {
+                        ChargeFrame = 0;
+                    }
                 }
             }
 

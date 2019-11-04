@@ -46,8 +46,8 @@ namespace CSkies.NPCs.Bosses.Enigma
                 int foundTarget = HomeOnTarget();
                 if (foundTarget != -1)
                 {
-                    NPC n = Main.npc[foundTarget];
-                    Vector2 desiredVelocity = projectile.DirectionTo(n.Center) * desiredFlySpeedInPixelsPerFrame;
+                    Player p = Main.player[foundTarget];
+                    Vector2 desiredVelocity = projectile.DirectionTo(p.Center) * desiredFlySpeedInPixelsPerFrame;
                     projectile.velocity = Vector2.Lerp(projectile.velocity, desiredVelocity, 1f / amountOfFramesToLerpBy);
                 }
             }
@@ -55,25 +55,20 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         private int HomeOnTarget()
         {
-            const bool homingCanAimAtWetEnemies = true;
             const float homingMaximumRangeInPixels = 400;
 
             int selectedTarget = -1;
-            for (int i = 0; i < Main.maxNPCs; i++)
+            for (int i = 0; i < Main.maxPlayers; i++)
             {
-                NPC n = Main.npc[i];
-                if (n.CanBeChasedBy(projectile) && (!n.wet || homingCanAimAtWetEnemies))
-                {
-                    float distance = projectile.Distance(n.Center);
-                    if (distance <= homingMaximumRangeInPixels &&
-                        (
-                            selectedTarget == -1 || //there is no selected target
-                            projectile.Distance(Main.npc[selectedTarget].Center) > distance) 
-                    )
-                        selectedTarget = i;
-                }
+                Player n = Main.player[i];
+                float distance = projectile.Distance(n.Center);
+                if (distance <= homingMaximumRangeInPixels &&
+                    (
+                        selectedTarget == -1 || //there is no selected target
+                        projectile.Distance(Main.player[selectedTarget].Center) > distance)
+                )
+                    selectedTarget = i;
             }
-
             return selectedTarget;
         }
 
