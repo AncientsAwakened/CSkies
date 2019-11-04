@@ -346,19 +346,21 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height / 4, 0, 0);
             Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height / 4, 0, 0);
+            Rectangle RingFrame = BaseDrawing.GetFrame(0, ChargeTex.Width, ChargeTex.Height, 0, 0);
 
+            RingEffects();
             if (scale > 0)
             {
-                RingEffects();
-                BaseDrawing.DrawTexture(spriteBatch, RingTex, 0, npc.position, npc.width, npc.height, scale, rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), drawColor, true);
+                BaseDrawing.DrawTexture(spriteBatch, RingTex, 0, npc.position, npc.width, npc.height, scale, rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), Color.White, true);
             }
+
+            BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
+            BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, Color.White, true);
+
             if (npc.ai[0] == 5)
             {
                 BaseDrawing.DrawTexture(spriteBatch, ChargeTex, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 4, charge, Color.White, true);
             }
-
-            BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
 
             BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, handRot, 0, 4, handsframe, drawColor, true);
             return false;
