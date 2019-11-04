@@ -119,7 +119,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public override void Kill(int timeleft)
         {
-            Projectile.NewProjectile(projectile.position, new Vector2(0, -12), ModContent.ProjectileType<EnigmaRain>(), projectile.damage / 4, 5, Main.myPlayer);
+            Projectile.NewProjectile(projectile.position, new Vector2(0, 12), ModContent.ProjectileType<EnigmaRain>(), projectile.damage / 4, 5, Main.myPlayer);
             for (int num468 = 0; num468 < 5; num468++)
             {
                 int num469 = Dust.NewDust(projectile.Center, projectile.width, projectile.height, DustID.Electric, -projectile.velocity.X * 0.2f, -projectile.velocity.Y * 0.2f, 100, default, 2f);

@@ -51,6 +51,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 Unhooded = true;
                 Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/EnigmaHood"), 1f);
                 Preamble[0] = 2;
+                Preamble[1] = 0;
             }
         }
 
@@ -105,9 +106,9 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] % (ChangeRate / 6) == 0)
                     {
-                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(20, -10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(0, 20)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
                         Main.projectile[a].Center = npc.Center + new Vector2(30, 0);
-                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(20, -10)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
+                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(0, 20)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
                         Main.projectile[b].Center = npc.Center - new Vector2(30, 0);
                     }
 

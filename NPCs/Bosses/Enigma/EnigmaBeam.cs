@@ -36,7 +36,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             if (Enigma.active && Enigma.type == mod.NPCType("Enigma") && (Enigma.ai[0] == 3 || Enigma.ai[0] == 4))
             {
-                projectile.Center = Enigma.Center;
+                projectile.Center = Enigma.Center + new Vector2(0, 20);
                 projectile.velocity = new Vector2(0, 10);
             }
             else
