@@ -20,6 +20,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.aiStyle = -1;
             projectile.ignoreWater = true;
             projectile.tileCollide = false;
+            projectile.timeLeft = 180;
         }
 
         public float Rotation = 0;
@@ -86,7 +87,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 
             }
             projectile.ai[0] += 1f;
-            if (projectile.ai[0] % 30f == 0f && projectile.ai[0] < 180f && Main.netMode != 1)
+            if (projectile.ai[0] % 20f == 0f && Main.netMode != 1)
             {
                 int[] array4 = new int[5];
                 Vector2[] array5 = new Vector2[5];
@@ -113,7 +114,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 {
                     Vector2 vector82 = array5[num842] - projectile.Center;
                     float ai = Main.rand.Next(100);
-                    Vector2 vector83 = Vector2.Normalize(vector82.RotatedByRandom(0.78539818525314331)) * 12f;
+                    Vector2 vector83 = Vector2.Normalize(vector82.RotatedByRandom(0.78539818525314331)) * 16f;
                     Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, vector83.X, vector83.Y, ModContent.ProjectileType<Enigmashock>(), projectile.damage / 4, 0f, Main.myPlayer, vector82.ToRotation(), ai);
                 }
             }

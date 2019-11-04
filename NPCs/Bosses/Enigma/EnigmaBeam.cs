@@ -37,7 +37,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             if (Enigma.active && Enigma.type == mod.NPCType("Enigma") && (Enigma.ai[0] == 3 || Enigma.ai[0] == 4))
             {
                 projectile.Center = Enigma.Center;
-                projectile.velocity = Vector2.Normalize(Enigma.velocity);
+                projectile.velocity = new Vector2(0, 10);
             }
             else
             {
@@ -102,7 +102,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             if (Main.rand.Next(5) == 0)
             {
                 Vector2 value40 = projectile.velocity.RotatedBy(Math.PI / 2, default) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
-                int num830 = Dust.NewDust(vector72 + value40 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default, 1.5f);
+                int num830 = Dust.NewDust(vector72 + value40 - Vector2.One * 4f, 8, 8, DustID.Electric, 0f, 0f, 100, default, 1.5f);
                 Main.dust[num830].velocity *= 0.5f;
                 Main.dust[num830].velocity.Y = -Math.Abs(Main.dust[num830].velocity.Y);
             }

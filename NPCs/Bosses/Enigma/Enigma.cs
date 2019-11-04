@@ -332,7 +332,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             Texture2D RingTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCircle");
             Texture2D ChargeTex = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaCharge");
 
-            Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height, 0, 0);
+            Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, 62, 50, 0, 0);
             Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height, 0, 0);
 
             if (scale > 0)
@@ -381,7 +381,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsLaser");
                     break;
                 case 5:
-                    hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCarge");
+                    hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCharge");
                     break;
                 case 6:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAim");
@@ -420,7 +420,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             int fpt = (int)npc.ai[0] == 0 ? 10 : 3;
 
-            if (handCounter >= fpt)
+            if (handCounter++ >= fpt)
             {
                 handCounter = 0;
                 HandFrame++;
