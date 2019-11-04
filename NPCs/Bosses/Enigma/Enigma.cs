@@ -32,10 +32,22 @@ namespace CSkies.NPCs.Bosses.Enigma
             bossBag = mod.ItemType("EnigmaBag");
         }
 
+        bool Unhooded = false;
+
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
             npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
             npc.damage = (int)(npc.damage * 0.5f);
+        }
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (npc.life < npc.lifeMax / 2 && !Unhooded)
+            {
+                Unhooded = true;
+                Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/EnigmaHood"), 1f);
+                Preamble[0] = 2;
+            }
         }
 
         public override void AI()
@@ -61,14 +73,21 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             float ChangeRate = Main.expertMode ? 180 : 240;
 
+            float Movespeed = .2f;
+            float VelMax = 6;
+
             if (npc.life < npc.lifeMax / 2)
             {
+                music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/EnigmaU");
+                Movespeed = .25f;
+                VelMax = 8;
                 ChangeRate = Main.expertMode ? 120 : 180;
+                npc.damage = 48;
             }
 
             npc.ai[1]++;
 
-            BaseAI.AISpaceOctopus(npc, ref EAI, .2f, 6, 400); 
+            BaseAI.AISpaceOctopus(npc, ref EAI, Movespeed, VelMax, 400); 
 
             switch ((int)npc.ai[0])
             {
@@ -190,11 +209,27 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
 
                     break;
+
+                case 7:
+
+                    if (npc.ai[1] == 45)
+                    {
+                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[a].Center = npc.Center + new Vector2(200, 0);
+                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[b].Center = npc.Center - new Vector2(200, 0);
+                    }
+
+                    if (npc.ai[1] > 90)
+                    {
+                        AIReset();
+                    }
+
+                    break;
                 default:
                     npc.ai[0] = 0;
                     goto case 0;
             }
-
         }
 
         public void AIChange()
@@ -223,7 +258,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public int AIType()
         {
-            int aitype = Main.rand.Next(4);
+            int aitype = Main.rand.Next(Unhooded ? 5 : 4);
 
             switch (aitype)
             {
@@ -233,6 +268,8 @@ namespace CSkies.NPCs.Bosses.Enigma
                     return 2;
                 case 2:
                     return 3;
+                case 3:
+                    return 7;
                 default:
                     return 5;
             }
@@ -255,6 +292,8 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 npc.DropLoot(mod.ItemType("EnigmaMask"));
             }
+
+            CWorld.downedEnigma = true;
 
             if (Main.expertMode)
             {
@@ -324,6 +363,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHands");
                     break;
                 case 1:
+                case 7:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
                 case 2:
@@ -346,6 +386,10 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsPrelude");
             }
+            if (Preamble[0] == 2)
+            {
+                hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCover");
+            }
         }
 
         public override void FindFrame(int frameHeight)
@@ -364,11 +408,9 @@ namespace CSkies.NPCs.Bosses.Enigma
                     ChargeFrame = 0;
                 }
             }
-            var fpt = ((int)npc.ai[0]) switch
-            {
-                0 => 10,
-                _ => 3,
-            };
+
+            int fpt = (int)npc.ai[0] == 0 ? 10 : 3;
+
             if (handCounter >= fpt)
             {
                 handCounter = 0;
@@ -437,12 +479,13 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public void Prefight()
         {
+            npc.ai[0] = 0;
             if (Main.netMode != 1)
             {
-                npc.velocity *= 0;
-                if (Preamble[1]++ < 600)
+                Preamble[1]++;
+                music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
+                if (Preamble[0] == 0)
                 {
-                    music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
                     if (!CWorld.downedEnigma)
                     {
                         if (Preamble[1] == 90)
@@ -476,6 +519,32 @@ namespace CSkies.NPCs.Bosses.Enigma
                     else
                     {
                         if (Main.netMode != 1) BaseUtility.Chat("You again? Haven't you humiliated me enough as is?", Color.Cyan);
+                        Preamble[0] = 1;
+
+                        npc.netUpdate = true;
+                    }
+                }
+                else if (Preamble[0] == 2)
+                {
+                    npc.velocity *= .96f;
+                    if (Preamble[1] == 90)
+                    {
+                        if (Main.netMode != 1) BaseUtility.Chat("..!!!", Color.Cyan);
+                    }
+
+                    if (Preamble[1] == 180)
+                    {
+                        if (Main.netMode != 1) BaseUtility.Chat("MY HOOD!!!", Color.Cyan);
+                    }
+
+                    if (Preamble[1] == 270)
+                    {
+                        if (Main.netMode != 1) BaseUtility.Chat("MY SUPREME BRAIN IS EXPOSED!", Color.Cyan);
+                    }
+
+                    if (Preamble[1] >= 360)
+                    {
+                        if (Main.netMode != 1) BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
                         Preamble[0] = 1;
 
                         npc.netUpdate = true;
