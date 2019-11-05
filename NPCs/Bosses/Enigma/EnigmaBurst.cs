@@ -35,7 +35,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             const int aislotHomingCooldown = 0;
             const int homingDelay = 20;
-            const float desiredFlySpeedInPixelsPerFrame = 15;
+            const float desiredFlySpeedInPixelsPerFrame = 20;
             const float amountOfFramesToLerpBy = 30; // minimum of 1, please keep in full numbers even though it's a float!
 
             projectile.ai[aislotHomingCooldown]++;
@@ -74,6 +74,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public override void Kill(int timeleft)
         {
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), projectile.position);
             for (int num468 = 0; num468 < 10; num468++)
             {
                 int num469 = Dust.NewDust(projectile.Center, projectile.width, projectile.height, DustID.Electric, -projectile.velocity.X * 0.2f, -projectile.velocity.Y * 0.2f, 100, default, 2f);
@@ -119,6 +120,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public override void Kill(int timeleft)
         {
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Shock"), projectile.position);
             Projectile.NewProjectile(projectile.position, new Vector2(0, 12), ModContent.ProjectileType<EnigmaRain>(), projectile.damage / 4, 5, Main.myPlayer);
             for (int num468 = 0; num468 < 5; num468++)
             {
@@ -203,15 +205,12 @@ namespace CSkies.NPCs.Bosses.Enigma
                 float num186 = 60f;
                 for (int num187 = 0; num187 < 200; num187++)
                 {
-                    NPC nPC2 = Main.npc[num187];
-                    if (nPC2.CanBeChasedBy(this, false))
+                    Player p = Main.player[num187];
+                    float num188 = projectile.Distance(p.Center);
+                    if (num188 < num186 && Collision.CanHitLine(projectile.Center, 0, 0, p.Center, 0, 0))
                     {
-                        float num188 = projectile.Distance(nPC2.Center);
-                        if (num188 < num186 && Collision.CanHitLine(projectile.Center, 0, 0, nPC2.Center, 0, 0))
-                        {
-                            num186 = num188;
-                            num185 = num187;
-                        }
+                        num186 = num188;
+                        num185 = num187;
                     }
                 }
                 if (num185 != -1)
@@ -231,8 +230,20 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.netUpdate = true;
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (projectile.ai[1] != -1)
+            {
+                projectile.ai[0] = 0f;
+                projectile.ai[1] = -1f;
+                projectile.netUpdate = true;
+            }
+            return false;
+        }
+
         public override void Kill(int timeLeft)
         {
+            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap2"), projectile.position);
             bool flag = WorldGen.SolidTile(Framing.GetTileSafely((int)projectile.position.X / 16, (int)projectile.position.Y / 16));
 
             for (int num58 = 0; num58 < 4; num58++)

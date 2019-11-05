@@ -89,6 +89,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.ai[0] += 1f;
             if (projectile.ai[0] % 20f == 0f && Main.netMode != 1)
             {
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap2"), projectile.position);
                 int[] array4 = new int[5];
                 Vector2[] array5 = new Vector2[5];
                 int num838 = 0;

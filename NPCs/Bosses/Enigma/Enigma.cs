@@ -24,7 +24,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             npc.damage = 40;
             npc.defense = 30;
             npc.lifeMax = 40000;
-            npc.value = Item.sellPrice(0, 12, 0, 0);
+            npc.value = Item.sellPrice(0, 5, 0, 0);
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
             npc.knockBackResist = 0f;
@@ -56,6 +56,8 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
         }
 
+        public float ChangeRate = Main.expertMode ? 180 : 240;
+
         public override void AI()
         {
             if (Preamble[0] != 1)
@@ -77,16 +79,15 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             Player player = Main.player[npc.target];
 
-            float ChangeRate = Main.expertMode ? 180 : 240;
 
-            float Movespeed = .2f;
-            float VelMax = 8;
+            float Movespeed = .25f;
+            float VelMax = 10;
 
             if (npc.life < npc.lifeMax / 2)
             {
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/EnigmaU");
-                Movespeed = .25f;
-                VelMax = 10;
+                Movespeed = .3f;
+                VelMax = 12;
                 ChangeRate = Main.expertMode ? 120 : 180;
                 npc.damage = 48;
             }
@@ -107,6 +108,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] % (ChangeRate / 6) == 0)
                     {
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), npc.position);
                         int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(0, 20)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
                         Main.projectile[a].Center = npc.Center + new Vector2(30, 0);
                         int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(0, 20)), ModContent.ProjectileType<EngimaBurst>(), npc.damage / 4, 4, Main.myPlayer);
@@ -122,6 +124,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] % (ChangeRate / 4) == 0)
                     {
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap2"), npc.position);
                         int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-5, 0)), ModContent.ProjectileType<EngimaSpell>(), npc.damage / 4, 4, Main.myPlayer);
                         Main.projectile[a].Center = npc.Center + new Vector2(30, 0);
                         int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-5, 0)), ModContent.ProjectileType<EngimaSpell>(), npc.damage / 4, 4, Main.myPlayer);
@@ -143,7 +146,9 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] > ChangeRate)
                     {
-                        Projectile.NewProjectile(npc.Center, new Vector2(0, -10), mod.ProjectileType("EnigmaBeam"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position);
+                        Projectile laser = Main.projectile[Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0f, 0f, ModContent.ProjectileType<EnigmaBeam>(), npc.damage / 4, 3f, Main.myPlayer, npc.whoAmI)];
+                        laser.velocity = BaseUtility.RotateVector(default, new Vector2(14f, 0f), laser.rotation);
                         npc.ai[0] = 4;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
@@ -173,6 +178,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] % 10 == 0)
                     {
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position);
                         int[] array4 = new int[5];
                         Vector2[] array5 = new Vector2[5];
                         int num838 = 0;
@@ -217,6 +223,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] == 45)
                     {
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), npc.position);
                         int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
                         Main.projectile[a].Center = npc.Center + new Vector2(200, 0);
                         int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
@@ -234,7 +241,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     goto case 0;
             }
 
-            if (npc.ai[0] == 6)
+            if (npc.ai[0] == 4 || npc.ai[0] == 6)
             {
                 Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
                 float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
@@ -331,7 +338,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         int handCounter = 0;
         int HandFrame = 0;
         int ChargeFrame = 0;
-        float handRot = 0;
+        public float handRot = 0;
 
         Texture2D body;
         Texture2D hand;
@@ -351,7 +358,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             RingEffects();
             if (scale > 0)
             {
-                BaseDrawing.DrawTexture(spriteBatch, RingTex, 0, npc.position, npc.width, npc.height, scale, rotation, 0, 1, new Rectangle(0, 0, RingTex.Width, RingTex.Height), Color.White, true);
+                BaseDrawing.DrawTexture(spriteBatch, RingTex, 0, npc.position, npc.width, npc.height, scale, rotation, 0, 1, RingFrame, Color.White, true);
             }
 
             BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);

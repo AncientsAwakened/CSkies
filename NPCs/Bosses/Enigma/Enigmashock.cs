@@ -25,7 +25,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.alpha = 255;
             projectile.ignoreWater = true;
             projectile.tileCollide = true;
-            projectile.extraUpdates = 4;
+            projectile.extraUpdates = 6;
             projectile.timeLeft = 120 * (projectile.extraUpdates + 1);
         }
 
