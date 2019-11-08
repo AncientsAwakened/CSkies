@@ -146,8 +146,9 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] > ChangeRate)
                     {
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position);
-                        Projectile laser = Main.projectile[Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0f, 0f, ModContent.ProjectileType<EnigmaBeam>(), npc.damage / 4, 3f, Main.myPlayer, npc.whoAmI)];
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position); 
+                        handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
+                        Projectile laser = Main.projectile[Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0f, 0f, ModContent.ProjectileType<EnigmaBeam>(), npc.damage / 4, 3f, Main.myPlayer, 0, npc.whoAmI)];
                         laser.velocity = BaseUtility.RotateVector(default, new Vector2(14f, 0f), laser.rotation);
                         npc.ai[0] = 4;
                         npc.ai[1] = 0;
@@ -156,7 +157,6 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
                     break;
                 case 4:
-
                     if (npc.ai[1] > ChangeRate + 60)
                     {
                         AIReset();
@@ -167,6 +167,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] > ChangeRate)
                     {
+                        handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
                         npc.ai[0] = 6;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
@@ -243,16 +244,27 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             if (npc.ai[0] == 4 || npc.ai[0] == 6)
             {
-                Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
-                float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
-                float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
-                float NewRotation = (float)Math.Atan2(num2, num1);
-                handRot = MathHelper.Lerp(npc.rotation, NewRotation, 1f / 30f);
+                handRot -= GetSpinOffset();
             }
             else
             {
                 handRot = 0;
             }
+        }
+
+        private float GetSpinOffset()
+        {
+            const float PI = (float)Math.PI;
+            float newRotation = (Main.player[npc.target].Center - npc.Center).ToRotation();
+            float difference = newRotation;
+            float rotationDirection = 2f * (float)Math.PI * 1f / 6f / 60f;
+            while (difference < -PI)
+                difference += 2f * PI;
+            while (difference > PI)
+                difference -= 2f * PI;
+            if (difference > 0f)
+                rotationDirection *= -1f;
+            return rotationDirection;
         }
 
         public void AIChange()
@@ -353,7 +365,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             Rectangle handsframe = BaseDrawing.GetFrame(HandFrame, hand.Width, hand.Height / 4, 0, 0);
             Rectangle charge = BaseDrawing.GetFrame(ChargeFrame, ChargeTex.Width, ChargeTex.Height / 4, 0, 0);
-            Rectangle RingFrame = BaseDrawing.GetFrame(0, ChargeTex.Width, ChargeTex.Height, 0, 0);
+            Rectangle RingFrame = BaseDrawing.GetFrame(0, RingTex.Width, RingTex.Height, 0, 0);
 
             RingEffects();
             if (scale > 0)

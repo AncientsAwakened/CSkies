@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -112,11 +113,50 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             projectile.velocity *= .97f;
 
-            if (projectile.ai[0]++ > 120)
+            if (projectile.ai[1]++ > 120)
             {
                 projectile.Kill();
             }
+
+            const int aislotHomingCooldown = 0;
+            const int homingDelay = 0;
+            const float desiredFlySpeedInPixelsPerFrame = 20;
+            const float amountOfFramesToLerpBy = 30; // minimum of 1, please keep in full numbers even though it's a float!
+
+            projectile.ai[aislotHomingCooldown]++;
+            if (projectile.ai[aislotHomingCooldown] > homingDelay)
+            {
+                projectile.ai[aislotHomingCooldown] = homingDelay;
+
+                int foundTarget = HomeOnTarget();
+                if (foundTarget != -1)
+                {
+                    Player p = Main.player[foundTarget];
+                    Vector2 desiredVelocity = projectile.DirectionTo(p.Center) * desiredFlySpeedInPixelsPerFrame;
+                    projectile.velocity.X = Vector2.Lerp(projectile.velocity, desiredVelocity, 1f / amountOfFramesToLerpBy).X;
+                }
+            }
         }
+
+        private int HomeOnTarget()
+        {
+            const float homingMaximumRangeInPixels = 400;
+
+            int selectedTarget = -1;
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                Player n = Main.player[i];
+                float distance = projectile.Distance(n.Center);
+                if (distance <= homingMaximumRangeInPixels &&
+                    (
+                        selectedTarget == -1 || //there is no selected target
+                        projectile.Distance(Main.player[selectedTarget].Center) > distance)
+                )
+                    selectedTarget = i;
+            }
+            return selectedTarget;
+        }
+
 
         public override void Kill(int timeleft)
         {
@@ -138,8 +178,8 @@ namespace CSkies.NPCs.Bosses.Enigma
         }
         public override void SetDefaults()
         {
-            projectile.width = 10;
-            projectile.height = 10;
+            projectile.width = 64;
+            projectile.height = 64;
             projectile.aiStyle = -1;
             projectile.hostile = true;
             projectile.tileCollide = false;
@@ -267,6 +307,14 @@ namespace CSkies.NPCs.Bosses.Enigma
                     Main.dust[num60].noLight = true;
                 }
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D t = Main.projectileTexture[projectile.type];
+            Rectangle f = BaseDrawing.GetFrame(projectile.frame, t.Width, t.Height / 7, 0, 0);
+            BaseDrawing.DrawTexture(spriteBatch, t, 0, projectile.position, projectile.width, projectile.height, projectile.scale, 0, 0, 7, f, Color.White, true);
+            return false;
         }
     }
 }
