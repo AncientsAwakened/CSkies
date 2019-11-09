@@ -78,6 +78,8 @@ namespace CSkies
             SkyManager.Instance["CSkies:CSky"] = new CSky();
             CSky.starTextures[0] = GetTexture("Backgrounds/CStar0");
             CSky.starTextures[1] = GetTexture("Backgrounds/CStar1");
+
+            SetupMusicBoxes();
         }
 
         public override void Unload()
@@ -156,6 +158,20 @@ namespace CSkies
                 }
                 if (Main.netMode == 2) BaseNet.SyncAI(classID, id, newAI, aitype);
             }
+        }
+
+
+        public void SetupMusicBoxes()
+        {
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Comet"), ItemType("CometBox"), TileType("CometBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Observer"), ItemType("ObserverBox"), TileType("ObserverBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Starcore"), ItemType("StarcoreBox"), TileType("StarcoreBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Abyss"), ItemType("AbyssBox"), TileType("AbyssBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/ObserverVoid"), ItemType("OVBox"), TileType("OVBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Void"), ItemType("VOIDBox"), TileType("VOIDBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Heart"), ItemType("MagmaHeartBox"), TileType("MagmaHeartBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Heartcore"), ItemType("HCBox"), TileType("HCBox"));
+            AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/FurySoul"), ItemType("FSBox"), TileType("FSBox"));
         }
     }
     enum MsgType : byte
