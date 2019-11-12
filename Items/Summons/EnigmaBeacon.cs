@@ -11,7 +11,8 @@ namespace CSkies.Items.Summons
 		{
 			DisplayName.SetDefault("Enigma Beacon");
 			Tooltip.SetDefault(@"It's flashing strangely, as if something is tracking it.
-Summons Enigma");
+Summons Enigma
+Non-Consumable");
         }
 
 		public override void SetDefaults()
@@ -22,8 +23,7 @@ Summons Enigma");
 			item.useAnimation = 45;
 			item.useTime = 45;
 			item.useStyle = 4;
-            item.maxStack = 20;
-			item.consumable = true;
+			item.consumable = false;
             item.noUseGraphic = true;
 		}
 
