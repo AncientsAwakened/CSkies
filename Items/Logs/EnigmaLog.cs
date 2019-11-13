@@ -297,9 +297,9 @@ have a vandal to vaporize.
             base.SetStaticDefaults();
             DisplayName.SetDefault("Enigma Log Extra I");
             Tooltip.SetDefault(
-@"Those dark islands to the east...the contraptions there quite facinate me. However,
-I refuse to go back over there. Not after I got trampled by that equestrian annoyance. My
-back prosthetic is still dented from getting stepped on!");
+@"Those dark islands to the east...the contraptions there quite facinate me. 
+However, I refuse to go back over there. Not after I got trampled by that 
+equestrian annoyance. My back prosthetic is still dented from getting stepped on!");
         }
 
         public override void SetDefaults()
