@@ -23,6 +23,7 @@ namespace CSkies
         public bool ZoneComet = false;
         public bool ZoneVoid = false;
         public bool ZoneCSky = false;
+        public bool ZoneObservatory = false;
 
         public bool VoidEye = false;
         public bool VoidCD = false;

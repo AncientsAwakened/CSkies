@@ -54,6 +54,16 @@ namespace CSkies.NPCs.Other
                     Main.npc[n].Center = npc.Center;
                 }
             }
+
+            if (npc.collideX || npc.collideY)
+            {
+                int VoidHeight = 140;
+                int boundary = Main.maxTilesX / 15;
+                Point spawnTilePos = new Point(Main.rand.Next(boundary, Main.maxTilesX - boundary), VoidHeight);
+                Vector2 spawnPos = new Vector2(spawnTilePos.X * 16, spawnTilePos.Y * 16);
+
+                npc.position = spawnPos;
+            }
         }
 
         public Color GetGlowAlpha()
