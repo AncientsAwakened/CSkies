@@ -140,12 +140,12 @@ namespace CSkies.Worldgen
             }
             else if (CWorld.VaultCount == 1)
             {
-                WorldGen.PlaceObject(origin.X + 13, origin.Y + 14, mod.TileType("HeartAltar3"));
+                WorldGen.PlaceObject(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"));
                 NetMessage.SendObjectPlacment(-1, origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"), 0, 0, -1, -1);
             }
             else if (CWorld.VaultCount == 2)
             {
-                WorldGen.PlaceObject(origin.X + 13, origin.Y + 14, mod.TileType("HeartAltar4"));
+                WorldGen.PlaceObject(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"));
                 NetMessage.SendObjectPlacment(-1, origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"), 0, 0, -1, -1);
             }
 

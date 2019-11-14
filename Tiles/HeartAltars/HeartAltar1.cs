@@ -23,7 +23,7 @@ namespace CSkies.Tiles.HeartAltars
             TileObjectData.newTile.CoordinatePadding = 2;
             TileObjectData.addTile(Type);
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Heart Altar");
+            name.SetDefault("Magma Altar");
             AddMapEntry(new Color(199, 74, 161), name);
             disableSmartCursor = true;
             animationFrameHeight = 54;
@@ -109,6 +109,28 @@ namespace CSkies.Tiles.HeartAltars
             if (!CWorld.Altar1)
             {
                 BaseDrawing.DrawTileTexture(sb, heart, x, y, 16, 16, frameX, frameY, false, false, false, null, HeartColor);
+            }
+        }
+
+        public override void MouseOver(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+
+            player.showItemIcon2 = ModContent.ItemType<Items.Void.VoidFragment>();
+
+            player.showItemIconText = "";
+            player.noThrow = 2;
+            player.showItemIcon = true;
+        }
+
+        public override void MouseOverFar(int i, int j)
+        {
+            MouseOver(i, j);
+            Player player = Main.LocalPlayer;
+            if (player.showItemIconText == "")
+            {
+                player.showItemIcon = false;
+                player.showItemIcon2 = 0;
             }
         }
     }

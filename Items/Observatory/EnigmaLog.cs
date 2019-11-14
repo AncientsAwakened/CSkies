@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CSkies.Items.Logs
+namespace CSkies.Items.Observatory
 {
     public class EnigmaLog1 : ModItem
     {

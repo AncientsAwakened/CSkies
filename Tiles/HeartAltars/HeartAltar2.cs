@@ -76,6 +76,28 @@ namespace CSkies.Tiles.HeartAltars
             }
         }
 
+        public override void MouseOver(int i, int j)
+        {
+            Player player = Main.LocalPlayer;
+
+            player.showItemIcon2 = ModContent.ItemType<Items.Void.VoidFragment>();
+
+            player.showItemIconText = "";
+            player.noThrow = 2;
+            player.showItemIcon = true;
+        }
+
+        public override void MouseOverFar(int i, int j)
+        {
+            MouseOver(i, j);
+            Player player = Main.LocalPlayer;
+            if (player.showItemIconText == "")
+            {
+                player.showItemIcon = false;
+                player.showItemIcon2 = 0;
+            }
+        }
+
         public override bool CanKillTile(int i, int j, ref bool blockDamaged)
         {
             return false;
