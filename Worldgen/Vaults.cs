@@ -15,14 +15,14 @@ namespace CSkies.Worldgen
         public override bool Place(Point origin, StructureMap structures)
         {
             Mod mod = CSkies.inst;
-            /*ushort tileGrass = (ushort)ModContent.TileType<AbyssGrass>(), tileStone = (ushort)ModContent.TileType<AbyssStone>(), tileIce = (ushort)ModContent.TileType<Abice>(),
+            ushort tileGrass = (ushort)ModContent.TileType<AbyssGrass>(), tileStone = (ushort)ModContent.TileType<AbyssStone>(), tileIce = (ushort)ModContent.TileType<Abice>(),
             tileSand = (ushort)ModContent.TileType<AbyssSand>(), tileSandHardened = (ushort)ModContent.TileType<HardenedAbyssSand>(), tileSandstone = (ushort)ModContent.TileType<AbyssSandstone>(), 
             tileMoss = (ushort)ModContent.TileType<AbyssMoss>();
 
             byte StoneWall = (byte)ModContent.WallType<AbyssStoneWall>(), SandstoneWall = (byte)ModContent.WallType<AbyssSandstoneWall>(), HardenedSandWall = (byte)ModContent.WallType<HardenedAbyssSandWall>(),
             GrassWall = (byte)ModContent.WallType<AbyssLeafWall>();
 
-            int biomeRadius = 118;*/
+            int biomeRadius = 118;
 
 
 
@@ -42,7 +42,7 @@ namespace CSkies.Worldgen
 
             TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/AbyssVault"), colorToTile, mod.GetTexture("Worldgen/AbyssVaultWall"), colorToWall, null, mod.GetTexture("Worldgen/AbyssVaultSlopes"));
 
-            /*Point newOrigin = new Point(origin.X, origin.Y);
+            Point newOrigin = new Point(origin.X, origin.Y);
 
             WorldUtils.Gen(newOrigin, new Shapes.Circle(biomeRadius), Actions.Chain(new GenAction[] //grass...
 			{
@@ -127,7 +127,7 @@ namespace CSkies.Worldgen
                 new Modifiers.OnlyWalls(new byte[]{ WallID.GrassUnsafe, WallID.CorruptGrassUnsafe, WallID.CrimsonGrassUnsafe }),
                 new Modifiers.RadialDither(biomeRadius - 5, biomeRadius),
                 new PlaceModWall(GrassWall, true)
-            }));*/
+            }));
 
             int genX = origin.X - (gen.width / 2);
             int genY = origin.Y - 30;
@@ -161,6 +161,8 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
+                [new Color(255, 255, 0)] = mod.TileType("StarCircuit"),
+                [new Color(0, 255, 255)] = mod.TileType("Starglass"),
                 [new Color(0, 0, 255)] = mod.TileType("AbyssBricks"),
                 [new Color(0, 255, 0)] = mod.TileType("AbyssDoor"),
                 [new Color(255, 0, 0)] = ModContent.TileType<AbyssStone>(),
@@ -171,16 +173,17 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
             {
-                [new Color(0, 0, 255)] = mod.WallType("AbyssWall"),
+                [new Color(0, 255, 0)] = mod.WallType("StarcircuitWall"),
+                [new Color(255, 0, 0)] = mod.WallType("StarglassWall"),
                 [Color.Black] = -1
             };
 
-            TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/AbyssVaultPlanet"), colorToTile, mod.GetTexture("Worldgen/AbyssVaultPlanetWall"), colorToWall, null, mod.GetTexture("Worldgen/AbyssVaultPlanetSlopes"));
+            TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/Observatory"), colorToTile, mod.GetTexture("Worldgen/ObservatoryWalls"), colorToWall, null, mod.GetTexture("Worldgen/ObservatorySlopes"));
 
             gen.Generate(origin.X, origin.Y, true, true);
 
-            WorldGen.PlaceObject(origin.X + 32, origin.Y + 34, mod.TileType("HeartAltar1"));
-            NetMessage.SendObjectPlacment(-1, origin.X + 17, origin.Y + 18, mod.TileType("HeartAltar1"), 0, 0, -1, -1);
+            WorldGen.PlaceObject(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
+            NetMessage.SendObjectPlacment(-1, origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"), 0, 0, -1, -1);
 
             return true;
         }
