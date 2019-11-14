@@ -99,7 +99,7 @@ namespace CSkies.Tiles.Observatory
             }
             for (int k = 0; k < 7; k++)
             {
-                Main.spriteBatch.Draw(mod.GetTexture("Tiles/Furniture/Razewood/RazewoodChandelier_Flame"), new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(frameX, frameY, width, height), Color.White, 0f, default, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(mod.GetTexture("Glowmasks/ObservatoryChandelier_Light"), new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(frameX, frameY, width, height), Color.White, 0f, default, 1f, SpriteEffects.None, 0f);
             }
         }
     }
