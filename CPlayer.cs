@@ -60,7 +60,7 @@ namespace CSkies
 
             ZoneVoid = false;
             ZoneComet = false;
-            ZoneCSky = false;
+            ZoneObservatory = false;
 
             Heartburn = false;
         }
@@ -69,7 +69,7 @@ namespace CSkies
         {
             ZoneVoid = NearVoid() || CWorld.AbyssTiles > 50;
             ZoneComet = CWorld.CometTiles > 30;
-            ZoneCSky = CWorld.CSkyTiles > 30;
+            ZoneObservatory = CWorld.ObservatoryTiles > 30 && !ZoneVoid;
         }
 
         public override void UpdateBiomeVisuals()

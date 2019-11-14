@@ -37,11 +37,6 @@ namespace CSkies.NPCs.Enemies
             }
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return Main.hardMode && !Main.dayTime ? SpawnCondition.Sky.Chance * 0.05f : 0;
-        }
-
         public override void AI()
         {
             if (!npc.HasPlayerTarget)

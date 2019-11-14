@@ -8,7 +8,7 @@ namespace CSkies.Items.Observatory
 {
     public class EnigmaLog1 : ModItem
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Enigma Log #1");
@@ -62,7 +62,7 @@ keep looking. Shouldn't take too long...");
 
     public class EnigmaLog2 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -83,7 +83,7 @@ days is so hard to find...");
 
     public class EnigmaLog3 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -103,7 +103,7 @@ being.");
 
     public class EnigmaLog4 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -126,7 +126,7 @@ Inanis I swear to Galaxius if you--");
 
     public class EnigmaLog5 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -147,7 +147,7 @@ Gate open somehow...how do you do that again..?");
 
     public class EnigmaLog6 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -170,7 +170,7 @@ correctly...now where to find this oversized calamari dish...");
 
     public class EnigmaLog7 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -194,7 +194,7 @@ shedding a very real tear down my titanium-alloy cheek.");
 
     public class EnigmaLog8 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -215,7 +215,7 @@ out for potential threats. Off you go, you magnificent machine.");
 
     public class EnigmaLog9 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -242,7 +242,7 @@ warn me--
 
     public class EnigmaLog10 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -264,7 +264,7 @@ extreme prejudice. Someone replicating my call signal is...concerning.");
 
     public class EnigmaLog11 : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -289,7 +289,7 @@ have a vandal to vaporize.
 
     public class EnigmaLogAA : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -308,7 +308,7 @@ equestrian annoyance. My back prosthetic is still dented from getting stepped on
 
     public class EnigmaLogRede : EnigmaLog1
     {
-        public override string Texture => "CSkies/Items/Logs/EnigmaLog";
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();

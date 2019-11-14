@@ -1,7 +1,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace CSkies.Items.Walls
+namespace CSkies.Items.Blocks
 {
     public class StarCircuitWall : ModItem
     {
@@ -17,7 +17,7 @@ namespace CSkies.Items.Walls
             item.useTime = 10;
             item.useStyle = 1;
             item.consumable = true;
-            item.createWall = mod.WallType("StarCircuitWall")
+            item.createWall = mod.WallType("StarCircuitWall");
         }
 
         

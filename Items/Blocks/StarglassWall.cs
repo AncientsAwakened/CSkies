@@ -1,7 +1,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace CSkies.Items.Walls
+namespace CSkies.Items.Blocks
 {
     public class StarglassWall : ModItem
     {

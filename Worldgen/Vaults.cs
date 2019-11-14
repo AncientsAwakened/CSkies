@@ -22,7 +22,7 @@ namespace CSkies.Worldgen
             byte StoneWall = (byte)ModContent.WallType<AbyssStoneWall>(), SandstoneWall = (byte)ModContent.WallType<AbyssSandstoneWall>(), HardenedSandWall = (byte)ModContent.WallType<HardenedAbyssSandWall>(),
             GrassWall = (byte)ModContent.WallType<AbyssLeafWall>();
 
-            int biomeRadius = 118;
+            int biomeRadius = 89;
 
 
 
@@ -161,8 +161,8 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
-                [new Color(255, 255, 0)] = mod.TileType("StarCircuit"),
-                [new Color(0, 255, 255)] = mod.TileType("Starglass"),
+                [new Color(255, 255, 0)] = mod.TileType("StarCircuitUnsafe"),
+                [new Color(0, 255, 255)] = mod.TileType("StarglassUnsafe"),
                 [new Color(0, 0, 255)] = mod.TileType("AbyssBricks"),
                 [new Color(0, 255, 0)] = mod.TileType("AbyssDoor"),
                 [new Color(255, 0, 0)] = ModContent.TileType<AbyssStone>(),
@@ -173,8 +173,8 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
             {
-                [new Color(0, 255, 0)] = mod.WallType("StarcircuitWall"),
-                [new Color(255, 0, 0)] = mod.WallType("StarglassWall"),
+                [new Color(0, 255, 0)] = mod.WallType("StarCircuitWallUnsafe"),
+                [new Color(255, 0, 0)] = mod.WallType("StarglassWallUnsafe"),
                 [Color.Black] = -1
             };
 
@@ -187,7 +187,6 @@ namespace CSkies.Worldgen
 
             return true;
         }
-
     }
 
     public class AbyssBiome : MicroBiome

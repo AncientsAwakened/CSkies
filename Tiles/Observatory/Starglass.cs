@@ -14,6 +14,18 @@ namespace CSkies.Tiles.Observatory
             drop = mod.ItemType("Starglass");   //put your CustomBlock name
             AddMapEntry(new Color(100, 200, 100));
         }
+    }
+
+    public class StarglassUnsafe : ModTile
+    {
+        public override void SetDefaults()
+        {
+            Main.tileSolid[Type] = true;
+            Main.tileMergeDirt[Type] = false;
+            Main.tileBlockLight[Type] = true;
+            drop = mod.ItemType("Starglass");   //put your CustomBlock name
+            AddMapEntry(new Color(100, 200, 100));
+        }
 
         public override bool CanKillTile(int i, int j, ref bool blockDamaged)
         {

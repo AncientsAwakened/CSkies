@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using CSkies.Tiles;
 using CSkies.Tiles.Abyss;
+using CSkies.Tiles.Observatory;
 using Terraria.World.Generation;
 using Terraria.GameContent.Generation;
 using CSkies.Worldgen;
@@ -32,6 +33,7 @@ namespace CSkies
 
         public static int CometTiles = 0;
         public static int AbyssTiles = 0;
+        public static int ObservatoryTiles = 0;
         public static int CSkyTiles = 0;
 
         public static int VaultCount = 0;
@@ -159,6 +161,9 @@ namespace CSkies
                 tileCounts[ModContent.TileType<HardenedAbyssSand>()] +
                 tileCounts[ModContent.TileType<AbyssStone>()] +
                 tileCounts[ModContent.TileType<AbyssGrass>()];
+
+            ObservatoryTiles = tileCounts[ModContent.TileType<StarCircuitUnsafe>()] +
+                tileCounts[ModContent.TileType<StarglassUnsafe>()];
         }
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
