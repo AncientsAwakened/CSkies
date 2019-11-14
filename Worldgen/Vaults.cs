@@ -158,9 +158,6 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
-                [new Color(255, 255, 0)] = ModContent.TileType<StarBrickUnsafe>(),
-                [new Color(0, 255, 255)] = ModContent.TileType<StarglassUnsafe>(),
-                [new Color(128, 128, 128)] = ModContent.TileType<StarCircuitUnsafe>(),
                 [new Color(0, 0, 255)] = ModContent.TileType<AbyssBricks>(),
                 [new Color(0, 255, 0)] = ModContent.TileType<AbyssDoor>(),
                 [new Color(255, 0, 0)] = ModContent.TileType<AbyssStone>(),
@@ -171,10 +168,40 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
             {
+                [new Color(0, 0, 255)] = ModContent.WallType<AbyssWall>(),
+                [Color.Black] = -1
+            };
+
+            TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/AbyssVaultPlanet"), colorToTile, mod.GetTexture("Worldgen/AbyssVaultPlanetWall"), colorToWall, null, mod.GetTexture("Worldgen/AbyssVaultPlanetSlopes"));
+
+            gen.Generate(origin.X, origin.Y, true, true);
+
+            CUtils.ObectPlace(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
+
+            return true;
+        }
+    }
+
+    public class Observatory : MicroBiome
+    {
+        public override bool Place(Point origin, StructureMap structures)
+        {
+            Mod mod = CSkies.inst;
+
+            Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
+            {
+                [new Color(255, 255, 0)] = ModContent.TileType<StarBrickUnsafe>(),
+                [new Color(0, 255, 255)] = ModContent.TileType<StarglassUnsafe>(),
+                [new Color(128, 128, 128)] = ModContent.TileType<StarCircuitUnsafe>(),
+                [new Color(255, 255, 255)] = -2,
+                [Color.Black] = -1
+            };
+
+            Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
+            {
                 [new Color(0, 255, 0)] = ModContent.WallType<StarBrickWallUnsafe>(),
                 [new Color(255, 0, 0)] = ModContent.WallType<StarglassWallUnsafe>(),
                 [new Color(255, 0, 255)] = ModContent.WallType<StarCircuitWallUnsafe>(),
-                [new Color(0, 0, 255)] = ModContent.WallType<AbyssWall>(),
                 [Color.Black] = -1
             };
 

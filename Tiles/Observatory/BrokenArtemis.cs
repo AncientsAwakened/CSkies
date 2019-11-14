@@ -26,9 +26,6 @@ namespace CSkies.Tiles.Observatory
 			TileObjectData.newTile.CoordinatePadding = 2;
 			TileObjectData.addTile(Type);
 			AddMapEntry(new Color(52, 75, 88));
-			adjTiles = new int[] { TileID.WorkBenches };
-			adjTiles = new int[] { TileID.Bookcases };
-			adjTiles = new int[] { TileID.Bottles };
 
 		}
 
