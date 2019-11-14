@@ -12,7 +12,6 @@ namespace CSkies.Tiles.Observatory
             dustType = ModContent.DustType<Dusts.StarDust>();
             AddMapEntry(new Color(10, 70, 30));
             soundType = 21;
-            Main.wallLargeFrames[Type] = 2;
         }
 
 		public override void NumDust(int i, int j, bool fail, ref int num)
@@ -29,7 +28,6 @@ namespace CSkies.Tiles.Observatory
             dustType = ModContent.DustType<Dusts.StarDust>();
             AddMapEntry(new Color(10, 70, 30));
             soundType = 21;
-            Main.wallLargeFrames[Type] = 2;
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)

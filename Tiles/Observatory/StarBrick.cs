@@ -11,6 +11,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileBlendAll[Type] = true;
             soundType = 21;
             drop = mod.ItemType("StarBrick");
             dustType = mod.DustType("Stardust");
@@ -26,6 +27,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileBlendAll[Type] = true;
             soundType = 21;
             drop = mod.ItemType("StarBrick");
             dustType = mod.DustType("Stardust");

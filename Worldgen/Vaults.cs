@@ -200,7 +200,7 @@ namespace CSkies.Worldgen
             CUtils.ObectPlace(origin.X + 97, origin.Y + 58, mod.TileType("ObservatoryLantern"));
             CUtils.ObectPlace(origin.X + 86, origin.Y + 48, mod.TileType("ObservatoryLantern"));
             CUtils.ObectPlace(origin.X + 103, origin.Y + 48, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 103, origin.Y + 67, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 104, origin.Y + 67, mod.TileType("ObservatoryLantern"));
             CUtils.ObectPlace(origin.X + 108, origin.Y + 67, mod.TileType("ObservatoryLantern"));
             CUtils.ObectPlace(origin.X + 109, origin.Y + 57, mod.TileType("ObservatoryLantern"));
             CUtils.ObectPlace(origin.X + 70, origin.Y + 29, mod.TileType("ObservatoryLantern"));
