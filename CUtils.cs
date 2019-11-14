@@ -63,5 +63,11 @@ namespace CSkies
             }
             return p;
         }
+
+        public static void ObectPlace(int x, int y, int type)
+        {
+            WorldGen.PlaceObject(x, y, type);
+            NetMessage.SendObjectPlacment(-1, x, y, type, 0, 0, -1, -1);
+        }
     }
 }

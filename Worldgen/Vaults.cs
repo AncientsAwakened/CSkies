@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-
 using Microsoft.Xna.Framework;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.World.Generation;
 using CSkies.Tiles.Abyss;
+using CSkies.Tiles.Observatory;
+using CSkies.Tiles;
 
 namespace CSkies.Worldgen
 {
@@ -135,18 +135,15 @@ namespace CSkies.Worldgen
 
             if (CWorld.VaultCount == 0)
             {
-                WorldGen.PlaceObject(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar2"));
-                NetMessage.SendObjectPlacment(-1, origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar2"), 0, 0, -1, -1);
+                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar2"));
             }
             else if (CWorld.VaultCount == 1)
             {
-                WorldGen.PlaceObject(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"));
-                NetMessage.SendObjectPlacment(-1, origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"), 0, 0, -1, -1);
+                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"));
             }
             else if (CWorld.VaultCount == 2)
             {
-                WorldGen.PlaceObject(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"));
-                NetMessage.SendObjectPlacment(-1, origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"), 0, 0, -1, -1);
+                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"));
             }
 
             return true;
@@ -161,10 +158,11 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
-                [new Color(255, 255, 0)] = mod.TileType("StarCircuitUnsafe"),
-                [new Color(0, 255, 255)] = mod.TileType("StarglassUnsafe"),
-                [new Color(0, 0, 255)] = mod.TileType("AbyssBricks"),
-                [new Color(0, 255, 0)] = mod.TileType("AbyssDoor"),
+                [new Color(255, 255, 0)] = ModContent.TileType<StarBrickUnsafe>(),
+                [new Color(0, 255, 255)] = ModContent.TileType<StarglassUnsafe>(),
+                [new Color(128, 128, 128)] = ModContent.TileType<StarCircuitUnsafe>(),
+                [new Color(0, 0, 255)] = ModContent.TileType<AbyssBricks>(),
+                [new Color(0, 255, 0)] = ModContent.TileType<AbyssDoor>(),
                 [new Color(255, 0, 0)] = ModContent.TileType<AbyssStone>(),
                 [new Color(255, 0, 255)] = ModContent.TileType<AbyssGrass>(),
                 [new Color(255, 255, 255)] = -2,
@@ -173,8 +171,10 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
             {
-                [new Color(0, 255, 0)] = mod.WallType("StarCircuitWallUnsafe"),
-                [new Color(255, 0, 0)] = mod.WallType("StarglassWallUnsafe"),
+                [new Color(0, 255, 0)] = ModContent.WallType<StarBrickWallUnsafe>(),
+                [new Color(255, 0, 0)] = ModContent.WallType<StarglassWallUnsafe>(),
+                [new Color(255, 0, 255)] = ModContent.WallType<StarCircuitWallUnsafe>(),
+                [new Color(0, 0, 255)] = ModContent.WallType<AbyssWall>(),
                 [Color.Black] = -1
             };
 
@@ -182,8 +182,7 @@ namespace CSkies.Worldgen
 
             gen.Generate(origin.X, origin.Y, true, true);
 
-            WorldGen.PlaceObject(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
-            NetMessage.SendObjectPlacment(-1, origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"), 0, 0, -1, -1);
+            CUtils.ObectPlace(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
 
             return true;
         }

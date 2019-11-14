@@ -30,17 +30,14 @@ namespace CSkies.Tiles.Observatory
             return Color.White;
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override void PostDraw(int x, int y, SpriteBatch sb)
         {
-            Tile tile = Main.tile[i, j];
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen)
+            Tile tile = Main.tile[x, y];
+            if (tile != null && tile.active() && tile.type == Type)
             {
-                zero = Vector2.Zero;
+                Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
+                BaseDrawing.DrawTileTexture(sb, glowTex, x, y, true, false, false, null, C);
             }
-            int height = tile.frameY == 36 ? 18 : 16;
-            Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
-            Main.spriteBatch.Draw(glowTex, new Vector2((i * 16) - (int)Main.screenPosition.X, (j * 16) - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
     }
 
@@ -66,20 +63,17 @@ namespace CSkies.Tiles.Observatory
 
         public static Color C(Color a)
         {
-            return Color.White;
+            return new Color(200, 200, 200);
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override void PostDraw(int x, int y, SpriteBatch sb)
         {
-            Tile tile = Main.tile[i, j];
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen)
+            Tile tile = Main.tile[x, y];
+            if (tile != null && tile.active() && tile.type == Type)
             {
-                zero = Vector2.Zero;
+                Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
+                BaseDrawing.DrawTileTexture(sb, glowTex, x, y, true, false, false, null, C);
             }
-            int height = tile.frameY == 36 ? 18 : 16;
-            Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
-            Main.spriteBatch.Draw(glowTex, new Vector2((i * 16) - (int)Main.screenPosition.X, (j * 16) - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         public override bool CanExplode(int i, int j)

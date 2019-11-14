@@ -13,10 +13,15 @@ namespace CSkies.Tiles.Observatory
             AddMapEntry(new Color(31, 82, 72));
         }
 
+        public static Color C(Color a)
+        {
+            return new Color(128, 128, 128);
+        }
+
         public override void PostDraw(int x, int y, SpriteBatch sb)
         {
             Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuitWall_Glow");
-            BaseDrawing.DrawWallTexture(sb, glowTex, x, y, false, StarCircuit.C);
+            BaseDrawing.DrawWallTexture(sb, glowTex, x, y, false, C);
         }
 
         public override void KillWall(int i, int j, ref bool fail)
@@ -37,7 +42,7 @@ namespace CSkies.Tiles.Observatory
         public override void PostDraw(int x, int y, SpriteBatch sb)
         {
             Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuitWall_Glow");
-            BaseDrawing.DrawWallTexture(sb, glowTex, x, y, false, StarCircuit.C);
+            BaseDrawing.DrawWallTexture(sb, glowTex, x, y, false, StarCircuitWallUnsafe.C);
         }
     }
 }

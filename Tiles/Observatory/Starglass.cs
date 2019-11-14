@@ -11,7 +11,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileSolid[Type] = true;
 			Main.tileMergeDirt[Type] = false;
             Main.tileBlockLight[Type] = true;
-            drop = mod.ItemType("Starglass");   //put your CustomBlock name
+            drop = mod.ItemType("Starglass");
             AddMapEntry(new Color(100, 200, 100));
         }
     }
@@ -23,7 +23,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = false;
             Main.tileBlockLight[Type] = true;
-            drop = mod.ItemType("Starglass");   //put your CustomBlock name
+            drop = mod.ItemType("Starglass");
             AddMapEntry(new Color(100, 200, 100));
         }
 
