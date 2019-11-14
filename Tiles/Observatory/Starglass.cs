@@ -14,6 +14,7 @@ namespace CSkies.Tiles.Observatory
             drop = mod.ItemType("Starglass");   //put your CustomBlock name
             AddMapEntry(new Color(100, 200, 100));
         }
+
         public override bool CanKillTile(int i, int j, ref bool blockDamaged)
         {
             return CWorld.downedEnigma;
