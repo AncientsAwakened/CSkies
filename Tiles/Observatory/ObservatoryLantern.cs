@@ -66,15 +66,15 @@ namespace CSkies.Tiles.Observatory
             Tile tile = Main.tile[i, j];
             if (tile.frameX < 18)
             {
-                r = 0.9f;
-                g = 0.9f;
-                b = 0.9f;
+                r = 0.5f;
+                g = 0.6f;
+                b = 0.5f;
             }
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 48, 32, mod.ItemType("RazewoodLantern"));
+			Item.NewItem(i * 16, j * 16, 48, 32, mod.ItemType("ObservatoryLantern"));
 			Chest.DestroyChest(i, j);
 		}
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

@@ -73,8 +73,8 @@ namespace CSkies.Tiles.Observatory
             if (tile.frameX < 36)
             {
                 r = 0.6f;
-                g = 0.6f;
-                b = 0.8f;
+                g = 0.8f;
+                b = 0.6f;
             }
         }
 

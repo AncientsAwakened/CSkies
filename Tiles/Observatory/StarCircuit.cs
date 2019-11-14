@@ -19,12 +19,6 @@ namespace CSkies.Tiles.Observatory
 			minPick = 225;
         }
 
-        public override void ModifyLight(int x, int y, ref float r, ref float g, ref float b)
-        {
-            Color color = BaseUtility.ColorMult(Colors.COLOR_GLOWPULSE, 0.7f);
-            r = color.R / 255f; g = color.G / 255f; b = color.B / 255f;
-        }
-
         public static Color C(Color a)
         {
             return Color.White;
@@ -32,11 +26,20 @@ namespace CSkies.Tiles.Observatory
 
         public override void PostDraw(int x, int y, SpriteBatch sb)
         {
+            int xPos = Main.tile[x, y].frameX;
+            int yPos = Main.tile[x, y].frameY;
+            Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
+            Color GlowColor = new Color(120, 120, 120);
+            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+            Vector2 drawOffset = new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y) + zero;
             Tile tile = Main.tile[x, y];
-            if (tile != null && tile.active() && tile.type == Type)
+            if (!(tile.halfBrick() && tile.slope() == 0))
             {
-                Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
-                BaseDrawing.DrawTileTexture(sb, glowTex, x, y, true, false, false, null, C);
+                Main.spriteBatch.Draw(glowTex, drawOffset, new Rectangle?(new Rectangle(xPos, yPos, 18, 18)), GlowColor, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+            }
+            else if (tile.halfBrick())
+            {
+                Main.spriteBatch.Draw(glowTex, drawOffset + new Vector2(0f, 8f), new Rectangle?(new Rectangle(xPos, yPos, 18, 8)), GlowColor, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
     }
@@ -55,12 +58,6 @@ namespace CSkies.Tiles.Observatory
             minPick = 225;
         }
 
-        public override void ModifyLight(int x, int y, ref float r, ref float g, ref float b)
-        {
-            Color color = BaseUtility.ColorMult(Colors.COLOR_GLOWPULSE, 0.7f);
-            r = color.R / 255f; g = color.G / 255f; b = color.B / 255f;
-        }
-
         public static Color C(Color a)
         {
             return new Color(200, 200, 200);
@@ -68,11 +65,20 @@ namespace CSkies.Tiles.Observatory
 
         public override void PostDraw(int x, int y, SpriteBatch sb)
         {
+            int xPos = Main.tile[x, y].frameX;
+            int yPos = Main.tile[x, y].frameY;
+            Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
+            Color GlowColor = new Color(120, 120, 120);
+            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+            Vector2 drawOffset = new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y) + zero;
             Tile tile = Main.tile[x, y];
-            if (tile != null && tile.active() && tile.type == Type)
+            if (!(tile.halfBrick() && tile.slope() == 0))
             {
-                Texture2D glowTex = mod.GetTexture("Glowmasks/StarCircuit_Glow");
-                BaseDrawing.DrawTileTexture(sb, glowTex, x, y, true, false, false, null, C);
+                Main.spriteBatch.Draw(glowTex, drawOffset, new Rectangle?(new Rectangle(xPos, yPos, 18, 18)), GlowColor, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+            }
+            else if (tile.halfBrick())
+            {
+                Main.spriteBatch.Draw(glowTex, drawOffset + new Vector2(0f, 8f), new Rectangle?(new Rectangle(xPos, yPos, 18, 8)), GlowColor, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
             }
         }
 
