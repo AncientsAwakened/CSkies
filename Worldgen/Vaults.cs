@@ -190,9 +190,9 @@ namespace CSkies.Worldgen
 
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
-                [new Color(255, 255, 0)] = ModContent.TileType<StarBrickUnsafe>(),
-                [new Color(0, 255, 255)] = ModContent.TileType<StarglassUnsafe>(),
-                [new Color(128, 128, 128)] = ModContent.TileType<StarCircuitUnsafe>(),
+                [new Color(0, 255, 0)] = ModContent.TileType<StarBrickUnsafe>(),
+                [new Color(255, 0, 0)] = ModContent.TileType<StarglassUnsafe>(),
+                [new Color(0, 0, 255)] = ModContent.TileType<StarCircuitUnsafe>(),
                 [new Color(255, 255, 255)] = -2,
                 [Color.Black] = -1
             };
@@ -201,7 +201,7 @@ namespace CSkies.Worldgen
             {
                 [new Color(0, 255, 0)] = ModContent.WallType<StarBrickWallUnsafe>(),
                 [new Color(255, 0, 0)] = ModContent.WallType<StarglassWallUnsafe>(),
-                [new Color(255, 0, 255)] = ModContent.WallType<StarCircuitWallUnsafe>(),
+                [new Color(0, 0, 255)] = ModContent.WallType<StarCircuitWallUnsafe>(),
                 [Color.Black] = -1
             };
 
@@ -209,56 +209,118 @@ namespace CSkies.Worldgen
 
             gen.Generate(origin.X, origin.Y, true, true);
 
-            CUtils.ObectPlace(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
-
             #region Decorations
-            CUtils.ObectPlace(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
 
-            CUtils.ObectPlace(origin.X + 90, origin.Y + 47, mod.TileType("BrokenArtemis"));
+            CUtils.ObectPlace(origin.X + 145, origin.Y + 118, mod.TileType("BrokenArtemis"));
 
-            CUtils.ObectPlace(origin.X + 23, origin.Y + 59, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 28, origin.Y + 59, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 39, origin.Y + 55, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 46, origin.Y + 59, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 80, origin.Y + 57, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 81, origin.Y + 67, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 85, origin.Y + 67, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 92, origin.Y + 58, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 97, origin.Y + 58, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 86, origin.Y + 48, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 103, origin.Y + 48, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 104, origin.Y + 67, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 108, origin.Y + 67, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 109, origin.Y + 57, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 70, origin.Y + 29, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 73, origin.Y + 29, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 116, origin.Y + 29, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 119, origin.Y + 29, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 166, origin.Y + 59, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 161, origin.Y + 59, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 150, origin.Y + 55, mod.TileType("ObservatoryLantern"));
-            CUtils.ObectPlace(origin.X + 143, origin.Y + 59, mod.TileType("ObservatoryLantern"));
+            #region Lanterns
+            CUtils.ObectPlace(origin.X + 134, origin.Y + 57, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 165, origin.Y + 57, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 54, origin.Y + 63, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 59, origin.Y + 63, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 240, origin.Y + 63, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 245, origin.Y + 63, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 41, origin.Y + 66, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 258, origin.Y + 66, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 129, origin.Y + 70, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 170, origin.Y + 70, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 40, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 70, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 78, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 81, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 218, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 221, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 229, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 259, origin.Y + 75, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 89, origin.Y + 80, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 210, origin.Y + 80, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 71, origin.Y + 88, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 76, origin.Y + 88, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 223, origin.Y + 88, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 228, origin.Y + 88, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 33, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 37, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 44, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 255, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 262, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 266, origin.Y + 91, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 34, origin.Y + 99, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 37, origin.Y + 99, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 262, origin.Y + 99, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 265, origin.Y + 99, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 67, origin.Y + 102, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 70, origin.Y + 102, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 229, origin.Y + 102, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 232, origin.Y + 102, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 37, origin.Y + 111, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 79, origin.Y + 111, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 220, origin.Y + 111, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 262, origin.Y + 111, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 93, origin.Y + 112, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 96, origin.Y + 112, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 99, origin.Y + 112, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 200, origin.Y + 112, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 203, origin.Y + 112, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 206, origin.Y + 112, mod.TileType("ObservatoryLantern"));
 
-            CUtils.ObectPlace(origin.X + 27, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 32, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 70, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 119, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 157, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 162, origin.Y + 38, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 50, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 56, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 133, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 139, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 17, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 24, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 31, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 158, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 165, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 172, origin.Y + 49, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 58, origin.Y + 59, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 131, origin.Y + 59, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 70, origin.Y + 66, mod.TileType("ObservatoryChandelier"));
-            CUtils.ObectPlace(origin.X + 119, origin.Y + 66, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 79, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 82, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 85, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 88, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 211, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 214, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 217, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+            CUtils.ObectPlace(origin.X + 220, origin.Y + 123, mod.TileType("ObservatoryLantern"));
+
+            #endregion
+
+            #region Chandeliers
+            CUtils.ObectPlace(origin.X + 140, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 159, origin.Y + 48, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 31, origin.Y + 66, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 269, origin.Y + 66, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 100, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 106, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 112, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 118, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 181, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 187, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 193, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 199, origin.Y + 80, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 40, origin.Y + 83, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 45, origin.Y + 83, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 254, origin.Y + 83, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 259, origin.Y + 83, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 6, origin.Y + 93, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 293, origin.Y + 93, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 103, origin.Y + 90, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 196, origin.Y + 90, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 95, origin.Y + 91, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 203, origin.Y + 91, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 49, origin.Y + 99, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 250, origin.Y + 99, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 63, origin.Y + 102, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 73, origin.Y + 102, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 225, origin.Y + 102, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 236, origin.Y + 102, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 15, origin.Y + 103, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 20, origin.Y + 103, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 278, origin.Y + 103, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 284, origin.Y + 103, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 29, origin.Y + 107, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 270, origin.Y + 107, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 44, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 50, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 133, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 166, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 249, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 254, origin.Y + 111, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 16, origin.Y + 112, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 283, origin.Y + 112, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 128, origin.Y + 121, mod.TileType("ObservatoryChandelier"));
+            CUtils.ObectPlace(origin.X + 171, origin.Y + 121, mod.TileType("ObservatoryChandelier"));
+            #endregion
+
             #endregion
 
             return true;

@@ -195,6 +195,12 @@ namespace CSkies
             origin = new Point((int)(Main.maxTilesX * 0.7f), (int)(Main.maxTilesY * 0.35f));
             Vault c = new Vault();
             c.Place(origin, WorldGen.structures);
+
+            progress.Message = "Entering the Atmosphere";
+            Point OOrigin = new Point((int)(Main.maxTilesX * 0.25f), 100);
+            Observatory observatory = new Observatory();
+            observatory.Place(OOrigin, WorldGen.structures);
+
         }
 
         public override void PostUpdate()
