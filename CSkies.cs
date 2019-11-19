@@ -116,6 +116,12 @@ namespace CSkies
                 priority = MusicPriority.Event;
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/Comet");
             }
+
+            if (cPlayer.ZoneObservatory)
+            {
+                priority = MusicPriority.Event;
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/Observatory");
+            }
         }
 
         public override void HandlePacket(BinaryReader bb, int whoAmI)

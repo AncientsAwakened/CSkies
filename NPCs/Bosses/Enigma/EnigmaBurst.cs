@@ -111,8 +111,6 @@ namespace CSkies.NPCs.Bosses.Enigma
                 expr_178D3_cp_0.position.Y -= num574;
             }
 
-            projectile.velocity *= .97f;
-
             if (projectile.ai[1]++ > 120)
             {
                 projectile.Kill();
@@ -121,7 +119,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             const int aislotHomingCooldown = 0;
             const int homingDelay = 0;
             const float desiredFlySpeedInPixelsPerFrame = 20;
-            const float amountOfFramesToLerpBy = 30; // minimum of 1, please keep in full numbers even though it's a float!
+            const float amountOfFramesToLerpBy = 30;
 
             projectile.ai[aislotHomingCooldown]++;
             if (projectile.ai[aislotHomingCooldown] > homingDelay)

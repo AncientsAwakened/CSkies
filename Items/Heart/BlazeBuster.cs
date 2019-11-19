@@ -51,5 +51,16 @@ namespace CSkies.Items.Heart
 		{
 			return new Vector2(-12, -6);
 		}
+
+        public override void ModifyTooltips(System.Collections.Generic.List<TooltipLine> list)
+        {
+            foreach (TooltipLine line2 in list)
+            {
+                if (line2.mod == "Terraria" && line2.Name == "ItemName")
+                {
+                    line2.overrideColor = Colors.Rarity12;
+                }
+            }
+        }
     }
 }

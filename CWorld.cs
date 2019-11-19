@@ -40,6 +40,7 @@ namespace CSkies
         public static bool KillDoors = false;
         public static bool AbyssBiome = false;
 
+        public static bool Altar = false;
         public static bool Altar1 = false;
         public static bool Altar2 = false;
         public static bool Altar3 = false;
@@ -54,6 +55,7 @@ namespace CSkies
             downedHeart = false;
             downedHeartcore = false;
             downedSoul = false;
+            Altar = false;
             Altar1 = false;
             Altar2 = false;
             Altar3 = false;
@@ -228,6 +230,7 @@ namespace CSkies
 
             if (Main.dayTime && Main.time == 5)
             {
+                Altar = false;
                 Altar1 = false;
                 Altar2 = false;
                 Altar3 = false;

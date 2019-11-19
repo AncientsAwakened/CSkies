@@ -176,7 +176,7 @@ namespace CSkies.Worldgen
 
             gen.Generate(origin.X, origin.Y, true, true);
 
-            CUtils.ObectPlace(origin.X + 277, origin.Y + 51, mod.TileType("HeartAltar1"));
+            CUtils.ObectPlace(origin.X + 32, origin.Y + 34, mod.TileType("HeartAltar1"));
 
             return true;
         }

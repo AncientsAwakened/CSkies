@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.ModLoader.IO;
 using System.IO;
+using System.Collections.Generic;
 
 namespace CSkies.Tiles.Observatory.Doors
 {
@@ -31,11 +32,10 @@ namespace CSkies.Tiles.Observatory.Doors
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
-            if
-            if (++frameCounter >= 3)
+            if (DoorWorld.Door1)
             {
                 frameCounter = 0;
-                if (++frame >= 9) frame = 0;
+                if (++frame >= 9) frame = 8;
             }
         }
 
