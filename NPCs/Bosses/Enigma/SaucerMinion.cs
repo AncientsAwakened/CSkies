@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,18 +16,18 @@ namespace CSkies.NPCs.Bosses.Enigma
 		
         public override void SetDefaults()
         {
-            npc.width = 60;
-            npc.height = 40;
-            npc.value = BaseUtility.CalcValue(0, 0, 10, 0);
+            npc.width = 64;
+            npc.height = 64;
+            npc.value = BaseUtility.CalcValue(0, 0, 0, 0);
             npc.npcSlots = 1;
 			npc.aiStyle = -1;
-            npc.lifeMax = 500;
+            npc.lifeMax = 2300;
             npc.defense = 20;
-            npc.damage = 55;
+            npc.damage = 45;
             npc.knockBackResist = 0.3f;
 			npc.noGravity = true;
-            npc.HitSound = SoundID.NPCHit1;
-            npc.DeathSound = SoundID.NPCDeath1;
+            npc.HitSound = new LegacySoundStyle(3, 4, Terraria.Audio.SoundType.Sound);
+            npc.DeathSound = new LegacySoundStyle(4, 14, Terraria.Audio.SoundType.Sound);
             npc.noTileCollide = true;
         }
 
