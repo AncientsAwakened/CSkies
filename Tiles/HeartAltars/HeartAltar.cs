@@ -30,6 +30,11 @@ namespace CSkies.Tiles.HeartAltars
             animationFrameHeight = 54;
         }
 
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        {
+            Item.NewItem(i * 16, j * 16, 48, 48, drop);
+        }
+
         public override void ModifyLight(int x, int y, ref float r, ref float g, ref float b)
         {
             Color color = BaseUtility.ColorMult(Heartcore.Flame, 0.7f);

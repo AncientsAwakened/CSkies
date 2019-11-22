@@ -4,3 +4,4 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>", Scope = "member", Target = "~M:CSkies.NPCs.Bosses.Enigma.Enigma.AIType~System.Int32")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>", Scope = "member", Target = "~M:CSkies.NPCs.Bosses.Enigma.Enigma.AI")]

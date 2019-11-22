@@ -58,7 +58,6 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
         public override void AI()
         {
             if (Preamble[0] != 1)
@@ -201,7 +200,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         Main.projectile[b].Center = npc.Center - new Vector2(200, 0);
                     }
 
-                    if (npc.ai[1] > 90)
+                    if (npc.ai[1] > 180)
                     {
                         AIReset();
                     }
@@ -500,7 +499,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         private void RingEffects()
         {
             rotation += .2f;
-            if (npc.ai[0] == 5 || npc.ai[0] == 6)
+            if (npc.ai[0] == 7 || npc.ai[0] == 8)
             {
                 if (scale >= 1f)
                 {

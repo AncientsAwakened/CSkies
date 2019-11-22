@@ -24,8 +24,6 @@ namespace CSkies.Worldgen
 
             int biomeRadius = 89;
 
-
-
             Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
             {
                 [new Color(0, 0, 255)] = mod.TileType("AbyssBricks"),
@@ -135,15 +133,15 @@ namespace CSkies.Worldgen
 
             if (CWorld.VaultCount == 0)
             {
-                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar2"));
+                CUtils.ObectPlace(genX + 29, genY + 31, mod.TileType("HeartAltar2"));
             }
             else if (CWorld.VaultCount == 1)
             {
-                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar3"));
+                CUtils.ObectPlace(genX + 29, genY + 31, mod.TileType("HeartAltar3"));
             }
             else if (CWorld.VaultCount == 2)
             {
-                CUtils.ObectPlace(origin.X + 29, origin.Y + 31, mod.TileType("HeartAltar4"));
+                CUtils.ObectPlace(genX + 29, genY + 31, mod.TileType("HeartAltar4"));
             }
 
             return true;

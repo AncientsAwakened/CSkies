@@ -15,7 +15,7 @@ namespace CSkies.Items.Observatory
             Tooltip.SetDefault(
 @"Entry log; I have arrived on planet T-3R in the milky way galaxy.
 Or as the lesser beings call it, '" + Main.worldName + @"'. What a stupid name.
-If my reading are correct...the abyss vaults should be here somewhere. I'll
+If my readings are correct...the abyss vaults should be here somewhere. I'll
 keep looking. Shouldn't take too long...");
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(5, 4));
         }
@@ -306,14 +306,15 @@ equestrian annoyance. My back prosthetic is still dented from getting stepped on
         }
     }
 
-    public class EnigmaLogRede : EnigmaLog1
+    public class EnigmaLogRede1 : EnigmaLog1
     {
         public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
             DisplayName.SetDefault("Enigma Log Extra II");
-            Tooltip.SetDefault(@"Those damn T-Bots! They are absolutely stealing
+            Tooltip.SetDefault(
+@"Those damn T-Bots! They are absolutely stealing
 my style! My color scheme, my robotic designs, everything!
 Plagiarism I say, Plagiarism!!!
  
@@ -322,6 +323,26 @@ Huh?
 You mean they've been here for how long?
  
 ...well shit.");
+        }
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+        }
+    }
+
+    public class EnigmaLogRede2 : EnigmaLog1
+    {
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Enigma Log Extra II");
+            Tooltip.SetDefault(
+@"Well then, if the T-Bots won't stop cramping on my
+stylish architecture, then I'll cramp on their weapon
+designs! I snagged a blueprint for a grenade made for
+some 'MACE' thingy. No matter, it's mine now.");
         }
 
         public override void SetDefaults()
