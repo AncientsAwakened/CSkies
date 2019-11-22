@@ -42,7 +42,7 @@ namespace CSkies.Items.Blocks
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.LifeCrystal, 5);
             recipe.AddIngredient(ItemID.Meteorite, 20);
-            recipe.AddIngredient(null, "MagmaHeart", 1);
+            recipe.AddIngredient(null, "MoltenHeart", 1);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
