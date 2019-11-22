@@ -58,6 +58,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
         public override void AI()
         {
             if (Preamble[0] != 1)
@@ -165,6 +166,50 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                 case 5:
 
+                    if (Main.rand.Next(10) == 0)
+                    {
+                        int x = Main.rand.Next(-6, 6);
+                        int y = -Main.rand.Next(3, 5);
+                        int p = Projectile.NewProjectile(npc.Center, new Vector2(x, y), ModContent.ProjectileType<Nut>(), npc.damage / 2, 5, Main.myPlayer, 0, Main.rand.Next(3));
+                        Main.projectile[p].Center = npc.Center;
+                    }
+
+                    if (npc.ai[1] >= 120)
+                    {
+                        int minion = Main.rand.Next(2);
+
+                        switch (minion)
+                        {
+                            case 0: minion = mod.NPCType("BabyStarcore"); break;
+                            default: minion = mod.NPCType("SaucerMinion"); break;
+                        }
+
+                        int m = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, minion);
+                        Main.npc[m].Center = npc.Center;
+
+                        AIReset();
+                    }
+
+                    break;
+                case 6:
+                    if (npc.ai[1] == 45)
+                    {
+                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), npc.position);
+                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[a].Center = npc.Center + new Vector2(200, 0);
+                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
+                        Main.projectile[b].Center = npc.Center - new Vector2(200, 0);
+                    }
+
+                    if (npc.ai[1] > 90)
+                    {
+                        AIReset();
+                    }
+
+
+                    break;
+                case 7:
+
                     if (npc.ai[1] > ChangeRate)
                     {
                         handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
@@ -173,10 +218,8 @@ namespace CSkies.NPCs.Bosses.Enigma
                         npc.ai[2] = 0;
                         npc.ai[3] = 0;
                     }
-
                     break;
-                case 6:
-
+                case 8:
                     if (npc.ai[1] % 10 == 0)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position);
@@ -214,24 +257,6 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
 
                     if (npc.ai[1] > ChangeRate + 60)
-                    {
-                        AIReset();
-                    }
-
-                    break;
-
-                case 7:
-
-                    if (npc.ai[1] == 45)
-                    {
-                        Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), npc.position);
-                        int a = Projectile.NewProjectile(npc.position, new Vector2(-10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
-                        Main.projectile[a].Center = npc.Center + new Vector2(200, 0);
-                        int b = Projectile.NewProjectile(npc.position, new Vector2(10, Main.rand.Next(-20, 10)), ModContent.ProjectileType<EnigmaVortex>(), npc.damage / 4, 4, Main.myPlayer);
-                        Main.projectile[b].Center = npc.Center - new Vector2(200, 0);
-                    }
-
-                    if (npc.ai[1] > 90)
                     {
                         AIReset();
                     }
@@ -293,7 +318,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public int AIType()
         {
-            int aitype = Main.rand.Next(Unhooded ? 5 : 4);
+            int aitype = Main.rand.Next(Unhooded ? 6 : 5);
 
             switch (aitype)
             {
@@ -304,9 +329,11 @@ namespace CSkies.NPCs.Bosses.Enigma
                 case 2:
                     return 3;
                 case 3:
-                    return 7;
-                default:
                     return 5;
+                case 4:
+                    return 6;
+                default:
+                    return 7;
             }
         }
 
@@ -401,7 +428,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHands");
                     break;
                 case 1:
-                case 7:
+                case 6:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
                 case 2:
@@ -414,9 +441,12 @@ namespace CSkies.NPCs.Bosses.Enigma
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsLaser");
                     break;
                 case 5:
+                    hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAssemble");
+                    break;
+                case 7:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCharge");
                     break;
-                case 6:
+                case 8:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAim");
                     break;
             }
