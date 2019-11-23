@@ -34,7 +34,6 @@ namespace CSkies
         public static int CometTiles = 0;
         public static int AbyssTiles = 0;
         public static int ObservatoryTiles = 0;
-        public static int CSkyTiles = 0;
 
         public static int VaultCount = 0;
         public static bool KillDoors = false;

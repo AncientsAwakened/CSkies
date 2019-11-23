@@ -13,8 +13,8 @@ namespace CSkies.NPCs.Bosses.Enigma
 	{
 		public override void SetDefaults()
         {
-            projectile.width = 80;
-            projectile.height = 80;
+            projectile.width = 102;
+            projectile.height = 102;
             projectile.aiStyle = -1;
             projectile.hostile = true;
             projectile.alpha = 255;
@@ -33,7 +33,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 		
 		public override void AI()
         {
-            Lighting.AddLight(projectile.Center, 0f, .7f, 0f);
+            Lighting.AddLight(projectile.Center, 0f, 0f, .5f);
             ActiveSound activeSound = Main.GetActiveSound(SlotId.FromFloat(projectile.localAI[0]));
             if (activeSound != null)
             {

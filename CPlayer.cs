@@ -22,7 +22,6 @@ namespace CSkies
 
         public bool ZoneComet = false;
         public bool ZoneVoid = false;
-        public bool ZoneCSky = false;
         public bool ZoneObservatory = false;
 
         public bool VoidEye = false;
@@ -75,10 +74,8 @@ namespace CSkies
         public override void UpdateBiomeVisuals()
         {
             bool useVoid = ZoneVoid || NearVoidBoss();
-            bool useCSky = ZoneCSky;
 
             player.ManageSpecialBiomeVisuals("CSkies:AbyssSky", useVoid);
-            player.ManageSpecialBiomeVisuals("CSkies:CSky", useCSky);
         }
 
         public bool NearVoid()

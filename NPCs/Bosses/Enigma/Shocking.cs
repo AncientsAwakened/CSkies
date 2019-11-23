@@ -32,30 +32,30 @@ namespace CSkies.NPCs.Bosses.Enigma
             return Color.White;
         }
 		
-		int head = -1;
+		int Summon = -1;
 
         public override bool PreAI()
         {
-			if(head == -1)
+			if(Summon == -1)
 			{
-				int npcID = BaseAI.GetNPC(projectile.Center, mod.NPCType("OrthrusHead1"), 500f, null);	
-				if(npcID >= 0) head = npcID;
+				int projID = BaseAI.GetProjectile(projectile.Center, mod.ProjectileType("ShockSummon"), Main.myPlayer, 500f, null);	
+				if(projID >= 0) Summon = projID;
 			}
-			if(head == -1) return false;				
-			NPC headNPC = Main.npc[head];
-			if(headNPC == null || headNPC.life <= 0 || !headNPC.active || headNPC.type != mod.NPCType("OrthrusHead1")){ projectile.Kill(); return false; }
+			if(Summon == -1) return false;				
+			Projectile Vortex = Main.projectile[Summon];
+			if(Vortex == null || !Vortex.active || Vortex.type != mod.ProjectileType("ShockSummon")){ projectile.Kill(); return false; }
 
 			//Fun fact: this technique is what the shadowbeam staff does!
 			if(Main.netMode != 1 && projectile.timeLeft % 3 == 0) //so it doesn't do this every tick, which would be laggy
 			{
-				projectile.Center = headNPC.Center; //reset to start chain movement
+				projectile.Center = Vortex.Center; //reset to start chain movement
 				for(int m = 0; m < 18; m++) //this + velocity ends up ~540 in length, same as the texture
 				{
 					projectile.Center += projectile.velocity * 30f; //move to new point in the chain
 					projectile.Damage(); //inflcit damage
 				}
 			}
-			projectile.Center = headNPC.Center;
+			projectile.Center = Vortex.Center;
 			BaseAI.LookAt(projectile.Center + projectile.velocity, projectile.Center, ref projectile.rotation, ref projectile.spriteDirection, 2, 0f, 0.1f, false);
 
             if (++projectile.frameCounter >= 3)

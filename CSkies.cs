@@ -73,12 +73,6 @@ namespace CSkies
             AbyssSky.boltTexture = GetTexture("Backgrounds/VoidBolt");
             AbyssSky.flashTexture = GetTexture("Backgrounds/VoidFlash");
 
-
-            Filters.Scene["CSkies:CSky"] = new Filter(new CSkyData("FilterMiniTower").UseColor(.15f, 0f, .2f).UseOpacity(0.5f), EffectPriority.VeryHigh);
-            SkyManager.Instance["CSkies:CSky"] = new CSky();
-            CSky.starTextures[0] = GetTexture("Backgrounds/CStar0");
-            CSky.starTextures[1] = GetTexture("Backgrounds/CStar1");
-
             SetupMusicBoxes();
         }
 

@@ -17,7 +17,9 @@ namespace CSkies.NPCs.Bosses.Enigma
         {
             projectile.CloneDefaults(ProjectileID.Grenade);
             aiType = ProjectileID.Grenade;
-            projectile.hostile = false;
+            projectile.width = 40;
+            projectile.height = 40;
+            projectile.hostile = true;
             projectile.friendly = false;
             projectile.extraUpdates = 1;
             projectile.timeLeft = 120;

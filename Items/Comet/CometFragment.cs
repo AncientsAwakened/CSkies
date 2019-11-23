@@ -3,6 +3,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 
 namespace CSkies.Items.Comet
 {
@@ -13,6 +14,7 @@ namespace CSkies.Items.Comet
             DisplayName.SetDefault("Comet Fragment");
             ItemID.Sets.ItemIconPulse[item.type] = true;
             ItemID.Sets.ItemNoGravity[item.type] = true;
+            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(5, 3));
         }
         public override void SetDefaults()
         {

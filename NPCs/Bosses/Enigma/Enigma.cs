@@ -58,6 +58,8 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
+        public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11;
+
         public override void AI()
         {
             if (Preamble[0] != 1)
@@ -204,21 +206,87 @@ namespace CSkies.NPCs.Bosses.Enigma
                     {
                         AIReset();
                     }
-
-
                     break;
                 case 7:
+                    npc.ai[2]++;
+
+                    if (npc.ai[2] < 10)
+                    {
+                        HandFrame = 0;
+                    }
+                    if (npc.ai[2] == 10)
+                    {
+                        HandFrame = 1;
+                    }
+                    if (npc.ai[2] == 20)
+                    {
+                        HandFrame = 2;
+                    }
+                    if (npc.ai[2] == 30)
+                    {
+                        HandFrame = 3;
+                        if (Main.netMode != 1)
+                        {
+                            int a = Projectile.NewProjectile(npc.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-7, -5)), ModContent.ProjectileType<EnigmaGrenade>(), npc.damage / 4, 4, Main.myPlayer);
+                            Main.projectile[a].Center = npc.Center + new Vector2(20, 20);
+                        }
+                    }
+                    if (npc.ai[2] >= 40)
+                    {
+                        npc.ai[2] = 0;
+                    }
+
+                    if (npc.ai[1] > 241)
+                    {
+                        AIReset();
+                    }
+                    break;
+                case 8:
+
+                    for (int num468 = 0; num468 < 3; num468++)
+                    {
+                        int num469 = Dust.NewDust(npc.Center, 0, 0, DustID.Electric, 0, 0, 100, default, 1f);
+                        Main.dust[num469].noGravity = true;
+                    }
+
+                    Vector2 dir = Vector2.Normalize(player.Center - npc.Center);
+
+                    if (npc.ai[1] > 90)
+                    {
+                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, dir.X, dir.Y, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
+
+                        Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
+                        float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
+                        float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
+                        float NewRotation = (float)Math.Atan2(num2, num1);
+                        handRot = MathHelper.Lerp(handRot, NewRotation, 1f / 30f);
+                        npc.ai[0] = 9;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+                        npc.ai[3] = 0;
+                    }
+
+                    break;
+                case 9:
+
+                    if (npc.ai[1] > 60)
+                    {
+                        AIReset();
+                    }
+
+                        break;
+                case 10:
 
                     if (npc.ai[1] > ChangeRate)
                     {
-                        handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
-                        npc.ai[0] = 6;
+                        npc.ai[0] = 11;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
                         npc.ai[3] = 0;
                     }
                     break;
-                case 8:
+                case 11:
+                    handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
                     if (npc.ai[1] % 10 == 0)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Static"), npc.position);
@@ -266,11 +334,11 @@ namespace CSkies.NPCs.Bosses.Enigma
                     goto case 0;
             }
 
-            if (npc.ai[0] == 4 || npc.ai[0] == 6)
+            if (npc.ai[0] == 4 || npc.ai[0] == 11)
             {
                 handRot -= GetSpinOffset();
             }
-            else
+            else if (npc.ai[0] != 9)
             {
                 handRot = 0;
             }
@@ -315,24 +383,30 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
         }
 
+        //Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, StaticPrep = 10, Static = 11;
+
         public int AIType()
         {
-            int aitype = Main.rand.Next(Unhooded ? 6 : 5);
+            int aitype = Main.rand.Next(Unhooded ? 8 : 7);
 
             switch (aitype)
             {
                 case 0:
-                    return 1;
+                    return HomingMagic;
                 case 1:
-                    return 2;
+                    return LightningStorm;
                 case 2:
-                    return 3;
+                    return BeamPrep;
                 case 3:
-                    return 5;
+                    return Construct;
                 case 4:
-                    return 6;
+                    return Vortexes;
+                case 5:
+                    return Grenades;
+                case 6:
+                    return ShockPrep;
                 default:
-                    return 7;
+                    return StaticPrep;
             }
         }
 
@@ -402,7 +476,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             BaseDrawing.DrawTexture(spriteBatch, body, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, drawColor, true);
             BaseDrawing.DrawTexture(spriteBatch, glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 6, npc.frame, Color.White, true);
 
-            if (npc.ai[0] == 5)
+            if (npc.ai[0] == 10)
             {
                 BaseDrawing.DrawTexture(spriteBatch, ChargeTex, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 4, charge, Color.White, true);
             }
@@ -410,6 +484,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             BaseDrawing.DrawTexture(spriteBatch, hand, 0, npc.position, npc.width, npc.height, npc.scale, handRot, 0, 4, handsframe, drawColor, true);
             return false;
         }
+
 
         public void Textures()
         {
@@ -423,29 +498,42 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             switch ((int)npc.ai[0])
             {
-                case 0:
+                case Idle:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHands");
                     break;
-                case 1:
-                case 6:
+
+                case HomingMagic:
+                case Vortexes:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
-                case 2:
+
+                case LightningStorm:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCast");
                     break;
-                case 3:
+
+                case BeamPrep:
+                case ShockPrep:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsPrep");
                     break;
-                case 4:
+
+                case Beam:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsLaser");
                     break;
-                case 5:
+
+                case Construct:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAssemble");
                     break;
-                case 7:
+
+                case Grenades:
+                    hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsThrow");
+                    break;
+
+                case StaticPrep:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCharge");
                     break;
-                case 8:
+
+                case Static:
+                case Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAim");
                     break;
             }
@@ -480,15 +568,18 @@ namespace CSkies.NPCs.Bosses.Enigma
                 }
             }
 
-            int fpt = (int)npc.ai[0] == 0 ? 10 : 1;
-
-            if (handCounter++ >= fpt)
+            if (npc.ai[0] != 7)
             {
-                handCounter = 0;
-                HandFrame++;
-                if (HandFrame > 3)
+                int fpt = (int)npc.ai[0] == 0 ? 10 : 1;
+
+                if (handCounter++ >= fpt)
                 {
-                    HandFrame = 0;
+                    handCounter = 0;
+                    HandFrame++;
+                    if (HandFrame > 3)
+                    {
+                        HandFrame = 0;
+                    }
                 }
             }
         }
@@ -499,7 +590,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         private void RingEffects()
         {
             rotation += .2f;
-            if (npc.ai[0] == 7 || npc.ai[0] == 8)
+            if (npc.ai[0] == 10 || npc.ai[0] == 11)
             {
                 if (scale >= 1f)
                 {
@@ -640,7 +731,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         if (Main.netMode != 1) BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
                         Preamble[0] = 1;
 
-                        npc.ai[0] = 5;
+                        npc.ai[0] = 10;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
                         npc.ai[3] = 0;

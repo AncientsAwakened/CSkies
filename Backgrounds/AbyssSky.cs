@@ -89,8 +89,6 @@ namespace CSkies.Backgrounds
             return new Color(Vector4.Lerp(value, Vector4.One, Intensity * 0.5f));
         }
 
-        
-
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
             if (maxDepth >= 3.40282347E+38f && minDepth < 3.40282347E+38f)
@@ -175,6 +173,22 @@ namespace CSkies.Backgrounds
         {
             UpdateVoidSky();
             base.Apply();
+        }
+    }
+
+    public class AbyssVaultBG : ModUgBgStyle
+    {
+        public override bool ChooseBgStyle()
+        {
+            return !Main.gameMenu && Main.LocalPlayer.GetModPlayer<CPlayer>().ZoneVoid;
+        }
+
+        public override void FillTextureArray(int[] textureSlots)
+        {
+            textureSlots[0] = mod.GetBackgroundSlot("Backgrounds/AbyssVaultBG");
+            textureSlots[1] = mod.GetBackgroundSlot("Backgrounds/AbyssVaultBG");
+            textureSlots[2] = mod.GetBackgroundSlot("Backgrounds/AbyssVaultBG");
+            textureSlots[3] = mod.GetBackgroundSlot("Backgrounds/AbyssVaultBG");
         }
     }
 }

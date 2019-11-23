@@ -39,7 +39,8 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             if (projectile.ai[0]++ == 180 && Main.netMode != 1)
             {
-                Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, 0, 10, mod.ProjectileType("Shocking"), projectile.damage / 4, 0f, Main.myPlayer);
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Shock"), projectile.position);
+                Projectile.NewProjectile(projectile.position, new Vector2(0, 10), mod.ProjectileType("Shocking"), projectile.damage / 4, 4, Main.myPlayer);
             }
         }
     }
