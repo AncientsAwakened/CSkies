@@ -52,13 +52,12 @@ namespace CSkies.NPCs.Bosses.Enigma
                 Unhooded = true;
                 Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/EnigmaHood"), 1f);
                 Preamble[0] = 2;
-                Preamble[1] = 0;
             }
         }
 
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
-        public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11;
+        public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11, despawn = 12;
 
         public override void AI()
         {
@@ -81,6 +80,16 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             Player player = Main.player[npc.target];
 
+            if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000)
+            {
+                npc.TargetClosest();
+                if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000)
+                {
+                    npc.ai[0] = 12;
+                    Despawn();
+                    return;
+                }
+            }
 
             float Movespeed = .25f;
             float VelMax = 10;
@@ -221,15 +230,15 @@ namespace CSkies.NPCs.Bosses.Enigma
                     if (npc.ai[2] == 20)
                     {
                         HandFrame = 2;
-                    }
-                    if (npc.ai[2] == 30)
-                    {
-                        HandFrame = 3;
                         if (Main.netMode != 1)
                         {
                             int a = Projectile.NewProjectile(npc.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-7, -5)), ModContent.ProjectileType<EnigmaGrenade>(), npc.damage / 4, 4, Main.myPlayer);
                             Main.projectile[a].Center = npc.Center + new Vector2(20, 20);
                         }
+                    }
+                    if (npc.ai[2] == 30)
+                    {
+                        HandFrame = 3;
                     }
                     if (npc.ai[2] >= 40)
                     {
@@ -249,17 +258,10 @@ namespace CSkies.NPCs.Bosses.Enigma
                         Main.dust[num469].noGravity = true;
                     }
 
-                    Vector2 dir = Vector2.Normalize(player.Center - npc.Center);
-
                     if (npc.ai[1] > 90)
                     {
-                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, dir.X, dir.Y, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
-
-                        Vector2 vector2 = new Vector2(npc.position.X + (npc.width * 0.5f), npc.position.Y + (npc.height * 0.5f));
-                        float num1 = Main.player[npc.target].position.X + (player.width / 2) - vector2.X;
-                        float num2 = Main.player[npc.target].position.Y + (player.height / 2) - vector2.Y;
-                        float NewRotation = (float)Math.Atan2(num2, num1);
-                        handRot = MathHelper.Lerp(handRot, NewRotation, 1f / 30f);
+                        Projectile.NewProjectile(npc.Center.X + 40, npc.Center.Y, 0, 10, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X - 40, npc.Center.Y, 0, 10, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
                         npc.ai[0] = 9;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
@@ -338,7 +340,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 handRot -= GetSpinOffset();
             }
-            else if (npc.ai[0] != 9)
+            else
             {
                 handRot = 0;
             }
@@ -504,6 +506,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                 case HomingMagic:
                 case Vortexes:
+                case Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
 
@@ -533,9 +536,13 @@ namespace CSkies.NPCs.Bosses.Enigma
                     break;
 
                 case Static:
-                case Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAim");
                     break;
+
+                case despawn:
+                    hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsPrelude");
+                    break;
+
             }
             if (Preamble[0] == 0)
             {
@@ -558,7 +565,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     npc.frame.Y = 0;
                 }
 
-                if (npc.ai[0] == 5)
+                if (npc.ai[0] == 10)
                 {
                     ChargeFrame += 1;
                     if (ChargeFrame > 3)
@@ -696,6 +703,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         {
                             if (Main.netMode != 1) BaseUtility.Chat("I'll squash you like the insect you are.", Color.Cyan);
                             Preamble[0] = 1;
+                            Preamble[1] = 0;
 
                             npc.netUpdate = true;
                         }
@@ -703,6 +711,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     else
                     {
                         if (Main.netMode != 1) BaseUtility.Chat("You again? Haven't you humiliated me enough as is?", Color.Cyan);
+                        Preamble[1] = 0;
                         Preamble[0] = 1;
 
                         npc.netUpdate = true;
@@ -730,6 +739,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     {
                         if (Main.netMode != 1) BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
                         Preamble[0] = 1;
+                        Preamble[1] = 0;
 
                         npc.ai[0] = 10;
                         npc.ai[1] = 0;
@@ -739,6 +749,29 @@ namespace CSkies.NPCs.Bosses.Enigma
                         npc.netUpdate = true;
                     }
                 }
+            }
+        }
+
+        public void Despawn()
+        {
+            Preamble[1]++;
+
+            if (Preamble[1] > 120 && Main.netMode != 1)
+            {
+                BaseUtility.Chat("Hmpf. Pathetic.", Color.Cyan);
+                for (int num572 = 0; num572 < 10; num572++)
+                {
+                    float num573 = npc.velocity.X * 0.2f * num572;
+                    float num574 = -(npc.velocity.Y * 0.2f) * num572;
+                    int num575 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.Electric, 0f, 0f, 100, default, 1f);
+                    Main.dust[num575].velocity *= 0f;
+                    Dust expr_178B4_cp_0 = Main.dust[num575];
+                    expr_178B4_cp_0.position.X -= num573;
+                    Dust expr_178D3_cp_0 = Main.dust[num575];
+                    expr_178D3_cp_0.position.Y -= num574;
+                }
+                npc.active = false;
+                npc.netUpdate = true;
             }
         }
 

@@ -21,7 +21,6 @@ namespace CSkies.NPCs.Bosses.Enigma
             projectile.height = 40;
             projectile.hostile = true;
             projectile.friendly = false;
-            projectile.extraUpdates = 1;
             projectile.timeLeft = 120;
         }
         public override void AI()
@@ -53,7 +52,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 dustIndex = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), projectile.width, projectile.height, DustID.Electric, 0f, 0f, 100, default, 2f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
-            Projectile.NewProjectile(projectile.position.X, projectile.position.Y, 0, 0, mod.ProjectileType("EnigmaRing"), projectile.damage, projectile.knockBack, projectile.owner, 0, 1);
+            Projectile.NewProjectile(projectile.position.X, projectile.position.Y, 0, 0, mod.ProjectileType("EnigmaRing"), projectile.damage, projectile.knockBack, projectile.owner, 0f, 0f);
         }
     }
 }

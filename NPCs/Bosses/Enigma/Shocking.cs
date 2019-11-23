@@ -75,9 +75,9 @@ namespace CSkies.NPCs.Bosses.Enigma
         }
 
         public override bool PreDraw(SpriteBatch sb, Color dColor)
-		{
-			Vector2 drawOffset = BaseUtility.RotateVector(Vector2.Zero, new Vector2(270, 0), projectile.rotation);	
-			BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], 0, projectile.position + drawOffset, projectile.width, projectile.height, projectile.scale, projectile.rotation, projectile.spriteDirection, Main.projFrames[projectile.type], new Rectangle(0, projectile.frame * 50, 570, 50), GetAlpha(Color.White), true, default);			
+        {
+            Vector2 drawOffset = BaseUtility.RotateVector(Vector2.Zero, new Vector2(540 * 0.5f, 25), projectile.rotation);
+            BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], 0, projectile.position + drawOffset, projectile.width, projectile.height, projectile.scale, projectile.rotation, projectile.spriteDirection, Main.projFrames[projectile.type], new Rectangle(0, projectile.frame * 50, 570, 50), GetAlpha(Color.White), true, default);			
 			return false;
 		}
     }

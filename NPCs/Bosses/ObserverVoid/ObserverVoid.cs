@@ -107,11 +107,10 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                 {
                     for (int m = 0; m < StarCount; m++)
                     {
-                        int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("BlackHole"), npc.damage / 4, 4, Main.myPlayer);
+                        int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("BlackHole"), npc.damage / 4, 4, Main.myPlayer, m);
                         Main.projectile[projectileID].Center = npc.Center;
                         Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
                         Main.projectile[projectileID].velocity *= 8f;
-                        Main.projectile[projectileID].ai[0] = m;
                     }
                     internalAI[3] = 1;
                     npc.netUpdate = true;
