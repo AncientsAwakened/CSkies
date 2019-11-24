@@ -1,16 +1,14 @@
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Localization;
 
-namespace CSkies.NPCs.Critters
+namespace CSkies.NPCs.Enemies.Observatory
 {
-    public class Sweeper : ModNPC
+    public class Stabber : ModNPC
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Sweeper");
+            DisplayName.SetDefault("Stabber");
             Main.npcFrameCount[npc.type] = 5;
         }
         public override void SetDefaults()
@@ -25,6 +23,7 @@ namespace CSkies.NPCs.Critters
             npc.npcSlots = 0f;
             npc.aiStyle = -1;
             npc.dontTakeDamageFromHostiles = true;
+            npc.damage = 40;
             npc.catchItem = (short)mod.ItemType("Sweeper");
         }
 
@@ -32,7 +31,7 @@ namespace CSkies.NPCs.Critters
         
         public override void AI()
         {
-            BaseAI.AISnail(npc, ref npc.ai, ref status, 0.6f, 0.1f);
+            BaseAI.AISnail(npc, ref npc.ai, ref status, 0.9f, 0.1f);
         }
 
         public override void HitEffect(int hitDirection, double damage)
@@ -43,11 +42,6 @@ namespace CSkies.NPCs.Critters
                 Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/Sweeper1"), 1f);
                 Gore.NewGore(npc.position, npc.velocity, mod.GetGoreSlot("Gores/Sweeper2"), 1f);
             }
-        }
-        
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
-        {
-            return false;
         }
 
         public override void FindFrame(int frameHeight)

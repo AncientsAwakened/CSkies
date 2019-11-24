@@ -15,6 +15,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         {
             Main.npcFrameCount[npc.type] = 6;
         }
+
         public override void SetDefaults()
         {
             npc.npcSlots = 100;
@@ -73,11 +74,6 @@ namespace CSkies.NPCs.Bosses.Enigma
                 npc.dontTakeDamage = false;
             }
 
-            if (!npc.HasPlayerTarget)
-            {
-                npc.TargetClosest();
-            }
-
             Player player = Main.player[npc.target];
 
             if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000)
@@ -90,6 +86,8 @@ namespace CSkies.NPCs.Bosses.Enigma
                     return;
                 }
             }
+
+            Player player = Main.player[npc.target];
 
             float Movespeed = .25f;
             float VelMax = 10;
