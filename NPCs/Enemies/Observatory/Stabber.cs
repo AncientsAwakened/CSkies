@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,7 +15,7 @@ namespace CSkies.NPCs.Enemies.Observatory
         }
         public override void SetDefaults()
         {
-            npc.width = 44;
+            npc.width = 54;
             npc.height = 38;
             npc.defense = 20;
             npc.lifeMax = 50;
@@ -31,6 +33,7 @@ namespace CSkies.NPCs.Enemies.Observatory
         
         public override void AI()
         {
+            Lighting.AddLight(npc.Center, Color.LimeGreen.R / 150, Color.LimeGreen.G / 150, Color.LimeGreen.B / 150);
             BaseAI.AISnail(npc, ref npc.ai, ref status, 0.9f, 0.1f);
         }
 
@@ -55,6 +58,13 @@ namespace CSkies.NPCs.Enemies.Observatory
                     npc.frame.Y = 0;
                 }
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            BaseDrawing.DrawTexture(spriteBatch, Main.npcTexture[npc.type], 0, npc, drawColor, false);
+            BaseDrawing.DrawTexture(spriteBatch, mod.GetTexture("Glowmasks/Stabber_Glow"), 0, npc, Color.White, false);
+            return false;
         }
     }
 }

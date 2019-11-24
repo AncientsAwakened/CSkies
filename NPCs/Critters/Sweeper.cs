@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CSkies.NPCs.Critters
 {
@@ -32,6 +33,7 @@ namespace CSkies.NPCs.Critters
         
         public override void AI()
         {
+            Lighting.AddLight(npc.Center, Color.LimeGreen.R / 150, Color.LimeGreen.G / 150, Color.LimeGreen.B / 150);
             BaseAI.AISnail(npc, ref npc.ai, ref status, 0.6f, 0.1f);
         }
 
@@ -52,7 +54,7 @@ namespace CSkies.NPCs.Critters
 
         public override void FindFrame(int frameHeight)
         {
-            if (npc.frameCounter++ > 6)
+            if (npc.frameCounter++ > 4)
             {
                 npc.frameCounter = 0;
                 npc.frame.Y += frameHeight;
@@ -61,6 +63,13 @@ namespace CSkies.NPCs.Critters
                     npc.frame.Y = 0;
                 }
             }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
+        {
+            BaseDrawing.DrawTexture(spriteBatch, Main.npcTexture[npc.type], 0, npc, drawColor, false);
+            BaseDrawing.DrawTexture(spriteBatch, mod.GetTexture("Glowmasks/Sweeper_Glow"), 0, npc, Color.White, false);
+            return false;
         }
     }
 }

@@ -87,8 +87,6 @@ namespace CSkies.NPCs.Bosses.Enigma
                 }
             }
 
-            Player player = Main.player[npc.target];
-
             float Movespeed = .25f;
             float VelMax = 10;
 
