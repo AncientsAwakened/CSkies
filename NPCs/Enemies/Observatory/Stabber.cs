@@ -26,7 +26,7 @@ namespace CSkies.NPCs.Enemies.Observatory
             npc.aiStyle = -1;
             npc.dontTakeDamageFromHostiles = true;
             npc.damage = 40;
-            npc.catchItem = (short)mod.ItemType("Sweeper");
+            npc.catchItem = (short)mod.ItemType("SweeperItem");
         }
 
         int status = -1;

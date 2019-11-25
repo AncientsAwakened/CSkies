@@ -78,6 +78,8 @@ namespace CSkies
                 if (Main.hardMode)
                 {
                     pool.Add(mod.NPCType("Starprobe"), .2f);
+                    pool.Add(mod.NPCType("Sweeper"), .08f);
+                    pool.Add(mod.NPCType("Stabber"), .02f);
                 }
             }
 

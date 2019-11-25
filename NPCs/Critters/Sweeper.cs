@@ -26,7 +26,7 @@ namespace CSkies.NPCs.Critters
             npc.npcSlots = 0f;
             npc.aiStyle = -1;
             npc.dontTakeDamageFromHostiles = true;
-            npc.catchItem = (short)mod.ItemType("Sweeper");
+            npc.catchItem = (short)mod.ItemType("SweeperItem");
         }
 
         int status = -1;

@@ -15,6 +15,7 @@ namespace CSkies.Items.Summons
 			Tooltip.SetDefault(@"The heart on it glows at the same rate your own beats
 Summons Heartcore
 Can only be used at night");
+            ItemID.Sets.SortingPriorityBossSpawns[item.type] = 13;
         }
 
 		public override void SetDefaults()

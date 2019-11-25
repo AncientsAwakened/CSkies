@@ -13,6 +13,7 @@ namespace CSkies.Items.Summons
 			Tooltip.SetDefault(@"It's flashing strangely, as if something is tracking it.
 Summons Enigma
 Non-Consumable");
+            ItemID.Sets.SortingPriorityBossSpawns[item.type] = 13;
         }
 
 		public override void SetDefaults()

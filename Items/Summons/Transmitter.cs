@@ -12,6 +12,7 @@ namespace CSkies.Items.Summons
 			Tooltip.SetDefault(@"It's displaying coordinates somewhere in the atmosphere...
 Summons Starcore
 Can only be used at night");
+            ItemID.Sets.SortingPriorityBossSpawns[item.type] = 13;
         }
 
 		public override void SetDefaults()

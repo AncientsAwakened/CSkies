@@ -14,6 +14,7 @@ namespace CSkies.Items.Summons
 Summons Observer Void
 Can only be used at night");
             Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(6, 4));
+            ItemID.Sets.SortingPriorityBossSpawns[item.type] = 13;
         }
 
 		public override void SetDefaults()
