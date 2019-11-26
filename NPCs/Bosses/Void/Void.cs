@@ -407,21 +407,21 @@ namespace CSkies.NPCs.Bosses.Void
         public void Starblast(int damage = 130)
         {
             Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
-            int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[a].Center = npc.Center;
-            int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[b].Center = npc.Center;
-            int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[c].Center = npc.Center;
-            int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[d].Center = npc.Center;
-            int e = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int e = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, 8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[e].Center = npc.Center;
-            int f = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int f = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, -8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[f].Center = npc.Center;
-            int g = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, 8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int g = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, 8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[g].Center = npc.Center;
-            int h = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, -8f), mod.ProjectileType("VoidBlast"), damage, 3);
+            int h = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, -8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
             Main.projectile[h].Center = npc.Center;
         }
 
