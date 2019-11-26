@@ -40,6 +40,7 @@ namespace CSkies.NPCs.Bosses.Void
                     int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<VoidTransition2>());
                     Main.npc[n].Center = npc.Center;
                     Main.npc[n].velocity = npc.velocity;
+                    npc.netUpdate = true;
                     npc.active = false;
                 }
                 npc.ai[0] = 0;

@@ -72,17 +72,6 @@ namespace CSkies
                 return;
             }
 
-            if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneObservatory)
-            {
-                ClearPoolWithExceptions(pool);
-                if (Main.hardMode)
-                {
-                    pool.Add(mod.NPCType("Starprobe"), .2f);
-                    pool.Add(mod.NPCType("Sweeper"), .08f);
-                    pool.Add(mod.NPCType("Stabber"), .02f);
-                }
-            }
-
             if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid)
             {
                 if (NPC.downedMoonlord)
@@ -91,6 +80,7 @@ namespace CSkies
                     pool.Add(mod.NPCType("AbyssEye"), .15f);
                     pool.Add(mod.NPCType("FlailingHate"), .05f);
                     pool.Add(mod.NPCType("Fleyer"), .2f);
+                    pool.Add(mod.NPCType("AbyssEye"), .2f);
 
                     if (spawnInfo.player.ZoneDesert)
                     {

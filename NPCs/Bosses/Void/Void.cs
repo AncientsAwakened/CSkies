@@ -162,11 +162,10 @@ namespace CSkies.NPCs.Bosses.Void
                     {
                         for (int m = 0; m < 4; m++)
                         {
-                            int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidOrbitter"), npc.damage / 4, 4, Main.myPlayer);
+                            int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidOrbitter"), npc.damage / 4, 4, Main.myPlayer, m);
                             Main.projectile[projectileID].Center = npc.Center;
                             Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
                             Main.projectile[projectileID].velocity *= 8f;
-                            Main.projectile[projectileID].ai[0] = m;
                         };
                         npc.netUpdate = true;
                     }
@@ -175,13 +174,13 @@ namespace CSkies.NPCs.Bosses.Void
                     {
                         targetPos = player.Center;
                         targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
-                        Movement(targetPos, 1.5f);
+                        Movement(targetPos, 1.3f);
                         if (npc.ai[1] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
                         {
                             npc.ai[0]++;
                             npc.ai[1] = 0;
                             npc.netUpdate = true;
-                            npc.velocity.X = -40 * (npc.Center.X < player.Center.X ? -1 : 1);
+                            npc.velocity.X = -30 * (npc.Center.X < player.Center.X ? -1 : 1);
                             npc.velocity.Y *= 0.1f;
                         }
                     }

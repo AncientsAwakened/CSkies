@@ -33,7 +33,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         public override void AI()
         {
-            if (++npc.ai[0] >= 6 && Main.netMode != 1)
+            if (++npc.ai[0] >= 3 && Main.netMode != 1)
             {
                 if (++npc.ai[1] >= 19)
                 {

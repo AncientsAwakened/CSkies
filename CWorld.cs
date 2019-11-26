@@ -8,7 +8,6 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using CSkies.Tiles;
 using CSkies.Tiles.Abyss;
-using CSkies.Tiles.Observatory;
 using Terraria.World.Generation;
 using Terraria.GameContent.Generation;
 using CSkies.Worldgen;
@@ -27,13 +26,8 @@ namespace CSkies
         public static bool downedHeartcore = false;
         public static bool downedSoul = false;
 
-        public static bool downedEnigma = false;
-        public static bool downedEnigmachina = false;
-        public static bool downedLuminoth = false;
-
         public static int CometTiles = 0;
         public static int AbyssTiles = 0;
-        public static int ObservatoryTiles = 0;
 
         public static int VaultCount = 0;
         public static bool KillDoors = false;
@@ -75,10 +69,6 @@ namespace CSkies
             if (downedHeartcore) downed.Add("Heart");
             if (downedSoul) downed.Add("Soul");
 
-            if (downedEnigma) downed.Add("E");
-            if (downedEnigmachina) downed.Add("EM");
-            if (downedLuminoth) downed.Add("L");
-
             if (MeteorMessage) downed.Add("Comet");
             if (KillDoors) downed.Add("door");
             if (AbyssBiome) downed.Add("AB");
@@ -100,10 +90,6 @@ namespace CSkies
             downedHeartcore = downed.Contains("Heart");
             downedSoul = downed.Contains("Soul");
 
-            downedEnigma = downed.Contains("E");
-            downedEnigmachina = downed.Contains("EM");
-            downedLuminoth = downed.Contains("L");
-
             MeteorMessage = downed.Contains("Comet");
             KillDoors = downed.Contains("door");
             AbyssBiome = downed.Contains("AB");
@@ -124,9 +110,6 @@ namespace CSkies
             BitsByte flags0 = new BitsByte();
             flags0[0] = downedHeart;
             flags0[1] = AbyssBiome;
-            flags0[2] = downedEnigma;
-            flags0[3] = downedEnigmachina;
-            flags0[4] = downedLuminoth;
             writer.Write(flags0);
         }
         public override void NetReceive(BinaryReader reader)
@@ -145,9 +128,6 @@ namespace CSkies
             BitsByte flags0 = reader.ReadByte();
             downedHeart = flags0[0];
             AbyssBiome = flags0[1];
-            downedEnigma = flags0[2];
-            downedEnigmachina = flags0[3];
-            downedLuminoth = flags0[4];
         }
         #endregion
 
@@ -162,9 +142,6 @@ namespace CSkies
                 tileCounts[ModContent.TileType<HardenedAbyssSand>()] +
                 tileCounts[ModContent.TileType<AbyssStone>()] +
                 tileCounts[ModContent.TileType<AbyssGrass>()];
-
-            ObservatoryTiles = tileCounts[ModContent.TileType<StarCircuitUnsafe>()] +
-                tileCounts[ModContent.TileType<StarglassUnsafe>()];
         }
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
@@ -196,11 +173,6 @@ namespace CSkies
             origin = new Point((int)(Main.maxTilesX * 0.7f), (int)(Main.maxTilesY * 0.35f));
             Vault c = new Vault();
             c.Place(origin, WorldGen.structures);
-
-            progress.Message = "Entering the Atmosphere";
-            Point OOrigin = new Point((int)(Main.maxTilesX * 0.25f), 100);
-            Observatory observatory = new Observatory();
-            observatory.Place(OOrigin, WorldGen.structures);
 
         }
 
@@ -240,49 +212,6 @@ namespace CSkies
 
             if (NPC.downedMoonlord && !AbyssBiome)
             {
-                bool placed = false;
-                while (!placed)
-                {
-                    if (Main.rand.Next(2) == 0)
-                    {
-                        AbyssPos.X = Main.rand.Next(Main.maxTilesX - 2600, Main.maxTilesX - 100);
-                    }
-                    else
-                    {
-                        AbyssPos.X = Main.rand.Next(100, 2600);
-                    }
-                    int j = (int)WorldGen.worldSurfaceLow - 30;
-                    while (Main.tile[AbyssPos.X, j] != null && !Main.tile[AbyssPos.X, j].active())
-                    {
-                        j++;
-                    }
-                    for (int l = AbyssPos.X - 25; l < AbyssPos.X + 25; l++)
-                    {
-                        for (int m = j - 6; m < j + 90; m++)
-                        {
-                            if (Main.tile[l, m] != null && Main.tile[l, m].active())
-                            {
-                                int type = Main.tile[l, m].type;
-                                if (type == TileID.Cloud || type == TileID.RainCloud || type == TileID.Sunplate)
-                                {
-                                    j++;
-                                    if (!Main.tile[l, m].active())
-                                    {
-                                        j++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    AbyssPos.Y = j;
-
-                    Point origin = AbyssPos;
-                    AbyssBiome a = new AbyssBiome();
-                    placed = a.Place(origin, WorldGen.structures);
-
-                    Main.NewText("AbyssGen", new Color(61, 41, 81));
-                }
-
                 Main.NewText("The death of a titan unleashes horrors of the deep into " + Main.worldName + "...", new Color(61, 41, 81));
                 AbyssBiome = true;
             }

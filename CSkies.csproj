@@ -8,7 +8,9 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="NPCs\Enemies\Observatory\" />
+    <Compile Remove="NPCs\Enemies\Observatory\**" />
+    <EmbeddedResource Remove="NPCs\Enemies\Observatory\**" />
+    <None Remove="NPCs\Enemies\Observatory\**" />
   </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />

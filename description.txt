@@ -11,13 +11,11 @@ Currently Celestial Skies adds:
 
 -----
 
-V 2.0.0.0
+V 2.0.1.0
 
-WARNING: TO EXPERIENCE THIS UPDATE YOU WILL NEED A NEW WORLD
+Patches to reported bugs
 
-1 new Miniboss; Magma Heart; Fought inside the newly generated Abyss Vaults
-
-2 new bosses; Starcore: An early hardmode boss, and Heartcore, a post-Observer Void boss
+Nerfs to VOID and Fury Soul
 
 -----
 

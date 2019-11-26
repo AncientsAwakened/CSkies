@@ -22,7 +22,6 @@ namespace CSkies
 
         public bool ZoneComet = false;
         public bool ZoneVoid = false;
-        public bool ZoneObservatory = false;
 
         public bool VoidEye = false;
         public bool VoidCD = false;
@@ -59,7 +58,6 @@ namespace CSkies
 
             ZoneVoid = false;
             ZoneComet = false;
-            ZoneObservatory = false;
 
             Heartburn = false;
         }
@@ -68,7 +66,6 @@ namespace CSkies
         {
             ZoneVoid = NearVoid() || CWorld.AbyssTiles > 50;
             ZoneComet = CWorld.CometTiles > 30;
-            ZoneObservatory = CWorld.ObservatoryTiles > 30 && !ZoneVoid;
         }
 
         public override void UpdateBiomeVisuals()
