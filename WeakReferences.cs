@@ -1,4 +1,5 @@
 ﻿using CSkies.Items.Summons;
+using CSkies.Items.Void;
 using System;
 using Terraria.ModLoader;
 
@@ -19,8 +20,9 @@ namespace CSkies
             {
                 bossChecklist.Call("AddBossWithInfo", "The Observer", 5.5, (Func<bool>)(() => CWorld.downedObserver), "Use a [i:" + ModContent.ItemType<CosmicEye>() + "] at night");
                 bossChecklist.Call("AddBossWithInfo", "Starcore", 5.5, (Func<bool>)(() => CWorld.downedStarcore), "Use a [i:" + ModContent.ItemType<Transmitter>() + "] at night");
+                bossChecklist.Call("AddBossWithInfo", "Enigma", 11, (Func<bool>)(() => CWorld.downedEnigma), "Use an [i:" + ModContent.ItemType<EnigmaBeacon>() + "]");
                 bossChecklist.Call("AddBossWithInfo", "Observer Void", 14, (Func<bool>)(() => CWorld.downedObserverV), "Use a [i:" + ModContent.ItemType<VoidEye>() + "] at night");
-                bossChecklist.Call("AddMiniBossWithInfo", "Molten Heart", 15, (Func<bool>)(() => CWorld.downedHeart), "Use a heart altar in an abyss vault after Observer Void has been defeated");
+                bossChecklist.Call("AddMiniBossWithInfo", "Molten Heart", 15, (Func<bool>)(() => CWorld.downedHeart), "Use a [i:" + ModContent.ItemType<VoidFragment>() + "] at a heart altar in an abyss vault after Observer Void has been defeated");
                 bossChecklist.Call("AddBossWithInfo", "Heartcore", 16, (Func<bool>)(() => CWorld.downedHeartcore), "Use a [i:" + ModContent.ItemType<PassionRune>() + "] at night");
                 
 

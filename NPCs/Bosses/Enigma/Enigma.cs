@@ -76,7 +76,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             Player player = Main.player[npc.target];
 
-            if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000)
+            if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000 || player.whoAmI == -1)
             {
                 npc.TargetClosest();
                 if (player.dead || !player.active || Vector2.Distance(player.Center, npc.Center) > 5000)
@@ -88,13 +88,13 @@ namespace CSkies.NPCs.Bosses.Enigma
             }
 
             float Movespeed = .25f;
-            float VelMax = 10;
+            float VelMax = 8;
 
             if (npc.life < npc.lifeMax / 2)
             {
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/EnigmaU");
                 Movespeed = .3f;
-                VelMax = 12;
+                VelMax = 11;
                 ChangeRate = Main.expertMode ? 120 : 180;
                 npc.damage = 48;
             }
@@ -677,27 +677,27 @@ namespace CSkies.NPCs.Bosses.Enigma
                         }
                         if (Preamble[1] == 120)
                         {
-                            if (Main.netMode != 1) BaseUtility.Chat("Well...I've finally found you.", Color.Cyan);
+                            BaseUtility.Chat("Well...I've finally found you.", Color.Cyan);
                         }
 
                         if (Preamble[1] == 240)
                         {
-                            if (Main.netMode != 1) BaseUtility.Chat("You have been quite the thorn in my side.", Color.Cyan);
+                            BaseUtility.Chat("You have been quite the thorn in my side.", Color.Cyan);
                         }
 
                         if (Preamble[1] == 360)
                         {
-                            if (Main.netMode != 1) BaseUtility.Chat("Especially after you trashed my beatuiful starcore...", Color.Cyan);
+                            BaseUtility.Chat("Especially after you trashed my beatuiful starcore...", Color.Cyan);
                         }
 
                         if (Preamble[1] == 480)
                         {
-                            if (Main.netMode != 1) BaseUtility.Chat("You're too much of a liability for my plans, so...", Color.Cyan);
+                            BaseUtility.Chat("You're too much of a liability for my plans, so...", Color.Cyan);
                         }
 
                         if (Preamble[1] >= 600)
                         {
-                            if (Main.netMode != 1) BaseUtility.Chat("I'll squash you like the insect you are.", Color.Cyan);
+                            BaseUtility.Chat("I'll squash you like the insect you are.", Color.Cyan);
                             Preamble[0] = 1;
                             Preamble[1] = 0;
 
@@ -706,7 +706,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
                     else
                     {
-                        if (Main.netMode != 1) BaseUtility.Chat("You again? Haven't you humiliated me enough as is?", Color.Cyan);
+                        BaseUtility.Chat("You again? Haven't you humiliated me enough as is?", Color.Cyan);
                         Preamble[1] = 0;
                         Preamble[0] = 1;
 
@@ -718,22 +718,22 @@ namespace CSkies.NPCs.Bosses.Enigma
                     npc.velocity *= .96f;
                     if (Preamble[1] == 90)
                     {
-                        if (Main.netMode != 1) BaseUtility.Chat("..!!!", Color.Cyan);
+                        BaseUtility.Chat("..!!!", Color.Cyan);
                     }
 
                     if (Preamble[1] == 180)
                     {
-                        if (Main.netMode != 1) BaseUtility.Chat("MY HOOD!!!", Color.Cyan);
+                        BaseUtility.Chat("MY HOOD!!!", Color.Cyan);
                     }
 
                     if (Preamble[1] == 270)
                     {
-                        if (Main.netMode != 1) BaseUtility.Chat("MY SUPREME BRAIN IS EXPOSED!", Color.Cyan);
+                        BaseUtility.Chat("MY SUPREME BRAIN IS EXPOSED!", Color.Cyan);
                     }
 
                     if (Preamble[1] >= 360)
                     {
-                        if (Main.netMode != 1) BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
+                        BaseUtility.Chat("HOW DARE YOU! TASTE ELECTRICITY YOU INSIGNIFICANT IMBECILE!", Color.Cyan);
                         Preamble[0] = 1;
                         Preamble[1] = 0;
 
