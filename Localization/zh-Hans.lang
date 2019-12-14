@@ -193,6 +193,67 @@ ItemName.ObservatoryChandelier=巨型观星座灯
 
 ItemName.ObservatoryKey=巨型观星座灯
 
+ItemName.ObservatoryLantern=观星挂灯
+
+//Items.Other
+
+ItemName.SweeperItem=鸡器人
+
+//Items.Railscope
+
+ItemName.Railscope=轨道视镜枪
+ItemTooltip.Railscope=允许你通过屏幕边界看的更远
+
+ItemName.StarDroneUnit=星间无人机单元
+ItemTooltip.StarDroneUnit=召唤一个星辰无人机为你而战
+
+ItemName.Starsaber=星光刃
+ItemTooltip.Starsaber=发射跟踪星星
+
+ItemName.Stelarite=天文锭
+
+ItemName.StormStaff=星辰风暴
+ItemTooltip.StormStaff=从空中召唤星辰充能风暴
+
+//Items.Summons
+
+ItemName.CosmicEye=宙眼
+ItemTooltip.StormStaff=它观察着你\n召唤监视者\n只能在晚上使用
+
+ItemName.EnigmaBeacon=神谜信标
+ItemTooltip.EnigmaBeacon=它奇怪地闪烁着，好像有什么东西在追寻它的踪迹\n召唤神谜人 恩尼格玛\n无消耗
+
+ItemName.PassionRune=激情符文
+ItemTooltip.PassionRune=它上面的心和你的心一同脉动\n召唤心核\n只能在晚上使用
+
+ItemName.Transmitter=发信器
+ItemTooltip.Transmitter=它好像显示着大气层中的某个坐标\n召唤星核\n只能在晚上使用
+
+ItemName.VoidEye=空虚之眼
+ItemTooltip.VoidEye=深渊凝视着你\n召唤虚空监视者\n只能在晚上使用
+
+//Items.Void
+
+ItemName.Singularity=奇点
+ItemTooltip.Singularity=发射一个链旋刃
+
+ItemName.VoidFan=深渊扇
+
+ItemName.VoidFragment=虚空碎片
+ItemTooltip.VoidFragment=一个破碎世界的碎片
+
+ItemName.VoidJavelin=虚空之枪
+
+ItemName.VoidPortal=虚空传送门
+ItemTooltip.VoidPortal=召唤一个深渊凝视者为你而战
+
+ItemName.VoidShot=渊典
+ItemTooltip.VoidShot=朝敌人发射一个跟踪奇点, 碰触时爆炸
+
+ItemName.VoidWings=虚空之翼
+ItemTooltip.VoidWings=允许飞行和滑翔\n按住时悬停
+
+
 //NPCs.Boss.Enigma
 
 NPCName.BabyStarcore=小星源之核
