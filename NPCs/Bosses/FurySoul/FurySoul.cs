@@ -540,13 +540,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     InternalAI[2]++;
 
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI / 2).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI / 2).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI * 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI * 2, npc.whoAmI);
                 }
             }
             else if (npc.life < npc.lifeMax / 2)
@@ -561,11 +561,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     InternalAI[2]++;
 
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + Pi2).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + Pi2).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
                 }
             }
             else
@@ -580,12 +580,12 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     InternalAI[2]++;
 
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
                 }
             }
 
-            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()))
+            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()) && InternalAI[2] != 0)
             {
                 AIChange();
             }
