@@ -74,8 +74,16 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
         public int StarCount = Main.expertMode ? 10 : 8;
         public Vector2 pos;
 
+        bool title = false;
+
         public override void AI()
         {
+            if (!title)
+            {
+                CSkies.ShowTitle(npc, 3);
+                title = true;
+            }
+
             Lighting.AddLight(npc.Center, 0, 0f, .15f);
             npc.TargetClosest();
             if (!Main.dayTime)
@@ -103,7 +111,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
 
             if (internalAI[3] == 0 && npc.ai[3] < 1000)
             {
-                if (Main.netMode != 1)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     for (int m = 0; m < StarCount; m++)
                     {
@@ -128,7 +136,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
 
             BaseAI.AISkull(npc, ref npc.ai, true, 11, 350, .05f, .07f);
 
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (internalAI[2]++ > 200)
                 {

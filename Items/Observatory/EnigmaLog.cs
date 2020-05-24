@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ID;
 
 namespace CSkies.Items.Observatory
 {
@@ -25,7 +26,7 @@ keep looking. Shouldn't take too long...");
             item.width = 28;
             item.height = 32;
             item.maxStack = 1;
-            item.rare = 7;
+            item.rare = ItemRarityID.Lime;
             item.value = 0;
         }
 
@@ -322,7 +323,7 @@ Huh?
 
 You mean they've been here for how long?
  
-...well shit.");
+...well phooey.");
         }
 
         public override void SetDefaults()
@@ -343,6 +344,67 @@ You mean they've been here for how long?
 stylish architecture, then I'll cramp on their weapon
 designs! I snagged a blueprint for a grenade made for
 some 'MACE' thingy. No matter, it's mine now.");
+        }
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+        }
+    }
+
+    public class EnigmaLogAA2 : EnigmaLog1
+    {
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Enigma Log Extra IV");
+            Tooltip.SetDefault(
+@"THAT THIEVING EXCUSE FOR A WORM PILFERED SOME OF MY CONTRAPTIONS!
+He just screeched 'GiVe mE uR sHInIEs!!!11!!1!' and made off
+with about 6k galactic credits' worth of equipment! How
+DARE he steal from the great Enigma Andromeda the Great!");
+        }
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+        }
+    }
+
+    public class EnigmaLogGRealm : EnigmaLog1
+    {
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Enigma Log Extra V");
+            Tooltip.SetDefault(
+@"Those shambling undead nuisances just will NOT leave me alone!
+Whoever is leading them I will find them and give them a very
+stern talking to! Especially after one of those braindead
+brutes shoulder-bashed me back into orbit. That hurt!");
+        }
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+        }
+    }
+
+    public class EnigmaLogErilipah : EnigmaLog1
+    {
+        public override string Texture => "CSkies/Items/Observatory/EnigmaLog";
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Enigma Log Extra VI");
+            Tooltip.SetDefault(
+@"That black biome over yonder is TOO BLOODY DARK! Even with my
+Nightvision augment I can't see diddly SQUAT in there! And that
+oversized demon head just REFUSES TO STOP CHASING ME! I'm 
+sorry, I only wanted samples, I didn't mean to interrupt
+you being an ABSOLUTELY HORRID example of manners!");
         }
 
         public override void SetDefaults()

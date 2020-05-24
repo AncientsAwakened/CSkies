@@ -1,4 +1,5 @@
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Blocks
 {
@@ -13,9 +14,9 @@ namespace CSkies.Items.Blocks
             item.autoReuse = true;
             item.useAnimation = 15;
             item.useTime = 10;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.consumable = true;
-            item.rare = 7;
+            item.rare = ItemRarityID.Lime;
             item.createTile = mod.TileType("Starglass");
         }
 

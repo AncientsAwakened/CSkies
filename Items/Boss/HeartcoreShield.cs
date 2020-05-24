@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Boss
 {
@@ -20,7 +21,7 @@ Below half health, you gain 10% speed, 25% damage, but defense is reduced by 8")
             item.width = 30;
             item.height = 28;
             item.value = Item.sellPrice(0, 5, 0, 0);
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.accessory = true;
             item.expert = true;
             item.expertOnly = true;

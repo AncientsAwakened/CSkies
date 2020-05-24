@@ -87,7 +87,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                 
             }
             projectile.ai[0] += 1f;
-            if (projectile.ai[0] % 20f == 0f && Main.netMode != 1)
+            if (projectile.ai[0] % 20f == 0f && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap2"), projectile.position);
                 int[] array4 = new int[5];

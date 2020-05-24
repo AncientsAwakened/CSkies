@@ -15,10 +15,10 @@ namespace CSkies.Items.Comet
             item.useAnimation = 14;
             item.maxStack = 999;
             item.noUseGraphic = true;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
 			item.knockBack = 1;
 			item.value = 10;
-			item.rare = 2;
+			item.rare = ItemRarityID.Green;
 			item.shootSpeed = 12f;
 			item.shoot = mod.ProjectileType("CometKnife");
 			item.UseSound = SoundID.Item1;

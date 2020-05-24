@@ -6,6 +6,10 @@ using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 using CSkies.Backgrounds;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using System.Collections.Generic;
+using Terraria.UI;
+using ReLogic.Graphics;
 
 namespace CSkies
 {
@@ -105,6 +109,7 @@ namespace CSkies
                 priority = MusicPriority.Event;
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/Abyss");
             }
+
             if (cPlayer.ZoneComet)
             {
                 priority = MusicPriority.Event;
@@ -133,7 +138,7 @@ namespace CSkies
                     Main.projectile[projID].friendly = friendly;
                     Main.projectile[projID].hostile = hostile;
                 }
-                if (Main.netMode == 2) MNet.SendBaseNetMessage(0, owner, projID, friendly, hostile);
+                if (Main.netMode == NetmodeID.Server) MNet.SendBaseNetMessage(0, owner, projID, friendly, hostile);
             }
             else
             if (msg == MsgType.SyncAI) //sync AI array
@@ -156,10 +161,9 @@ namespace CSkies
                 {
                     ((ParentProjectile)Main.projectile[id].modProjectile).SetAI(newAI, aitype);
                 }
-                if (Main.netMode == 2) BaseNet.SyncAI(classID, id, newAI, aitype);
+                if (Main.netMode == NetmodeID.Server) BaseNet.SyncAI(classID, id, newAI, aitype);
             }
         }
-
 
         public void SetupMusicBoxes()
         {
@@ -172,6 +176,108 @@ namespace CSkies
             AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Heart"), ItemType("MagmaHeartBox"), TileType("MagmaHeartBox"));
             AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/Heartcore"), ItemType("HCBox"), TileType("HCBox"));
             AddMusicBox(GetSoundSlot(SoundType.Music, "Sounds/Music/FurySoul"), ItemType("FSBox"), TileType("FSBox"));
+        }
+
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            Titles modPlayer = Main.player[Main.myPlayer].GetModPlayer<Titles>();
+            if (modPlayer.text)
+            {
+                var textLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
+                var computerState = new LegacyGameInterfaceLayer("AAMod: UI",
+                    delegate
+                    {
+                        BossTitle(modPlayer.BossID);
+                        return true;
+                    },
+                    InterfaceScaleType.UI);
+                layers.Insert(textLayer, computerState);
+            }
+        }
+
+        private void BossTitle(int BossID)
+        {
+            string BossName = "";
+            string BossTitle = "";
+            Color titleColor = Color.White;
+
+            switch (BossID)
+            {
+                case 1:
+                    BossName = "The Observer";
+                    BossTitle = "All-Seeing Eye";
+                    titleColor = Color.SkyBlue;
+                    break;
+                case 2:
+                    BossName = "Starcore";
+                    BossTitle = "Cosmic Construct";
+                    titleColor = Color.LimeGreen;
+                    break;
+                case 3:
+                    BossName = "Observer Void";
+                    BossTitle = "Abyssal Gazer";
+                    titleColor = new Color(75, 68, 124);
+                    break;
+                case 4:
+                    BossName = "V O I D";
+                    BossTitle = "All-Seeing Evil";
+                    titleColor = new Color(143, 204, 204);
+                    break;
+                case 5:
+                    BossName = "Heartcore";
+                    BossTitle = "Sealed Fury";
+                    titleColor = Color.HotPink;
+                    break;
+                case 6:
+                    BossName = "Fury Soul";
+                    BossTitle = "Hellish Wrath Incarnate";
+                    titleColor = new Color(254, 121, 2);
+                    break;
+                case 7:
+                    BossName = "Enigma";
+                    BossTitle = "Mechanical Madman";
+                    titleColor = Color.DarkBlue;
+                    break;
+                case 8:
+                    BossName = "Enigma Prime";
+                    BossTitle = "Supreme Galactic Genius";
+                    titleColor = Color.LimeGreen;
+                    break;
+                case 9:
+                    BossName = "Artemis Luminoth";
+                    BossTitle = "Mechanical Masterpiece";
+                    titleColor = Color.LimeGreen;
+                    break;
+            }
+
+            Titles modPlayer2 = Main.player[Main.myPlayer].GetModPlayer<Titles>();
+            float alpha = modPlayer2.alphaText;
+            float alpha2 = modPlayer2.alphaText2;
+
+            Vector2 textSize = Main.fontDeathText.MeasureString("~ " + BossName + " ~");
+            Vector2 textSize2 = Main.fontDeathText.MeasureString(BossTitle) * .6f; ;
+            float textPositionLeft = Main.screenWidth / 2 - textSize.X / 2;
+            float text2PositionLeft = Main.screenWidth / 2 - textSize2.X / 2;
+
+            Main.spriteBatch.DrawString(Main.fontDeathText, BossTitle, new Vector2(text2PositionLeft, (Main.screenHeight / 2) - 350), titleColor * ((255 - alpha2) / 255f), 0f, Vector2.Zero, .6f, SpriteEffects.None, 0f);
+            Main.spriteBatch.DrawString(Main.fontDeathText, "~ " + BossName + " ~", new Vector2(textPositionLeft, Main.screenHeight / 2 - 300), titleColor * ((255 - alpha) / 255f), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+        }
+
+        public static void ShowTitle(NPC npc, int ID)
+        {
+            if (CConfigClient.Instance.BossIntroText)
+            {
+                Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<Title>(), 0, 0, Main.myPlayer, ID, 0);
+            }
+        }
+
+        public static void ShowTitle(Player player, int ID)
+        {
+            if (CConfigClient.Instance.BossIntroText)
+            {
+                Projectile.NewProjectile(player.Center, Vector2.Zero, ModContent.ProjectileType<Title>(), 0, 0, Main.myPlayer, ID, 0);
+            }
         }
     }
     enum MsgType : byte

@@ -15,10 +15,10 @@ namespace CSkies.Items.Comet
 		
 		public override void SetDefaults()
 		{
-			item.rare = 2;
+			item.rare = ItemRarityID.Green;
 			item.noUseGraphic = true;
 			item.UseSound = SoundID.Item1;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.damage = 15;
 			item.useAnimation = 21;
 			item.useTime = 21;

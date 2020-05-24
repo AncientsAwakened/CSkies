@@ -15,10 +15,10 @@ namespace CSkies.Items.Void
 		
 		public override void SetDefaults()
 		{
-			item.rare = 11;
+			item.rare = ItemRarityID.Purple;
 			item.noUseGraphic = true;
 			item.UseSound = SoundID.Item1;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.damage = 110;
 			item.useAnimation = 16;
 			item.useTime = 16;

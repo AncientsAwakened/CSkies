@@ -20,7 +20,7 @@ namespace CSkies.Items.Materials
             item.width = 22;
             item.height = 22;
 			item.maxStack = 99;
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.value = 1000;
         }
 

@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Boss
 {
@@ -16,7 +17,7 @@ namespace CSkies.Items.Boss
             item.width = 30;
             item.height = 28;
             item.value = Item.sellPrice(0, 1, 0, 0);
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.accessory = true;
             item.expert = true;
             item.expertOnly = true;

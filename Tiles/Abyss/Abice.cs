@@ -13,7 +13,7 @@ namespace CSkies.Tiles.Abyss
             Main.tileMergeDirt[Type] = true;
             Main.tileBlendAll[this.Type] = false;
 			Main.tileMerge[TileID.SnowBlock][Type] = true;
-            soundType = 21;
+            soundType = SoundID.Tink;
             dustType = mod.DustType("VoidDust");
             drop = mod.ItemType("BlackIce");   //put your CustomBlock name
             AddMapEntry(new Color(60, 60, 100));

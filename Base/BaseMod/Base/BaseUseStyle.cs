@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace CSkies
 {
@@ -33,9 +34,9 @@ namespace CSkies
 				player.direction = (center.X > player.Center.X ? 1 : -1);
 				player.itemRotation = (float)Math.Atan2(distY * player.direction, distX * player.direction);
 
-				if (player.whoAmI == Main.myPlayer && Main.netMode != 0)
+				if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.SinglePlayer)
 				{
-					NetMessage.SendData(13, -1, -1, NetworkText.FromLiteral(""), player.whoAmI, 0f, 0f, 0f, 0);
+					NetMessage.SendData(MessageID.PlayerControls, -1, -1, NetworkText.FromLiteral(""), player.whoAmI, 0f, 0f, 0f, 0);
 					NetMessage.SendData(41, -1, -1, NetworkText.FromLiteral(""), player.whoAmI, 0f, 0f, 0f, 0);
 				}
 			}

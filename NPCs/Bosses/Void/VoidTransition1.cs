@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.Void
 {
@@ -33,7 +34,7 @@ namespace CSkies.NPCs.Bosses.Void
 
         public override void AI()
         {
-            if (++npc.ai[0] >= 12 && Main.netMode != 1)
+            if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (++npc.ai[1] >= 8)
                 {

@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria.World.Generation;
 using CSkies.Tiles.Abyss;
 using CSkies.Tiles.Observatory;
+using CSkies.Tiles.Core;
 using CSkies.Tiles;
 
 namespace CSkies.Worldgen
@@ -324,6 +325,38 @@ namespace CSkies.Worldgen
             return true;
         }
     }
+
+    public class EngineCore : MicroBiome
+    {
+        public override bool Place(Point origin, StructureMap structures)
+        {
+            Mod mod = CSkies.inst;
+
+            Dictionary<Color, int> colorToTile = new Dictionary<Color, int>
+            {
+                [new Color(255, 0, 0)] = ModContent.TileType<HeatEngineBrickUnsafe>(),
+                [new Color(255, 255, 0)] = ModContent.TileType<HeatGlass>(),
+                [new Color(255, 0, 255)] = ModContent.TileType<CoreValve>(),
+                [new Color(0, 0, 255)] = ModContent.TileType<ScrapHeap>(),
+                [new Color(255, 255, 255)] = -1,
+                [Color.Black] = -2
+            };
+
+            Dictionary<Color, int> colorToWall = new Dictionary<Color, int>
+            {
+                [new Color(0, 255, 0)] = ModContent.WallType<HeatEngineWallUnsafe>(),
+                [new Color(255, 0, 0)] = ModContent.WallType<HeatCircuitWall>(),
+                [Color.Black] = -1
+            };
+
+            TexGen gen = BaseWorldGenTex.GetTexGenerator(mod.GetTexture("Worldgen/MagmaCore"), colorToTile, mod.GetTexture("Worldgen/MagmaCoreWalls"), colorToWall, mod.GetTexture("Worldgen/MagmaCore_Lava"), mod.GetTexture("Worldgen/MagmaCore_Slope"));
+
+            gen.Generate(origin.X, origin.Y, true, true);
+
+            return true;
+        }
+    }
+
 
     public class AbyssBiome : MicroBiome
     {

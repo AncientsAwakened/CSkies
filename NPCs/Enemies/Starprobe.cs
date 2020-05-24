@@ -54,7 +54,7 @@ namespace CSkies.NPCs.Enemies
             BaseAI.AISkull(npc, ref npc.ai, true, 6f, 350f, 0.1f, 0.15f);
 
             bool playerActive = player != null && player.active && !player.dead;
-            if (Main.netMode != 1 && playerActive)
+            if (Main.netMode != NetmodeID.MultiplayerClient && playerActive)
             {
                 npc.ai[3]++;
                 if (npc.ai[3] >= 90)

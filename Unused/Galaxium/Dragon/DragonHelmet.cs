@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Galaxium.Dragon
 {
@@ -17,7 +18,7 @@ namespace CSkies.Items.Galaxium.Dragon
 			item.width = 20;
 			item.height = 24;
 			item.value = Item.sellPrice(0, 5, 0, 0);
-			item.rare = 10;
+			item.rare = ItemRarityID.Red;
 			item.defense = 8;
 		}
 

@@ -16,12 +16,12 @@ namespace CSkies.Items.Heart
 			item.height = 48;
 			item.useTime = 20;
 			item.useAnimation = 20;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.shoot = mod.ProjectileType("FirePro");
 			item.shootSpeed = 9f;
 			item.knockBack = 7;
             item.value = Item.sellPrice(0, 12, 0, 0);
-            item.rare = 8;
+            item.rare = ItemRarityID.Yellow;
             item.UseSound = SoundID.Item15;
             item.autoReuse = true;
 		}

@@ -7,6 +7,7 @@ using Terraria.ObjectData;
 using Terraria.Localization;
 using Terraria.Utilities;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies
 {
@@ -2191,7 +2192,7 @@ namespace CSkies
                                 if (canExplode)
                                 {
                                     WorldGen.KillTile(x2, y2, false, false, false);
-                                    if (sync && !Main.tile[x2, y2].active() && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 0, x2, y2, 0f, 0); }
+                                    if (sync && !Main.tile[x2, y2].active() && Main.netMode != NetmodeID.SinglePlayer) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 0, x2, y2, 0f, 0); }
                                 }
                             }
                             if (canExplode)
@@ -2203,7 +2204,7 @@ namespace CSkies
                                         if (Main.tile[x3, y3] != null && Main.tile[x3, y3].wall > 0 && updateWalls)
                                         {
                                             WorldGen.KillWall(x3, y3, false);
-                                            if(sync && Main.tile[x3, y3].wall == 0 && Main.netMode != 0) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 2, x3, y3, 0f, 0); }
+                                            if(sync && Main.tile[x3, y3].wall == 0 && Main.netMode != NetmodeID.SinglePlayer) { NetMessage.SendData(BaseConstants.NET_TILE_UPDATE, -1, -1, NetworkText.FromLiteral(""), 2, x3, y3, 0f, 0); }
                                         }
                                     }
                                 }

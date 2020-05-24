@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.FurySoul
 {
@@ -31,9 +32,16 @@ namespace CSkies.NPCs.Bosses.FurySoul
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/FurySoul");
         }
 
+        bool title = false;
+
         public override void AI()
         {
-            if (++npc.ai[0] >= 12 && Main.netMode != 1)
+            if (!title)
+            {
+                CSkies.ShowTitle(npc, 6);
+                title = true;
+            }
+            if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (++npc.ai[1] >= 15)
                 {

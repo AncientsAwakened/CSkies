@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Tiles
 {
@@ -12,7 +13,7 @@ namespace CSkies.Tiles
 			Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileMerge[Type][ModContent.TileType<AbyssBricks>()] = true;
-            soundType = 21;
+            soundType = SoundID.Tink;
             dustType = ModContent.DustType<Dusts.VoidDust>();
             AddMapEntry(new Color(10, 10, 50));
 			minPick = 99999;

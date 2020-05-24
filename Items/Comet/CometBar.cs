@@ -14,9 +14,9 @@ namespace CSkies.Items.Comet
             item.autoReuse = true;
             item.useAnimation = 15;
             item.value = 16000;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.useTime = 10;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.consumable = true;
             item.createTile = mod.TileType("CometBar");
         }

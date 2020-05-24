@@ -43,7 +43,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         public override void HitEffect(int hitDirection, double damage)
 		{
-			if (Main.netMode == 2) { return; }
+			if (Main.netMode == NetmodeID.Server) { return; }
 			if (npc.life <= 0)
 			{
 				for (int m = 0; m < 20; m++)

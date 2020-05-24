@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.UI;
 using Terraria.ModLoader;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace CSkies
 {
@@ -676,7 +677,7 @@ namespace CSkies
         public static bool ShouldDrawArmor(Player drawPlayer, int armorType, int itemType = -1)
         {
 			if (drawPlayer.merman || drawPlayer.wereWolf) { return false; }
-            if (itemType == -1) { return (drawPlayer.armor[10 + armorType].type > 0) || (drawPlayer.armor[10 + armorType].IsBlank() && drawPlayer.armor[0 + armorType].type > 0); }
+            if (itemType == -1) { return (drawPlayer.armor[10 + armorType].type > ItemID.None) || (drawPlayer.armor[10 + armorType].IsBlank() && drawPlayer.armor[0 + armorType].type > ItemID.None); }
             return (drawPlayer.armor[10 + armorType].type == itemType) || (drawPlayer.armor[10 + armorType].IsBlank() && drawPlayer.armor[0 + armorType].type == itemType);
         }
 

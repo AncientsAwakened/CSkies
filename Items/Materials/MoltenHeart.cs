@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Materials
 {
@@ -18,7 +19,7 @@ namespace CSkies.Items.Materials
 	        item.width = 22;
 	        item.height = 22;
             item.value = Item.buyPrice(0, 1, 0, 0);
-            item.rare = 8;
+            item.rare = ItemRarityID.Yellow;
 		}
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

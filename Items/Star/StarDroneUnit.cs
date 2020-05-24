@@ -22,10 +22,10 @@ namespace CSkies.Items.Star
             item.height = 28;
             item.useTime = 36;
             item.useAnimation = 36;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.noMelee = true;
             item.knockBack = 3;
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.UseSound = SoundID.Item44;
             item.shoot = mod.ProjectileType("StarDrone");
             item.shootSpeed = 10f;

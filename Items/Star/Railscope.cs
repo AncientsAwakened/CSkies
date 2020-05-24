@@ -16,7 +16,7 @@ namespace CSkies.Items.Star
 		public override void SetDefaults()
         {
             item.autoReuse = true;
-            item.useStyle = 5;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.useAnimation = 50;
             item.useTime = 50;
             item.width = 24;
@@ -26,7 +26,7 @@ namespace CSkies.Items.Star
             item.damage = 20;
             item.shootSpeed = 5f;
             item.noMelee = true;
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.ranged = true;
             item.value = Item.sellPrice(0, 2, 0, 0);
             item.shoot = ModContent.ProjectileType<Projectiles.Star.Starlaser>();

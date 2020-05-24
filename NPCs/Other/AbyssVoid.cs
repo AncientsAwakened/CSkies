@@ -45,7 +45,7 @@ namespace CSkies.NPCs.Other
 		{
             npc.rotation += .01f;
             npc.timeLeft = 10;
-            if (Main.netMode != 1 && npc.ai[1]++ > 450)
+            if (Main.netMode != NetmodeID.MultiplayerClient && npc.ai[1]++ > 450)
             {
                 npc.ai[1] = 0;
                 for (int a = 0; a < Main.rand.Next(4); a++)
@@ -90,7 +90,7 @@ namespace CSkies.NPCs.Other
         public override void PostUpdate()
         {
             bool anyVoidExist = NPC.AnyNPCs(mod.NPCType("AbyssVoid"));
-            if (Main.netMode != 1 && NPC.downedMoonlord && !anyVoidExist)
+            if (Main.netMode != NetmodeID.MultiplayerClient && NPC.downedMoonlord && !anyVoidExist)
             {
                 SpawnVoid();
             }
@@ -107,7 +107,7 @@ namespace CSkies.NPCs.Other
 			if (!anyVoidExist)
 			{
                 int whoAmI = NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<AbyssVoid>());			
-				if (Main.netMode == 2 && whoAmI != -1 && whoAmI < 200)
+				if (Main.netMode == NetmodeID.Server && whoAmI != -1 && whoAmI < 200)
 				{					
 					NetMessage.SendData(MessageID.SyncNPC, number: whoAmI);
 				}			

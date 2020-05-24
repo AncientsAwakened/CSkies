@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CSkies.NPCs.Enemies;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -9,20 +10,104 @@ namespace CSkies
 {
     public class CGlobalNPC : GlobalNPC
     {
+        public bool Cometspark = false;
+        public int sparkImmune = 0;
+
+        public override bool InstancePerEntity => true;
+
+        public override void ResetEffects(NPC npc)
+        {
+            Cometspark = false;
+        }
+
+        public override void UpdateLifeRegen(NPC npc, ref int damage)
+        {
+            ApplyDPSDebuff(Cometspark, 10, ref npc.lifeRegen);
+        }
+
+        public void ApplyDPSDebuff(bool debuff, int lifeRegenValue, int damageValue, ref int lifeRegen, ref int damage)
+        {
+            if (debuff)
+            {
+                if (lifeRegen > 0)
+                {
+                    lifeRegen = 0;
+                }
+
+                lifeRegen -= lifeRegenValue;
+
+                if (damage < damageValue)
+                {
+                    damage = damageValue;
+                }
+            }
+        }
+
+        public void ApplyDPSDebuff(bool debuff, int lifeRegenValue, ref int lifeRegen)
+        {
+            if (debuff)
+            {
+                if (lifeRegen > 0)
+                {
+                    lifeRegen = 0;
+                }
+
+                lifeRegen -= lifeRegenValue;
+            }
+        }
+
         public override void NPCLoot(NPC npc)
         {
-            if (npc.type == NPCID.SkeletronHead && !CWorld.MeteorMessage)
+            bool evilBoss = npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail || npc.type == NPCID.BrainofCthulhu;
+
+            Mod AA = ModLoader.GetMod("AAMod");
+
+            bool chaosBoss = AA != null && (npc.type == AA.NPCType("Broodmother") || npc.type == AA.NPCType("Hydra"));
+
+            if (evilBoss || chaosBoss)
             {
-                CWorld.MeteorMessage = true;
-                if (Main.netMode != 1) BaseUtility.Chat("Pieces of the sky begin to fall", new Color(136, 151, 255), true); int num144 = 12;
-                Vector2 vector = new Vector2(npc.Center.X, npc.Center.Y - 1000);
-                float num147 = Main.rand.Next(-100, 101);
-                float num148 = Main.rand.Next(200) + 100;
-                float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
-                num149 = num144 / num149;
-                num147 *= num149;
-                num148 *= num149;
-                Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
+                if (npc.boss)
+                {
+                    if (!CWorld.MeteorMessage)
+                    {
+                        CWorld.MeteorMessage = true;
+                        if (Main.netMode != NetmodeID.MultiplayerClient) BaseUtility.Chat("Pieces of the sky begin to fall", new Color(136, 151, 255), true); int num144 = 12;
+                        Vector2 vector = new Vector2(npc.Center.X, npc.Center.Y - 1000);
+                        float num147 = Main.rand.Next(-100, 101);
+                        float num148 = Main.rand.Next(200) + 100;
+                        float num149 = (float)Math.Sqrt(num147 * num147 + num148 * num148);
+                        num149 = num144 / num149;
+                        num147 *= num149;
+                        num148 *= num149;
+                        Projectile.NewProjectile(vector.X, vector.Y, num147, num148, ModContent.ProjectileType<Projectiles.FallenShard>(), 1000, 10f, Main.myPlayer, 0f, 0f);
+                    }
+                }
+            }
+        }
+
+        public override void PostAI(NPC npc)
+        {
+            if (sparkImmune > 0)
+            {
+                sparkImmune--;
+            }
+            else
+            {
+                sparkImmune = 0;
+            }
+            if (Cometspark)
+            {
+                if (Main.rand.Next(30) == 0)
+                {
+                    for (int n = 0; n < Main.maxPlayers; n++)
+                    {
+                        if (Vector2.Distance(Main.npc[n].Center, npc.Center) < 80 && sparkImmune != 0)
+                        {
+                            Main.npc[n].AddBuff(ModContent.BuffType<Buffs.Cometspark>(), 120);
+                            Main.npc[n].GetGlobalNPC<CGlobalNPC>().sparkImmune = 300;
+                        }
+                    }
+                }
             }
         }
 
@@ -54,7 +139,7 @@ namespace CSkies
             }
             catch (Exception e)
             {
-                if (Main.netMode != 1)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     BaseUtility.Chat(e.StackTrace);
                 }
@@ -77,10 +162,14 @@ namespace CSkies
                 ClearPoolWithExceptions(pool);
                 if (Main.hardMode)
                 {
-                    pool.Add(mod.NPCType("Starprobe"), .2f);
                     pool.Add(mod.NPCType("Sweeper"), .08f);
                     pool.Add(mod.NPCType("Stabber"), .02f);
                 }
+            }
+
+            if (spawnInfo.player.ZoneSkyHeight)
+            {
+                pool.Add(ModContent.NPCType<Starprobe>(), .2f);
             }
 
             if (spawnInfo.player.GetModPlayer<CPlayer>().ZoneVoid)

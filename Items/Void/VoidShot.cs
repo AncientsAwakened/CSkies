@@ -16,7 +16,7 @@ namespace CSkies.Items.Void
 		{
 			item.mana = 35;
 			item.damage = 160;
-			item.useStyle = 5;
+			item.useStyle = ItemUseStyleID.HoldingOut;
 			item.shootSpeed = 9f;
 			item.shoot = mod.ProjectileType("VoidMagic");
 			item.width = 28;
@@ -27,7 +27,7 @@ namespace CSkies.Items.Void
 			item.autoReuse = true;
 			item.noMelee = true;
 			item.knockBack = 8f;
-			item.rare = 11;
+			item.rare = ItemRarityID.Purple;
 			item.value = Item.sellPrice(0, 10, 0, 0);
 			item.magic = true;
 			item.noUseGraphic = true;

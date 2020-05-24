@@ -25,11 +25,11 @@ namespace CSkies.Items.Heart
 	        item.height = 50;
 	        item.useTime = 10;
 	        item.useAnimation = 10;
-	        item.useStyle = 5;
+	        item.useStyle = ItemUseStyleID.HoldingOut;
 	        item.noMelee = true;
 	        item.knockBack = 6.75f;
             item.value = Item.sellPrice(0, 12, 0, 0);
-            item.rare = 10;
+            item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item88;
 	        item.autoReuse = true;
 	        item.shoot = mod.ProjectileType("Meteor0");

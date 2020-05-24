@@ -22,9 +22,9 @@ namespace CSkies.NPCs.Bosses.Enigma
             npc.width = 62;
             npc.height = 50;
             npc.aiStyle = -1;
-            npc.damage = 40;
-            npc.defense = 30;
-            npc.lifeMax = 40000;
+            npc.damage = 55;
+            npc.defense = 40;
+            npc.lifeMax = 48000;
             npc.value = Item.sellPrice(0, 5, 0, 0);
             npc.HitSound = SoundID.NPCHit1;
             npc.DeathSound = SoundID.NPCDeath1;
@@ -42,8 +42,8 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
-            npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
-            npc.damage = (int)(npc.damage * 0.5f);
+            npc.lifeMax = (int)(npc.lifeMax * 0.7f * bossLifeScale);
+            npc.damage = (int)(npc.damage * 0.7f);
         }
 
         public override void HitEffect(int hitDirection, double damage)
@@ -59,6 +59,8 @@ namespace CSkies.NPCs.Bosses.Enigma
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
         public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11, despawn = 12;
+        
+        bool title = false;
 
         public override void AI()
         {
@@ -72,6 +74,12 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Enigma");
                 npc.dontTakeDamage = false;
+            }
+
+            if (!title)
+            {
+                CSkies.ShowTitle(npc, 7);
+                title = true;
             }
 
             Player player = Main.player[npc.target];
@@ -226,7 +234,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     if (npc.ai[2] == 20)
                     {
                         HandFrame = 2;
-                        if (Main.netMode != 1)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int a = Projectile.NewProjectile(npc.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-7, -5)), ModContent.ProjectileType<EnigmaGrenade>(), npc.damage / 4, 4, Main.myPlayer);
                             Main.projectile[a].Center = npc.Center + new Vector2(20, 20);
@@ -359,7 +367,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public void AIChange()
         {
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 npc.ai[0] = AIType();
                 npc.ai[1] = 0;
@@ -371,7 +379,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public void AIReset()
         {
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 npc.ai[0] = 0;
                 npc.ai[1] = 0;
@@ -653,7 +661,7 @@ namespace CSkies.NPCs.Bosses.Enigma
             {
                 npc.alpha = 0;
             }
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Preamble[1]++;
                 music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
@@ -752,7 +760,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         {
             Preamble[1]++;
 
-            if (Preamble[1] > 120 && Main.netMode != 1)
+            if (Preamble[1] > 120 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 BaseUtility.Chat("Hmpf. Pathetic.", Color.Cyan);
                 for (int num572 = 0; num572 < 10; num572++)

@@ -2,6 +2,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Comet
 {
@@ -16,7 +17,7 @@ namespace CSkies.Items.Comet
             item.width = 22;
             item.height = 22;
 			item.maxStack = 99;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.value = 100;
         }
 

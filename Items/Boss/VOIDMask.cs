@@ -1,4 +1,5 @@
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Boss
 {
@@ -15,7 +16,7 @@ namespace CSkies.Items.Boss
         {
             item.width = 22;
             item.height = 26;
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.vanity = true;
             item.expert = true;
             item.expertOnly = true;

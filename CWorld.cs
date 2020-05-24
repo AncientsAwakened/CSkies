@@ -35,6 +35,10 @@ namespace CSkies
         public static int AbyssTiles = 0;
         public static int ObservatoryTiles = 0;
 
+        public static bool downedRegulator = false;
+        public static bool downedDrone = false;
+        public static bool ValveBroken = false;
+
         public static int VaultCount = 0;
         public static bool KillDoors = false;
         public static bool AbyssBiome = false;
@@ -54,12 +58,15 @@ namespace CSkies
             downedHeart = false;
             downedHeartcore = false;
             downedSoul = false;
+            downedRegulator = false;
+            AbyssBiome = false;
+            downedDrone = false;
             Altar = false;
             Altar1 = false;
             Altar2 = false;
             Altar3 = false;
             Altar4 = false;
-            AbyssBiome = false;
+            AbyssBiome = false; 
         }
 
         #region saving/loading
@@ -82,6 +89,10 @@ namespace CSkies
             if (MeteorMessage) downed.Add("Comet");
             if (KillDoors) downed.Add("door");
             if (AbyssBiome) downed.Add("AB");
+
+            if (downedDrone) downed.Add("drone");
+            if (ValveBroken) downed.Add("broke");
+            if (downedRegulator) downed.Add("Regulator");
 
             return new TagCompound
             {
@@ -107,6 +118,10 @@ namespace CSkies
             MeteorMessage = downed.Contains("Comet");
             KillDoors = downed.Contains("door");
             AbyssBiome = downed.Contains("AB");
+
+            downedDrone = downed.Contains("drone");
+            ValveBroken = downed.Contains("Valve");
+            downedRegulator = downed.Contains("Regulator");
         }
         public override void NetSend(BinaryWriter writer)
         {
@@ -127,6 +142,9 @@ namespace CSkies
             flags0[2] = downedEnigma;
             flags0[3] = downedEnigmachina;
             flags0[4] = downedLuminoth;
+            flags0[5] = downedRegulator;
+            flags0[6] = ValveBroken;
+            flags0[7] = downedDrone;
             writer.Write(flags0);
         }
         public override void NetReceive(BinaryReader reader)
@@ -148,6 +166,9 @@ namespace CSkies
             downedEnigma = flags0[2];
             downedEnigmachina = flags0[3];
             downedLuminoth = flags0[4];
+            downedRegulator = flags0[5];
+            ValveBroken = flags0[6];
+            downedDrone = flags0[7];
         }
         #endregion
 
@@ -307,7 +328,7 @@ namespace CSkies
         public static void DropMeteor()
         {
             bool flag = true;
-            if (Main.netMode == 1)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 return;
             }
@@ -554,11 +575,11 @@ namespace CSkies
                 }
             }
             string cometText = "The sky has fallen somewhere in the world";
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 BaseUtility.Chat(cometText, new Color(136, 151, 255), true);
             }
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendTileSquare(-1, i, j, 40, TileChangeType.None);
             }

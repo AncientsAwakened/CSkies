@@ -4,12 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Enums;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.FurySoul
 {
     public class Flameray : ModProjectile
     {
-        private const float maxTime = 45;
+        public float maxTime = 180;
+        public float maxScale = 1f;
 
         public override void SetStaticDefaults()
 		{
@@ -41,16 +43,25 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         public override void AI()
         {
-            projectile.hide = false;
             Vector2? vector78 = null;
             if (projectile.velocity.HasNaNs() || projectile.velocity == Vector2.Zero)
             {
                 projectile.velocity = -Vector2.UnitY;
             }
-            int ai1 = (int)projectile.ai[1];
-            if (Main.npc[ai1].active && Main.npc[ai1].type == ModContent.NPCType<FurySoul>())
+            if (Main.npc[(int)projectile.ai[1]].active && Main.npc[(int)projectile.ai[1]].modNPC is FurySoul)
             {
-                projectile.Center = Main.npc[ai1].Center - Vector2.UnitY * 6f;
+                projectile.Center = Main.npc[(int)projectile.ai[1]].Center;
+                if (projectile.ai[0] == 0)
+                {
+                    projectile.velocity = Vector2.Normalize(Main.npc[(int)projectile.ai[1]].velocity);
+                    projectile.position += 30 * projectile.velocity;
+                    projectile.position += 10 * projectile.velocity.RotatedBy(Main.npc[(int)projectile.ai[1]].spriteDirection > 0 ? -Math.PI / 2 : Math.PI / 2);
+                }
+                else
+                {
+                    projectile.velocity = (Main.npc[(int)projectile.ai[1]].rotation + (float)Math.PI / 2).ToRotationVector2();
+                    projectile.velocity = projectile.velocity.RotatedBy(projectile.ai[0]);
+                }
             }
             else
             {
@@ -61,11 +72,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 projectile.velocity = -Vector2.UnitY;
             }
-            if (projectile.localAI[0] == 0f)
+            if (projectile.localAI[0] == 0f && maxScale >= 1)
             {
-                Main.PlaySound(29, (int)projectile.position.X, (int)projectile.position.Y, 104, 1f, 0f);
+                Main.PlaySound(SoundID.Zombie, (int)projectile.position.X, (int)projectile.position.Y, 104, 1f, 0f);
             }
-            float num801 = 3f;
+            float num801 = maxScale;
             projectile.localAI[0] += 1f;
             if (projectile.localAI[0] >= maxTime)
             {
@@ -74,9 +85,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
             projectile.scale = (float)Math.Sin(projectile.localAI[0] * 3.14159274f / maxTime) * 10f * num801;
             if (projectile.scale > num801)
+            {
                 projectile.scale = num801;
+            }
             float num804 = projectile.velocity.ToRotation();
-            num804 += projectile.ai[0];
             projectile.rotation = num804 - 1.57079637f;
             projectile.velocity = num804.ToRotationVector2();
             float num805 = 3f;
@@ -87,7 +99,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 samplingPoint = vector78.Value;
             }
             float[] array3 = new float[(int)num805];
-            Collision.LaserScan(samplingPoint, projectile.velocity, num806 * projectile.scale, 3000f, array3);
+            Collision.LaserScan(samplingPoint, projectile.velocity, num806 * projectile.scale, 2400f, array3);
             float num807 = 0f;
             int num3;
             for (int num808 = 0; num808 < array3.Length; num808 = num3 + 1)
@@ -117,8 +129,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 dust.velocity *= 0.5f;
                 Main.dust[num813].velocity.Y = -Math.Abs(Main.dust[num813].velocity.Y);
             }
-            DelegateMethods.v3_1 = new Vector3(0.3f, 0.65f, 0.7f);
-            Utils.PlotTileLine(projectile.Center, projectile.Center + projectile.velocity * projectile.localAI[1], projectile.width * projectile.scale, new Utils.PerLinePoint(DelegateMethods.CastLight));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -127,19 +137,19 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 return false;
             }
+
             Texture2D texture2D19 = Main.projectileTexture[projectile.type];
             Texture2D texture2D20 = mod.GetTexture("NPCs/Bosses/FurySoul/Flameray2");
             Texture2D texture2D21 = mod.GetTexture("NPCs/Bosses/FurySoul/Flameray3");
-            float num223 = projectile.localAI[1];
+
             Color color44 = Colors.COLOR_GLOWPULSE * 0.9f;
-            SpriteBatch arg_ABD8_0 = Main.spriteBatch;
-            Texture2D arg_ABD8_1 = texture2D19;
-            Vector2 arg_ABD8_2 = projectile.Center - Main.screenPosition;
-            Rectangle? sourceRectangle2 = null;
-            arg_ABD8_0.Draw(arg_ABD8_1, arg_ABD8_2, sourceRectangle2, color44, projectile.rotation, texture2D19.Size() / 2f, projectile.scale, SpriteEffects.None, 0f);
-            num223 -= (texture2D19.Height / 2 + texture2D21.Height) * projectile.scale;
-            Vector2 value20 = projectile.Center;
-            value20 += projectile.velocity * projectile.scale * texture2D19.Height / 2f;
+
+            Main.spriteBatch.Draw(texture2D19, projectile.Center - Main.screenPosition, null, color44, projectile.rotation, texture2D19.Size() / 2f, projectile.scale, SpriteEffects.None, 0f);
+
+            float num223 = projectile.localAI[1] - ((texture2D19.Height / 2 + texture2D21.Height) * projectile.scale);
+
+            Vector2 value20 = projectile.Center + projectile.velocity * projectile.scale * texture2D19.Height / 2f;
+
             if (num223 > 0f)
             {
                 float num224 = 0f;
@@ -160,11 +170,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                     }
                 }
             }
-            SpriteBatch arg_AE2D_0 = Main.spriteBatch;
-            Texture2D arg_AE2D_1 = texture2D21;
-            Vector2 arg_AE2D_2 = value20 - Main.screenPosition;
-            sourceRectangle2 = null;
-            arg_AE2D_0.Draw(arg_AE2D_1, arg_AE2D_2, sourceRectangle2, color44, projectile.rotation, texture2D21.Frame(1, 1, 0, 0).Top(), projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture2D21, value20 - Main.screenPosition, null, color44, projectile.rotation, texture2D21.Frame(1, 1, 0, 0).Top(), projectile.scale, SpriteEffects.None, 0f);
             return false;
         }
 
@@ -187,6 +193,30 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 return true;
             }
             return false;
+        }
+    }
+
+    public class FlameraySmall : Flameray
+    {
+        public override string Texture => "CSkies/NPCs/Bosses/FurySoul/Flameray";
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            maxTime = 60;
+            maxScale = 0.2f;
+        }
+
+        public override bool CanDamage()
+        {
+            return false;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                Projectile.NewProjectile(projectile.Center, projectile.velocity, ModContent.ProjectileType<Flameray>(), projectile.damage, projectile.knockBack, projectile.owner, projectile.ai[0], projectile.ai[1]);
+            base.Kill(timeLeft);
         }
     }
 }

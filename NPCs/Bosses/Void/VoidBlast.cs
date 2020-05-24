@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using System;
-
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.Void
 {
@@ -116,7 +116,7 @@ namespace CSkies.NPCs.Bosses.Void
                 projectile.ai[1] = 1.7f;
                 projectile.scale = 1.2f;
 
-                Main.PlaySound(2, (int)projectile.position.X, (int)projectile.position.Y, 33, 0.4f, 0.2f);
+                Main.PlaySound(SoundID.Item, (int)projectile.position.X, (int)projectile.position.Y, 33, 0.4f, 0.2f);
             }
             //damage fall off once per 2 frames
             if (projectile.damage > 1 && projectile.timeLeft % 2 == 0) projectile.damage -= 1;

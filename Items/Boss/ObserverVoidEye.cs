@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Boss
 {
@@ -19,7 +20,7 @@ You can only use this ability once every 5 minutes");
             item.width = 30;
             item.height = 28;
             item.value = Item.sellPrice(0, 10, 0, 0);
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.accessory = true;
             item.expert = true;
             item.expertOnly = true;

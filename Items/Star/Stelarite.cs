@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Items.Star
 {
@@ -15,7 +16,7 @@ namespace CSkies.Items.Star
             item.width = 22;
             item.height = 22;
 			item.maxStack = 99;
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.value = 10000;
         }
 

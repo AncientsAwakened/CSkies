@@ -15,9 +15,9 @@ namespace CSkies.Items.Comet
             item.width = 30;
             item.height = 30;
             item.maxStack = 1;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.value = BaseUtility.CalcValue(0, 0, 90, 50);
-            item.useStyle = 5;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.useAnimation = 45;
             item.useTime = 45;
             item.UseSound = SoundID.Item1;

@@ -15,7 +15,7 @@ namespace CSkies.Tiles.Observatory
 
         public static Color C(Color a)
         {
-            return new Color(200, 128, 128);
+            return new Color(128, 128, 128);
         }
 
         public override void PostDraw(int x, int y, SpriteBatch sb)

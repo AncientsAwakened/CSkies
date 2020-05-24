@@ -32,22 +32,22 @@ namespace CSkies
         public float HeartringScale = 0;
         public float HeartringRot = 0;
 
+        public bool CometSet = false;
+
         public bool Heartburn = false;
+        public bool Cometspark = false;
 
         public override void ResetEffects()
         {
-            Watcher = false;
-            Gazer = false;
-            Drone = false;
-            Rune = false;
-
-            VoidEye = false;
-            VoidCD = false;
-
-            Heartburn = false;
+            Reset();
         }
 
         public override void Initialize()
+        {
+            Reset();
+        }
+
+        public void Reset()
         {
             Watcher = false;
             Gazer = false;
@@ -62,6 +62,7 @@ namespace CSkies
             ZoneObservatory = false;
 
             Heartburn = false;
+            Cometspark = false;
         }
 
         public override void UpdateBiomes()
@@ -160,6 +161,85 @@ namespace CSkies
                     HeartringScale -= .02f;
                 }
             }
+
+            if (Cometspark)
+            {
+                if (Main.rand.Next(30) == 0)
+                {
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        if (Vector2.Distance(Main.player[p].Center, player.Center) < 80)
+                        {
+                            Main.player[p].AddBuff(ModContent.BuffType<Buffs.Cometspark>(), 120);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public override void UpdateDead()
+        {
+            Cometspark = false;
+            Heartburn = false;
+        }
+
+        public override void UpdateBadLifeRegen()
+        {
+            if (Cometspark)
+            {
+                if (player.lifeRegen > 0)
+                {
+                    player.lifeRegen = 0;
+                }
+
+                player.lifeRegenTime = 0;
+                player.lifeRegen -= 5;
+            }
+            if (Heartburn)
+            {
+                if (player.statLife > player.statLifeMax2 * .8f)
+                {
+                    player.lifeRegen -= 30;
+                }
+                else
+                {
+                    player.lifeRegen = 0;
+                }
+            }
+        }
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (CometSet && proj.ranged)
+            {
+                target.AddBuff(ModContent.BuffType<Buffs.Cometspark>(), 300);
+            }
+        }
+
+        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        {
+            base.ModifyHitNPC(item, target, ref damage, ref knockback, ref crit);
+        }
+
+        public override void DrawEffects(PlayerDrawInfo drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+            if (Cometspark)
+            {
+                if (Main.rand.Next(4) == 0 && drawInfo.shadow == 0f)
+                {
+                    int dust = Dust.NewDust(drawInfo.position - new Vector2(2f, 2f), player.width + 4, player.height + 4, DustID.Electric, player.velocity.X * 0.4f, player.velocity.Y * 0.4f, 100, default, 1.5f);
+
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].velocity *= 1.8f;
+                    Main.dust[dust].velocity.Y -= 0.5f;
+
+                    Main.playerDrawDust.Add(dust);
+                    r *= 0f;
+                    g *= 0f;
+                    b *= 0.1f;
+                }
+            }
         }
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
@@ -212,21 +292,6 @@ namespace CSkies
                 {
                     player.AddBuff(ModContent.BuffType<Buffs.VECooldown>(), 3000);
                     Projectile.NewProjectile(player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Void.VoidEyeVortex>(), 60, 0, Main.myPlayer);
-                }
-            }
-        }
-
-        public override void UpdateBadLifeRegen()
-        {
-            if (Heartburn)
-            {
-                if (player.statLife > player.statLifeMax2 * .8f)
-                {
-                    player.lifeRegen -= 30;
-                }
-                else
-                {
-                    player.lifeRegen = 0;
                 }
             }
         }

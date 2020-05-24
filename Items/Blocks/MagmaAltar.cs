@@ -12,7 +12,7 @@ namespace CSkies.Items.Blocks
 
         public override void SetDefaults()
 		{
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.useTurn = true;
 			item.useAnimation = 15;
 			item.useTime = 10;
@@ -21,7 +21,7 @@ namespace CSkies.Items.Blocks
 			item.createTile = mod.TileType("HeartAltar");
 			item.width = 24;
 			item.height = 24;
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.value = 10000;
 			item.accessory = true;
 		}

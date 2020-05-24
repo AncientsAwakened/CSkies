@@ -46,8 +46,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
         }
 
         public float[] Movement = new float[4];
-        public float[] start = new float[1];
-        public float[] Minion = new float[1];
+        public float[] InternalAI = new float[4];
 
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -58,8 +57,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 writer.Write(Movement[1]);
                 writer.Write(Movement[2]);
                 writer.Write(Movement[3]);
-                writer.Write(start[0]);
-                writer.Write(Minion[0]);
+                writer.Write(InternalAI[0]);
+                writer.Write(InternalAI[1]);
+                writer.Write(InternalAI[2]);
+                writer.Write(InternalAI[3]);
             }
         }
 
@@ -72,8 +73,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 Movement[1] = reader.ReadFloat();
                 Movement[2] = reader.ReadFloat();
                 Movement[3] = reader.ReadFloat();
-                start[0] = reader.ReadFloat();
-                Minion[0] = reader.ReadFloat();
+                InternalAI[0] = reader.ReadFloat();
+                InternalAI[1] = reader.ReadFloat();
+                InternalAI[2] = reader.ReadFloat();
+                InternalAI[3] = reader.ReadFloat();
             }
         }
 
@@ -106,6 +109,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
         float Changerate;
 
         bool rage = false;
+        float rotAmt = 0;
 
         public override void AI()
         {
@@ -121,10 +125,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
             if (npc.life < npc.lifeMax / 2 && NPC.CountNPCS(ModContent.NPCType<FuryMinion>()) < 2)
             {
-                Minion[0]++;
-                if (Minion[0] > 360)
+                InternalAI[1]++;
+                if (InternalAI[1] > 360)
                 {
-                    Minion[0] = 0;
+                    InternalAI[1] = 0;
                     int a = NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, ModContent.NPCType<FuryMinion>());
                     Main.npc[a].Center = npc.Center + new Vector2(200, 0);
                     Main.PlaySound(SoundID.Item14, Main.npc[a].Center);
@@ -179,7 +183,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             if (npc.ai[0] == 10)
             {
                 npc.velocity *= 0;
-                if (start[0]++ > 60)
+                if (InternalAI[0]++ > 60)
                 {
                     AIChange();
                 }
@@ -251,7 +255,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
             if (npc.ai[2]++ > Changerate)
             {
-                npc.rotation += .06f;
+                if (npc.ai[0] != 2)
+                {
+                    npc.rotation += .06f;
+                    rotAmt = .03f;
+                }
 
                 switch (npc.ai[0])
                 {
@@ -295,108 +303,66 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         break;
                     case 2:
-                        if (npc.life < npc.lifeMax / 4)
-                        {
-                            LaserAttack3();
-                        }
-                        else if (npc.life < npc.lifeMax / 2)
-                        {
-                            LaserAttack2();
-                        }
-                        else
-                        {
-                            LaserAttack();
-                        }
+                        LaserAttack();
                         break;
                     case 3:
-                        if (npc.life < npc.lifeMax / 4)
+
+                        int loops = (npc.life < npc.lifeMax / 4) ? 14 : 8;
+
+                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
+
+                        for (int a = 0; a < loops; a++)
                         {
-                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            AIChange();
+                            float shotDir = Pi2 / loops * a;
+
+                            Vector2 Direction = shotDir.ToRotationVector2();
+
+                            Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        else if (Main.rand.Next(2) == 0)
-                        {
-                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            AIChange();
-                        }
-                        else
-                        {
-                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(6, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-6, 12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(6, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-6, -12), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, -6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -6), ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            AIChange();
-                        }
+
+                        AIChange();
+
                         break;
                     case 4:
-                        if (npc.ai[2] == 180)
+                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 0)
                         {
-                            Teleport();
+                            InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        if (npc.ai[2] == 210)
+                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 1)
                         {
-                            Teleport();
+                            Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        if (npc.ai[2] == 240)
+                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 2)
                         {
-                            Teleport();
+                            Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        if (npc.ai[2] == 270)
+                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 3)
                         {
-                            Teleport();
+                            Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
-                        if (npc.ai[2] == 300)
+                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 4)
                         {
-                            Teleport();
+                            Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -432,7 +398,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                     {
                         Frequency = Main.rand.Next(10, 40);
                     }
-                    if (Main.rand.Next(2) == 0)
+                    if (Main.rand.NextBool(2))
                     {
                         BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
                     }
@@ -446,16 +412,18 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         private void AIChange()
         {
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 npc.ai[0] = Main.rand.Next(5);
                 npc.ai[1] = 0;
                 npc.ai[2] = 0;
+                InternalAI[2] = 0; 
+                InternalAI[3] = 0;
                 if (npc.ai[0] == 2 || npc.ai[0] == 4)
                 {
                     Teleport();
                 }
-                else if ((npc.life < npc.lifeMax * (3 / 4)) && Main.rand.Next(3) == 0)
+                else if ((npc.life < (int)(npc.lifeMax * .75f)) && Main.rand.Next(3) == 0)
                 {
                     Teleport();
                 }
@@ -548,329 +516,76 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         }
 
+        readonly float Pi2 = (float)Math.PI * 2;
+
         private void LaserAttack()
         {
-            if (npc.ai[2] == Changerate + 10)
+            if (npc.ai[0] < Changerate + 30)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 20)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 30)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 40)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 50)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 60)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 70)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 80)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 90)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 100)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 110)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 120)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 130)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 140)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 150)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 160)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] > Changerate + 160 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()))
-            {
-                AIChange();
-            }
-        }
+                npc.rotation += rotAmt;
 
-        private void LaserAttack2()
-        {
-            if (npc.ai[2] == Changerate + 15)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                return;
             }
-            if (npc.ai[2] == Changerate + 30)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 45)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 60)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 75)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 90)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 105)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 120)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 135)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 150)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 165)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 180)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 195)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 210)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 225)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 240)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] > Changerate + 240 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()))
-            {
-                AIChange();
-            }
-        }
 
-        private void LaserAttack3()
-        {
-            if (npc.ai[2] == Changerate + 20)
+            rotAmt += .01f;
+
+            if (npc.life < npc.lifeMax / 4)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                if (rotAmt > .3f)
+                {
+                    rotAmt = .3f;
+                }
+
+                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
+                {
+                    InternalAI[2]++;
+
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI / 2).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI, npc.whoAmI);
+
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI * 2, npc.whoAmI);
+                }
             }
-            if (npc.ai[2] == Changerate + 40)
+            else if (npc.life < npc.lifeMax / 2)
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                rotAmt += .01f;
+                if (rotAmt > .2f)
+                {
+                    rotAmt = .2f;
+                }
+
+                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
+                {
+                    InternalAI[2]++;
+
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + Pi2).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                }
             }
-            if (npc.ai[2] == Changerate + 60)
+            else
             {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                rotAmt += .01f;
+                if (rotAmt > .1f)
+                {
+                    rotAmt = .1f;
+                }
+
+                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
+                {
+                    InternalAI[2]++;
+
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<Flameray>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                }
             }
-            if (npc.ai[2] == Changerate + 80)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 100)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 120)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 140)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 160)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 180)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 200)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 220)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 240)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -5), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 260)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 280)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 300)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(0, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] == Changerate + 320)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(5, -10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                Projectile.NewProjectile(npc.Center, new Vector2(-5, 10), ModContent.ProjectileType<Flameray>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-            }
-            if (npc.ai[2] > Changerate + 320 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()))
+
+            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()))
             {
                 AIChange();
             }
@@ -892,7 +607,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
             Texture2D RingTex1 = mod.GetTexture("NPCs/Bosses/Heartcore/Ring1");
             Texture2D RingTex2 = mod.GetTexture("NPCs/Bosses/Heartcore/Ring2");
             Texture2D RitualTex = mod.GetTexture("NPCs/Bosses/Heartcore/Ritual");
-
 
             if (scale > 0)
             {

@@ -73,8 +73,16 @@ namespace CSkies.NPCs.Bosses.Observer
 
         public int StarCount = Main.expertMode ? 6 : 4;
 
+        bool title = false;
+
         public override void AI()
         {
+            if (!title)
+            {
+                CSkies.ShowTitle(npc, 1);
+                title = true;
+            }
+
             npc.TargetClosest();
             if (!Main.dayTime)
             {
@@ -103,7 +111,7 @@ namespace CSkies.NPCs.Bosses.Observer
 
             if (internalAI[3] == 0)
             {
-                if (Main.netMode != 1)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     for (int m = 0; m < StarCount; m++)
                     {
@@ -129,7 +137,7 @@ namespace CSkies.NPCs.Bosses.Observer
 
             BaseAI.AISpaceOctopus(npc, ref npc.ai, .2f, 6, 270, 70, null);
 
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (internalAI[2]++ > 100)
                 {
@@ -241,7 +249,7 @@ namespace CSkies.NPCs.Bosses.Observer
 
         public override void HitEffect(int hitDirection, double damage)
         {
-            if (Main.netMode == 2) { return; }
+            if (Main.netMode == NetmodeID.Server) { return; }
             if (npc.life <= 0)
             {
                 for (int m = 0; m < 20; m++)

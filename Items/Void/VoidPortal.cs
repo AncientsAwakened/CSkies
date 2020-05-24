@@ -30,7 +30,7 @@ namespace CSkies.Items.Void
             item.height = 24;
             item.useTime = 36;
             item.useAnimation = 36;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.noUseGraphic = true;
             item.noMelee = true;
             item.knockBack = 3;
@@ -39,7 +39,7 @@ namespace CSkies.Items.Void
             item.shootSpeed = 10f;
             item.buffType = mod.BuffType("Gazer");
             item.autoReuse = true;
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.value = Item.sellPrice(0, 1, 0, 0);
         }
 		

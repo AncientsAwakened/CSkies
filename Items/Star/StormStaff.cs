@@ -25,11 +25,11 @@ namespace CSkies.Items.Star
 	        item.height = 50;
 	        item.useTime = 40;
 	        item.useAnimation = 40;
-	        item.useStyle = 5;
+	        item.useStyle = ItemUseStyleID.HoldingOut;
 	        item.noMelee = true;
 	        item.knockBack = 6.75f;
             item.value = Item.buyPrice(0, 2, 0, 0);
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.UseSound = SoundID.Item20;
             item.autoReuse = true;
 	        item.shoot = mod.ProjectileType("Starstorm");

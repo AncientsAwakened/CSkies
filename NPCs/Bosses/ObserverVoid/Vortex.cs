@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.ObserverVoid
 {
@@ -37,7 +38,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             {
                 projectile.alpha = 0;
             }
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 projectile.ai[0]++;
             }
@@ -54,7 +55,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
                     projectile.ai[1] -= .01f;
                 }
 
-                if (projectile.ai[0] <= 0 && Main.netMode != 1)
+                if (projectile.ai[0] <= 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     projectile.active = false;
                     projectile.netUpdate = true;

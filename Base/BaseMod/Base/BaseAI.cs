@@ -566,7 +566,7 @@ namespace CSkies
         public static void AIPath(NPC npc, ref float[] ai, Vector2[] points, float moveInterval = 0.11f, float maxSpeed = 3f, bool direct = false)
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
-            if (Main.netMode != 1 && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
+            if (Main.netMode != NetmodeID.MultiplayerClient && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(5f, ((npc.width + npc.height) / 2f) * 0.45f))
             {
                 ai[0] = 0f; ai[1] = 0f; destVec = default;
             }
@@ -576,7 +576,7 @@ namespace CSkies
                 if (destVec == default)
                 {
                     npc.velocity *= 0.95f;
-                    if(Main.netMode != 1)
+                    if(Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         destVec = points[(int)npc.ai[2]];
                         ai[0] = destVec.X; ai[1] = destVec.Y;
@@ -618,7 +618,7 @@ namespace CSkies
                     destVec = point;
                     ai[0] = destVec.X; ai[1] = destVec.Y;
                 }
-                if(Main.netMode == 2){ npc.netUpdate = true; }
+                if(Main.netMode == NetmodeID.Server){ npc.netUpdate = true; }
             }else //otherwise move to the point.
             {
                 npc.velocity = AIVelocityLinear(npc, destVec, moveInterval, maxSpeed, direct);
@@ -646,7 +646,7 @@ namespace CSkies
         {
             Vector2 destVec = new Vector2(ai[0], ai[1]);
             bool idleTooLong = false;
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 //used to prevent the npc from getting 'stuck' trying to reach a point
                 if (!idleTooLong && destVec != default && Vector2.Distance(npc.Center, destVec) <= Math.Max(12f, ((npc.width + npc.height) / 2f) * 3f * (moveInterval / 0.06f)))
@@ -689,7 +689,7 @@ namespace CSkies
                     if (closestPoint == topRight || closestPoint == bottomLeft) { destVec = rand.Next(2) == 0 ? topLeft : bottomRight; }
                 }
                 ai[0] = destVec.X; ai[1] = destVec.Y;
-                if(Main.netMode == 2){ npc.netUpdate = true; }
+                if(Main.netMode == NetmodeID.Server){ npc.netUpdate = true; }
             }else
             if (destVec != default) //otherwise move towards the point.
             {
@@ -1134,7 +1134,7 @@ namespace CSkies
 					projectile.netUpdate = true;
 				}else
 				{
-					if (Main.netMode != 1 && Collision.CanHitLine(projectile.Center, 0, 0, Main.player[parentTarget].Center, 0, 0))
+					if (Main.netMode != NetmodeID.MultiplayerClient && Collision.CanHitLine(projectile.Center, 0, 0, Main.player[parentTarget].Center, 0, 0))
 					{
 						Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, distVecNormal.X * shootVelocity, distVecNormal.Y * shootVelocity, fireProjType, fireDmg, 1f, Main.myPlayer, 0f, 0f);
 					}
@@ -1172,7 +1172,7 @@ namespace CSkies
 					if (Main.projectile[i].active && Main.projectile[i].owner == p.owner && Main.projectile[i].type == p.type) yoyoFound = true;
 				}
 			}
-			if ((playerYoyo && p.owner == Main.myPlayer) || (!playerYoyo && Main.netMode != 1))
+			if ((playerYoyo && p.owner == Main.myPlayer) || (!playerYoyo && Main.netMode != NetmodeID.MultiplayerClient))
 			{
 				localAI[0] += 1f;
 				if (yoyoFound) localAI[0] += Main.rand.Next(10, 31) * 0.1f;
@@ -1229,7 +1229,7 @@ namespace CSkies
 						yoyoWayTooFar = true;
 					}
 				}
-				if ((playerYoyo && p.owner == Main.myPlayer) || (!playerYoyo && Main.netMode != 1))
+				if ((playerYoyo && p.owner == Main.myPlayer) || (!playerYoyo && Main.netMode != NetmodeID.MultiplayerClient))
 				{
 					if ((playerYoyo && (!isChanneling || powner.stoned || powner.frozen)) || (!playerYoyo && !isChanneling))
 					{
@@ -1817,7 +1817,7 @@ namespace CSkies
                         int id = Projectile.NewProjectile(p.Center.X + p.velocity.X, p.Center.Y + p.velocity.Y, rotVec.X, rotVec.Y, p.type, p.damage, p.knockBack, p.owner);
                         Main.projectile[id].damage = p.damage;
                         Main.projectile[id].ai[1] = p.ai[1] + 1f;
-                        NetMessage.SendData(27, -1, -1, NetworkText.FromLiteral(""), id, 0f, 0f, 0f, 0);
+                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, NetworkText.FromLiteral(""), id, 0f, 0f, 0f, 0);
 						p.position -= p.velocity;
                         return;
                     }
@@ -1847,7 +1847,7 @@ namespace CSkies
 				if (p.scale <= 0f){ p.Kill(); }
 				if (p.ai[0] <= start){ p.ai[0] += 1f; return; }
 				p.velocity.Y = p.velocity.Y + gravity;
-				if (Main.netMode != 2 && SpawnDust != null)
+				if (Main.netMode != NetmodeID.Server && SpawnDust != null)
 				{
 					for (int m = 0; m < 3; m++)
 					{
@@ -1884,7 +1884,7 @@ namespace CSkies
 				p.scale -= scaleReduce;
 				if (p.scale <= 0f) { p.Kill(); }
 				p.velocity.Y = p.velocity.Y + gravity;
-				if (Main.netMode != 2 && SpawnDust != null) SpawnDust(p, p.position, p.width, p.height);
+				if (Main.netMode != NetmodeID.Server && SpawnDust != null) SpawnDust(p, p.position, p.width, p.height);
 			}
         }
 
@@ -1974,7 +1974,7 @@ namespace CSkies
             if (playSound && p.soundDelay == 0)
             {
                 p.soundDelay = 8;
-                Main.PlaySound(2, (int)p.position.X, (int)p.position.Y, 7);
+                Main.PlaySound(SoundID.Item, (int)p.position.X, (int)p.position.Y, 7);
             }
             if (ai[0] == 0f)
             {
@@ -2172,7 +2172,7 @@ namespace CSkies
                 {
                     p.netUpdate = true;
                     Collision.HitTiles(p.position, p.velocity, p.width, p.height);
-					if (playSound) { Main.PlaySound(0, (int)p.position.X, (int)p.position.Y, 1); }
+					if (playSound) { Main.PlaySound(SoundID.Dig, (int)p.position.X, (int)p.position.Y, 1); }
                 }
             }
         }
@@ -2390,7 +2390,7 @@ namespace CSkies
 			if (FireProj != null && shootProjInterval > -1 && (ai[0] += 1f) >= shootProjInterval)
 			{
 				ai[0] = 0f;
-				if (Main.netMode != 1)
+				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
 					Vector2 projVelocity = Vector2.Zero;
 					while (Math.Abs(projVelocity.X) < 1.5f)
@@ -2432,7 +2432,7 @@ namespace CSkies
 			Vector2 playerCenter = (targetPlayer == null ? npc.Center + new Vector2(0, 5f) : targetPlayer.Center);
 			Vector2 dist = playerCenter - npc.Center;
 			
-			if (npc.justHit && Main.netMode != 1 && noDmg && Main.rand.Next(6) == 0)
+			if (npc.justHit && Main.netMode != NetmodeID.MultiplayerClient && noDmg && Main.rand.Next(6) == 0)
 			{
 				npc.netUpdate = true;
 				ai[0] = -1f;
@@ -2695,7 +2695,7 @@ namespace CSkies
 				if (npc.direction > 0){ npc.spriteDirection = 1; }
 			}
 			bool collisonOnX = false;
-			if (Main.netMode != 1)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				if (ai[2] == 0f && Main.rand.Next(7200) == 0){ ai[2] = 2f; npc.netUpdate = true; }
 				if (!npc.collideX && !npc.collideY)
@@ -2993,8 +2993,8 @@ namespace CSkies
 				npc.life = -1;
 				npc.HitEffect(0, 10.0);
 				npc.active = false;
-				if (npc.type == 37)
-					Main.PlaySound(15, (int)npc.position.X, (int)npc.position.Y, 0);
+				if (npc.type == NPCID.OldMan)
+					Main.PlaySound(SoundID.Roar, (int)npc.position.X, (int)npc.position.Y, 0);
 			}
 			//prevent a -1, -1 saving scenario
 			if ((npc.type >= Main.maxNPCTypes && npc.homeTileX == -1 && npc.homeTileY == -1) || (npc.homeTileX == ushort.MaxValue && npc.homeTileY == ushort.MaxValue))
@@ -3003,13 +3003,13 @@ namespace CSkies
 				npc.homeTileY = (int)npc.Center.Y / 16;
 			}
 			int homeTileY = npc.homeTileY;
-			if (Main.netMode != 1 && npc.homeTileY > 0)
+			if (Main.netMode != NetmodeID.MultiplayerClient && npc.homeTileY > 0)
 			{
 				while (!WorldGen.SolidTile(npc.homeTileX, homeTileY) && homeTileY < Main.maxTilesY - 20)
 					++homeTileY;
 			}
 			//handle teleporting to the home tile
-			if (Main.netMode != 1 && canTeleportHome && seekHouse && ((npcTileX != npc.homeTileX || npcTileY != homeTileY) && !npc.homeless))
+			if (Main.netMode != NetmodeID.MultiplayerClient && canTeleportHome && seekHouse && ((npcTileX != npc.homeTileX || npcTileY != homeTileY) && !npc.homeless))
 			{
 				bool moveToHome = true;
 				for (int m2 = 0; m2 < 2; ++m2)
@@ -3046,7 +3046,7 @@ namespace CSkies
 				if (ai[2] > 0f) --ai[2];
 				if (seekHouse && !isTalking && !critter)
 				{
-					if (Main.netMode != 1)
+					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
 						//stop at the home tile
 						if (npcTileX == npc.homeTileX && npcTileY == homeTileY)
@@ -3068,7 +3068,7 @@ namespace CSkies
 					if (npc.velocity.X > 0.1f) npc.velocity.X -= 0.1f;
 					else if (npc.velocity.X < -0.1f) npc.velocity.X += 0.1f;
 					else npc.velocity.X = 0f;
-					if (Main.netMode != 1)
+					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
 						if (ai[1] > 0) --ai[1];
 						if (ai[1] <= 0)
@@ -3081,7 +3081,7 @@ namespace CSkies
 						}
 					}
 				}
-				if (Main.netMode == 1 || seekHouse && (npcTileX != npc.homeTileX || npcTileY != homeTileY)) return;
+				if (Main.netMode == NetmodeID.MultiplayerClient || seekHouse && (npcTileX != npc.homeTileX || npcTileY != homeTileY)) return;
 				//move towards the home point
 				if (npcTileX < npc.homeTileX - 25 || npcTileX > npc.homeTileX + 25)
 				{
@@ -3098,13 +3098,13 @@ namespace CSkies
 			}else
 			if (ai[0] != 1) { return; }else
 			//move around within the home
-			if (Main.netMode != 1 && !critter && seekHouse && npcTileX == npc.homeTileX && npcTileY == npc.homeTileY)
+			if (Main.netMode != NetmodeID.MultiplayerClient && !critter && seekHouse && npcTileX == npc.homeTileX && npcTileY == npc.homeTileY)
 			{
 				ai[0] = 0f; ai[1] = 200 + Main.rand.Next(200); ai[2] = 60f;
 				npc.netUpdate = true;
 			}else
 			{
-				if (Main.netMode != 1 && !npc.homeless && !Main.tileDungeon[Main.tile[npcTileX, npcTileY].type] && (npcTileX < npc.homeTileX - 35 || npcTileX > npc.homeTileX + 35))
+				if (Main.netMode != NetmodeID.MultiplayerClient && !npc.homeless && !Main.tileDungeon[Main.tile[npcTileX, npcTileY].type] && (npcTileX < npc.homeTileX - 35 || npcTileX > npc.homeTileX + 35))
 				{
 					if (npc.Center.X < (npc.homeTileX * 16) && npc.direction == -1)
 						ai[1] -= 5f;
@@ -3124,7 +3124,7 @@ namespace CSkies
 					if (WorldGen.CloseDoor(npc.doorX, npc.doorY, false))
 					{
 						npc.closeDoor = false;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 1, npc.doorX, npc.doorY, npc.direction, 0);
+						NetMessage.SendData(MessageID.ChangeDoor, -1, -1, NetworkText.FromLiteral(""), 1, npc.doorX, npc.doorY, npc.direction, 0);
 					}
 					if ((npc.Center.X / 16f > npc.doorX + 4) || (npc.Center.X / 16f < npc.doorX - 4) || (npc.Center.Y / 16f > npc.doorY + 4) || (npc.Center.Y / 16f < npc.doorY - 4))
 						npc.closeDoor = false;
@@ -3160,7 +3160,7 @@ namespace CSkies
 				//Main.tile[tileX2 - npc.direction, tileY2 + 1].halfBrick();
 				if (canOpenDoors && Main.tile[tileX2, tileY2 - 2].nactive() && Main.tile[tileX2, tileY2 - 2].type == 10 && (Main.rand.Next(10) == 0 || seekHouse))
 				{
-					if (Main.netMode == 1)
+					if (Main.netMode == NetmodeID.MultiplayerClient)
 						return;
 					//attempt to open the door...
 					if (WorldGen.OpenDoor(tileX2, tileY2 - 2, npc.direction))
@@ -3168,7 +3168,7 @@ namespace CSkies
 						npc.closeDoor = true;
 						npc.doorX = tileX2;
 						npc.doorY = tileY2 - 2;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, npc.direction, 0);
+						NetMessage.SendData(MessageID.ChangeDoor, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, npc.direction, 0);
 						npc.netUpdate = true;
 						ai[1] += 80f;
 					//if that fails, attempt to open it the other way...
@@ -3177,7 +3177,7 @@ namespace CSkies
 						npc.closeDoor = true;
 						npc.doorX = tileX2;
 						npc.doorY = tileY2 - 2;
-						NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, -npc.direction, 0);
+						NetMessage.SendData(MessageID.ChangeDoor, -1, -1, NetworkText.FromLiteral(""), 0, tileX2, tileY2 - 2, -npc.direction, 0);
 						npc.netUpdate = true;
 						ai[1] += 80f;
 					//if it still fails, you can't open the door, so turn around
@@ -3470,7 +3470,7 @@ namespace CSkies
 			}
 			if ((npc.velocity.X > 0f && npc.oldVelocity.X < 0f || npc.velocity.X < 0f && npc.oldVelocity.X > 0f || (npc.velocity.Y > 0f && npc.oldVelocity.Y < 0f || npc.velocity.Y < 0f && npc.oldVelocity.Y > 0f)) && !npc.justHit)
 				npc.netUpdate = true;
-			if(Main.netMode != 1 && transformType != -1)
+			if(Main.netMode != NetmodeID.MultiplayerClient && transformType != -1)
             {
 			    int centerTileX = (int)npc.Center.X / 16;
 			    int centerTileY = (int)npc.Center.Y / 16;
@@ -3939,7 +3939,7 @@ namespace CSkies
 			{
 				npc.timeLeft = 50;
 			}
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
 				if (!singlePiece)
 				{
@@ -4080,8 +4080,8 @@ namespace CSkies
                         npc.active = false;
                     }
                 }
-                if (!npc.active && Main.netMode == 2) 
-					NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, 0f, 0f, -1);
+                if (!npc.active && Main.netMode == NetmodeID.Server) 
+					NetMessage.SendData(MessageID.StrikeNPC, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, 0f, 0f, -1);
             }
             int tileX = (int)(npc.position.X / 16f) - 1;
             int tileCenterX = (int)((npc.Center.X) / 16f) + 2;
@@ -4208,7 +4208,7 @@ namespace CSkies
                         if (distSoundDelay < 10f) { distSoundDelay = 10f; }
                         if (distSoundDelay > 20f) { distSoundDelay = 20f; }
                         npc.soundDelay = (int)distSoundDelay;
-                        Main.PlaySound(15, (int)npc.position.X, (int)npc.position.Y, 1);
+                        Main.PlaySound(SoundID.Roar, (int)npc.position.X, (int)npc.position.Y, 1);
                     }
                     dist = (float)Math.Sqrt(playerCenterX * playerCenterX + playerCenterY * playerCenterY);
                     float absPlayerCenterX = Math.Abs(playerCenterX);
@@ -4348,7 +4348,7 @@ namespace CSkies
                 ai[1] = 30f;
                 npc.netUpdate = true;
             }else
-            if (ai[0] >= teleportInterval && Main.netMode != 1)
+            if (ai[0] >= teleportInterval && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 ai[0] = 1f;
                 int playerTileX = (int)Main.player[npc.target].position.X / 16;
@@ -4478,7 +4478,7 @@ namespace CSkies
             else
             {
                 //if y velocity is 0, set the npc's velocity to a random number to get it started.
-                if (Main.netMode != 1 && npc.velocity.Y == 0f)
+                if (Main.netMode != NetmodeID.MultiplayerClient && npc.velocity.Y == 0f)
                 {
                     npc.velocity.Y = Main.rand.Next(-50, -20) * 0.1f;
                     npc.velocity.X = Main.rand.Next(-20, 20) * 0.1f;
@@ -4984,7 +4984,7 @@ namespace CSkies
                             doorBeatCounter = 10f;
                         }
                         WorldGen.KillTile(tileX, tileY - 1, true, false, false);
-                        if (attemptOpenDoor && Main.netMode != 1)
+                        if (attemptOpenDoor && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             bool openedDoor = false;
                             if (interactDoorStyle != 0)
@@ -5004,9 +5004,9 @@ namespace CSkies
                                 tickUpdater = ticksUntilBoredom;
                                 npc.netUpdate = true;
                             }
-                            if (Main.netMode == 2 && openedDoor)
+                            if (Main.netMode == NetmodeID.Server && openedDoor)
                             {
-                                NetMessage.SendData(19, -1, -1, NetworkText.FromLiteral(""), 0, tileX, tileY, npc.direction, 0);
+                                NetMessage.SendData(MessageID.ChangeDoor, -1, -1, NetworkText.FromLiteral(""), 0, tileX, tileY, npc.direction, 0);
                             }
                         }
                     }
@@ -5146,7 +5146,7 @@ namespace CSkies
         public static int DropItem(Entity codable, int type, int amt, int maxStack, float chance, bool clusterItem = false, bool sync = false)
         {
             int itemID = -1;
-            if ((sync || Main.netMode != 1) && (float)Main.rand.NextDouble() <= chance)
+            if ((sync || Main.netMode != NetmodeID.MultiplayerClient) && (float)Main.rand.NextDouble() <= chance)
             {
                 if (clusterItem)
                 {
@@ -5158,7 +5158,7 @@ namespace CSkies
                         if (stackCount == amt || stackCount2 == maxStack)
                         {
                             itemID = Item.NewItem((int)codable.position.X, (int)codable.position.Y, codable.width, codable.height, type, stackCount2, false, 0);
-							if(sync) NetMessage.SendData(21, -1, -1, null, itemID, 0f, 0f, 0f, 0, 0, 0);
+							if(sync) NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemID, 0f, 0f, 0f, 0, 0, 0);
                             stackCount2 = 0;
                         }
                     }
@@ -5169,7 +5169,7 @@ namespace CSkies
                     {
                         count++;
                         itemID = Item.NewItem((int)codable.position.X, (int)codable.position.Y, codable.width, codable.height, type, 1, false, 0);
-						if(sync) NetMessage.SendData(21, -1, -1, null, itemID, 0f, 0f, 0f, 0, 0, 0);						
+						if(sync) NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemID, 0f, 0f, 0f, 0, 0, 0);						
                     }
                 }
             }
@@ -5222,9 +5222,9 @@ namespace CSkies
             {
                 int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
                 int dmgDealt = (int)player.Hurt(PlayerDeathReason.ByOther(-1), parsedDamage, hitDirection, false, false, false, 0);
-                if (Main.netMode != 0)
+                if (Main.netMode != NetmodeID.SinglePlayer)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.LegacyDefault().GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(MessageID.HurtPlayer, -1, -1, PlayerDeathReason.LegacyDefault().GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                 }
             }else
             if (damager is Player)
@@ -5248,9 +5248,9 @@ namespace CSkies
 				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); });
 				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPVP(player, subPlayer, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
-                if (Main.netMode != 0)
+                if (Main.netMode != NetmodeID.SinglePlayer)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByPlayer(subPlayer.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(MessageID.HurtPlayer, -1, -1, PlayerDeathReason.ByPlayer(subPlayer.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                 }
                 subPlayer.attackCD = (int)(subPlayer.itemAnimationMax * 0.33f);
             }else
@@ -5269,9 +5269,9 @@ namespace CSkies
 					
 					//crit = false;
 					//p.DealtPVP(player, hitDirection, dmgDealt, crit);
-                    if (Main.netMode != 0)
+                    if (Main.netMode != NetmodeID.SinglePlayer)
                     {
-                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                        NetMessage.SendData(MessageID.HurtPlayer, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                     }
                     p.playerImmune[player.whoAmI] = 40;
                 }else
@@ -5285,9 +5285,9 @@ namespace CSkies
 					
 					//crit = false;
 					//p.DealtPlayer(player, hitDirection, dmgDealt, crit);
-                    if (Main.netMode != 0)
+                    if (Main.netMode != NetmodeID.SinglePlayer)
                     {
-                        NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                        NetMessage.SendData(MessageID.HurtPlayer, -1, -1, PlayerDeathReason.ByProjectile(p.owner, p.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                     }
                 }
             }else
@@ -5313,9 +5313,9 @@ namespace CSkies
 				//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtPlayer(player, npc, hitDirection, dmgAmt, crit); });
 				//ItemDef.RunEquipMethod(player, (item) => { item.DealtPlayer(npc, player, hitDirection, dmgAmt, crit); }, true, true, false, true);
 
-                if (Main.netMode != 0)
+                if (Main.netMode != NetmodeID.SinglePlayer)
                 {
-                    NetMessage.SendData(26, -1, -1, PlayerDeathReason.ByNPC(npc.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
+                    NetMessage.SendData(MessageID.HurtPlayer, -1, -1, PlayerDeathReason.ByNPC(npc.whoAmI).GetDeathText(player.name), player.whoAmI, hitDirection, 1, knockback, parsedDamage);
                 }
             }
         }
@@ -5347,9 +5347,9 @@ namespace CSkies
             {
                 int parsedDamage = dmgAmt; if (dmgVariation){ parsedDamage = Main.DamageVar(dmgAmt); }
                 npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
-                if (Main.netMode != 0)
+                if (Main.netMode != NetmodeID.SinglePlayer)
                 {
-                    NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                    NetMessage.SendData(MessageID.StrikeNPC, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
                 }
             }else
             if (damager is Projectile)
@@ -5365,9 +5365,9 @@ namespace CSkies
                     int resultDmg = (int)npc.StrikeNPC(parsedDamage, knockback, hitDirection, false, false, false);
 
 					//p.DealtNPC(npc, hitDirection, resultDmg, knockback, false);
-                    if (Main.netMode != 0)
+                    if (Main.netMode != NetmodeID.SinglePlayer)
                     {
-                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                        NetMessage.SendData(MessageID.StrikeNPC, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
                     }
                     if (p.penetrate != 1){ npc.immune[p.owner] = 10; }
                 }
@@ -5395,9 +5395,9 @@ namespace CSkies
 					//BuffDef.RunBuffMethod(player, (modbuff) => { modbuff.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); });
 					//ItemDef.RunEquipMethod(player, (item) => { item.DealtNPC(player, npc, hitDirection, dmgAmt, knockback, crit); }, true, true, false, true);
 
-                    if (Main.netMode != 0)
+                    if (Main.netMode != NetmodeID.SinglePlayer)
                     {
-                        NetMessage.SendData(28, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
+                        NetMessage.SendData(MessageID.StrikeNPC, -1, -1, NetworkText.FromLiteral(""), npc.whoAmI, 1, knockback, hitDirection, parsedDamage);
                     }
                     npc.immune[player.whoAmI] = player.itemAnimation;
                 }
@@ -5418,11 +5418,11 @@ namespace CSkies
          */
         public static void KillNPC(NPC npc)
         {
-			if(Main.netMode == 1) return;
+			if(Main.netMode == NetmodeID.MultiplayerClient) return;
 			npc.active = false;
 			int npcID = npc.whoAmI;
             Main.npc[npcID] = new NPC();
-            if (Main.netMode == 2) NetMessage.SendData(23, -1, -1, null, npcID, 0f, 0f, 0f, 0, 0, 0);
+            if (Main.netMode == NetmodeID.Server) NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcID, 0f, 0f, 0f, 0, 0, 0);
         }
 
         /*
@@ -5816,7 +5816,7 @@ namespace CSkies
             if (codable is NPC)
             {
                 NPC npc = (NPC)codable;
-                return npc.life > 0 && (!npc.friendly || (npc.type == 22 && player.killGuide)) && !npc.dontTakeDamage;
+                return npc.life > 0 && (!npc.friendly || (npc.type == NPCID.Guide && player.killGuide)) && !npc.dontTakeDamage;
             }else
             if (codable is Player)
             {
@@ -5856,7 +5856,7 @@ namespace CSkies
         {
             int pID = -1;
             if (damage == -1) { Projectile proj = new Projectile(); proj.SetDefaults(projType); damage = proj.damage; }
-            bool properSide = (codable is NPC ? Main.netMode != 1 : codable is Projectile ? ((Projectile)codable).owner == Main.myPlayer : true);
+            bool properSide = (codable is NPC ? Main.netMode != NetmodeID.MultiplayerClient : codable is Projectile ? ((Projectile)codable).owner == Main.myPlayer : true);
             if (properSide)
             {
                 Vector2 targetCenter = position + new Vector2(width * 0.5f, height * 0.5f);
@@ -5885,11 +5885,11 @@ namespace CSkies
          */
         public static int FireProjectile(Vector2 fireTarget, NPC npc, int projectileType, int damage, float knockback, float speedScalar = 1.0F, int soundGroup = 0, int sound = -1, int hostility = 0, int owner = -1)
         {
-            if (Main.netMode != 2 && soundGroup != -1 && sound != -1)
+            if (Main.netMode != NetmodeID.Server && soundGroup != -1 && sound != -1)
             {
                 Main.PlaySound(soundGroup, (int)npc.Center.X, (int)npc.Center.Y, sound);
             }
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 int projectileID = FireProjectile(fireTarget, npc.Center, projectileType, damage, knockback, speedScalar, hostility, owner);
                 npc.netUpdate = true;
@@ -5906,7 +5906,7 @@ namespace CSkies
          */
         public static int FireProjectile(Vector2 fireTarget, Projectile p, int projectileType, int damage, float knockback, float speedScalar = 1.0F, int soundGroup = 0, int sound = -1, int hostility = 0, int owner = -1)
         {
-            if (Main.netMode != 2 && soundGroup != -1 && sound != -1)
+            if (Main.netMode != NetmodeID.Server && soundGroup != -1 && sound != -1)
             {
                 Main.PlaySound(soundGroup, (int)p.Center.X, (int)p.Center.Y, sound);
             }
@@ -5944,7 +5944,7 @@ namespace CSkies
             {
 				proj.friendly = (hostility == 1 || hostility == 2);
 				proj.hostile = (hostility == -1 || hostility == 2);
-				if (Main.netMode != 0) { MNet.SendBaseNetMessage(0, proj.owner, proj.identity, proj.friendly, proj.hostile); }
+				if (Main.netMode != NetmodeID.SinglePlayer) { MNet.SendBaseNetMessage(0, proj.owner, proj.identity, proj.friendly, proj.hostile); }
             }
 			proj.netUpdate2 = true;
 			Main.projectile[projectileID] = proj;

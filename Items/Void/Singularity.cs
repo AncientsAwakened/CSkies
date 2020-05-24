@@ -15,7 +15,7 @@ namespace CSkies.Items.Void
         public override void SetDefaults()
         {
             item.autoReuse = true;
-            item.useStyle = 5;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.useAnimation = 24;
             item.useTime = 24;
             item.knockBack = 15f;
@@ -25,7 +25,7 @@ namespace CSkies.Items.Void
             item.shoot = mod.ProjectileType("Singularity");
             item.shootSpeed = 14f;
             item.UseSound = SoundID.Item10;
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
             item.value = Item.sellPrice(0, 20, 0, 0);
             item.melee = true;
             item.noMelee = true;

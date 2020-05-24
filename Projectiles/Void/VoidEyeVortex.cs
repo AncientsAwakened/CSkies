@@ -43,7 +43,7 @@ namespace CSkies.Projectiles.Void
             }
             else if (projectile.ai[0] == 1)
             {
-                if (Main.netMode != 1 && projectile.ai[1]++ > 120)
+                if (Main.netMode != NetmodeID.MultiplayerClient && projectile.ai[1]++ > 120)
                 {
                     projectile.ai[0] = 2;
                     projectile.netUpdate = true;

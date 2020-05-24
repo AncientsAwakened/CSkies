@@ -16,7 +16,7 @@ namespace CSkies.Items.Heart
 		public override void SetDefaults()
         {
             item.autoReuse = true;
-            item.useStyle = 5;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.useAnimation = 50;
             item.useTime = 50;
             item.width = 46;
@@ -26,7 +26,7 @@ namespace CSkies.Items.Heart
             item.damage = 180;
             item.shootSpeed = 5f;
             item.noMelee = true;
-            item.rare = 8;
+            item.rare = ItemRarityID.Yellow;
             item.ranged = true;
             item.value = Item.sellPrice(0, 12, 0, 0);
             item.shoot = ModContent.ProjectileType<Projectiles.Heart.Blaze>();

@@ -36,7 +36,7 @@ namespace CSkies.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(0, (int)projectile.position.X, (int)projectile.position.Y); // Play a death sound
+            Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y); // Play a death sound
             Vector2 usePos = projectile.position; // Position to use for dusts
                                                   // Please note the usage of MathHelper, please use projectile! We subtract 90 degrees as radians to the rotation vector to offset the sprite as its default rotation in the sprite isn't aligned properly.
             Vector2 rotVector =
@@ -55,7 +55,7 @@ namespace CSkies.Projectiles
 
                 // Sync the drop for multiplayer
                 // Note the usage of Terraria.ID.MessageID, please use projectile!
-                if (Main.netMode == 1 && item >= 0)
+                if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0)
                 {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f);
                 }

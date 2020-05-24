@@ -20,10 +20,10 @@ namespace CSkies.Items.Void
 			item.useAnimation = 15;
 			item.shoot = mod.ProjectileType("VoidJavelin");
 			item.shootSpeed = 16;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.knockBack = 4;
 			item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 11;
+			item.rare = ItemRarityID.Purple;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.crit = 3;

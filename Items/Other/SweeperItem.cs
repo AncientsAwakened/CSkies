@@ -18,10 +18,10 @@ namespace CSkies.Items.Other
             item.height = 30;
             item.maxStack = 999;
             item.value = Item.buyPrice(0, 0, 5, 0);
-            item.rare = 1;
+            item.rare = ItemRarityID.Blue;
             item.useAnimation = 30;
             item.useTime = 30;
-            item.useStyle = 4;
+            item.useStyle = ItemUseStyleID.HoldingUp;
             item.consumable = true;
             item.makeNPC = (short)ModContent.NPCType<Sweeper>();
         }

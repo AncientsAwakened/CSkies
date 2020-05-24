@@ -132,7 +132,7 @@ namespace CSkies.NPCs.Bosses.Void
                     {
                         if (npc.ai[3] < Repeats() - 1)
                         {
-                            if (Main.netMode != 1) { npc.ai[2]++; }
+                            if (Main.netMode != NetmodeID.MultiplayerClient) { npc.ai[2]++; }
                             int teleportRate = npc.life < npc.lifeMax / 4 ? 15 : 30;
                             if (npc.ai[2] >= teleportRate) // + lasers
                             {
@@ -158,7 +158,7 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(player))
                         break;
 
-                    if (Main.netMode != 1 && !CUtils.AnyProjectiles(mod.ProjectileType("VoidOrbitter")))
+                    if (Main.netMode != NetmodeID.MultiplayerClient && !CUtils.AnyProjectiles(mod.ProjectileType("VoidOrbitter")))
                     {
                         for (int m = 0; m < 4; m++)
                         {
@@ -225,31 +225,40 @@ namespace CSkies.NPCs.Bosses.Void
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
 
-                        if (Main.netMode != 1)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                             npc.TargetClosest(false);
 
-                        Projectile.NewProjectile(npc.Center, new Vector2(10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-10, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-10, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(10, 0), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-10, 0), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(0, -10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(0, 10), mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        float dir = (float)Math.PI / 8;
 
-                        if (npc.life < npc.lifeMax / 2 && Main.netMode != 1)
+                        if (Main.rand.NextBool() || npc.life < npc.lifeMax / 2)
+                        {
+                            dir = 0;
+                        }
+
+                        int loops = (npc.life < npc.lifeMax / 2 ? 8 : 4);
+
+                        for (int i = 0; i < loops; i++)
+                        {
+                            Vector2 shotDir = dir.ToRotationVector2();
+
+                            Projectile.NewProjectile(npc.Center, shotDir, mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+
+                            dir += (float)Math.PI * 2 / loops;
+                        }
+
+                        if (npc.life < npc.lifeMax / 2 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int choice = Main.rand.Next(2);
                             if (choice == 0)
                             {
                                 Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
-                                int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int a = Projectile.NewProjectile(npc.Center, new Vector2(0f, -12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
                                 Main.projectile[a].Center = npc.Center;
-                                int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int b = Projectile.NewProjectile(npc.Center, new Vector2(0f, 12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
                                 Main.projectile[b].Center = npc.Center;
-                                int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int c = Projectile.NewProjectile(npc.Center, new Vector2(-12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
                                 Main.projectile[c].Center = npc.Center;
-                                int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int d = Projectile.NewProjectile(npc.Center, new Vector2(12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
                                 Main.projectile[d].Center = npc.Center;
                             }
                             else
@@ -324,7 +333,7 @@ namespace CSkies.NPCs.Bosses.Void
                     {
                         Teleport();
                         npc.ai[2] = 0;
-                        if (Main.netMode != 1) //spawn lightning
+                        if (Main.netMode != NetmodeID.MultiplayerClient) //spawn lightning
                         {
                             for (int l = 0; l < Repeats(); l++)
                             {
@@ -404,25 +413,28 @@ namespace CSkies.NPCs.Bosses.Void
             }
         }
 
-        public void Starblast(int damage = 130)
+        public void Starblast()
         {
             Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
-            int a = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, -12f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[a].Center = npc.Center;
-            int b = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(0f, 12f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[b].Center = npc.Center;
-            int c = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-12f, 0f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[c].Center = npc.Center;
-            int d = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(12f, 0f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[d].Center = npc.Center;
-            int e = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, 8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[e].Center = npc.Center;
-            int f = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(8f, -8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[f].Center = npc.Center;
-            int g = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, 8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[g].Center = npc.Center;
-            int h = Projectile.NewProjectile(new Vector2(npc.Center.X, npc.Center.Y), new Vector2(-8f, -8f), mod.ProjectileType("VoidBlast"), damage / 4, 3);
-            Main.projectile[h].Center = npc.Center;
+
+            float dir = 0;
+
+            if (Main.rand.NextBool() || npc.life < npc.lifeMax / 2)
+            {
+                dir = (float)Math.PI / 8; ;
+            }
+
+            int loops = (npc.life < npc.lifeMax / 2 ? 8 : 4);
+
+            for (int i = 0; i < loops; i++)
+            {
+                Vector2 shotDir = dir.ToRotationVector2();
+
+                int a = Projectile.NewProjectile(npc.Center, shotDir * 10, mod.ProjectileType("VoidBlast"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                Main.projectile[a].Center = npc.Center;
+
+                dir += dir + ((float)Math.PI * 2 / loops);
+            }
         }
 
         public void Teleport()

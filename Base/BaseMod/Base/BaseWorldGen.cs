@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ObjectData;
 using Terraria.Localization;
 using Terraria.World.Generation;
+using Terraria.ID;
 
 namespace CSkies
 {
@@ -186,7 +187,7 @@ namespace CSkies
                     }
                 }
             }
-            if (sync && Main.netMode != 0)
+            if (sync && Main.netMode != NetmodeID.SinglePlayer)
             {
                 NetMessage.SendTileSquare(-1, (int)(position.X / 16f), (int)(position.Y / 16f), (radius * 2) + 2);
             }
@@ -225,7 +226,7 @@ namespace CSkies
 			if (liquidType == 1) { Main.tile[x, y].lava(true); Main.tile[x, y].honey(false); }else
 			if (liquidType == 2) { Main.tile[x, y].lava(false); Main.tile[x, y].honey(true); }
             if(updateFlow){ Liquid.AddWater(x, y); }
-            if (sync && Main.netMode != 0) { NetMessage.SendTileSquare(-1, x, y, 1); }
+            if (sync && Main.netMode != NetmodeID.SinglePlayer) { NetMessage.SendTileSquare(-1, x, y, 1); }
         }
 
         /**

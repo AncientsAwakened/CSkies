@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Enums;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.Void
 {
@@ -63,7 +64,7 @@ namespace CSkies.NPCs.Bosses.Void
             }
             if (projectile.localAI[0] == 0f)
             {
-                Main.PlaySound(29, (int)projectile.position.X, (int)projectile.position.Y, 104, 1f, 0f);
+                Main.PlaySound(SoundID.Zombie, (int)projectile.position.X, (int)projectile.position.Y, 104, 1f, 0f);
             }
             float num801 = 3f;
             projectile.localAI[0] += 1f;
@@ -132,11 +133,8 @@ namespace CSkies.NPCs.Bosses.Void
             Texture2D texture2D21 = mod.GetTexture("NPCs/Bosses/Void/VoidDeathray3");
             float num223 = projectile.localAI[1];
             Color color44 = Colors.COLOR_GLOWPULSE * 0.9f;
-            SpriteBatch arg_ABD8_0 = Main.spriteBatch;
-            Texture2D arg_ABD8_1 = texture2D19;
             Vector2 arg_ABD8_2 = projectile.Center - Main.screenPosition;
-            Rectangle? sourceRectangle2 = null;
-            arg_ABD8_0.Draw(arg_ABD8_1, arg_ABD8_2, sourceRectangle2, color44, projectile.rotation, texture2D19.Size() / 2f, projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture2D19, arg_ABD8_2, null, color44, projectile.rotation, texture2D19.Size() / 2f, projectile.scale, SpriteEffects.None, 0f);
             num223 -= (texture2D19.Height / 2 + texture2D21.Height) * projectile.scale;
             Vector2 value20 = projectile.Center;
             value20 += projectile.velocity * projectile.scale * texture2D19.Height / 2f;
@@ -163,8 +161,7 @@ namespace CSkies.NPCs.Bosses.Void
             SpriteBatch arg_AE2D_0 = Main.spriteBatch;
             Texture2D arg_AE2D_1 = texture2D21;
             Vector2 arg_AE2D_2 = value20 - Main.screenPosition;
-            sourceRectangle2 = null;
-            arg_AE2D_0.Draw(arg_AE2D_1, arg_AE2D_2, sourceRectangle2, color44, projectile.rotation, texture2D21.Frame(1, 1, 0, 0).Top(), projectile.scale, SpriteEffects.None, 0f);
+            arg_AE2D_0.Draw(arg_AE2D_1, arg_AE2D_2, null, color44, projectile.rotation, texture2D21.Frame(1, 1, 0, 0).Top(), projectile.scale, SpriteEffects.None, 0f);
             return false;
         }
 

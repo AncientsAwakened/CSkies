@@ -20,7 +20,7 @@ namespace CSkies.Tiles
 			num = fail ? 1 : 3;
 		}
 
-        public static Color Glow(Color c) => Colors.Flash;
+        public static Color Glow(Color c) => new Color(Colors.Flash.R / 3, Colors.Flash.G / 3, Colors.Flash.B / 3);
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {

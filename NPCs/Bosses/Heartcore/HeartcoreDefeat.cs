@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.Heartcore
 {
@@ -32,7 +33,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
 
         public override void AI()
         {
-            if (++npc.ai[0] >= 12 && Main.netMode != 1)
+            if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (++npc.ai[1] >= 23)
                 {

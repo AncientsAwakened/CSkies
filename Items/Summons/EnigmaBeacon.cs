@@ -20,10 +20,10 @@ Non-Consumable");
 		{
 			item.width = 28;
 			item.height = 32;
-			item.rare = 2;
+			item.rare = ItemRarityID.Green;
 			item.useAnimation = 45;
 			item.useTime = 45;
-			item.useStyle = 4;
+			item.useStyle = ItemUseStyleID.HoldingUp;
 			item.consumable = false;
             item.noUseGraphic = true;
 		}

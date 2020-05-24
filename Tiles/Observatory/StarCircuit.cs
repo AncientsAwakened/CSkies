@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies.Tiles.Observatory
 {
@@ -13,7 +14,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileBlendAll[Type] = true;
-            soundType = 21;
+            soundType = SoundID.Tink;
             drop = mod.ItemType("StarCircuit");
             dustType = mod.DustType("Stardust");
             AddMapEntry(new Color(110, 142, 142));
@@ -53,7 +54,7 @@ namespace CSkies.Tiles.Observatory
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileBlendAll[Type] = true;
-            soundType = 21;
+            soundType = SoundID.Tink;
             drop = mod.ItemType("StarCircuit");
             dustType = mod.DustType("Stardust");
             AddMapEntry(new Color(110, 142, 142));

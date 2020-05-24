@@ -93,8 +93,16 @@ namespace CSkies.NPCs.Bosses.Starcore
 
         public static Color Warning => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.LimeGreen, Color.Red, Color.LimeGreen);
 
+        bool title = false;
+
         public override void AI()
         {
+            if (!title)
+            {
+                CSkies.ShowTitle(npc, 2);
+                title = true;
+            }
+
             int speed = 10;
             float interval = .015f;
             if (npc.life < npc.lifeMax / 4)
@@ -134,7 +142,7 @@ namespace CSkies.NPCs.Bosses.Starcore
                     npc.velocity.Y -= 0.2f;
                     if (npc.velocity.Y > 15f) npc.velocity.Y = 15f;
                     npc.rotation = 0f;
-                    if (npc.position.Y + npc.velocity.Y <= 0f && Main.netMode != 1) { BaseAI.KillNPC(npc); npc.netUpdate = true; }
+                    if (npc.position.Y + npc.velocity.Y <= 0f && Main.netMode != NetmodeID.MultiplayerClient) { BaseAI.KillNPC(npc); npc.netUpdate = true; }
                 }
             }
 

@@ -21,7 +21,7 @@ Holding down while flying allows you to hover");
 			item.width = 28;
 			item.height = 40;
             item.value = Item.sellPrice(0, 8, 0, 0);
-            item.rare = 11;
+            item.rare = ItemRarityID.Purple;
 			item.accessory = true;
 		}
 		

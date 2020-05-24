@@ -20,7 +20,7 @@ namespace CSkies.Items.Materials
             item.width = 22;
             item.height = 22;
 			item.maxStack = 99;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.value = 100;
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

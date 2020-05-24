@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace CSkies.Tiles.Abyss
 {
@@ -15,7 +16,7 @@ namespace CSkies.Tiles.Abyss
             Main.tileLighted[Type] = false;
 
             dustType = ModContent.DustType<Dusts.VoidDust>();
-            soundType = 6;
+            soundType = SoundID.Grass;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.LavaDeath = true;

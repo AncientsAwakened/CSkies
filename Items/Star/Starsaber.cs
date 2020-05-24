@@ -21,12 +21,12 @@ namespace CSkies.Items.Star
 			item.height = 48;
 			item.useTime = 30;
 			item.useAnimation = 30;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.shoot = mod.ProjectileType("StarPro");
 			item.shootSpeed = 8f;
 			item.knockBack = 5;
             item.value = Item.sellPrice(0, 2, 0, 0);
-            item.rare = 5;
+            item.rare = ItemRarityID.Pink;
             item.UseSound = SoundID.Item15;
             item.autoReuse = true;
 		}

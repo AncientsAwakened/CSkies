@@ -22,10 +22,10 @@ namespace CSkies.Items.Galaxium
 			item.useAnimation = 11;
 			item.shoot = mod.ProjectileType("Galaxy_Javelin_Pro");
 			item.shootSpeed = 19f;
-			item.useStyle = 1;
+			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.knockBack = 2;
 			item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = 10;
+			item.rare = ItemRarityID.Red;
 			item.UseSound = SoundID.Item1;
 			item.autoReuse = true;
 			item.crit = 3;

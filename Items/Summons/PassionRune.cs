@@ -22,10 +22,10 @@ Can only be used at night");
 		{
 			item.width = 40;
 			item.height = 40;
-			item.rare = 2;
+			item.rare = ItemRarityID.Green;
 			item.useAnimation = 45;
 			item.useTime = 45;
-			item.useStyle = 4;
+			item.useStyle = ItemUseStyleID.HoldingUp;
             item.maxStack = 20;
 			item.consumable = true;
             item.noUseGraphic = true;

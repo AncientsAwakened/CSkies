@@ -125,7 +125,7 @@ namespace CSkies.Projectiles.Void
                 if (projectile.ai[0] % 30f == 0f && projectile.ai[0] < 241f && Main.myPlayer == projectile.owner)
                 {
                     Vector2 vector128 = Vector2.UnitY.RotatedByRandom(6.2831854820251465) * 12f;
-                    Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, vector128.X, vector128.Y, 618, projectile.damage / 2, 0f, projectile.owner, 0f, projectile.whoAmI);
+                    Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y, vector128.X, vector128.Y, ProjectileID.NebulaArcanumSubshot, projectile.damage / 2, 0f, projectile.owner, 0f, projectile.whoAmI);
                 }
                 Vector2 vector129 = projectile.Center;
                 float num1004 = 800f;

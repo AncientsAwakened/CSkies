@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.Localization;
 using Terraria.Utilities;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace CSkies
 {
@@ -74,14 +75,14 @@ namespace CSkies
 			if(tile.frameY != 0) top--;
 			if(player.sign >= 0)
 			{
-				Main.PlaySound(11, -1, -1, 1);
+				Main.PlaySound(SoundID.MenuClose, -1, -1, 1);
 				player.sign = -1;
 				Main.editSign = false;
 				Main.npcChatText = "";
 			}
 			if(Main.editChest)
 			{
-				Main.PlaySound(12, -1, -1, 1);
+				Main.PlaySound(SoundID.MenuTick, -1, -1, 1);
 				Main.editChest = false;
 				Main.npcChatText = "";
 			}

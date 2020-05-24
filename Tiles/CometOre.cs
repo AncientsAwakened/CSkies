@@ -14,7 +14,7 @@ namespace CSkies.Tiles
 			Main.tileMergeDirt[Type] = true;
             Main.tileSpelunker[Type] = true;
             Main.tileBlockLight[Type] = true;
-            soundType = 21;
+            soundType = SoundID.Tink;
             Main.tileLighted[Type] = true;
             drop = mod.ItemType("CometOre");   //put your CustomBlock name
             dustType = DustID.BlueCrystalShard;

@@ -31,7 +31,7 @@ namespace CSkies.Items.Comet
             item.height = 24;
             item.useTime = 36;
             item.useAnimation = 36;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
             item.noUseGraphic = true;
             item.noMelee = true;
             item.knockBack = 3;
@@ -40,7 +40,7 @@ namespace CSkies.Items.Comet
             item.shootSpeed = 10f;
             item.buffType = mod.BuffType("Watcher");
             item.autoReuse = true;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.value = Item.sellPrice(0, 1, 0, 0);
         }
 		

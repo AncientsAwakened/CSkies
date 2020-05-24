@@ -19,11 +19,11 @@ namespace CSkies.Items.Comet
             item.width = 20;
             item.height = 20;
             item.maxStack = 30;
-            item.rare = 2;
+            item.rare = ItemRarityID.Green;
             item.useAnimation = 45;
             item.useTime = 45;
             item.consumable = true;
-            item.useStyle = 1;
+            item.useStyle = ItemUseStyleID.SwingThrow;
         }
 
         public override bool CanUseItem(Player player)
