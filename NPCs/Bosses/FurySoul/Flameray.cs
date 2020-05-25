@@ -23,11 +23,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
             projectile.width = 48;
             projectile.height = 48;
             projectile.hostile = true;
-            projectile.alpha = 255;
+            projectile.alpha = 0;
             projectile.penetrate = -1;
             projectile.tileCollide = false;
             projectile.timeLeft = 600;
-            projectile.hide = true;
+            projectile.hide = false;
             cooldownSlot = 1;
         }
 
@@ -51,17 +51,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             if (Main.npc[(int)projectile.ai[1]].active && Main.npc[(int)projectile.ai[1]].modNPC is FurySoul)
             {
                 projectile.Center = Main.npc[(int)projectile.ai[1]].Center;
-                if (projectile.ai[0] == 0)
-                {
-                    projectile.velocity = Vector2.Normalize(Main.npc[(int)projectile.ai[1]].velocity);
-                    projectile.position += 30 * projectile.velocity;
-                    projectile.position += 10 * projectile.velocity.RotatedBy(Main.npc[(int)projectile.ai[1]].spriteDirection > 0 ? -Math.PI / 2 : Math.PI / 2);
-                }
-                else
-                {
+
                     projectile.velocity = (Main.npc[(int)projectile.ai[1]].rotation + (float)Math.PI / 2).ToRotationVector2();
                     projectile.velocity = projectile.velocity.RotatedBy(projectile.ai[0]);
-                }
             }
             else
             {
@@ -76,27 +68,30 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 Main.PlaySound(SoundID.Zombie, (int)projectile.position.X, (int)projectile.position.Y, 104, 1f, 0f);
             }
+            float num801 = maxScale;
             projectile.localAI[0] += 1f;
             if (projectile.localAI[0] >= maxTime)
             {
                 projectile.Kill();
                 return;
             }
-            projectile.scale = (float)Math.Sin(projectile.localAI[0] * 3.14159274f / maxTime) * 10f * maxScale;
-            if (projectile.scale > maxScale)
+            projectile.scale = (float)Math.Sin(projectile.localAI[0] * 3.14159274f / maxTime) * 10f * num801;
+            if (projectile.scale > num801)
             {
-                projectile.scale = maxScale;
+                projectile.scale = num801;
             }
             float num804 = projectile.velocity.ToRotation();
             projectile.rotation = num804 - 1.57079637f;
             projectile.velocity = num804.ToRotationVector2();
+            float num805 = 3f;
+            float num806 = projectile.width;
             Vector2 samplingPoint = projectile.Center;
             if (vector78.HasValue)
             {
                 samplingPoint = vector78.Value;
             }
-            float[] array3 = new float[3];
-            Collision.LaserScan(samplingPoint, projectile.velocity, projectile.width * projectile.scale, 2400f, array3);
+            float[] array3 = new float[(int)num805];
+            Collision.LaserScan(samplingPoint, projectile.velocity, num806 * projectile.scale, 2400f, array3);
             float num807 = 0f;
             int num3;
             for (int num808 = 0; num808 < array3.Length; num808 = num3 + 1)
@@ -104,7 +99,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 num807 += array3[num808];
                 num3 = num808;
             }
-            num807 /= 3;
+            num807 /= num805;
             float amount = 0.5f;
             projectile.localAI[1] = MathHelper.Lerp(projectile.localAI[1], num807, amount);
             Vector2 vector79 = projectile.Center + projectile.velocity * (projectile.localAI[1] - 14f);

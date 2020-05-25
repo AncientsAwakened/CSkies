@@ -520,15 +520,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         private void LaserAttack()
         {
-            if (npc.ai[0] < Changerate + 30)
-            {
-                npc.rotation += rotAmt;
-
-                return;
-            }
-
-            rotAmt += .01f;
-
+            npc.rotation += rotAmt;
             if (npc.life < npc.lifeMax / 4)
             {
                 if (rotAmt > .3f)
@@ -552,9 +544,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             else if (npc.life < npc.lifeMax / 2)
             {
                 rotAmt += .01f;
-                if (rotAmt > .2f)
+                if (rotAmt > .05f)
                 {
-                    rotAmt = .2f;
+                    rotAmt = .05f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
@@ -570,22 +562,20 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
             else
             {
-                rotAmt += .01f;
-                if (rotAmt > .1f)
+                rotAmt += .005f;
+                if (rotAmt > .025f)
                 {
-                    rotAmt = .1f;
+                    rotAmt = .025f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
                 {
-                    InternalAI[2]++;
-
                     Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
                     Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
                 }
             }
-
-            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()) && InternalAI[2] != 0)
+            InternalAI[2]++;
+            if (InternalAI[2] > 240)
             {
                 AIChange();
             }
