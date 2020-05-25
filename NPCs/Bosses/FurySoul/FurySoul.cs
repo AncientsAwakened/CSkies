@@ -523,6 +523,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.rotation += rotAmt;
             if (npc.life < npc.lifeMax / 4)
             {
+                rotAmt += .02f;
                 if (rotAmt > .3f)
                 {
                     rotAmt = .3f;
@@ -544,9 +545,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             else if (npc.life < npc.lifeMax / 2)
             {
                 rotAmt += .01f;
-                if (rotAmt > .05f)
+                if (rotAmt > .1f)
                 {
-                    rotAmt = .05f;
+                    rotAmt = .1f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)

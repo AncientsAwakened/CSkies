@@ -11,7 +11,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
     public class Flameray : ModProjectile
     {
         public float maxTime = 180;
-        public float maxScale = 1f;
+        public float maxScale = 2f;
 
         public override void SetStaticDefaults()
 		{
