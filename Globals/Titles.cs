@@ -29,7 +29,7 @@ namespace CSkies
 
     public class Title : ModProjectile
     {
-        public override string Texture => "AAMod/BlankTex";
+        public override string Texture => "CSkies/BlankTex";
         public override void SetDefaults()
         {
             projectile.width = 1;
@@ -69,65 +69,6 @@ namespace CSkies
                     modPlayer.alphaText -= 5f;
                 }
                 if (modPlayer.alphaText > 0f)
-                {
-                    modPlayer.alphaText2 -= 5f;
-                }
-            }
-        }
-    }
-
-    public class SistersTitle : ModProjectile
-    {
-        public override string Texture => "AAMod/BlankTex";
-        public override void SetDefaults()
-        {
-            projectile.width = 1;
-            projectile.height = 1;
-            projectile.penetrate = -1;
-            projectile.hostile = false;
-            projectile.friendly = false;
-            projectile.tileCollide = false;
-            projectile.ignoreWater = true;
-            projectile.timeLeft = 300;
-        }
-
-        public override void AI()
-        {
-            Player player = Main.player[projectile.owner];
-            Titles modPlayer = player.GetModPlayer<Titles>();
-
-            modPlayer.text = true;
-
-            modPlayer.BossID = (int)projectile.ai[0];
-
-            projectile.velocity.X = 0;
-            projectile.velocity.Y = 0;
-
-            if (projectile.timeLeft <= 45)
-            {
-                if (modPlayer.alphaText < 255f)
-                {
-                    modPlayer.alphaText += 10f;
-                    modPlayer.alphaText2 += 10f;
-                    modPlayer.alphaText3 += 10f;
-                    modPlayer.alphaText4 += 10f;
-                }
-            }
-            else
-            {
-                if (projectile.timeLeft <= 240)
-                {
-                    modPlayer.alphaText -= 5f;
-                }
-                if (projectile.timeLeft <= 200)
-                {
-                    modPlayer.alphaText3 -= 5f;
-                }
-                if (projectile.timeLeft <= 160)
-                {
-                    modPlayer.alphaText4 -= 5f;
-                }
-                if (modPlayer.alphaText2 > 0f)
                 {
                     modPlayer.alphaText2 -= 5f;
                 }

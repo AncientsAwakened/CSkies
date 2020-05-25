@@ -184,7 +184,7 @@ namespace CSkies
             if (modPlayer.text)
             {
                 var textLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
-                var computerState = new LegacyGameInterfaceLayer("AAMod: UI",
+                var computerState = new LegacyGameInterfaceLayer("CSkies: UI",
                     delegate
                     {
                         BossTitle(modPlayer.BossID);
