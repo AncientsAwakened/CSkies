@@ -317,17 +317,12 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
         {
             Texture2D tex = Main.npcTexture[npc.type];
             Texture2D Cyclone = mod.GetTexture("NPCs/Bosses/ObserverVoid/DarkVortex");
+            if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
+            else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
             if (VortexScale > 0)
             {
                 Rectangle frame = BaseDrawing.GetFrame(0, Cyclone.Width, Cyclone.Height, 0, 0);
-                BaseDrawing.DrawTexture(sb, Cyclone, 0, npc.position, npc.width, npc.height, VortexScale, VortexRotation, npc.direction, 1, frame, Color.White, true);
-                if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
-                else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
-            }
-            else
-            {
-                if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
-                else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
+                BaseDrawing.DrawTexture(sb, Cyclone, 0, npc.position, npc.width, npc.height, VortexScale, VortexRotation, npc.direction, 1, frame, Color.White, true);\
             }
             BaseDrawing.DrawAura(sb, tex, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
             BaseDrawing.DrawTexture(sb, tex, 0, npc, npc.GetAlpha(Color.White));

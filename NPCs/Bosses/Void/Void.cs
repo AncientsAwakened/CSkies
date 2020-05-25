@@ -158,19 +158,6 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(player))
                         break;
 
-                    if (Main.netMode != NetmodeID.MultiplayerClient && !CUtils.AnyProjectiles(mod.ProjectileType("VoidOrbitter")))
-                    {
-                        for (int m = 0; m < 4; m++)
-                        {
-                            int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidOrbitter"), npc.damage / 4, 4, Main.myPlayer);
-                            Main.projectile[projectileID].Center = npc.Center;
-                            Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
-                            Main.projectile[projectileID].velocity *= 8f;
-                            Main.projectile[projectileID].ai[0] = m;
-                        };
-                        npc.netUpdate = true;
-                    }
-
                     if (++npc.ai[1] > 60)
                     {
                         targetPos = player.Center;
@@ -193,6 +180,7 @@ namespace CSkies.NPCs.Bosses.Void
 
                 case 4:
                     isCharging = true;
+
                     if (++npc.ai[1] > 240 || (Math.Sign(npc.velocity.X) > 0 ? npc.Center.X > player.Center.X + 900 : npc.Center.X < player.Center.X - 900))
                     {
                         npc.ai[1] = 0;
@@ -207,9 +195,18 @@ namespace CSkies.NPCs.Bosses.Void
                             npc.ai[0]--;
                         npc.netUpdate = true;
                     }
-                    if (npc.ai[1] % 30 == 0 && npc.life < npc.lifeMax / 3)
+                    
+                    if (npc.ai[1] % 20 == 0)
                     {
-                        Starblast();
+                        int a = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidVortex"), npc.damage / 4, 3);
+                        Main.projectile[a].Center = npc.Center;
+                    }
+                    if (npc.ai[1] % 30 == 0)
+                    {
+                        if (npc.life < npc.lifeMax / 3)
+                        {
+                            Starblast();
+                        }
                     }
                     break;
 
@@ -433,7 +430,7 @@ namespace CSkies.NPCs.Bosses.Void
                 int a = Projectile.NewProjectile(npc.Center, shotDir * 10, mod.ProjectileType("VoidBlast"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
                 Main.projectile[a].Center = npc.Center;
 
-                dir += dir + ((float)Math.PI * 2 / loops);
+                dir += (float)Math.PI * 2 / loops;
             }
         }
 
@@ -514,16 +511,12 @@ namespace CSkies.NPCs.Bosses.Void
 
         public void SuckPlayer()
         {
-            bool V = false;
+            bool V = npc.ai[0] == 4;
             Player target = Main.player[Main.myPlayer];
 
-            if (Vector2.Distance(target.Center, npc.Center) > 4000 && !target.dead && target.active)
+            if (Vector2.Distance(target.Center, npc.Center) > 4000 && !target.dead && target.active && V)
             {
                 target.AddBuff(ModContent.BuffType<Buffs.Sucked>(), 2);
-            }
-            if (target.HasBuff(ModContent.BuffType<Buffs.Sucked>()))
-            {
-                V = true;
             }
 
             if (V)
@@ -686,7 +679,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override bool PreDraw(SpriteBatch sb, Color dColor)
         {
             Texture2D tex = Main.npcTexture[npc.type];
-            Texture2D Cyclone = mod.GetTexture("NPCs/Bosses/ObserverVoid/DarkVortex");
+            Texture2D Cyclone = mod.GetTexture("NPCs/Bosses/Void/VoidCyclone");
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
             if (VortexScale > 0)
@@ -696,7 +689,7 @@ namespace CSkies.NPCs.Bosses.Void
             }
             if (isCharging)
             {
-                BaseDrawing.DrawAfterimage(sb, tex, 0, npc, .6f, 1, 8, true, 0, 0, dColor, npc.frame, 4);
+                BaseDrawing.DrawAfterimage(sb, tex, 0, npc, .6f, 1, 8, true, 0, 0, Color.White, npc.frame, 4);
             }
             BaseDrawing.DrawAura(sb, tex, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
             return false;
