@@ -245,11 +245,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             if (npc.ai[0] == 2 || npc.ai[0] == 4)
             {
                 npc.velocity *= .0f;
-                npc.defense = 9999;
             }
             else
             {
-                npc.defense = 60;
                 BaseAI.AISkull(npc, ref Movement, true, 14, 350, .04f, .05f);
             }
 
@@ -324,6 +322,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
                         break;
                     case 4:
+
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 0)
                         {
                             InternalAI[3] += 1;
@@ -364,17 +363,17 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         {
                             Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, 14), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, -14), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
-                        if (npc.ai[2] >= 360)
+                        if (npc.ai[2] >= 360 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()))
                         {
                             AIChange();
                         }
@@ -419,6 +418,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 npc.ai[2] = 0;
                 InternalAI[2] = 0; 
                 InternalAI[3] = 0;
+                rotAmt = 0;
                 if (npc.ai[0] == 2 || npc.ai[0] == 4)
                 {
                     Teleport();
@@ -523,10 +523,10 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.rotation += rotAmt;
             if (npc.life < npc.lifeMax / 4)
             {
-                rotAmt += .02f;
-                if (rotAmt > .3f)
+                rotAmt += .0005f;
+                if (rotAmt > .035f)
                 {
-                    rotAmt = .3f;
+                    rotAmt = .035f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
@@ -539,31 +539,31 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
                     Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI * 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (Pi2 * .75f), npc.whoAmI);
                 }
             }
             else if (npc.life < npc.lifeMax / 2)
             {
-                rotAmt += .01f;
-                if (rotAmt > .1f)
+                rotAmt += .0005f;
+                if (rotAmt > .03f)
                 {
-                    rotAmt = .1f;
+                    rotAmt = .03f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
                 {
                     InternalAI[2]++;
 
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, Pi2 / 3, npc.whoAmI);
 
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + Pi2).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .66f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (Pi2 * .66f), npc.whoAmI);
                 }
             }
             else
             {
-                rotAmt += .005f;
+                rotAmt += .0005f;
                 if (rotAmt > .025f)
                 {
                     rotAmt = .025f;
@@ -576,7 +576,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 }
             }
             InternalAI[2]++;
-            if (InternalAI[2] > 240)
+            if (InternalAI[2] > 240 && (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())))
             {
                 AIChange();
             }

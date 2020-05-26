@@ -71,6 +71,8 @@ namespace CSkies.NPCs.Bosses.Void
 
         bool rage = false;
 
+        readonly float Pi2 = (float)Math.PI * 2;
+
         public override void AI()
         {
             if (npc.life < npc.lifeMax / 4)
@@ -100,7 +102,7 @@ namespace CSkies.NPCs.Bosses.Void
                     targetPos = player.Center;
                     targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
                     targetPos.Y -= 430;
-                    Movement(targetPos, 1f);
+                    Movement(targetPos, .7f);
                     if (++npc.ai[1] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 100) //initiate dash
                     {
                         npc.ai[0]++;
@@ -162,7 +164,7 @@ namespace CSkies.NPCs.Bosses.Void
                     {
                         targetPos = player.Center;
                         targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
-                        Movement(targetPos, 1.5f);
+                        Movement(targetPos, 1f);
                         if (npc.ai[1] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
                         {
                             npc.ai[0]++;
@@ -225,7 +227,7 @@ namespace CSkies.NPCs.Bosses.Void
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                             npc.TargetClosest(false);
 
-                        float dir = (float)Math.PI / 8;
+                        float dir = Pi2 / 8;
 
                         if (Main.rand.NextBool() || npc.life < npc.lifeMax / 2)
                         {
@@ -293,7 +295,7 @@ namespace CSkies.NPCs.Bosses.Void
                     if (!AliveCheck(player))
                         break;
                     targetPos = player.Center + player.DirectionTo(npc.Center) * 600;
-                    Movement(targetPos, 0.8f);
+                    Movement(targetPos, 0.6f);
                     if (++npc.ai[1] > 20)
                     {
                         npc.ai[0]++;
