@@ -218,15 +218,8 @@ namespace CSkies.NPCs.Bosses.Void
 
                     npc.velocity *= 0;
 
-                    if (++npc.ai[2] > 180)
+                    if (!CUtils.AnyProjectiles(ModContent.ProjectileType<VoidraySmall>()))
                     {
-                        npc.ai[0]++;
-                        npc.ai[1] = 0;
-                        npc.ai[2] = 0;
-
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            npc.TargetClosest(false);
-
                         float dir = Pi2 / 8;
 
                         if (Main.rand.NextBool() || npc.life < npc.lifeMax / 2)
@@ -244,6 +237,16 @@ namespace CSkies.NPCs.Bosses.Void
 
                             dir += (float)Math.PI * 2 / loops;
                         }
+                    }
+
+                    if (++npc.ai[2] > 60)
+                    {
+                        npc.ai[0]++;
+                        npc.ai[1] = 0;
+                        npc.ai[2] = 0;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            npc.TargetClosest(false);
 
                         if (npc.life < npc.lifeMax / 2 && Main.netMode != NetmodeID.MultiplayerClient)
                         {

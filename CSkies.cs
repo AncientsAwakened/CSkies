@@ -65,6 +65,7 @@ namespace CSkies
             PremultiplyTexture(GetTexture("NPCs/Bosses/ObserverVoid/Vortex"));
             PremultiplyTexture(GetTexture("NPCs/Bosses/ObserverVoid/Vortex1"));
             PremultiplyTexture(GetTexture("NPCs/Bosses/ObserverVoid/DarkVortex"));
+            PremultiplyTexture(GetTexture("NPCs/Bosses/Void/VoidCyclone"));
             PremultiplyTexture(GetTexture("Backgrounds/VoidBolt"));
             PremultiplyTexture(GetTexture("Backgrounds/VoidFlash"));
 

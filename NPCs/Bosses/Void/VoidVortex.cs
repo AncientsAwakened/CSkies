@@ -12,6 +12,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override void SetStaticDefaults()
 		{
             DisplayName.SetDefault("Void Vortex");
+            Main.projFrames[projectile.type] = 4;
         }
 
         public override void SetDefaults()
@@ -50,6 +51,15 @@ namespace CSkies.NPCs.Bosses.Void
                     target.velocity.Y = (target.velocity.Y * (num7 - 1) + num5) / num7;
                 }
             }
+
+            if (projectile.frameCounter++ > 5)
+            {
+                projectile.frameCounter = 0;
+                if (projectile.frame++ > 3)
+                {
+                    projectile.frame = 0;
+                }
+            }
         }
 
         public float auraPercent = 0f;
@@ -58,12 +68,12 @@ namespace CSkies.NPCs.Bosses.Void
         public override bool PreDraw(SpriteBatch spritebatch, Color lightColor)
         {
             Texture2D Tex = Main.projectileTexture[projectile.type];
-            Rectangle frame = new Rectangle(0, 0, Tex.Width, Tex.Height / 4);
+            Rectangle frame = new Rectangle(projectile.frame, 0, Tex.Width, Tex.Height / 4);
 
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
 
-            BaseDrawing.DrawTexture(spritebatch, Tex, 0, projectile.position, projectile.width, projectile.height, projectile.scale, -projectile.rotation, 0, 4, frame, projectile.GetAlpha(Color.White), true);
+            BaseDrawing.DrawTexture(spritebatch, Tex, 0, projectile.position, projectile.width, projectile.height, projectile.scale, 1, 0, 4, frame, projectile.GetAlpha(Color.White), true);
 
             BaseDrawing.DrawAura(spritebatch, Tex, 0, projectile, auraPercent, 2f, 0f, 0f, projectile.GetAlpha(Color.White));
             return false;

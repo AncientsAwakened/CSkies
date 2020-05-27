@@ -264,8 +264,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                     if (npc.ai[1] > 90)
                     {
-                        Projectile.NewProjectile(npc.Center.X + 40, npc.Center.Y, 0, 10, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
-                        Projectile.NewProjectile(npc.Center.X - 40, npc.Center.Y, 0, 10, mod.ProjectileType("Thundershock"), npc.damage / 4, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.Center.X + 40, npc.Center.Y, 0, 10, mod.ProjectileType("Thundershock"), npc.damage / 2, 0f, Main.myPlayer);
                         npc.ai[0] = 9;
                         npc.ai[1] = 0;
                         npc.ai[2] = 0;
@@ -510,7 +509,6 @@ namespace CSkies.NPCs.Bosses.Enigma
 
                 case HomingMagic:
                 case Vortexes:
-                case Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
 
@@ -524,6 +522,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     break;
 
                 case Beam:
+                case Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsLaser");
                     break;
 
