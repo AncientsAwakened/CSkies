@@ -10,6 +10,8 @@ namespace CSkies.NPCs.Bosses.Void
 {
     public class Voidray : ModProjectile
     {
+        public override string Texture => "CSkies/NPCs/Bosses/Void/VoidDeathray";
+
         public float maxTime = 120;
         public float maxScale = 2f;
 
@@ -131,8 +133,8 @@ namespace CSkies.NPCs.Bosses.Void
             }
 
             Texture2D texture2D19 = Main.projectileTexture[projectile.type];
-            Texture2D texture2D20 = mod.GetTexture("NPCs/Bosses/Void/Voidray");
-            Texture2D texture2D21 = mod.GetTexture("NPCs/Bosses/Void/Voidray");
+            Texture2D texture2D20 = mod.GetTexture("NPCs/Bosses/Void/VoidDeathray2");
+            Texture2D texture2D21 = mod.GetTexture("NPCs/Bosses/Void/VoidDeathray3");
 
             Color color44 = Colors.COLOR_GLOWPULSE * 0.9f;
 
@@ -190,7 +192,7 @@ namespace CSkies.NPCs.Bosses.Void
 
     public class VoidraySmall : Voidray
     {
-        public override string Texture => "CSkies/NPCs/Bosses/FurySoul/Flameray";
+        public override string Texture => "CSkies/NPCs/Bosses/Void/VoidDeathray";
 
         public override void SetDefaults()
         {
