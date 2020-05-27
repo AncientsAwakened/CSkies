@@ -70,10 +70,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override bool PreDraw(SpriteBatch sb, Color dColor)
         {
             Texture2D tex = Main.npcTexture[npc.type];
-            Texture2D Glow = mod.GetTexture("Glowmasks/VoidTransition2_Glow");
-            BaseDrawing.DrawTexture(sb, tex, 0, npc, npc.GetAlpha(Color.White));
-            BaseDrawing.DrawAura(sb, Glow, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
-            BaseDrawing.DrawTexture(sb, Glow, 0, npc, npc.GetAlpha(Color.White));
+            BaseDrawing.DrawAura(sb, tex, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
             return false;
         }
     }
