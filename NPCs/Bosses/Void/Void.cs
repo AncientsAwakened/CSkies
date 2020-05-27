@@ -14,7 +14,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("VOID");
-            Main.npcFrameCount[npc.type] = 4;
+            Main.npcFrameCount[npc.type] = 6;
         }
 
         public override void SetDefaults()
@@ -200,7 +200,7 @@ namespace CSkies.NPCs.Bosses.Void
                     
                     if (npc.ai[1] % 20 == 0)
                     {
-                        int a = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidVortex"), npc.damage / 4, 3);
+                        int a = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidVortex"), npc.damage / 2, 3);
                         Main.projectile[a].Center = npc.Center;
                     }
                     if (npc.ai[1] % 30 == 0)
@@ -240,7 +240,7 @@ namespace CSkies.NPCs.Bosses.Void
                         {
                             Vector2 shotDir = dir.ToRotationVector2();
 
-                            Projectile.NewProjectile(npc.Center, shotDir, mod.ProjectileType("VoidDeathray"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, shotDir, mod.ProjectileType("VoidraySmall"), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
 
                             dir += (float)Math.PI * 2 / loops;
                         }
@@ -251,13 +251,13 @@ namespace CSkies.NPCs.Bosses.Void
                             if (choice == 0)
                             {
                                 Main.PlaySound(SoundID.Item73, (int)npc.position.X, (int)npc.position.Y);
-                                int a = Projectile.NewProjectile(npc.Center, new Vector2(0f, -12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int a = Projectile.NewProjectile(npc.Center, new Vector2(0f, -12f), mod.ProjectileType("VoidShot"), npc.damage / 2, 3);
                                 Main.projectile[a].Center = npc.Center;
-                                int b = Projectile.NewProjectile(npc.Center, new Vector2(0f, 12f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int b = Projectile.NewProjectile(npc.Center, new Vector2(0f, 12f), mod.ProjectileType("VoidShot"), npc.damage / 2, 3);
                                 Main.projectile[b].Center = npc.Center;
-                                int c = Projectile.NewProjectile(npc.Center, new Vector2(-12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int c = Projectile.NewProjectile(npc.Center, new Vector2(-12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 2, 3);
                                 Main.projectile[c].Center = npc.Center;
-                                int d = Projectile.NewProjectile(npc.Center, new Vector2(12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 4, 3);
+                                int d = Projectile.NewProjectile(npc.Center, new Vector2(12f, 0f), mod.ProjectileType("VoidShot"), npc.damage / 2, 3);
                                 Main.projectile[d].Center = npc.Center;
                             }
                             else
@@ -280,7 +280,7 @@ namespace CSkies.NPCs.Bosses.Void
 
                     npc.velocity *= 0;
 
-                    if (++npc.ai[1] > 120)
+                    if (++npc.ai[1] > 180)
                     {
                         npc.velocity *= .98f;
                         npc.ai[0]++;
@@ -370,7 +370,7 @@ namespace CSkies.NPCs.Bosses.Void
                                 DirectionX += DirectionX == 0 ?  0 : Main.rand.Next(-2, 2);
                                 DirectionY += DirectionY == 0 ? 0 : Main.rand.Next(-2, 2);
 
-                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, vel.ToRotation(), 0f);
+                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 2, 0f, Main.myPlayer, vel.ToRotation(), 0f);
                             }
                         }
                     }
@@ -429,7 +429,7 @@ namespace CSkies.NPCs.Bosses.Void
             {
                 Vector2 shotDir = dir.ToRotationVector2();
 
-                int a = Projectile.NewProjectile(npc.Center, shotDir * 10, mod.ProjectileType("VoidBlast"), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                int a = Projectile.NewProjectile(npc.Center, shotDir * 10, mod.ProjectileType("VoidBlast"), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                 Main.projectile[a].Center = npc.Center;
 
                 dir += (float)Math.PI * 2 / loops;
@@ -648,7 +648,7 @@ namespace CSkies.NPCs.Bosses.Void
             {
                 npc.frameCounter = 0;
                 npc.frame.Y += frameHeight;
-                if (npc.frame.Y > (frameHeight * 3))
+                if (npc.frame.Y > (frameHeight * 5))
                 {
                     npc.frame.Y = 0;
                 }
@@ -691,7 +691,7 @@ namespace CSkies.NPCs.Bosses.Void
             }
             if (isCharging)
             {
-                BaseDrawing.DrawAfterimage(sb, tex, 0, npc, .6f, 1, 8, true, 0, 0, Color.White, npc.frame, 4);
+                BaseDrawing.DrawAfterimage(sb, tex, 0, npc, .6f, 1, 6, true, 0, 0, Color.White, npc.frame, 4);
             }
             BaseDrawing.DrawAura(sb, tex, 0, npc, auraPercent, 2f, 0f, 0f, npc.GetAlpha(Color.White));
             return false;

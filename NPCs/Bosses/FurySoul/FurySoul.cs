@@ -291,8 +291,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             for (int i = 0; i < 10; i++)
                             {
                                 double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 3, 6);
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 3, 6);
+                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
                             }
                         }
                         if (npc.ai[2] > 240)
@@ -315,7 +315,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
                             Vector2 Direction = shotDir.ToRotationVector2();
 
-                            Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
                         AIChange();
@@ -327,50 +327,50 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         {
                             InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 1)
                         {
                             Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 2)
                         {
                             Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 3)
                         {
                             Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 4)
                         {
                             Teleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 14), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -14), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 3, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, 14), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, -14), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
                         if (npc.ai[2] >= 360 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()))
@@ -399,11 +399,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
                     }
                     if (Main.rand.NextBool(2))
                     {
-                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
+                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<BigHeartshot>(), ref npc.ai[3], Frequency, npc.damage / 2, 10, true);
                     }
                     else
                     {
-                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Frequency, npc.damage / 3, 10, true);
+                        BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Frequency, npc.damage / 2, 10, true);
                     }
                 }
             }

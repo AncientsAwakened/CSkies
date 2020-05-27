@@ -11,7 +11,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("???");
-            Main.npcFrameCount[npc.type] = 8;
+            Main.npcFrameCount[npc.type] = 18;
         }
 
         public override void SetDefaults()
@@ -34,9 +34,9 @@ namespace CSkies.NPCs.Bosses.Void
 
         public override void AI()
         {
-            if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (++npc.ai[0] >= 5 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (++npc.ai[1] >= 8)
+                if (++npc.ai[1] >= 18)
                 {
                     int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<VoidTransition2>());
                     Main.npc[n].Center = npc.Center;

@@ -11,7 +11,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("???");
-            Main.npcFrameCount[npc.type] = 12;
+            Main.npcFrameCount[npc.type] = 19;
         }
 
         public override void SetDefaults()
@@ -42,9 +42,9 @@ namespace CSkies.NPCs.Bosses.Void
                 title = true;
             }
 
-            if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (++npc.ai[0] >= 5 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (++npc.ai[1] >= 12)
+                if (++npc.ai[1] >= 19)
                 {
                     int p = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0f, 0f, mod.ProjectileType("ShockwaveBoom"), 0, 1, Main.myPlayer, 0, 12);
                     Main.projectile[p].Center = npc.Center;

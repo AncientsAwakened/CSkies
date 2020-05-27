@@ -41,7 +41,6 @@ namespace CSkies.NPCs.Bosses.Heartcore
             if (projectile.frameCounter++ >= 7)
             {
                 projectile.frameCounter = 0;
-                projectile.frame++;
                 if (projectile.frame++ >= 3)
                 {
                     projectile.frame = 0;

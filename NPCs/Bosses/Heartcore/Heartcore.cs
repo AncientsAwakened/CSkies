@@ -37,7 +37,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {
             npc.lifeMax = (int)(npc.lifeMax * 0.5f * bossLifeScale);
-            npc.damage = (int)(npc.damage * 0.5f);
+            npc.damage = (int)(npc.damage * 0.8f);
             npc.defense = 70;
         }
 
@@ -190,7 +190,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                                 if (npc.ai[2] % 30 == 0)
                                 {
                                     double offsetAngle = startAngle + (deltaAngle * i);
-                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
+                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 2, 5, Main.myPlayer);
                                 }
                             }
                             if (npc.ai[2] > (Main.expertMode ? 271 : 331))
@@ -204,7 +204,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                             for (int i = 0; i < 3; i++)
                             {
                                 double offsetAngle = startAngle + (deltaAngle * i);
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 4, 5, Main.myPlayer);
+                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, baseSpeed * (float)Math.Sin(offsetAngle), baseSpeed * (float)Math.Cos(offsetAngle), ModContent.ProjectileType<BigHeartshot>(), npc.damage / 2, 5, Main.myPlayer);
                             }
                             npc.ai[2] = 0;
                             Shoot[0] = Main.rand.Next(4);
@@ -218,22 +218,22 @@ namespace CSkies.NPCs.Bosses.Heartcore
                         for (int i = 0; i < 10; i++)
                         {
                             double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 6);
-                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 4, 6);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                            Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
                         }
                         npc.ai[2] = 0;
                         Shoot[0] = Main.rand.Next(4);
                         break;
                     case 2:
                         Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/ArcaneCast"), npc.position);
-                        Projectile.NewProjectile(npc.Center, new Vector2(7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(7, -7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-7, -7), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(9, 0), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(-9, 0), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(0, -9), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.Center, new Vector2(0, 9), ModContent.ProjectileType<Fireball>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-7, 7), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(7, -7), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-7, -7), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(9, 0), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(-9, 0), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(0, -9), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.Center, new Vector2(0, 9), ModContent.ProjectileType<Fireball>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
 
                         npc.ai[2] = 0;
                         Shoot[0] = Main.rand.Next(4);
@@ -242,14 +242,14 @@ namespace CSkies.NPCs.Bosses.Heartcore
                         if (npc.ai[2] % 20 == 0)
                         {
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            Projectile.NewProjectile(npc.Center, new Vector2(9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(9, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-9, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(9, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(-9, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-                            Projectile.NewProjectile(npc.Center, new Vector2(0, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-9, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(9, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-9, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(9, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(-9, 0), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, -9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            Projectile.NewProjectile(npc.Center, new Vector2(0, 9), ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
                         if (npc.ai[2] > (Main.expertMode ? 271 : 331))
                         {
@@ -271,7 +271,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                 }
                 if (npc.life < npc.lifeMax / 2)
                 {
-                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
+                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 2, 10, true);
                 }
             }
         }

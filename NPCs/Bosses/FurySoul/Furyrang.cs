@@ -47,7 +47,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 Main.dust[dustnumber].velocity *= 0.3f;
             }
 
-            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 40, 35, 12f, .4f, true);
+            BaseAI.AIBoomerang(projectile, ref projectile.ai, Main.npc[master].position, Main.npc[master].width, Main.npc[master].height, true, 40, 35, 15f, .4f, true);
 		}
 	}
 }
