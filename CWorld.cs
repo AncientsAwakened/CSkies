@@ -257,11 +257,11 @@ namespace CSkies
                 Altar4 = false;
             }
 
-            Point AbyssPos = Point.Zero;
+            //Point AbyssPos = Point.Zero;
 
             if (NPC.downedMoonlord && !AbyssBiome)
             {
-                bool placed = false;
+                /*bool placed = false;
                 while (!placed)
                 {
                     if (Main.rand.Next(2) == 0)
@@ -302,7 +302,7 @@ namespace CSkies
                     placed = a.Place(origin, WorldGen.structures);
 
                     Main.NewText("AbyssGen", new Color(61, 41, 81));
-                }
+                }*/
 
                 Main.NewText("The death of a titan unleashes horrors of the deep into " + Main.worldName + "...", new Color(61, 41, 81));
                 AbyssBiome = true;
