@@ -302,7 +302,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
             {
                 npc.DropLoot(mod.ItemType("ObserverVoidMask"));
             }
-            npc.DropLoot(ModContent.ItemType<Items.Void.VoidFragment>(), Main.rand.Next(8, 12));
+            npc.DropLoot(ModContent.ItemType<Items.Boss.Void.VoidFragment>(), Main.rand.Next(8, 12));
             string[] lootTable = { "Singularity", "VoidFan", "VoidShot", "VoidJavelin", "VoidWings", "VoidPortal" };
             int loot = Main.rand.Next(lootTable.Length);
             npc.DropLoot(mod.ItemType(lootTable[loot]));

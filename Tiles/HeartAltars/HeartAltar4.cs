@@ -55,7 +55,7 @@ namespace CSkies.Tiles.HeartAltars
                 Main.NewText("The Altar has lost its glow...but is slowly gaining it back. Maybe it will have returned by morning?");
             }
             Player player = Main.LocalPlayer;
-            int type = ModContent.ItemType<Items.Void.VoidFragment>();
+            int type = ModContent.ItemType<Items.Boss.Void.VoidFragment>();
             if (BasePlayer.HasItem(player, type, 1))
             {
                 for (int m = 0; m < 50; m++)
@@ -80,7 +80,7 @@ namespace CSkies.Tiles.HeartAltars
         {
             Player player = Main.LocalPlayer;
 
-            player.showItemIcon2 = ModContent.ItemType<Items.Void.VoidFragment>();
+            player.showItemIcon2 = ModContent.ItemType<Items.Boss.Void.VoidFragment>();
 
             player.showItemIconText = "";
             player.noThrow = 2;

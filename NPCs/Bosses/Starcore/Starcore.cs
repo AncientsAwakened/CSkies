@@ -79,7 +79,7 @@ namespace CSkies.NPCs.Bosses.Starcore
 
                 npc.DropLoot(mod.ItemType(lootTableA[lootA]));
 
-                npc.DropLoot(ModContent.ItemType<Items.Star.Stelarite>(), Main.rand.Next(8, 12));
+                npc.DropLoot(ModContent.ItemType<Items.Boss.Starcore.Stelarite>(), Main.rand.Next(8, 12));
             }
             for (int num468 = 0; num468 < 12; num468++)
             {

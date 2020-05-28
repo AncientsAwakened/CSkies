@@ -36,7 +36,7 @@ namespace CSkies.NPCs.Bosses.Observer
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Observer");
             npc.alpha = 255;
             npc.noTileCollide = true;
-            bossBag = ModContent.ItemType<Items.Boss.ObserverBag>();
+            bossBag = ModContent.ItemType<ObserverBag>();
             npc.value = Item.sellPrice(0, 1, 0, 0);
         }
 

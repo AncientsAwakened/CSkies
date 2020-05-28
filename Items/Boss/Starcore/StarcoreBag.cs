@@ -39,7 +39,7 @@ namespace CSkies.Items.Boss.Starcore
 
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
 
-            player.QuickSpawnItem(ModContent.ItemType<Star.Stelarite>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<Stelarite>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("StarcoreShield"));
         }

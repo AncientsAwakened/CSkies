@@ -5,6 +5,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using CSkies.Items.Boss.Void;
 
 namespace CSkies.NPCs.Bosses.Void
 {
@@ -34,7 +35,7 @@ namespace CSkies.NPCs.Bosses.Void
             npc.boss = true;
             npc.noTileCollide = true;
             music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Void");
-            bossBag = ModContent.ItemType<Items.Boss.ObserverVoidBag>();
+            bossBag = ModContent.ItemType<ObserverVoidBag>();
             npc.dontTakeDamage = true;
             npc.value = Item.sellPrice(0, 30, 0, 0);
         }

@@ -47,7 +47,7 @@ namespace CSkies.Items.Boss.Observer
                 player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
             }
 
-            player.QuickSpawnItem(ModContent.ItemType<Comet.CometFragment>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<Boss.Observer.CometFragment>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("ObserverEye"));
         }

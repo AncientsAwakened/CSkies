@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using CSkies.Items.Boss.Starcore;
 
 namespace CSkies.Items.Boss.Heartcore
 {

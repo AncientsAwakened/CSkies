@@ -40,7 +40,7 @@ namespace CSkies.Items.Boss.Heartcore
 
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
 
-            player.QuickSpawnItem(ModContent.ItemType<Heart.HeartSoul>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<HeartSoul>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("HeartcoreShield"));
         }
