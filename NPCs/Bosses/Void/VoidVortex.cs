@@ -73,7 +73,7 @@ namespace CSkies.NPCs.Bosses.Void
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
 
-            BaseDrawing.DrawTexture(spritebatch, Tex, 0, projectile.position, projectile.width, projectile.height, projectile.scale, 1, 0, 4, frame, projectile.GetAlpha(Color.White), true);
+            BaseDrawing.DrawTexture(spritebatch, Tex, 0, projectile.position, projectile.width, projectile.height, projectile.scale, projectile.rotation, projectile.direction, 4, frame, projectile.GetAlpha(Color.White), true);
 
             BaseDrawing.DrawAura(spritebatch, Tex, 0, projectile, auraPercent, 2f, 0f, 0f, projectile.GetAlpha(Color.White));
             return false;

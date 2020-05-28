@@ -282,22 +282,33 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         break;
                     case 1:
-                        float spread1 = 12f * 0.0174f;
-                        double startAngle1 = Math.Atan2(npc.velocity.X, npc.velocity.Y) - spread1 / 2;
-                        double deltaAngle1 = spread1 / 10f;
-                        if (npc.ai[2] % 30 == 0)
+                        if (npc.ai[2] >= Changerate + 30)
                         {
-                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                            for (int i = 0; i < 10; i++)
+                            float spread1 = 12f * 0.0174f;
+                            double startAngle1 = Math.Atan2(npc.velocity.X, npc.velocity.Y) - spread1 / 2;
+                            double deltaAngle1 = spread1 / 10f;
+                            if (npc.ai[2] % 30 == 0)
                             {
-                                double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
+                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                }
+                            }
+                            if (npc.ai[2] > 260)
+                            {
+                                AIChange();
                             }
                         }
-                        if (npc.ai[2] > 240)
+                        else
                         {
-                            AIChange();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                int a = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = false;
+                            }
                         }
                         break;
                     case 2:
@@ -305,24 +316,58 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         break;
                     case 3:
 
-                        int loops = (npc.life < npc.lifeMax / 4) ? 14 : 8;
-
-                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-
-                        for (int a = 0; a < loops; a++)
+                        if (npc.ai[2] >= Changerate + 30)
                         {
-                            float shotDir = Pi2 / loops * a;
+                            int loops = (npc.life < npc.lifeMax / 4) ? 10 : 6;
 
-                            Vector2 Direction = shotDir.ToRotationVector2();
+                            Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
 
-                            Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            for (int a = 0; a < loops; a++)
+                            {
+                                float shotDir = Pi2 / loops * a;
+
+                                Vector2 Direction = shotDir.ToRotationVector2();
+
+                                Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                            }
+
+                            AIChange();
                         }
-
-                        AIChange();
+                        else
+                        {
+                            for (int i = 0; i < 10; i++)
+                            {
+                                int a = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = true;
+                            }
+                        }
 
                         break;
                     case 4:
-
+                        if (npc.ai[2] <= Changerate + 20)
+                        {
+                            for (int i = 0; i < 3; i++)
+                            {
+                                int a = Dust.NewDust(npc.Center + new Vector2(32, 32), 0, 0, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = true;
+                            }
+                            for (int i = 0; i < 3; i++)
+                            {
+                                int a = Dust.NewDust(npc.Center + new Vector2(-32, 32), 0, 0, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = true;
+                            }
+                            for (int i = 0; i < 3; i++)
+                            {
+                                int a = Dust.NewDust(npc.Center + new Vector2(32, -32), 0, 0, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = true;
+                            }
+                            for (int i = 0; i < 3; i++)
+                            {
+                                int a = Dust.NewDust(npc.Center + new Vector2(-32, -32), 0, 0, DustID.Fire, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[a].noGravity = true;
+                            }
+                            return;
+                        }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 0)
                         {
                             InternalAI[3] += 1;
@@ -373,7 +418,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, -12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                         }
 
-                        if (npc.ai[2] >= 360 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()))
+                        if (InternalAI[3] == 5 && !CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()))
                         {
                             AIChange();
                         }
@@ -445,26 +490,29 @@ namespace CSkies.NPCs.Bosses.FurySoul
             scale = 0;
             Player player = Main.player[npc.target];
             Vector2 targetPos = player.Center;
-            int posX = Main.rand.Next(3);
+            int posX = Main.rand.Next(5);
+
+            int posY = 0;
             switch (posX)
             {
                 case 0:
                     posX = -300;
+                    posY = 0;
                     break;
                 case 1:
-                    posX = 0;
-                    break;
-                case 2:
-                    posX = 300;
-                    break;
-            }
-            int posY = Main.rand.Next(posX == 0 ? 2 : 1);
-            switch (posY)
-            {
-                case 0:
+                    posX = -300;
                     posY = -300;
                     break;
-                case 1:
+                case 2:
+                    posX = 0;
+                    posY = -300;
+                    break;
+                case 3:
+                    posX = 300;
+                    posY = -300;
+                    break;
+                case 4:
+                    posX = 300;
                     posY = 0;
                     break;
             }
@@ -520,13 +568,13 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
         private void LaserAttack()
         {
+            rotAmt += .0005f;
             npc.rotation += rotAmt;
             if (npc.life < npc.lifeMax / 4)
             {
-                rotAmt += .0005f;
-                if (rotAmt > .035f)
+                if (rotAmt > .028f)
                 {
-                    rotAmt = .035f;
+                    rotAmt = .028f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
@@ -544,10 +592,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
             else if (npc.life < npc.lifeMax / 2)
             {
-                rotAmt += .0005f;
-                if (rotAmt > .03f)
+                if (rotAmt > .024f)
                 {
-                    rotAmt = .03f;
+                    rotAmt = .024f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
@@ -563,10 +610,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
             else
             {
-                rotAmt += .0005f;
-                if (rotAmt > .025f)
+                if (rotAmt > .02f)
                 {
-                    rotAmt = .025f;
+                    rotAmt = .02f;
                 }
 
                 if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)

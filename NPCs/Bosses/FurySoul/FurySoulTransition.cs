@@ -29,18 +29,37 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 npc.buffImmune[k] = true;
             }
-            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/FurySoul");
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/silence");
         }
 
         bool title = false;
 
         public override void AI()
         {
+            npc.velocity *= 0;
+
+            if (npc.ai[3]++ < 120)
+            {
+                npc.scale += npc.ai[2] * 0.01f;
+                if (npc.scale > 1f)
+                {
+                    npc.ai[2] = -1;
+                    npc.scale = 1f;
+                }
+                if (npc.scale < 0.7)
+                {
+                    npc.ai[2] = 1;
+                    npc.scale = 0.7f;
+                }
+                return;
+            }
+
             if (!title)
             {
                 CSkies.ShowTitle(npc, 6);
                 title = true;
             }
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/FurySoul");
             if (++npc.ai[0] >= 12 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (++npc.ai[1] >= 15)
@@ -55,7 +74,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 npc.ai[0] = 0;
                 npc.netUpdate = true;
             }
-            npc.velocity *= 0;
         }
 
         public override void FindFrame(int frameHeight)

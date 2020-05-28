@@ -15,7 +15,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
 			projectile.hostile = true;
 			projectile.penetrate = 1;
 			projectile.aiStyle = -1;
-			projectile.timeLeft = 300;
+			projectile.timeLeft = 120;
 			ProjectileID.Sets.TrailCacheLength[projectile.type] = 5;
 			ProjectileID.Sets.TrailingMode[projectile.type] = 2;
 		}
@@ -43,7 +43,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
 			}
             const int aislotHomingCooldown = 0;
             const int homingDelay = 30;
-            const float desiredFlySpeedInPixelsPerFrame = 15;
+            const float desiredFlySpeedInPixelsPerFrame = 10;
             const float amountOfFramesToLerpBy = 30; // minimum of 1, please keep in full numbers even though it's a float!
 
             projectile.ai[aislotHomingCooldown]++;

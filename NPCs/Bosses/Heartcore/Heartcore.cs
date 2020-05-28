@@ -99,7 +99,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
 
                 npc.DropLoot(mod.ItemType(lootTableA[lootA]));
 
-                npc.DropLoot(ModContent.ItemType<Items.Heart.HeartSoul>(), Main.rand.Next(8, 12));
+                npc.DropLoot(ModContent.ItemType<Items.Boss.Heartcore.HeartSoul>(), Main.rand.Next(8, 12));
                 int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<HeartcoreDefeat>());
                 Main.npc[n].Center = npc.Center;
                 CWorld.downedHeartcore = true;
@@ -129,8 +129,8 @@ namespace CSkies.NPCs.Bosses.Heartcore
                 {
                     Rage = true;
                 }
-                speed = 11;
-                interval = .03f;
+                speed = 10;
+                interval = .025f;
             }
 
             RingEffects();
@@ -271,7 +271,7 @@ namespace CSkies.NPCs.Bosses.Heartcore
                 }
                 if (npc.life < npc.lifeMax / 2)
                 {
-                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 2, 10, true);
+                    BaseAI.ShootPeriodic(npc, player.position, player.width, player.height, ModContent.ProjectileType<Meteor>(), ref npc.ai[3], Main.rand.Next(30, 50), npc.damage / 4, 10, true);
                 }
             }
         }

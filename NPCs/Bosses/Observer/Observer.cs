@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
+using CSkies.Items.Boss.Observer;
 
 namespace CSkies.NPCs.Bosses.Observer
 {
@@ -219,7 +220,7 @@ namespace CSkies.NPCs.Bosses.Observer
         {
             if (Main.rand.Next(10) == 0)
             {
-                npc.DropLoot(mod.ItemType("ObserverTrophy"));
+                npc.DropLoot(ModContent.ItemType<ObserverTrophy>());
             }
             if (Main.expertMode)
             {
@@ -229,10 +230,12 @@ namespace CSkies.NPCs.Bosses.Observer
             {
                 if (Main.rand.Next(7) == 0)
                 {
-                    npc.DropLoot(mod.ItemType("ObserverMask"));
+                    npc.DropLoot(ModContent.ItemType<ObserverMask>());
                 }
-                npc.DropLoot(ModContent.ItemType<Items.Comet.CometFragment>(), Main.rand.Next(8, 12));
-                string[] lootTable = { "Comet", "CometDagger", "CometFan", "CometJavelin", "CometPortal", "Comet Shot" };
+
+                npc.DropLoot(ModContent.ItemType<CometFragment>(), Main.rand.Next(8, 12));
+
+                string[] lootTable = { "Comet", "CometDagger", "CometFan", "CometJavelin", "CometPortal", "Skyshot" };
                 int loot = Main.rand.Next(lootTable.Length);
                 int Drop = mod.ItemType(lootTable[loot]);
 
