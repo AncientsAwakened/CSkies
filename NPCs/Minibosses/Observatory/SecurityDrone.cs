@@ -8,7 +8,6 @@ using System.IO;
 
 namespace CSkies.NPCs.Minibosses
 {
-    [AutoloadBossHead]
     public class SecurityDrone : ModNPC
     {
         public override void SetStaticDefaults()
