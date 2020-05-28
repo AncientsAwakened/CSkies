@@ -1,7 +1,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace CSkies.Items.Comet
+namespace CSkies.Items.Materials
 {
     public class CometOre : ModItem
     {

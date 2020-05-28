@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CSkies.NPCs.Minibosses
+namespace CSkies.NPCs.Minibosses.Observatory
 {
     internal class SecurityDroneShock : ModProjectile
     {

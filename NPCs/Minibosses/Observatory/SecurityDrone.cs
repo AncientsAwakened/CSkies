@@ -6,7 +6,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
-namespace CSkies.NPCs.Minibosses
+namespace CSkies.NPCs.Minibosses.Observatory
 {
     public class SecurityDrone : ModNPC
     {
