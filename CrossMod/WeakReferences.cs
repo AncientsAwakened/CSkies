@@ -111,7 +111,7 @@ namespace CSkies
                 #endregion
 
                 #region VOID
-                bossChecklist.Call("AddBoss", 15f, mod.NPCType("VOID"), mod,
+                bossChecklist.Call("AddBoss", 15f, mod.NPCType("Void"), mod,
                     "VOID",
                     (Func<bool>)(() => CWorld.downedObserverV),
                     ModContent.ItemType<VoidEye>(),
