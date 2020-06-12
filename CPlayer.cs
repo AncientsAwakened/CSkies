@@ -3,8 +3,9 @@ using Terraria.ModLoader;
 using CSkies.NPCs.Other;
 using Terraria.GameInput;
 using Microsoft.Xna.Framework;
-using CSkies.NPCs.Bosses.Void;
 using CSkies.NPCs.Bosses.ObserverVoid;
+using CSkies.NPCs.Bosses.Void;
+using CSkies.NPCs.Bosses.Novacore;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
@@ -75,8 +76,10 @@ namespace CSkies
         public override void UpdateBiomeVisuals()
         {
             bool useVoid = ZoneVoid || NearVoidBoss();
+            bool useNova = NearNova() ;
 
             player.ManageSpecialBiomeVisuals("CSkies:AbyssSky", useVoid);
+            player.ManageSpecialBiomeVisuals("CSkies:NovaSky", useNova);
         }
 
         public bool NearVoid()
@@ -85,6 +88,27 @@ namespace CSkies
             {
                 int v = BaseAI.GetNPC(player.Center, ModContent.NPCType<AbyssVoid>(), 2500);
                 if (v != -1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool NearNova()
+        {
+            if (NPC.AnyNPCs(ModContent.NPCType<Novacore>()))
+            {
+                int N = BaseAI.GetNPC(player.Center, ModContent.NPCType<Novacore>(), 2500);
+                if (N != -1)
+                {
+                    return true;
+                }
+            }
+            if (NPC.AnyNPCs(ModContent.NPCType<NovacoreIntro>()))
+            {
+                int N = BaseAI.GetNPC(player.Center, ModContent.NPCType<NovacoreIntro>(), 2500);
+                if (N != -1)
                 {
                     return true;
                 }

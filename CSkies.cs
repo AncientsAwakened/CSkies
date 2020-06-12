@@ -68,6 +68,9 @@ namespace CSkies
             PremultiplyTexture(GetTexture("NPCs/Bosses/Void/VoidCyclone"));
             PremultiplyTexture(GetTexture("Backgrounds/VoidBolt"));
             PremultiplyTexture(GetTexture("Backgrounds/VoidFlash"));
+            PremultiplyTexture(GetTexture("Backgrounds/NovaVortex"));
+            PremultiplyTexture(GetTexture("Backgrounds/NovaStar0"));
+            PremultiplyTexture(GetTexture("Backgrounds/NovaStar1"));
 
             Ref<Effect> screenRef = new Ref<Effect>(GetEffect("Effects/Shockwave"));
             Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave"), EffectPriority.VeryHigh);
@@ -75,8 +78,9 @@ namespace CSkies
 
             Filters.Scene["CSkies:AbyssSky"] = new Filter(new AbyssSkyData("FilterMiniTower").UseColor(.2f, .2f, .2f).UseOpacity(0.5f), EffectPriority.VeryHigh);
             SkyManager.Instance["CSkies:AbyssSky"] = new AbyssSky();
-            AbyssSky.boltTexture = GetTexture("Backgrounds/VoidBolt");
-            AbyssSky.flashTexture = GetTexture("Backgrounds/VoidFlash");
+
+            Filters.Scene["CSkies:NovaSky"] = new Filter(new AbyssSkyData("FilterMiniTower").UseColor(.3f, 0f, .3f).UseOpacity(0.4f), EffectPriority.VeryHigh);
+            SkyManager.Instance["CSkies:NovaSky"] = new NovaSky();
 
             SetupMusicBoxes();
         }

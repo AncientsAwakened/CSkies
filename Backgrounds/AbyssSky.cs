@@ -25,19 +25,10 @@ namespace CSkies.Backgrounds
             public bool IsAlive;
         }
 
-        public static Texture2D boltTexture;
-        public static Texture2D flashTexture;
-
         private Bolt[] bolts;
         public bool Active;
         public int ticksUntilNextBolt;
         public float Intensity;
-
-        public override void OnLoad()
-        {
-            boltTexture = TextureManager.Load("Backgrounds/VoidBolt");
-            flashTexture = TextureManager.Load("Backgrounds/VoidFlash");
-        }
 
         public override void Update(GameTime gameTime)
         {
@@ -108,11 +99,11 @@ namespace CSkies.Backgrounds
                         Vector2 position = (bolts[i].Position - value3) * value4 + value3 - Main.screenPosition;
                         if (rectangle.Contains((int)position.X, (int)position.Y))
                         {
-                            Texture2D texture = boltTexture;
+                            Texture2D texture = TextureManager.Load("Backgrounds/VoidBolt");
                             int life = bolts[i].Life;
                             if (life > 26 && life % 2 == 0)
                             {
-                                texture = flashTexture;
+                                texture = TextureManager.Load("Backgrounds/VoidFlash");
                             }
                             float scale2 = life / 30f;
                             spriteBatch.Draw(texture, position, null, Color.White * scale * scale2 * Intensity, 0f, Vector2.Zero, value4.X * 5f, SpriteEffects.None, 0f);

@@ -25,8 +25,8 @@ namespace CSkies.NPCs.Bosses.Novacore
             npc.height = 46;
             npc.aiStyle = -1;
             npc.damage = 130;
-            npc.defense = 80;
-            npc.lifeMax = 2000000;
+            npc.defense = 50;
+            npc.lifeMax = 1000000;
             npc.value = Item.sellPrice(0, 12, 0, 0);
             npc.HitSound = new LegacySoundStyle(3, 4, Terraria.Audio.SoundType.Sound);
             npc.DeathSound = new LegacySoundStyle(4, 14, Terraria.Audio.SoundType.Sound);
@@ -83,39 +83,29 @@ namespace CSkies.NPCs.Bosses.Novacore
 			}
         }
 
-        public static Color Flame => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.Orange, Color.Red, Color.Orange);
-
-        bool title = false;
-
         public int prismCount = 4;
         readonly int AIRate = (Main.expertMode ? 150 : 220);
         readonly float Pi2 = (float)Math.PI * 2;
 
         public override void AI()
         {
-            if (!title)
-            {
-                CSkies.ShowTitle(npc, 5);
-                title = true;
-            }
-
-            int speed = 11;
+            int speed = 14;
             float interval = .02f;
 
             if (npc.life < npc.lifeMax / 2)
             {
-                speed = 13;
+                speed = 16;
                 interval = .025f;
                 music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Novacore2");
             }
             if (npc.life < npc.lifeMax / 4)
             {
-                speed = 15;
+                speed = 18;
                 interval = .025f;
-                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/NovacorePinch");
+                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
             }
 
-            Lighting.AddLight(npc.Center, Flame.R / 150, Flame.G / 150, Flame.B / 150);
+            Lighting.AddLight(npc.Center, Color.Purple.R / 150, Color.Purple.G / 150, Color.Purple.B / 150);
 
             if (CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurretProj>()) || CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurret>()))
             {
@@ -154,19 +144,21 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
             }
 
-            BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .025f);
+            BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .05f);
 
             if (npc.ai[2]++ > AIRate || internalAI[0] == 7)
             {
                 if (internalAI[0] != 6 || internalAI[0] != 7)
                 {
-                    if (npc.velocity.X > 0)
+                    if (npc.velocity.X >= 0)
                     {
                         npc.rotation += .06f;
+                        npc.spriteDirection = -1;
                     }
                     else if (npc.velocity.X < 0)
                     {
                         npc.rotation -= .06f;
+                        npc.spriteDirection = 1;
                     }
                 }
                 else
@@ -210,14 +202,17 @@ namespace CSkies.NPCs.Bosses.Novacore
                             dust25.fadeIn = 0.5f;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
-                                float ai2 = Main.rand.Next(80);
-                                Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ProjectileID.VortexLightning, 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                                for (int a = 0; a < Repeats() + 1; a++)
+                                {
+                                    Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
+                                    float ai2 = Main.rand.Next(80);
+                                    Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ProjectileID.VortexLightning, 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                                }
                             }
                             npc.localAI[0] = 0;
                         }
 
-                        if (npc.ai[2] > AIRate + (45 * Repeats()) && Main.netMode != NetmodeID.MultiplayerClient)
+                        if (npc.ai[2] > AIRate + 45 + (45 * Repeats()) && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             AIChange();
                         }
@@ -431,7 +426,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 
         public override void NPCLoot()
         {
-            Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore1"), 1f);
+            /*Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore1"), 1f);
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore2"), 1f);
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore3"), 1f);
             Gore.NewGore(npc.position, npc.velocity * 0.2f, mod.GetGoreSlot("Gores/HeartcoreGore4"), 1f);
@@ -471,25 +466,39 @@ namespace CSkies.NPCs.Bosses.Novacore
                 //int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<HeartcoreDefeat>());
                 //Main.npc[n].Center = npc.Center;
                 CWorld.downedHeartcore = true;
+            }*/
+        }
+
+        int Frame = 0;
+        public override void FindFrame(int frameHeight)
+        {
+            if (npc.frameCounter++ > 5)
+            {
+                npc.frameCounter = 0;
+                Frame++;
+                if (Frame > 7)
+                {
+                    Frame = 0;
+                }
             }
+            npc.frame.Y = Frame * frameHeight;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            Texture2D texture2D13 = Main.npcTexture[npc.type];
             Texture2D BladeTex = mod.GetTexture("NPCs/Bosses/Novacore/NovacoreBack");
             Texture2D BladeGlowTex = mod.GetTexture("Glowmasks/NovacoreBack_Glow");
-            Texture2D Center = mod.GetTexture("NPCs/Bosses/Novacore/NovacoreCenter");
-            Texture2D CenterGlow = mod.GetTexture("Glowmasks/NovacoreCenter_Glow");
 
-            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
+            Texture2D texture2D13 = Main.npcTexture[npc.type];
+            Texture2D Glow = mod.GetTexture("Glowmasks/Novacore_Glow");
 
-            BaseDrawing.DrawTexture(spriteBatch, BladeTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, BladeTex.Width, BladeTex.Height), drawColor, true);
-            BaseDrawing.DrawTexture(spriteBatch, BladeGlowTex, r, npc.position, npc.width, npc.height, npc.scale, npc.rotation, 0, 1, new Rectangle(0, 0, BladeTex.Width, BladeTex.Height), Color.White, true);
+            Rectangle Bladeframe = BaseDrawing.GetFrame(Frame, BladeTex.Width, BladeTex.Height / 8, 0, 0);
 
-            BaseDrawing.DrawTexture(spriteBatch, Center, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, Center.Width, Center.Height), Colors.COLOR_GLOWPULSE, true);
-            BaseDrawing.DrawTexture(spriteBatch, CenterGlow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, new Rectangle(0, 0, Center.Width, Center.Height), Colors.COLOR_GLOWPULSE, true);
-            BaseDrawing.DrawTexture(spriteBatch, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 1, npc.frame, Color.White, true);
+            BaseDrawing.DrawTexture(spriteBatch, BladeTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, npc.spriteDirection, 8, Bladeframe, drawColor, true);
+            BaseDrawing.DrawTexture(spriteBatch, BladeGlowTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, npc.spriteDirection, 8, Bladeframe, Color.White, true);
+
+            BaseDrawing.DrawTexture(spriteBatch, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, npc.frame, Colors.COLOR_GLOWPULSE, true);
+            BaseDrawing.DrawTexture(spriteBatch, Glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, npc.frame, Colors.COLOR_GLOWPULSE, true);
 
             return false;
         }
