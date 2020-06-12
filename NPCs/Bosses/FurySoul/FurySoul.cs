@@ -484,7 +484,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
         }
 
-
         public void Teleport()
         {
             scale = 0;
@@ -570,25 +569,14 @@ namespace CSkies.NPCs.Bosses.FurySoul
         {
             rotAmt += .0005f;
             npc.rotation += rotAmt;
+            int LaserCount;
             if (npc.life < npc.lifeMax / 4)
             {
                 if (rotAmt > .028f)
                 {
                     rotAmt = .028f;
                 }
-
-                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
-                {
-                    InternalAI[2]++;
-
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI / 2).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
-
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI, npc.whoAmI);
-
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .75f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (Pi2 * .75f), npc.whoAmI);
-                }
+                LaserCount = 4;
             }
             else if (npc.life < npc.lifeMax / 2)
             {
@@ -596,17 +584,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     rotAmt = .024f;
                 }
-
-                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
-                {
-                    InternalAI[2]++;
-
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, 0, npc.whoAmI);
-
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 / 3)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, Pi2 / 3, npc.whoAmI);
-
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (Pi2 * .66f)).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (Pi2 * .66f), npc.whoAmI);
-                }
+                LaserCount = 3;
             }
             else
             {
@@ -614,11 +592,15 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     rotAmt = .02f;
                 }
-
-                if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
+                LaserCount = 2;
+            }
+            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()))
+            {
+                for (int l = 0; l < LaserCount; l++)
                 {
-                    Projectile.NewProjectile(npc.Center, npc.rotation.ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)Math.PI / 2, npc.whoAmI);
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + (float)Math.PI).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, (float)-Math.PI / 2, npc.whoAmI);
+                    float LaserPos = Pi2 / LaserCount;
+                    float laserDir = LaserPos * l;
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + laserDir).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, laserDir, npc.whoAmI);
                 }
             }
             InternalAI[2]++;

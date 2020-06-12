@@ -235,16 +235,21 @@ namespace CSkies
                     titleColor = new Color(254, 121, 2);
                     break;
                 case 7:
+                    BossName = "Novacore";
+                    BossTitle = "Astral Artifact";
+                    titleColor = Color.Magenta;
+                    break;
+                case 8:
                     BossName = "Enigma";
                     BossTitle = "Mechanical Madman";
                     titleColor = Color.DarkBlue;
                     break;
-                case 8:
+                case 9:
                     BossName = "Enigma Prime";
                     BossTitle = "Supreme Galactic Genius";
                     titleColor = Color.LimeGreen;
                     break;
-                case 9:
+                case 10:
                     BossName = "Artemis Luminoth";
                     BossTitle = "Mechanical Masterpiece";
                     titleColor = Color.LimeGreen;
@@ -281,8 +286,6 @@ namespace CSkies
             }
         }
     }
-
-
 
     enum MsgType : byte
     {

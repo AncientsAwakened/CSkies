@@ -78,7 +78,7 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             if (!title)
             {
-                CSkies.ShowTitle(npc, 7);
+                CSkies.ShowTitle(npc, 8);
                 title = true;
             }
 

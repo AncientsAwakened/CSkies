@@ -53,6 +53,14 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 }
                 return;
             }
+            else
+            {
+                if (npc.scale < 1)
+                {
+                    npc.ai[2] = 1;
+                    npc.scale += .1f;
+                }
+            }
 
             if (!title)
             {

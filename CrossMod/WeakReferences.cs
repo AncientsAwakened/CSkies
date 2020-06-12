@@ -106,8 +106,8 @@ namespace CSkies
                     },
                     "Use a [i: " + ModContent.ItemType<VoidEye>() + "] at night",
                     "Observer Void Returns to the darkness...",
-                    "AAMod/CrossMod/BossChecklist/Grips",
-                    "AAMod/CrossMod/BossChecklist/GripsHead");
+                    "CSkies/CrossMod/BossChecklist/ObserverVoid",
+                    "CSkies/NPCs/Bosses/ObserverVoid/ObserverVoid_Head_Boss");
                 #endregion
 
                 #region VOID
@@ -128,8 +128,8 @@ namespace CSkies
                     },
                     "Defeat Observer Void in expert mode",
                     "The sound of insane laugter rings through your ears...",
-                    "AAMod/CrossMod/BossChecklist/Toad",
-                    "AAMod/NPCs/Bosses/Toad/TruffleToad_Head_Boss",
+                    "CSkies/CrossMod/BossChecklist/Void",
+                    "CSkies/NPCs/Bosses/ObserverVoid/Void_Head_Boss",
                     (Func<bool>)(() => CWorld.downedObserverV && Main.expertMode));
                 #endregion
 
