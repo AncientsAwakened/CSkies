@@ -60,7 +60,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                 {
                     if (npc.alpha > 0)
                     {
-                        npc.alpha -= 3;
+                        npc.alpha -= 10;
                     }
                     else
                     {
@@ -70,7 +70,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 
                 if (npc.alpha > 0)
                 {
-                    Fadeout += 10;
+                    Fadeout += 5;
                     ShineAlpha -= 5;
                     if (ShineAlpha <= 30)
                     {
@@ -79,7 +79,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
                 else
                 {
-                    Fadeout -= 10;
+                    Fadeout -= 5;
                     ShineAlpha += 5;
                     if (ShineAlpha >= 255)
                     {
@@ -88,7 +88,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
             }
 
-            if (++npc.ai[0] > 480 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (++npc.ai[0] > 360 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 int n = NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, ModContent.NPCType<Novacore>(), 0, 10);
                 Main.npc[n].Center = npc.Center;
