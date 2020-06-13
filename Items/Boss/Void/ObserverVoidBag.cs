@@ -40,7 +40,7 @@ namespace CSkies.Items.Boss.Void
             int lootA = Main.rand.Next(lootTableA.Length);
             player.QuickSpawnItem(mod.ItemType(lootTableA[lootA]));
 
-            player.QuickSpawnItem(ModContent.ItemType<Void.VoidFragment>(), Main.rand.Next(10, 15));
+            player.QuickSpawnItem(ModContent.ItemType<VoidFragment>(), Main.rand.Next(10, 15));
 
             player.QuickSpawnItem(mod.ItemType("ObserverVoidEye"));
         }

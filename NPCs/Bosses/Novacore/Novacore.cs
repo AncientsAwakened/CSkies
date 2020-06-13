@@ -50,6 +50,8 @@ namespace CSkies.NPCs.Bosses.Novacore
         public bool LaserShot = false;
 		public float OrbitterDist = 0;
 		public float closestPlayer = 0;
+        public bool Phase2 = false;
+        public int PhaseTimer = 0;
 
 		public override void SendExtraAI(BinaryWriter writer)
         {
@@ -64,7 +66,9 @@ namespace CSkies.NPCs.Bosses.Novacore
                 writer.Write(LaserShot);
                 writer.Write(OrbitterDist);
 				writer.Write(closestPlayer);
-			}
+                writer.Write(Phase2);
+                writer.Write(PhaseTimer);
+            }
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -80,34 +84,92 @@ namespace CSkies.NPCs.Bosses.Novacore
                 LaserShot = reader.ReadBool();
                 OrbitterDist = reader.ReadFloat();
 				closestPlayer = reader.ReadFloat();
-			}
+                Phase2 = reader.ReadBool();
+                PhaseTimer = reader.ReadInt();
+            }
         }
-
-        public int prismCount = 4;
         readonly int AIRate = (Main.expertMode ? 150 : 220);
         readonly float Pi2 = (float)Math.PI * 2;
+        readonly bool AnyOrbitters = CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurretProj>()) || CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurret>());
+
+        public static Color Warning => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.Purple, Color.Red, Color.Purple);
+
+        bool WarningText = false;
 
         public override void AI()
         {
-            int speed = 14;
-            float interval = .02f;
 
+            Player player = Main.player[npc.target];
+
+            Vector2 targetPos;
+
+            if (!npc.HasPlayerTarget)
+            {
+                npc.TargetClosest();
+            }
+
+            int speed = 16;
+            float interval = .025f; 
+            
             if (npc.life < npc.lifeMax / 2)
             {
-                speed = 16;
-                interval = .025f;
+                if (!Phase2)
+                {
+                    npc.velocity *= .92f;
+
+                    PhaseTimer++;
+
+                    if (PhaseTimer == 120)
+                    {
+                        CombatText.NewText(npc.Hitbox, Color.Purple, "Target threat level underestimated. Engaging melee protocols.", true);
+                    }
+                    if (PhaseTimer >= 180)
+                    {
+                        Phase2 = true;
+                        internalAI[0] = 6;
+                    }
+
+                    return;
+                }
+                speed = 18;
+                interval = .03f;
                 music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Novacore2");
             }
+
             if (npc.life < npc.lifeMax / 4)
             {
-                speed = 18;
-                interval = .025f;
-                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
+                Lighting.AddLight(npc.Center, Warning.R / 150, Warning.G / 150, Warning.B / 150);
+                if (!WarningText)
+                {
+                    CombatText.NewText(npc.Hitbox, Color.Red, "ERROR. DRASTIC PHYSICAL DAMAGE TO CHASSIS! ASTRAL ENERGY LEAKS IMMINENT!", true);
+                    WarningText = true;
+                }
+                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch"); 
+                speed = 20;
+                interval = .03f;
+
+                if (Main.rand.Next(30) == 0)
+                {
+                    Lightning();
+                }
+            }
+            else
+            {
+                Lighting.AddLight(npc.Center, Color.Purple.R / 150, Color.Purple.G / 150, Color.Purple.B / 150);
+            }
+            
+
+            if (internalAI[0] != 6)
+            {
+                BaseAI.AISkull(npc, ref npc.ai, true, speed, 280, interval, .05f);
+            }
+            else
+            {
+                BaseAI.AIShadowflameGhost(npc, ref npc.ai, true, 660f, 0.6f, 14f, .4f, 8f, 8f, 18f, 0.6f, 0.6f, 1f, 7f);
             }
 
-            Lighting.AddLight(npc.Center, Color.Purple.R / 150, Color.Purple.G / 150, Color.Purple.B / 150);
 
-            if (CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurretProj>()) || CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurret>()))
+            if (AnyOrbitters)
             {
                 OrbitterDist += .2f;
                 if (OrbitterDist > 300)
@@ -120,35 +182,9 @@ namespace CSkies.NPCs.Bosses.Novacore
                 OrbitterDist = 0;
             }
 
-            if (!npc.HasPlayerTarget)
+            if (npc.ai[2]++ > AIRate || internalAI[0] == 7 || internalAI[0] == 8)
             {
-                npc.TargetClosest();
-            }
-            Player player = Main.player[npc.target];
-
-            if (player.dead || !player.active || Main.dayTime)
-            {
-                npc.TargetClosest();
-                npc.noTileCollide = true;
-
-                if (npc.timeLeft < 10)
-                    npc.timeLeft = 10;
-                npc.velocity.X *= 0.9f;
-
-                if (npc.ai[1]++ > 300)
-                {
-                    npc.velocity.Y -= 0.2f;
-                    if (npc.velocity.Y > 15f) npc.velocity.Y = 15f;
-                    npc.rotation = 0f;
-                    if (npc.position.Y + npc.velocity.Y <= 0f && Main.netMode != NetmodeID.MultiplayerClient) { BaseAI.KillNPC(npc); npc.netUpdate = true; }
-                }
-            }
-
-            BaseAI.AISkull(npc, ref npc.ai, true, speed, 350, interval, .05f);
-
-            if (npc.ai[2]++ > AIRate || internalAI[0] == 7)
-            {
-                if (internalAI[0] != 6 || internalAI[0] != 7)
+                if (internalAI[0] != 5)
                 {
                     if (npc.velocity.X >= 0)
                     {
@@ -167,12 +203,14 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
                 switch (internalAI[0])
                 {
-                    #region Lightning
                     case 0:
                     case 1:
                     case 2:
+
+                    #region Lightning
                     case 3:
-                    case 4:
+                        if (!AliveCheck(Main.player[npc.target]))
+                            break;
 
                         if (npc.localAI[0] == 0f)
                         {
@@ -220,7 +258,9 @@ namespace CSkies.NPCs.Bosses.Novacore
                     #endregion
 
                     #region Turrets
-                    case 5:
+                    case 4:
+                        if (!AliveCheck(Main.player[npc.target]))
+                            break;
                         for (int m = 0; m < TurretCount(); m++)
                         {
                             int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<NovaTurretProj>(), npc.damage, 4, Main.myPlayer);
@@ -234,7 +274,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                     #endregion
 
                     #region Lasers
-                    case 6: //Nova Beams
+                    case 5: //Nova Beams
                         if (!AliveCheck(Main.player[npc.target]))
                             break;
 
@@ -248,6 +288,58 @@ namespace CSkies.NPCs.Bosses.Novacore
                         }
                         break;
                     #endregion
+
+                    case 6:
+
+                        if (npc.ai[2] > AIRate + 240)
+                        {
+                            AIChange();
+                        }
+
+                        break;
+
+                    #region VOID Dash
+                    case 7: //prepare for queen bee dashes
+                        if (!AliveCheck(player))
+                            break;
+
+                        if (++npc.ai[3] > 60)
+                        {
+                            targetPos = player.Center;
+                            targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
+                            Movement(targetPos, 1f);
+                            if (npc.ai[3] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
+                            {
+                                internalAI[0]++;
+                                npc.ai[3] = 0;
+                                npc.netUpdate = true;
+                                npc.velocity.X = -40 * (npc.Center.X < player.Center.X ? -1 : 1);
+                                npc.velocity.Y *= 0.1f;
+                            }
+                        }
+                        else
+                        {
+                            npc.velocity *= 0.9f; //decelerate briefly
+                        }
+                        break;
+
+                    case 8:
+
+                        if (++npc.ai[1] > 240 || (Math.Sign(npc.velocity.X) > 0 ? npc.Center.X > player.Center.X + 900 : npc.Center.X < player.Center.X - 900))
+                        {
+                            npc.ai[1] = 0;
+                            npc.ai[2] = 0;
+                            if (++internalAI[2] >= Repeats()) //repeat dash three times
+                            {
+                                npc.ai[0] = 0;
+                                internalAI[2] = 0;
+                            }
+                            else
+                                npc.ai[0]--;
+                            npc.netUpdate = true;
+                        }
+                        break;
+                        #endregion
                 }
             }
             else
@@ -285,19 +377,58 @@ namespace CSkies.NPCs.Bosses.Novacore
             }
         }
 
+        private void Movement(Vector2 targetPos, float speedModifier)
+        {
+            if (npc.Center.X < targetPos.X)
+            {
+                npc.velocity.X += speedModifier;
+                if (npc.velocity.X < 0)
+                    npc.velocity.X += speedModifier * 2;
+            }
+            else
+            {
+                npc.velocity.X -= speedModifier;
+                if (npc.velocity.X > 0)
+                    npc.velocity.X -= speedModifier * 2;
+            }
+            if (npc.Center.Y < targetPos.Y)
+            {
+                npc.velocity.Y += speedModifier;
+                if (npc.velocity.Y < 0)
+                    npc.velocity.Y += speedModifier * 2;
+            }
+            else
+            {
+                npc.velocity.Y -= speedModifier;
+                if (npc.velocity.Y > 0)
+                    npc.velocity.Y -= speedModifier * 2;
+            }
+            if (Math.Abs(npc.velocity.X) > 30)
+                npc.velocity.X = 30 * Math.Sign(npc.velocity.X);
+            if (Math.Abs(npc.velocity.Y) > 30)
+                npc.velocity.Y = 30 * Math.Sign(npc.velocity.Y);
+        }
+
         private void AIChange()
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 npc.localAI[0] = 0;
-                npc.ai[0] = Main.rand.Next(7); 
-                if (CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurretProj>()) || CUtils.AnyProjectiles(ModContent.ProjectileType<NovaTurret>()))
+                int Selection = npc.life < npc.lifeMax / 2 ? Main.rand.Next(8) : Main.rand.Next(6);
+
+                npc.ai[0] = Selection; 
+
+                if (AnyOrbitters && npc.ai[0] == 5)
                 {
-                    if (npc.ai[0] == 5)
-                    {
-                        npc.ai[0] = 4;
-                    }
+                    npc.ai[0] = 3;
                 }
+
+                if (npc.ai[0] == 6)
+                {
+                    npc.ai[0] = 0;
+                    npc.ai[1] = 0;
+                }
+
                 npc.ai[2] = 0;
                 LaserShot = false;
                 npc.netUpdate = true;
@@ -379,6 +510,44 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
             }
             return true;
+        }
+
+        public void Lightning()
+        {
+            if (npc.localAI[0] == 0f)
+            {
+                npc.localAI[0] = 1f;
+                int num833 = Player.FindClosest(npc.Center, 0, 0);
+                Vector2 vector62 = Main.player[num833].Center - npc.Center;
+                if (vector62 == Vector2.Zero)
+                {
+                    vector62 = Vector2.UnitY;
+                }
+                closestPlayer = vector62.ToRotation();
+                npc.netUpdate = true;
+            }
+
+            Main.PlaySound(SoundID.Item8, npc.position);
+            Vector2 vector71 = closestPlayer.ToRotationVector2();
+            Vector2 value56 = vector71.RotatedBy(1.5707963705062866) * (Main.rand.Next(2) == 0).ToDirectionInt() * Main.rand.Next(10, 21);
+            vector71 *= Main.rand.Next(-80, 81);
+            Vector2 velocity3 = (vector71 - value56) / 10f;
+            Dust dust25 = Main.dust[Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<Dusts.CDust>())];
+            dust25.noGravity = true;
+            dust25.position = npc.Center + value56;
+            dust25.velocity = velocity3;
+            dust25.scale = 0.5f + Main.rand.NextFloat();
+            dust25.fadeIn = 0.5f;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                for (int a = 0; a < 3; a++)
+                {
+                    Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
+                    float ai2 = Main.rand.Next(80);
+                    Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ProjectileID.VortexLightning, 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                }
+            }
+            npc.localAI[0] = 0;
         }
 
         float rotAmt;
@@ -488,17 +657,29 @@ namespace CSkies.NPCs.Bosses.Novacore
         {
             Texture2D BladeTex = mod.GetTexture("NPCs/Bosses/Novacore/NovacoreBack");
             Texture2D BladeGlowTex = mod.GetTexture("Glowmasks/NovacoreBack_Glow");
+            Texture2D BladeWarning = mod.GetTexture("Glowmasks/NovacoreBack_Glow");
 
             Texture2D texture2D13 = Main.npcTexture[npc.type];
             Texture2D Glow = mod.GetTexture("Glowmasks/Novacore_Glow");
+            Texture2D Warning = mod.GetTexture("Glowmasks/Novacore_Warning");
 
             Rectangle Bladeframe = BaseDrawing.GetFrame(Frame, BladeTex.Width, BladeTex.Height / 8, 0, 0);
 
             BaseDrawing.DrawTexture(spriteBatch, BladeTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, npc.spriteDirection, 8, Bladeframe, drawColor, true);
             BaseDrawing.DrawTexture(spriteBatch, BladeGlowTex, 0, npc.position, npc.width, npc.height, npc.scale, npc.rotation, npc.spriteDirection, 8, Bladeframe, Color.White, true);
 
-            BaseDrawing.DrawTexture(spriteBatch, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, npc.frame, Colors.COLOR_GLOWPULSE, true);
+            if (npc.life < npc.lifeMax / 4)
+            {
+                BaseDrawing.DrawTexture(spriteBatch, BladeWarning, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, Bladeframe, Colors.Flash, true);
+            }
+
+            BaseDrawing.DrawTexture(spriteBatch, texture2D13, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, npc.frame, drawColor, true);
             BaseDrawing.DrawTexture(spriteBatch, Glow, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, npc.frame, Colors.COLOR_GLOWPULSE, true);
+
+            if (npc.life < npc.lifeMax / 4)
+            {
+                BaseDrawing.DrawTexture(spriteBatch, Warning, 0, npc.position, npc.width, npc.height, npc.scale, 0, 0, 8, Bladeframe, Colors.Flash, true);
+            }
 
             return false;
         }
