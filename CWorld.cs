@@ -226,6 +226,7 @@ namespace CSkies
         }
 
         public static float NovacoreAI = 0;
+        public static float NovacoreCounter = 0;
 
         public override void PostUpdate()
         {

@@ -175,18 +175,13 @@ namespace CSkies.NPCs.Bosses.Novacore
                 BaseAI.AISkull(npc, ref npc.ai, true, speed, 280, interval, .05f);
             }
 
-            if (AnyOrbitters)
+            OrbitterDist += .2f;
+            if (OrbitterDist > 300)
             {
-                OrbitterDist += .2f;
-                if (OrbitterDist > 300)
-                {
-                    OrbitterDist = 300;
-                }
+                OrbitterDist = 300;
             }
-            else
-            {
-                OrbitterDist = 0;
-            }
+
+            CWorld.NovacoreCounter = npc.ai[2];
 
             if (MeleeMode)
             {
@@ -342,7 +337,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                                     {
                                         Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
                                         float ai2 = Main.rand.Next(80);
-                                        Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ModContent.ProjectileType<Novashock>(), 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                                        Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ProjectileID.VortexLightning, 15, 1f, Main.myPlayer, closestPlayer, ai2);
                                     }
                                 }
                                 npc.localAI[0] = 0;
@@ -359,13 +354,17 @@ namespace CSkies.NPCs.Bosses.Novacore
                         case 4:
                             if (!AliveCheck(Main.player[npc.target]))
                                 break;
-                            for (int m = 0; m < TurretCount(); m++)
+                            if (!AnyOrbitters)
                             {
-                                int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<NovaTurretProj>(), npc.damage, 4, Main.myPlayer);
-                                Main.projectile[projectileID].Center = npc.Center;
-                                Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
-                                Main.projectile[projectileID].velocity *= 8f;
-                                Main.projectile[projectileID].ai[0] = m;
+                                OrbitterDist = 0;
+                                for (int m = 0; m < TurretCount(); m++)
+                                {
+                                    int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<NovaTurretProj>(), npc.damage, 4, Main.myPlayer);
+                                    Main.projectile[projectileID].Center = npc.Center;
+                                    Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
+                                    Main.projectile[projectileID].velocity *= 8f;
+                                    Main.projectile[projectileID].ai[0] = m;
+                                }
                             }
                             AIChange();
                             break;
@@ -422,8 +421,6 @@ namespace CSkies.NPCs.Bosses.Novacore
                     }
                 }
             }
-
-            
         }
 
         private void Movement(Vector2 targetPos, float speedModifier)
@@ -474,11 +471,6 @@ namespace CSkies.NPCs.Bosses.Novacore
 
                 int Selection = Main.rand.Next(6);
                 internalAI[0] = Selection;
-
-                if (AnyOrbitters && npc.ai[0] == 5)
-                {
-                    npc.ai[0] = 3;
-                }
 
                 CWorld.NovacoreAI = internalAI[0];
 

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ID;
 
 namespace CSkies.NPCs.Bosses.Novacore
 {
@@ -9,13 +10,15 @@ namespace CSkies.NPCs.Bosses.Novacore
 	{
 		public override void SetDefaults()
         {
+            projectile.penetrate = -1;
             projectile.width = 14;
             projectile.height = 14;
-            projectile.aiStyle = -1;
+            projectile.aiStyle = 88;
+            aiType = ProjectileID.VortexLightning;
             projectile.hostile = true;
             projectile.alpha = 255;
             projectile.ignoreWater = true;
-            projectile.tileCollide = true;
+            projectile.tileCollide = false;
             projectile.extraUpdates = 4;
             projectile.timeLeft = 600;
         }

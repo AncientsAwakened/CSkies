@@ -49,8 +49,6 @@ namespace CSkies.NPCs.Bosses.Novacore
             NPC novacore = Main.npc[body];
             if (novacore == null || novacore.life <= 0 || !novacore.active || novacore.type != ModContent.NPCType<Novacore>()) { projectile.active = false; return; }
 
-            Player player = Main.player[novacore.target];
-
             pos = novacore.Center;
 
             int starNumber = ((Novacore)novacore.modNPC).TurretCount();
@@ -95,14 +93,13 @@ namespace CSkies.NPCs.Bosses.Novacore
 
         public override bool PreDraw(SpriteBatch sb, Color lightColor)
         {
-            int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }
 
             Rectangle frame = BaseDrawing.GetFrame(projectile.frame, Main.projectileTexture[projectile.type].Width, Main.projectileTexture[projectile.type].Height / Main.projFrames[projectile.type], 0, 0);
 
-            BaseDrawing.DrawAura(sb, Main.projectileTexture[projectile.type], r, projectile.position, projectile.width, projectile.height, auraPercent, 1.5f, 1f, projectile.rotation, projectile.direction, 4, frame, 0f, 0f, null);
-            BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], r, projectile.position, projectile.width, projectile.height, projectile.scale, projectile.rotation, 0, 4, frame, projectile.GetAlpha(Colors.COLOR_GLOWPULSE), true);
+            BaseDrawing.DrawAura(sb, Main.projectileTexture[projectile.type], 0, projectile.position, projectile.width, projectile.height, auraPercent, 1.5f, 1f, projectile.rotation, projectile.direction, 4, frame, 0f, 0f, null);
+            BaseDrawing.DrawTexture(sb, Main.projectileTexture[projectile.type], 0, projectile.position, projectile.width, projectile.height, projectile.scale, projectile.rotation, 0, 4, frame, projectile.GetAlpha(Colors.COLOR_GLOWPULSE), true);
             return false;
         }
     }

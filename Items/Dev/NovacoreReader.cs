@@ -25,8 +25,10 @@ namespace CSkies.Items.Dev
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             string AI = CWorld.NovacoreAI.ToString();
-            TooltipLine DamageTooltip = new TooltipLine(mod, "AI Type", AI);
-            tooltips.Add(DamageTooltip);
+            string Counter = CWorld.NovacoreCounter.ToString();
+            TooltipLine AITooltip = new TooltipLine(mod, "AI Type", AI + @"
+" + Counter);
+            tooltips.Add(AITooltip);
 
             base.ModifyTooltips(tooltips);
         }
