@@ -282,12 +282,12 @@ namespace CSkies.NPCs.Bosses.Novacore
                         if (npc.velocity.X >= 0)
                         {
                             npc.rotation += .06f;
-                            npc.spriteDirection = -1;
+                            npc.spriteDirection = 1;
                         }
                         else if (npc.velocity.X < 0)
                         {
                             npc.rotation -= .06f;
-                            npc.spriteDirection = 1;
+                            npc.spriteDirection = -1;
                         }
                     }
                     else
@@ -379,7 +379,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 
                             LaserAttack();
 
-                            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeam>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeamSmall>()))
+                            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeam>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeamSmall>()) && !LaserShot)
                             {
                                 AIChange();
                             }
