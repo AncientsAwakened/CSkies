@@ -58,9 +58,8 @@ namespace CSkies.NPCs.Bosses.Novacore
         public override void AI()
 		{
 			Lighting.AddLight(projectile.Center, 0.45f, 0f, 0.5f);
-			
-			projectile.numUpdates = projectile.extraUpdates;
-			while (projectile.numUpdates >= 0)
+
+			/*while (projectile.numUpdates >= 0)
 			{
 				projectile.numUpdates--;
 				if (projectile.frameCounter == 0 || projectile.oldPos[0] == Vector2.Zero)
@@ -77,7 +76,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 					Main.dust[num23].noGravity = true;
 					Main.dust[num23].scale = 1.7f;
 				}
-			}
+			}*/
 
 			if (projectile.localAI[1] == 0f && projectile.ai[0] >= 900f)
 			{

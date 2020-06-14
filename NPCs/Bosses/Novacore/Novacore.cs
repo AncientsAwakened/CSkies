@@ -337,7 +337,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                                     {
                                         Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
                                         float ai2 = Main.rand.Next(80);
-                                        Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X * 4, vector72.Y * 4, ModContent.ProjectileType<Novashock>(), 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                                        Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ModContent.ProjectileType<Novashock>(), 15, 1f, Main.myPlayer, closestPlayer, ai2);
                                     }
                                 }
                                 npc.localAI[0] = 0;
