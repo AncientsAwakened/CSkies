@@ -54,7 +54,7 @@ namespace CSkies.Backgrounds
 
         readonly CSkies mod = CSkies.inst;
         float Rotation = 0;
-        Texture2D[] StarTex = new Texture2D[2];
+        readonly Texture2D[] StarTex = new Texture2D[2];
 
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
@@ -67,10 +67,8 @@ namespace CSkies.Backgrounds
 
             if (maxDepth >= 3.40282347E+38f && minDepth < 3.40282347E+38f)
             {
-                Player player = Main.LocalPlayer;
-                int posX = (int)(player.position.X / Main.maxTilesX);
 
-                var planetPos = new Vector2(Main.screenWidth * posX, Main.screenHeight / 2);
+                var planetPos = new Vector2(Main.screenWidth / 2, Main.screenHeight/ 3);
                 Rotation -= .0008f;
 
                 spriteBatch.Draw(Main.blackTileTexture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * Intensity);
