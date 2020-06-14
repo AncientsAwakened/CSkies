@@ -118,7 +118,7 @@ namespace CSkies
 					if (Main.rand.Next(5) == 0)
 					{
 						Vector2 value43 = projectile.velocity.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * projectile.width;
-						int num756 = Dust.NewDust(projectile.Center + value43 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default(Color), 1.5f);
+						int num756 = Dust.NewDust(projectile.Center + value43 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default, 1.5f);
 						Dust dust = Main.dust[num756];
 						dust.velocity *= 0.5f;
 						Main.dust[num756].velocity.Y = 0f - Math.Abs(Main.dust[num756].velocity.Y);
@@ -141,7 +141,7 @@ namespace CSkies
 					int num759 = unifiedRandom2.Next();
 					projectile.ai[1] = num759;
 					num759 %= 100;
-					float f2 = (float)num759 / 100f * ((float)Math.PI * 2f);
+					float f2 = num759 / 100f * ((float)Math.PI * 2f);
 					Vector2 vector57 = f2.ToRotationVector2();
 					if (vector57.Y > 0f)
 					{
@@ -180,12 +180,12 @@ namespace CSkies
 				{
 					return;
 				}
-				projectile.localAI[0] += spinningpoint15.X * (float)(projectile.extraUpdates + 1) * 2f * num757;
+				projectile.localAI[0] += spinningpoint15.X * (projectile.extraUpdates + 1) * 2f * num757;
 				projectile.velocity = spinningpoint15.RotatedBy(projectile.ai[0] + (float)Math.PI / 2f) * num757;
 				projectile.rotation = projectile.velocity.ToRotation() + (float)Math.PI / 2f;
 				if (Main.rand.Next(4) == 0 && Main.netMode != NetmodeID.MultiplayerClient && projectile.localAI[1] == 0f)
 				{
-					float num760 = (float)Main.rand.Next(-3, 4) * ((float)Math.PI / 3f) / 3f;
+					float num760 = Main.rand.Next(-3, 4) * ((float)Math.PI / 3f) / 3f;
 					Vector2 vector58 = projectile.ai[0].ToRotationVector2().RotatedBy(num760) * projectile.velocity.Length();
 					if (!Collision.CanHitLine(projectile.Center, 0, 0, projectile.Center + vector58 * 50f, 0, 0))
 					{

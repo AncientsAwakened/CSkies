@@ -142,11 +142,11 @@ namespace CSkies.Backgrounds
             int num3 = 0;
             for (int i = 0; i < num; i++)
             {
-                float num4 = (float)i / (float)num;
+                float num4 = i / (float)num;
                 for (int j = 0; j < num2; j++)
                 {
-                    float num5 = (float)j / (float)num2;
-                    _stars[num3].Position.X = num4 * (float)Main.maxTilesX * 16f;
+                    float num5 = j / (float)num2;
+                    _stars[num3].Position.X = num4 * Main.maxTilesX * 16f;
                     _stars[num3].Position.Y = num5 * ((float)Main.worldSurface * 16f + 2000f) - 1000f;
                     _stars[num3].Depth = _random.NextFloat() * 8f + 1.5f;
                     _stars[num3].TextureIndex = _random.Next(StarTex.Length);
