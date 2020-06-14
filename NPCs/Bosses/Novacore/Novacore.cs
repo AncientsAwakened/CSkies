@@ -52,6 +52,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 		public float closestPlayer = 0;
         public bool Phase2 = false;
         public int PhaseTimer = 0;
+        public bool MeleeMode = false;
 
 		public override void SendExtraAI(BinaryWriter writer)
         {
@@ -59,15 +60,20 @@ namespace CSkies.NPCs.Bosses.Novacore
             if (Main.netMode == NetmodeID.Server || Main.dedServ)
             {
                 writer.Write(Shoot);
-                writer.Write(internalAI[0]);
-                writer.Write(internalAI[1]);
-                writer.Write(internalAI[2]);
-                writer.Write(internalAI[3]);
+
+                writer.Write(internalAI[0]); //Projectile Attack Choice
+                writer.Write(internalAI[1]); //Melee Attack Choice
+                writer.Write(internalAI[2]); //Melee Attack Repeats
+                writer.Write(internalAI[3]); //Melee Attack Timer
+
                 writer.Write(LaserShot);
                 writer.Write(OrbitterDist);
 				writer.Write(closestPlayer);
+
                 writer.Write(Phase2);
                 writer.Write(PhaseTimer);
+
+                writer.Write(MeleeMode); //If performing a melee attack
             }
         }
 
@@ -77,15 +83,20 @@ namespace CSkies.NPCs.Bosses.Novacore
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 Shoot = reader.ReadFloat();
+
                 internalAI[0] = reader.ReadFloat();
                 internalAI[1] = reader.ReadFloat();
                 internalAI[2] = reader.ReadFloat();
                 internalAI[3] = reader.ReadFloat();
+
                 LaserShot = reader.ReadBool();
                 OrbitterDist = reader.ReadFloat();
 				closestPlayer = reader.ReadFloat();
+
                 Phase2 = reader.ReadBool();
                 PhaseTimer = reader.ReadInt();
+
+                MeleeMode = reader.ReadBool();
             }
         }
         readonly int AIRate = (Main.expertMode ? 150 : 220);
@@ -159,15 +170,10 @@ namespace CSkies.NPCs.Bosses.Novacore
             }
             
 
-            if (internalAI[0] != 6)
+            if (!MeleeMode)
             {
                 BaseAI.AISkull(npc, ref npc.ai, true, speed, 280, interval, .05f);
             }
-            else
-            {
-                BaseAI.AIShadowflameGhost(npc, ref npc.ai, true, 660f, 0.6f, 14f, .4f, 8f, 8f, 18f, 0.6f, 0.6f, 1f, 7f);
-            }
-
 
             if (AnyOrbitters)
             {
@@ -182,136 +188,61 @@ namespace CSkies.NPCs.Bosses.Novacore
                 OrbitterDist = 0;
             }
 
-            if (npc.ai[2]++ > AIRate || internalAI[0] == 7 || internalAI[0] == 8)
+            if (MeleeMode)
             {
-                if (internalAI[0] != 5)
+                internalAI[3]++;
+                switch (internalAI[1])
                 {
-                    if (npc.velocity.X >= 0)
-                    {
-                        npc.rotation += .06f;
-                        npc.spriteDirection = -1;
-                    }
-                    else if (npc.velocity.X < 0)
-                    {
-                        npc.rotation -= .06f;
-                        npc.spriteDirection = 1;
-                    }
-                }
-                else
-                {
-                    npc.rotation += .03f;
-                }
-                switch (internalAI[0])
-                {
+                    #region Diagonal Dashes
                     case 0:
-                    case 1:
-                    case 2:
-
-                    #region Lightning
-                    case 3:
-                        if (!AliveCheck(Main.player[npc.target]))
+                        if (!AliveCheck(player))
                             break;
-
-                        if (npc.localAI[0] == 0f)
+                        targetPos = player.Center;
+                        targetPos.X += 430 * (npc.Center.X < targetPos.X ? -1 : 1);
+                        targetPos.Y -= 430;
+                        Movement(targetPos, .7f);
+                        if (internalAI[3] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 100) //initiate dash
                         {
-                            npc.localAI[0] = 1f;
-                            int num833 = Player.FindClosest(npc.Center, 0, 0);
-                            Vector2 vector62 = Main.player[num833].Center - npc.Center;
-                            if (vector62 == Vector2.Zero)
+                            internalAI[1]++;
+                            internalAI[3] = 0;
+                            npc.netUpdate = true;
+                            npc.velocity = npc.DirectionTo(player.Center) * 45;
+                        }
+                        break;
+
+                    case 1: //dashing
+                        if (npc.Center.Y > player.Center.Y + 500 || Math.Abs(npc.Center.X - player.Center.X) > 1000)
+                        {
+                            npc.velocity.Y *= 0.5f;
+                            internalAI[3] = 0;
+                            if (++internalAI[2] >= Repeats() - 1) //repeat three times
                             {
-                                vector62 = Vector2.UnitY;
+                                internalAI[1] = 0;
+                                internalAI[2] = 0;
+                                internalAI[3] = 0;
+                                MeleeMode = false;
                             }
-                            closestPlayer = vector62.ToRotation();
+                            else
+                                internalAI[1]--;
                             npc.netUpdate = true;
                         }
-
-                        if (npc.ai[2] % 45 == 0)
-                        {
-                            Main.PlaySound(SoundID.Item8, npc.position);
-                            Vector2 vector71 = closestPlayer.ToRotationVector2();
-                            Vector2 value56 = vector71.RotatedBy(1.5707963705062866) * (Main.rand.Next(2) == 0).ToDirectionInt() * Main.rand.Next(10, 21);
-                            vector71 *= Main.rand.Next(-80, 81);
-                            Vector2 velocity3 = (vector71 - value56) / 10f;
-                            Dust dust25 = Main.dust[Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<Dusts.CDust>())];
-                            dust25.noGravity = true;
-                            dust25.position = npc.Center + value56;
-                            dust25.velocity = velocity3;
-                            dust25.scale = 0.5f + Main.rand.NextFloat();
-                            dust25.fadeIn = 0.5f;
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                for (int a = 0; a < Repeats() + 1; a++)
-                                {
-                                    Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
-                                    float ai2 = Main.rand.Next(80);
-                                    Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ProjectileID.VortexLightning, 15, 1f, Main.myPlayer, closestPlayer, ai2);
-                                }
-                            }
-                            npc.localAI[0] = 0;
-                        }
-
-                        if (npc.ai[2] > AIRate + 45 + (45 * Repeats()) && Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            AIChange();
-                        }
                         break;
                     #endregion
 
-                    #region Turrets
-                    case 4:
-                        if (!AliveCheck(Main.player[npc.target]))
-                            break;
-                        for (int m = 0; m < TurretCount(); m++)
-                        {
-                            int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<NovaTurretProj>(), npc.damage, 4, Main.myPlayer);
-                            Main.projectile[projectileID].Center = npc.Center;
-                            Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
-                            Main.projectile[projectileID].velocity *= 8f;
-                            Main.projectile[projectileID].ai[0] = m;
-                        }
-                        AIChange();
-                        break;
-                    #endregion
-
-                    #region Lasers
-                    case 5: //Nova Beams
-                        if (!AliveCheck(Main.player[npc.target]))
-                            break;
-
-                        npc.velocity *= .94f;
-
-                        LaserAttack();
-
-                        if (!CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeam>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeamSmall>()))
-                        {
-                            AIChange();
-                        }
-                        break;
-                    #endregion
-
-                    case 6:
-
-                        if (npc.ai[2] > AIRate + 240)
-                        {
-                            AIChange();
-                        }
-
-                        break;
-
-                    #region VOID Dash
-                    case 7: //prepare for queen bee dashes
+                    #region Horizontal Dash
+                    case 2: //prepare for queen bee dashes
                         if (!AliveCheck(player))
                             break;
 
-                        if (++npc.ai[3] > 60)
+                        if (internalAI[3] > 60)
                         {
                             targetPos = player.Center;
                             targetPos.X += 400 * (npc.Center.X < targetPos.X ? -1 : 1);
                             Movement(targetPos, 1f);
-                            if (npc.ai[3] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
+                            if (internalAI[3] > 180 || Math.Abs(npc.Center.Y - targetPos.Y) < 40) //initiate dash
                             {
-                                internalAI[0]++;
-                                npc.ai[3] = 0;
+                                internalAI[1]++;
+                                internalAI[3] = 0;
                                 npc.netUpdate = true;
                                 npc.velocity.X = -40 * (npc.Center.X < player.Center.X ? -1 : 1);
                                 npc.velocity.Y *= 0.1f;
@@ -323,58 +254,176 @@ namespace CSkies.NPCs.Bosses.Novacore
                         }
                         break;
 
-                    case 8:
+                    case 3:
 
-                        if (++npc.ai[1] > 240 || (Math.Sign(npc.velocity.X) > 0 ? npc.Center.X > player.Center.X + 900 : npc.Center.X < player.Center.X - 900))
+                        if (internalAI[3] > 240 || (Math.Sign(npc.velocity.X) > 0 ? npc.Center.X > player.Center.X + 900 : npc.Center.X < player.Center.X - 900))
                         {
-                            npc.ai[1] = 0;
-                            npc.ai[2] = 0;
+                            internalAI[3] = 0;
+
                             if (++internalAI[2] >= Repeats()) //repeat dash three times
                             {
-                                npc.ai[0] = 0;
+                                internalAI[1] = 0;
                                 internalAI[2] = 0;
+                                internalAI[3] = 0;
+                                MeleeMode = false;
                             }
                             else
-                                npc.ai[0]--;
+                                internalAI[1]--;
                             npc.netUpdate = true;
                         }
                         break;
+                    default:
+                        internalAI[1] = 0;
+                        goto case 0;
                         #endregion
                 }
             }
             else
             {
-                if (npc.velocity.X > 0)
+                if (npc.ai[2]++ > AIRate)
                 {
-                    npc.rotation += .03f;
-                }
-                else if (npc.velocity.X < 0)
-                {
-                    npc.rotation -= .03f;
-                }
-                if (npc.life < npc.lifeMax / 2)
-                {
-                    if (Shoot > 30)
+                    if (internalAI[0] != 5)
                     {
-                        if (Shoot % 10 == 0)
+                        if (npc.velocity.X >= 0)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            npc.rotation += .06f;
+                            npc.spriteDirection = -1;
+                        }
+                        else if (npc.velocity.X < 0)
+                        {
+                            npc.rotation -= .06f;
+                            npc.spriteDirection = 1;
+                        }
+                    }
+                    else
+                    {
+                        npc.rotation += .03f;
+                    }
+                    switch (internalAI[0])
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+
+                        #region Lightning
+                        case 3:
+                            if (!AliveCheck(Main.player[npc.target]))
+                                break;
+
+                            if (npc.localAI[0] == 0f)
                             {
-                                Vector2 spinningpoint2 = 0 * Vector2.UnitX;
-                                spinningpoint2 = spinningpoint2.RotatedBy((Main.rand.NextDouble() - 0.5) * 0.78539818525314331);
-                                spinningpoint2 *= 8f;
-                                Projectile.NewProjectile(npc.Center.X, npc.Center.Y, spinningpoint2.X, spinningpoint2.Y, ModContent.ProjectileType<NovaRocket>(), npc.damage / 3, 0f, Main.myPlayer, 0f, 20f);
-                                if (Shoot > 60)
+                                npc.localAI[0] = 1f;
+                                int num833 = Player.FindClosest(npc.Center, 0, 0);
+                                Vector2 vector62 = Main.player[num833].Center - npc.Center;
+                                if (vector62 == Vector2.Zero)
                                 {
-                                    Shoot = 0;
-                                    npc.netUpdate = true;
+                                    vector62 = Vector2.UnitY;
                                 }
+                                closestPlayer = vector62.ToRotation();
+                                npc.netUpdate = true;
                             }
-                            Main.PlaySound(SoundID.Item39, npc.Center);
+
+                            if (npc.ai[2] % 45 == 0)
+                            {
+                                Main.PlaySound(SoundID.Item8, npc.position);
+                                Vector2 vector71 = closestPlayer.ToRotationVector2();
+                                Vector2 value56 = vector71.RotatedBy(1.5707963705062866) * (Main.rand.Next(2) == 0).ToDirectionInt() * Main.rand.Next(10, 21);
+                                vector71 *= Main.rand.Next(-80, 81);
+                                Vector2 velocity3 = (vector71 - value56) / 10f;
+                                Dust dust25 = Main.dust[Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<Dusts.CDust>())];
+                                dust25.noGravity = true;
+                                dust25.position = npc.Center + value56;
+                                dust25.velocity = velocity3;
+                                dust25.scale = 0.5f + Main.rand.NextFloat();
+                                dust25.fadeIn = 0.5f;
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    for (int a = 0; a < Repeats() + 1; a++)
+                                    {
+                                        Vector2 vector72 = closestPlayer.ToRotationVector2() * 8f;
+                                        float ai2 = Main.rand.Next(80);
+                                        Projectile.NewProjectile(npc.Center.X - vector72.X, npc.Center.Y - vector72.Y, vector72.X, vector72.Y, ModContent.ProjectileType<Novashock>(), 15, 1f, Main.myPlayer, closestPlayer, ai2);
+                                    }
+                                }
+                                npc.localAI[0] = 0;
+                            }
+
+                            if (npc.ai[2] > AIRate + 140 && Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                AIChange();
+                            }
+                            break;
+                        #endregion
+
+                        #region Turrets
+                        case 4:
+                            if (!AliveCheck(Main.player[npc.target]))
+                                break;
+                            for (int m = 0; m < TurretCount(); m++)
+                            {
+                                int projectileID = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<NovaTurretProj>(), npc.damage, 4, Main.myPlayer);
+                                Main.projectile[projectileID].Center = npc.Center;
+                                Main.projectile[projectileID].velocity = new Vector2(MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()), MathHelper.Lerp(-1f, 1f, (float)Main.rand.NextDouble()));
+                                Main.projectile[projectileID].velocity *= 8f;
+                                Main.projectile[projectileID].ai[0] = m;
+                            }
+                            AIChange();
+                            break;
+                        #endregion
+
+                        #region Lasers
+                        case 5: //Nova Beams
+                            if (!AliveCheck(Main.player[npc.target]))
+                                break;
+
+                            npc.velocity *= .94f;
+
+                            LaserAttack();
+
+                            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeam>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<NovaBeamSmall>()))
+                            {
+                                AIChange();
+                            }
+                            break;
+                            #endregion
+                    }
+                }
+                else
+                {
+                    if (npc.velocity.X > 0)
+                    {
+                        npc.rotation += .03f;
+                    }
+                    else if (npc.velocity.X < 0)
+                    {
+                        npc.rotation -= .03f;
+                    }
+                    if (npc.life < npc.lifeMax / 2)
+                    {
+                        if (Shoot > 30)
+                        {
+                            if (Shoot % 10 == 0)
+                            {
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    Vector2 spinningpoint2 = 0 * Vector2.UnitX;
+                                    spinningpoint2 = spinningpoint2.RotatedBy((Main.rand.NextDouble() - 0.5) * 0.78539818525314331);
+                                    spinningpoint2 *= 8f;
+                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, spinningpoint2.X, spinningpoint2.Y, ModContent.ProjectileType<NovaRocket>(), npc.damage / 3, 0f, Main.myPlayer, 0f, 20f);
+                                    if (Shoot > 60)
+                                    {
+                                        Shoot = 0;
+                                        npc.netUpdate = true;
+                                    }
+                                }
+                                Main.PlaySound(SoundID.Item39, npc.Center);
+                            }
                         }
                     }
                 }
             }
+
+            
         }
 
         private void Movement(Vector2 targetPos, float speedModifier)
@@ -413,24 +462,26 @@ namespace CSkies.NPCs.Bosses.Novacore
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
+                npc.ai[2] = 0;
+                LaserShot = false;
                 npc.localAI[0] = 0;
-                int Selection = npc.life < npc.lifeMax / 2 ? Main.rand.Next(8) : Main.rand.Next(6);
 
-                npc.ai[0] = Selection; 
+                if (npc.life < npc.lifeMax / 2 && Main.rand.Next(3) == 0)
+                {
+                    MeleeMode = true;
+                    internalAI[1] = (Main.rand.Next(2) == 0 ? 0 : 2);
+                }
+
+                int Selection = Main.rand.Next(6);
+                internalAI[0] = Selection;
 
                 if (AnyOrbitters && npc.ai[0] == 5)
                 {
                     npc.ai[0] = 3;
                 }
 
-                if (npc.ai[0] == 6)
-                {
-                    npc.ai[0] = 0;
-                    npc.ai[1] = 0;
-                }
+                CWorld.NovacoreAI = internalAI[0];
 
-                npc.ai[2] = 0;
-                LaserShot = false;
                 npc.netUpdate = true;
             }
         }

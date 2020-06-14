@@ -225,6 +225,8 @@ namespace CSkies
 
         }
 
+        public static float NovacoreAI = 0;
+
         public override void PostUpdate()
         {
             if (!Main.dayTime && NPC.downedBoss3)

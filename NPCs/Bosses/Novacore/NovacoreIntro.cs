@@ -80,7 +80,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                 else
                 {
                     Fadeout -= 5;
-                    ShineAlpha += 5;
+                    ShineAlpha += 3;
                     if (ShineAlpha >= 255)
                     {
                         ShineAlpha = 255;
