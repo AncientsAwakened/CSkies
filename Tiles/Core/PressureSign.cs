@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ObjectData;
 using Terraria.ModLoader;
 namespace CSkies.Tiles.Core
 {
-	public class PressureSign : ModTile
+    public class PressureSign : ModTile
 	{
 		public override void SetDefaults()
 		{

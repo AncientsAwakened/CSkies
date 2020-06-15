@@ -3,11 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using CSkies.NPCs.Enemies;
 
 namespace CSkies.NPCs.Other
 {
-	public class EnigmaSpeaker : ModNPC
+    public class EnigmaSpeaker : ModNPC
 	{
         public override void SetStaticDefaults()
 		{

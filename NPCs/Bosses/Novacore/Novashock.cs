@@ -41,17 +41,6 @@ namespace CSkies.NPCs.Bosses.Novacore
             return base.Colliding(projHitbox, targetHitbox);
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if (projectile.localAI[1] < 1f)
-            {
-                projectile.localAI[1] += 2f;
-                projectile.position += projectile.velocity;
-                projectile.velocity = Vector2.Zero;
-            }
-            return false;
-        }
-
         public override void AI()
 		{
 			Lighting.AddLight(projectile.Center, 0.45f, 0f, 0.5f);

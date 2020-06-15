@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.Graphics.Shaders;
 using System;
 
 namespace CSkies.NPCs.Bosses.Novacore

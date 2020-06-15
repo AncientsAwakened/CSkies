@@ -8,7 +8,7 @@ namespace CSkies.Items.Boss.Starcore
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Stelarite");
+            DisplayName.SetDefault("Starsteel");
         }
 
         public override void SetDefaults()

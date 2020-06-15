@@ -38,6 +38,9 @@ namespace CSkies
         public bool Heartburn = false;
         public bool Cometspark = false;
 
+        public bool Starsteel = false;
+        public int StarsteelBonus = 0;
+
         public override void ResetEffects()
         {
             Reset();
@@ -64,6 +67,9 @@ namespace CSkies
 
             Heartburn = false;
             Cometspark = false;
+
+            Starsteel = false;
+            StarsteelBonus = 0;
         }
 
         public override void UpdateBiomes()

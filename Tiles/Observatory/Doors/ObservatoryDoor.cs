@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Terraria.Enums;
 using Terraria.DataStructures;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.ModLoader.IO;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 
 namespace CSkies.Tiles.Observatory.Doors
 {
-	public class ObservatoryDoorEntrance : ModTile
+    public class ObservatoryDoorEntrance : ModTile
 	{
 		public override void SetDefaults()
 		{

@@ -1,10 +1,5 @@
 ﻿using Terraria.ModLoader.Config;
-using System.IO;
-using Terraria;
-using Terraria.IO;
-using Terraria.ModLoader;
 using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace CSkies
 {

@@ -1,13 +1,10 @@
-using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace CSkies.NPCs.Bosses.Enigma
 {
-	public class SaucerMinion : ModNPC
+    public class SaucerMinion : ModNPC
 	{
         public override void SetStaticDefaults()
 		{

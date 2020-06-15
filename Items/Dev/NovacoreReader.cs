@@ -1,7 +1,4 @@
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
-using Terraria;
-using Terraria.Localization;
 using System.Collections.Generic;
 using Terraria.ID;
 
