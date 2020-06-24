@@ -60,7 +60,7 @@ namespace CSkies
         {
             bool evilBoss = npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail || npc.type == NPCID.BrainofCthulhu;
 
-            Mod AA = ModLoader.GetMod("AAMod");
+            Mod AA = ModLoader.GetMod("CSkies");
 
             bool chaosBoss = AA != null && (npc.type == AA.NPCType("Broodmother") || npc.type == AA.NPCType("Hydra"));
 

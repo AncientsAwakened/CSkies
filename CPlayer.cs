@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Terraria.Graphics.Shaders;
+using CSkies.Items.Armor.Starsteel;
 
 namespace CSkies
 {
@@ -140,8 +141,30 @@ namespace CSkies
 
         public int VortexScale = 0;
 
+        public Color StarsteelColor = Color.White;
+
         public override void PostUpdate()
         {
+            if (Starsteel)
+            {
+                switch (StarsteelBonus)
+                {
+                    case 1:
+                        StarsteelColor = Color.Red;
+                        break;
+                    case 2:
+                        StarsteelColor = Color.LimeGreen;
+                        break;
+                    case 3:
+                        StarsteelColor = Color.Violet;
+                        break;
+                    case 4:
+                        StarsteelColor = Color.Cyan;
+                        break;
+                    default: StarsteelColor = BaseDrawing.GetLightColor(player.Center); break;
+
+                }
+            }
             if (VoidEye)
             {
                 CritAll(10);
@@ -314,6 +337,68 @@ namespace CSkies
             }
         }
 
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (Starsteel && StarsteelBonus == 1 && crit)
+            {
+                for (int n = 0; n < 3; n++)
+                {
+                    float x = player.position.X + Main.rand.Next(-400, 400);
+                    float y = player.position.Y - Main.rand.Next(500, 800);
+                    Vector2 vector = new Vector2(x, y);
+                    float num13 = player.position.X + player.width / 2 - vector.X;
+                    float num14 = player.position.Y + player.height / 2 - vector.Y;
+                    num13 += Main.rand.Next(-100, 101);
+                    int num15 = 23;
+                    float num16 = (float)Math.Sqrt(num13 * num13 + num14 * num14);
+                    num16 = num15 / num16;
+                    num13 *= num16;
+                    num14 *= num16;
+                    int num17 = Projectile.NewProjectile(x, y, num13, num14, ModContent.ProjectileType<Projectiles.Star.ShieldStar>(), 30, 5f, player.whoAmI, 0, player.position.Y);
+                    Main.projectile[num17].melee = true;
+                }
+            }
+        }
+
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+            if (Starsteel && crit)
+            {
+                for (int n = 0; n < 3; n++)
+                {
+                    float x = player.position.X + Main.rand.Next(-400, 400);
+                    float y = player.position.Y - Main.rand.Next(500, 800);
+                    Vector2 vector = new Vector2(x, y);
+                    float num13 = player.position.X + player.width / 2 - vector.X;
+                    float num14 = player.position.Y + player.height / 2 - vector.Y;
+                    num13 += Main.rand.Next(-100, 101);
+                    int num15 = 23;
+                    float num16 = (float)Math.Sqrt(num13 * num13 + num14 * num14);
+                    num16 = num15 / num16;
+                    num13 *= num16;
+                    num14 *= num16;
+
+                    if (StarsteelBonus == 1 && proj.melee == true)
+                    {
+                        int num17 = Projectile.NewProjectile(x, y, num13, num14, ModContent.ProjectileType<FallingStarProj>(), 30, 5f, player.whoAmI, 0, player.position.Y);
+                        Main.projectile[num17].melee = true;
+                    }
+
+                    if (StarsteelBonus == 2 && proj.ranged == true)
+                    {
+                        int num17 = Projectile.NewProjectile(x, y, num13, num14, ModContent.ProjectileType<FallingStarProj>(), 30, 5f, player.whoAmI, 1, player.position.Y);
+                        Main.projectile[num17].ranged = true;
+                    }
+
+                    if (StarsteelBonus == 3 && proj.magic == true)
+                    {
+                        int num17 = Projectile.NewProjectile(x, y, num13, num14, ModContent.ProjectileType<FallingStarProj>(), 30, 5f, player.whoAmI, 2, player.position.Y);
+                        Main.projectile[num17].magic = true;
+                    }
+                }
+            }
+        }
+
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (VoidEye)
@@ -337,8 +422,15 @@ namespace CSkies
 
     public partial class CPlayer : ModPlayer
     {
+
         public override void ModifyDrawLayers(List<PlayerLayer> list)
         {
+            AddPlayerLayer(list, glAfterHead, PlayerLayer.Head);
+            AddPlayerLayer(list, glAfterBody, PlayerLayer.Body);
+            AddPlayerLayer(list, glAfterArm, PlayerLayer.Arms);
+            AddPlayerLayer(list, glAfterArm, PlayerLayer.Arms);
+            AddPlayerLayer(list, glAfterLegs, PlayerLayer.Legs);
+
             AddPlayerLayer(list, glAfterAll, list[list.Count - 1]);
         }
 
@@ -409,5 +501,56 @@ namespace CSkies
 
             return false;
         }
+
+        public PlayerLayer glAfterHead = new PlayerLayer("CSkies", "glAfterHead", PlayerLayer.Head, delegate (PlayerDrawInfo edi)
+        {
+            Mod mod = CSkies.inst;
+            Player drawPlayer = edi.drawPlayer;
+            CPlayer modPlayer = drawPlayer.GetModPlayer<CPlayer>();
+
+            Vector2 position = edi.position;
+            int dyeHead = edi.headArmorShader;
+
+            if (HasAndCanDraw(drawPlayer, ModContent.ItemType<StarsteelHelm>()))
+            {
+                BaseDrawing.DrawPlayerTexture(Main.playerDrawData, mod.GetTexture("Glowmasks/Armor/StarsteelHelm_Head_Glow"), dyeHead, drawPlayer, position, 0, 0f, 0f, drawPlayer.GetImmuneAlphaPure(modPlayer.StarsteelColor, edi.shadow), drawPlayer.bodyFrame);
+            }
+        });
+
+        public PlayerLayer glAfterBody = new PlayerLayer("AAMod", "glAfterBody", PlayerLayer.Body, delegate (PlayerDrawInfo edi)
+        {
+            Mod mod = CSkies.inst;
+            Player drawPlayer = edi.drawPlayer;
+            CPlayer modPlayer = drawPlayer.GetModPlayer<CPlayer>();
+
+            if (HasAndCanDraw(drawPlayer, ModContent.ItemType<StarsteelPlate>()))
+            {
+                BaseDrawing.DrawPlayerTexture(Main.playerDrawData, mod.GetTexture("Glowmasks/Armor/StarsteelPlate_Body_Glow"), edi.bodyArmorShader, drawPlayer, edi.position, 1, 0f, 0f, drawPlayer.GetImmuneAlphaPure(modPlayer.StarsteelColor, edi.shadow), drawPlayer.bodyFrame);
+            }
+        });
+
+        public PlayerLayer glAfterArm = new PlayerLayer("AAMod", "glAfterArm", PlayerLayer.Arms, delegate (PlayerDrawInfo edi)
+        {
+            Mod mod = CSkies.inst;
+            Player drawPlayer = edi.drawPlayer;
+            CPlayer modPlayer = drawPlayer.GetModPlayer<CPlayer>();
+
+            if (HasAndCanDraw(drawPlayer, ModContent.ItemType<StarsteelPlate>()))
+            {
+                BaseDrawing.DrawPlayerTexture(Main.playerDrawData, mod.GetTexture("Glowmasks/Armor/StarsteelPlate_Arms_Glow"), edi.bodyArmorShader, drawPlayer, edi.position, 1, 0f, 0f, drawPlayer.GetImmuneAlphaPure(modPlayer.StarsteelColor, edi.shadow), drawPlayer.bodyFrame);
+            }
+        });
+
+        public PlayerLayer glAfterLegs = new PlayerLayer("AAMod", "glAfterLegs", PlayerLayer.Legs, delegate (PlayerDrawInfo edi)
+        {
+            Mod mod = CSkies.inst;
+            Player drawPlayer = edi.drawPlayer;
+            CPlayer modPlayer = drawPlayer.GetModPlayer<CPlayer>();
+
+            if (HasAndCanDraw(drawPlayer, ModContent.ItemType<StarsteelBoots>()))
+            {
+                BaseDrawing.DrawPlayerTexture(Main.playerDrawData, mod.GetTexture("Glowmasks/Armor/StarsteelBoots_Legs_Glow"), edi.legArmorShader, drawPlayer, edi.position, 2, 0f, 0f, drawPlayer.GetImmuneAlphaPure(modPlayer.StarsteelColor, edi.shadow), drawPlayer.legFrame);
+            }
+        });
     }
 }

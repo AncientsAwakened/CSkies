@@ -24,59 +24,54 @@ namespace CSkies.Items.Armor.Starsteel
 
 		public override void UpdateEquip(Player player)
 		{
-			player.findTreasure = true;
-			player.pickSpeed -= 0.15f;
 
-			Lighting.AddLight((int)player.Center.X, (int)player.Center.Y, 1f, 0.95f, .8f);
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return body.type == mod.ItemType("StoneSoldierPlate") && legs.type == mod.ItemType("StoneSoldierGreaves") ;
+			return body.type == mod.ItemType("StarsteelPlate") && legs.type == mod.ItemType("StarsteelBoots") ;
         }
 
         public override void UpdateArmorSet(Player player)
 		{
-			bool Melee = BasePlayer.HasAccessory(player, ModContent.ItemType<StarsteelAugmentMe>(), true, false);
-			bool Ranged = BasePlayer.HasAccessory(player, ModContent.ItemType<StarsteelAugmentMe>(), true, false);
-			bool Magic = BasePlayer.HasAccessory(player, ModContent.ItemType<StarsteelAugmentMe>(), true, false);
-			bool Summon = BasePlayer.HasAccessory(player, ModContent.ItemType<StarsteelAugmentMe>(), true, false);
-
 			CPlayer modPlayer = player.GetModPlayer<CPlayer>();
 			modPlayer.Starsteel = true;
 
-			if (Melee)
+			if (modPlayer.StarsteelBonus == 1)
 			{
 				player.setBonus = @"+9% Melee Speed
 Melee critical hits will cause a piercing star to fall";
-				modPlayer.StarsteelBonus = 1;
 				item.defense = 23;
 				player.meleeSpeed += .09f;
 				return;
 			}
-			if (Ranged)
+			if (modPlayer.StarsteelBonus == 2)
 			{
 				player.setBonus = @"20% reduced ammo consumption
 Ranged critical hits will cause a piercing star to fall";
 				player.ammoCost80 = true;
-				modPlayer.StarsteelBonus = 2;
 				item.defense = 5;
 				return;
 			}
-			if (Magic)
+			if (modPlayer.StarsteelBonus == 3)
 			{
 				player.setBonus = @"Increases maximum mana by 90
 Magic critical hits will cause a piercing star to fall";
-				modPlayer.StarsteelBonus = 3;
 				item.defense = 9;
 				player.statManaMax2 += 90;
 				return;
 			}
-			if (Summon)
+			if (modPlayer.StarsteelBonus == 4)
 			{
 				player.setBonus = @"A guardian star watches over you by firing mini stars at enemies.";
-				modPlayer.StarsteelBonus = 4;
-				item.defense = 2;
+				item.defense = 2; 
+				if (player.whoAmI == Main.myPlayer)
+				{
+					if (player.ownedProjectileCounts[ModContent.ProjectileType<StarGuardian>()] < 1)
+					{
+						Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, -1f, ModContent.ProjectileType<StarGuardian>(), (int)(60 * player.minionDamage), 0f, Main.myPlayer, 0f, 0f);
+					}
+				}
 				return;
 			}
 
@@ -88,8 +83,7 @@ PLEASE EQUIP AUGMENT TO ACTIVATE ABILITY SYSTEM";
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.MiningHelmet);
-            recipe.AddIngredient(null, "StoneShell", 6);
+            recipe.AddIngredient(null, "Stelarite", 10);
             recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

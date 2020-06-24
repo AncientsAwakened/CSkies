@@ -153,8 +153,8 @@ namespace CSkies
                     },
                     "Use a [i: " + ModContent.ItemType<PassionRune>() + "] at night",
                     "Heartcore rockets back into the stratosphere...",
-                    "AAMod/CrossMod/BossChecklist/Heartcore",
-                    "AAMod/NPCs/Bosses/Broodmother/Heartcore_Head_Boss");
+                    "CSkies/CrossMod/BossChecklist/Heartcore",
+                    "CSkies/NPCs/Bosses/Broodmother/Heartcore_Head_Boss");
                 #endregion
 
                 #region Fury Soul
@@ -175,8 +175,8 @@ namespace CSkies
                     },
                     "Defeat Heartcore in expert mode",
                     "Heartcore vanishes in a blink of flame...",
-                    "AAMod/CrossMod/BossChecklist/FurySoul",
-                    "AAMod/NPCs/Bosses/FurySoul/FurySoul_Head_Boss",
+                    "CSkies/CrossMod/BossChecklist/FurySoul",
+                    "CSkies/NPCs/Bosses/FurySoul/FurySoul_Head_Boss",
                     null);
                 #endregion
 

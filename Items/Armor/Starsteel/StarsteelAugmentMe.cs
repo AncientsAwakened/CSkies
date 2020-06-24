@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 
 namespace CSkies.Items.Armor.Starsteel
 {
@@ -11,6 +12,7 @@ namespace CSkies.Items.Armor.Starsteel
         {
             DisplayName.SetDefault("Melee Starsteel Augment");
             Tooltip.SetDefault(@"If wearing starsteel Armor, accessory effects double.");
+            Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(5, 13));
         }
 
         public override void SetDefaults()
@@ -24,6 +26,7 @@ namespace CSkies.Items.Armor.Starsteel
 
         public override void UpdateEquip(Player player)
         {
+            player.GetModPlayer<CPlayer>().StarsteelBonus = 1;
             if (player.GetModPlayer<CPlayer>().Starsteel)
             {
                 player.meleeDamage += .1f;
