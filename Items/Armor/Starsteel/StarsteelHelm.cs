@@ -22,11 +22,6 @@ namespace CSkies.Items.Armor.Starsteel
             item.rare = ItemRarityID.LightRed;
 		}
 
-		public override void UpdateEquip(Player player)
-		{
-
-		}
-
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
 			return body.type == mod.ItemType("StarsteelPlate") && legs.type == mod.ItemType("StarsteelBoots") ;

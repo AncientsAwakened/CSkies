@@ -45,7 +45,9 @@ namespace CSkies.NPCs.Bosses.FurySoul
             npc.damage = (int)(npc.damage * 0.5f);
         }
 
-        public float[] Movement = new float[4];
+        public float[] Movement = new float[2];
+        public float TeleportTimer = 0;
+        public bool IsTeleporting = false;
         public float[] InternalAI = new float[4];
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -55,8 +57,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 writer.Write(Movement[0]);
                 writer.Write(Movement[1]);
-                writer.Write(Movement[2]);
-                writer.Write(Movement[3]);
+                writer.Write(TeleportTimer);
+                writer.Write(IsTeleporting);
                 writer.Write(InternalAI[0]);
                 writer.Write(InternalAI[1]);
                 writer.Write(InternalAI[2]);
@@ -71,8 +73,8 @@ namespace CSkies.NPCs.Bosses.FurySoul
             {
                 Movement[0] = reader.ReadFloat();
                 Movement[1] = reader.ReadFloat();
-                Movement[2] = reader.ReadFloat();
-                Movement[3] = reader.ReadFloat();
+                TeleportTimer = reader.ReadFloat();
+                IsTeleporting = reader.ReadBool();
                 InternalAI[0] = reader.ReadFloat();
                 InternalAI[1] = reader.ReadFloat();
                 InternalAI[2] = reader.ReadFloat();
@@ -94,6 +96,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
             CWorld.downedHeartcore = true;
             int n = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<FurySoulDeath>());
             Main.npc[n].Center = npc.Center;
+            Main.npc[n].rotation = npc.rotation;
             for (int num468 = 0; num468 < 12; num468++)
             {
                 int num469 = Dust.NewDust(new Vector2(npc.position.X, npc.position.Y), npc.width, npc.height, DustID.SolarFlare, -npc.velocity.X * 0.2f,
@@ -227,13 +230,16 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     npc.alpha -= 4;
                 }
-                if (scale >= 1f)
+                if (!IsTeleporting)
                 {
-                    scale = 1f;
-                }
-                else
-                {
-                    scale += .02f;
+                    if (scale >= 1f)
+                    {
+                        scale = 1f;
+                    }
+                    else
+                    {
+                        scale += .02f;
+                    }
                 }
             }
 
@@ -242,13 +248,16 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 player.AddBuff(ModContent.BuffType<Buffs.Heartburn>(), 10);
             }
 
-            if (npc.ai[0] == 2 || npc.ai[0] == 4)
+            if (!IsTeleporting)
             {
-                npc.velocity *= .0f;
-            }
-            else
-            {
-                BaseAI.AISkull(npc, ref Movement, true, 14, 350, .04f, .05f);
+                if (npc.ai[0] == 2 || npc.ai[0] == 4)
+                {
+                    npc.velocity *= .0f;
+                }
+                else
+                {
+                    BaseAI.AISkull(npc, ref Movement, true, 14, 350, .04f, .05f);
+                }
             }
 
             if (npc.ai[2]++ > Changerate)
@@ -284,22 +293,25 @@ namespace CSkies.NPCs.Bosses.FurySoul
                     case 1:
                         if (npc.ai[2] >= Changerate + 30)
                         {
-                            float spread1 = 12f * 0.0174f;
-                            double startAngle1 = Math.Atan2(npc.velocity.X, npc.velocity.Y) - spread1 / 2;
-                            double deltaAngle1 = spread1 / 10f;
-                            if (npc.ai[2] % 30 == 0)
-                            {
-                                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
-                                for (int i = 0; i < 10; i++)
-                                {
-                                    double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
-                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
-                                    Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
-                                }
-                            }
                             if (npc.ai[2] > 260)
                             {
                                 AIChange();
+                            }
+                            else
+                            {
+                                float spread1 = 12f * 0.0174f;
+                                double startAngle1 = Math.Atan2(npc.velocity.X, npc.velocity.Y) - spread1 / 2;
+                                double deltaAngle1 = spread1 / 10f;
+                                if (npc.ai[2] % 30 == 0)
+                                {
+                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
+                                    for (int i = 0; i < 10; i++)
+                                    {
+                                        double offsetAngle1 = (startAngle1 + deltaAngle1 * (i + i * i) / 2f) + 32f * i;
+                                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(Math.Sin(offsetAngle1) * 8f), (float)(Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                        Projectile.NewProjectile(npc.Center.X, npc.Center.Y, (float)(-Math.Sin(offsetAngle1) * 8f), (float)(-Math.Cos(offsetAngle1) * 8f), ModContent.ProjectileType<Fireshot>(), npc.damage / 2, 6);
+                                    }
+                                }
                             }
                         }
                         else
@@ -316,7 +328,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         break;
                     case 3:
 
-                        if (npc.ai[2] >= Changerate + 30)
+                        if (npc.ai[2] == Changerate + 30)
                         {
                             int loops = (npc.life < npc.lifeMax / 4) ? 10 : 6;
 
@@ -328,9 +340,11 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
                                 Vector2 Direction = shotDir.ToRotationVector2();
 
-                                Projectile.NewProjectile(npc.Center, Direction * 8, ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
+                                Projectile.NewProjectile(npc.Center, Direction * 12, ModContent.ProjectileType<Flamewave>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             }
-
+                        }
+                        else if(npc.ai[2] > Changerate + 30)
+                        {
                             AIChange();
                         }
                         else
@@ -454,16 +468,86 @@ namespace CSkies.NPCs.Bosses.FurySoul
             }
         }
 
+        private void SetTeleportLocation()
+        {
+            if (!NPC.AnyNPCs(ModContent.NPCType<TeleportLocation>()))
+            {
+                Player player = Main.player[npc.target];
+                Vector2 targetPos = player.Center;
+                int posX = Main.rand.Next(5);
+
+                int posY = 0;
+                switch (posX)
+                {
+                    case 0:
+                        posX = -300;
+                        posY = 0;
+                        break;
+                    case 1:
+                        posX = -300;
+                        posY = -300;
+                        break;
+                    case 2:
+                        posX = 0;
+                        posY = -300;
+                        break;
+                    case 3:
+                        posX = 300;
+                        posY = -300;
+                        break;
+                    case 4:
+                        posX = 300;
+                        posY = 0;
+                        break;
+                }
+
+                Vector2 position = new Vector2(targetPos.X + posX, targetPos.Y + posY);
+
+                NPC.NewNPC((int)position.X, (int)position.Y, ModContent.NPCType<TeleportLocation>(), 0, npc.whoAmI);
+            }
+        }
+
+        public void Teleport()
+        {
+            TeleportTimer++;
+            if (scale > 0)
+            {
+                scale -= .05f;
+            }
+
+            SetTeleportLocation();
+
+            if (TeleportTimer >= 60 || npc.ai[0] == 4)
+            {
+                scale = 0;
+                TeleportTimer = 0;
+
+                TPDust();
+
+                int Reticle = BaseAI.GetNPC(npc.Center, ModContent.NPCType<TeleportLocation>(), -1);
+
+                npc.Center = Main.npc[Reticle].Center;
+                Main.npc[Reticle].active = false;
+                Main.npc[Reticle].netUpdate = true;
+
+                IsTeleporting = false;
+                npc.netUpdate = true;
+
+                TPDust();
+            }
+            else
+            {
+                IsTeleporting = true;
+                return;
+            }
+        }
+
         private void AIChange()
         {
+            npc.velocity *= .98f;
+
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                npc.ai[0] = Main.rand.Next(5);
-                npc.ai[1] = 0;
-                npc.ai[2] = 0;
-                InternalAI[2] = 0; 
-                InternalAI[3] = 0;
-                rotAmt = 0;
                 if (npc.ai[0] == 2 || npc.ai[0] == 4)
                 {
                     Teleport();
@@ -480,44 +564,77 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 {
                     Teleport();
                 }
-                npc.netUpdate = true;
+                if (!IsTeleporting)
+                {
+                    float oldAI = npc.ai[0];
+                    for (int i = 0; i < 5; i++) //Gives it 5 chances to choose an ai that wasn't the last one, making it rare to do the same attack again but not impossible
+                    {
+                        npc.ai[0] = Main.rand.Next(5);
+                        if (npc.ai[0] != oldAI)
+                        {
+                            break;
+                        }
+                    }
+                    npc.ai[0] = Main.rand.Next(5);
+                    npc.ai[1] = 0;
+                    npc.ai[2] = 0;
+                    InternalAI[2] = 0;
+                    InternalAI[3] = 0;
+                    rotAmt = 0;
+                    npc.netUpdate = true;
+                }
             }
         }
 
-        public void Teleport()
+        readonly float Pi2 = (float)Math.PI * 2;
+
+        private void LaserAttack()
         {
-            scale = 0;
-            Player player = Main.player[npc.target];
-            Vector2 targetPos = player.Center;
-            int posX = Main.rand.Next(5);
-
-            int posY = 0;
-            switch (posX)
+            rotAmt += .0005f;
+            npc.rotation += rotAmt;
+            int LaserCount;
+            if (npc.life < npc.lifeMax / 4)
             {
-                case 0:
-                    posX = -300;
-                    posY = 0;
-                    break;
-                case 1:
-                    posX = -300;
-                    posY = -300;
-                    break;
-                case 2:
-                    posX = 0;
-                    posY = -300;
-                    break;
-                case 3:
-                    posX = 300;
-                    posY = -300;
-                    break;
-                case 4:
-                    posX = 300;
-                    posY = 0;
-                    break;
+                if (rotAmt > .028f)
+                {
+                    rotAmt = .028f;
+                }
+                LaserCount = 4;
             }
+            else if (npc.life < npc.lifeMax / 2)
+            {
+                if (rotAmt > .024f)
+                {
+                    rotAmt = .024f;
+                }
+                LaserCount = 3;
+            }
+            else
+            {
+                if (rotAmt > .02f)
+                {
+                    rotAmt = .02f;
+                }
+                LaserCount = 2;
+            }
+            if ((!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())) && InternalAI[2] == 0)
+            {
+                for (int l = 0; l < LaserCount; l++)
+                {
+                    float LaserPos = Pi2 / LaserCount;
+                    float laserDir = LaserPos * l;
+                    Projectile.NewProjectile(npc.Center, (npc.rotation + laserDir).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, laserDir, npc.whoAmI);
+                }
+            }
+            InternalAI[2]++;
+            if (InternalAI[2] > 240 && (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())))
+            {
+                AIChange();
+            }
+        }
 
-            npc.position = new Vector2(targetPos.X + posX, targetPos.Y + posY);
-
+        public void TPDust()
+        {
             Vector2 position = npc.Center + (Vector2.One * -20f);
             int num84 = 40;
             int height3 = num84;
@@ -559,54 +676,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 Main.dust[num92].noGravity = true;
                 Main.dust[num92].velocity *= 3f;
                 Main.dust[num92].velocity += npc.DirectionTo(Main.dust[num92].position) * 3f;
-            }
-
-        }
-
-        readonly float Pi2 = (float)Math.PI * 2;
-
-        private void LaserAttack()
-        {
-            rotAmt += .0005f;
-            npc.rotation += rotAmt;
-            int LaserCount;
-            if (npc.life < npc.lifeMax / 4)
-            {
-                if (rotAmt > .028f)
-                {
-                    rotAmt = .028f;
-                }
-                LaserCount = 4;
-            }
-            else if (npc.life < npc.lifeMax / 2)
-            {
-                if (rotAmt > .024f)
-                {
-                    rotAmt = .024f;
-                }
-                LaserCount = 3;
-            }
-            else
-            {
-                if (rotAmt > .02f)
-                {
-                    rotAmt = .02f;
-                }
-                LaserCount = 2;
-            }
-            if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>()))
-            {
-                for (int l = 0; l < LaserCount; l++)
-                {
-                    float LaserPos = Pi2 / LaserCount;
-                    float laserDir = LaserPos * l;
-                    Projectile.NewProjectile(npc.Center, (npc.rotation + laserDir).ToRotationVector2(), ModContent.ProjectileType<FlameraySmall>(), npc.damage / 4, 0f, Main.myPlayer, laserDir, npc.whoAmI);
-                }
-            }
-            InternalAI[2]++;
-            if (InternalAI[2] > 240 && (!CUtils.AnyProjectiles(ModContent.ProjectileType<Flameray>()) || !CUtils.AnyProjectiles(ModContent.ProjectileType<FlameraySmall>())))
-            {
-                AIChange();
             }
         }
 

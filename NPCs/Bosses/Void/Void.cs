@@ -201,7 +201,7 @@ namespace CSkies.NPCs.Bosses.Void
                     
                     if (npc.ai[1] % 20 == 0)
                     {
-                        int a = Projectile.NewProjectile(npc.Center, Vector2.Zero, mod.ProjectileType("VoidVortex"), npc.damage / 2, 3);
+                        int a = Projectile.NewProjectile(npc.Center, Vector2.Zero, ModContent.ProjectileType<VoidVortex>(), npc.damage / 2, 3);
                         Main.projectile[a].Center = npc.Center;
                     }
                     if (npc.ai[1] % 30 == 0)
@@ -230,13 +230,11 @@ namespace CSkies.NPCs.Bosses.Void
 
                         int loops = (npc.life < npc.lifeMax / 2 ? 8 : 4);
 
-                        for (int i = 0; i < loops; i++)
+                        for (int l = 0; l < loops; l++)
                         {
-                            Vector2 shotDir = dir.ToRotationVector2();
-
-                            Projectile.NewProjectile(npc.Center, shotDir, mod.ProjectileType("VoidraySmall"), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
-
-                            dir += (float)Math.PI * 2 / loops;
+                            float LaserPos = Pi2 / loops;
+                            float laserDir = LaserPos * l + dir;
+                            Projectile.NewProjectile(npc.Center, (npc.rotation + laserDir).ToRotationVector2(), ModContent.ProjectileType<VoidraySmall>(), npc.damage / 4, 0f, Main.myPlayer, laserDir, npc.whoAmI);
                         }
                     }
 
@@ -332,7 +330,7 @@ namespace CSkies.NPCs.Bosses.Void
 
                     npc.velocity *= 0;
 
-                    if (++npc.ai[2] > 20)
+                    if (++npc.ai[2] > 45)
                     {
                         Teleport();
                         npc.ai[2] = 0;
@@ -340,7 +338,7 @@ namespace CSkies.NPCs.Bosses.Void
                         {
                             for (int l = 0; l < Repeats(); l++)
                             {
-                                int speed = 16;
+                                int speed = 8;
                                 int DirectionX = Main.rand.Next(3);
                                 switch (DirectionX)
                                 {
@@ -374,7 +372,7 @@ namespace CSkies.NPCs.Bosses.Void
                                 DirectionX += DirectionX == 0 ?  0 : Main.rand.Next(-2, 2);
                                 DirectionY += DirectionY == 0 ? 0 : Main.rand.Next(-2, 2);
 
-                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X * 2, vel.Y * 2, ModContent.ProjectileType<VoidShock>(), npc.damage / 2, 0f, Main.myPlayer, vel.ToRotation(), 0f);
+                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X, vel.Y, ModContent.ProjectileType<VoidShock>(), npc.damage / 2, 0f, Main.myPlayer, vel.ToRotation(), 0f);
                             }
                         }
                     }
