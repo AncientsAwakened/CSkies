@@ -73,8 +73,12 @@ namespace CSkies
             PremultiplyTexture(GetTexture("Backgrounds/NovaStar1"));
 
             Ref<Effect> screenRef = new Ref<Effect>(GetEffect("Effects/Shockwave"));
+            Ref<Effect> screenRef2 = new Ref<Effect>(GetEffect("Effects/WhiteFlash"));
             Filters.Scene["Shockwave"] = new Filter(new ScreenShaderData(screenRef, "Shockwave"), EffectPriority.VeryHigh);
             Filters.Scene["Shockwave"].Load();
+
+            Filters.Scene["WhiteFlash"] = new Filter(new ScreenShaderData(screenRef2, "WhiteFlash"), EffectPriority.VeryHigh);
+            Filters.Scene["WhiteFlash"].Load();
 
             Filters.Scene["CSkies:AbyssSky"] = new Filter(new AbyssSkyData("FilterMiniTower").UseColor(.2f, .2f, .2f).UseOpacity(0.5f), EffectPriority.VeryHigh);
             SkyManager.Instance["CSkies:AbyssSky"] = new AbyssSky();

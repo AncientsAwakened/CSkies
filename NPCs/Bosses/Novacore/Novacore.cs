@@ -108,7 +108,7 @@ namespace CSkies.NPCs.Bosses.Novacore
 
         public override void AI()
         {
-
+          
             Player player = Main.player[npc.target];
 
             Vector2 targetPos;
@@ -119,8 +119,8 @@ namespace CSkies.NPCs.Bosses.Novacore
             }
 
             int speed = 16;
-            float interval = .025f; 
-            
+            float interval = .025f;
+
             if (npc.life < npc.lifeMax / 2)
             {
                 if (!Phase2)
@@ -154,7 +154,7 @@ namespace CSkies.NPCs.Bosses.Novacore
                     CombatText.NewText(npc.Hitbox, Color.Red, "ERROR. DRASTIC PHYSICAL DAMAGE TO CHASSIS! ASTRAL ENERGY LEAKS IMMINENT!", true);
                     WarningText = true;
                 }
-                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch"); 
+                music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
                 speed = 20;
                 interval = .03f;
 
@@ -167,7 +167,7 @@ namespace CSkies.NPCs.Bosses.Novacore
             {
                 Lighting.AddLight(npc.Center, Color.Purple.R / 150, Color.Purple.G / 150, Color.Purple.B / 150);
             }
-            
+
 
             if (!MeleeMode)
             {

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.Graphics.Effects;
 
 namespace CSkies.NPCs.Bosses.Novacore
 {
@@ -43,6 +44,12 @@ namespace CSkies.NPCs.Bosses.Novacore
             npc.rotation += .06f;
             npc.velocity *= 0;
             npc.ai[0]++;
+            if (Main.netMode != NetmodeID.Server && !Filters.Scene["WhiteFlash"].IsActive())
+                {
+                    Filters.Scene.Activate("WhiteFlash", npc.Center).GetShader().UseOpacity(npc.ai[0] * 5);
+                }
+                Filters.Scene["WhiteFlash"].GetShader().UseOpacity(npc.ai[0]*5);
+
             if (npc.ai[0] == 120 && Main.netMode != NetmodeID.Server)
             {
                 int p = Projectile.NewProjectile(npc.Center.X, npc.Center.Y, 0f, 0f, mod.ProjectileType("ShockwaveBoom"), 0, 1, Main.myPlayer, 0, 12);
@@ -90,6 +97,10 @@ namespace CSkies.NPCs.Bosses.Novacore
 
             if (++npc.ai[0] > 360 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                if (Main.netMode != NetmodeID.Server && Filters.Scene["WhiteFlash"].IsActive())
+                {
+                    Filters.Scene["WhiteFlash"].Deactivate();
+                }
                 int n = NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, ModContent.NPCType<Novacore>(), 0, 10);
                 Main.npc[n].Center = npc.Center;
                 Main.npc[n].velocity = npc.velocity;
@@ -135,9 +146,9 @@ namespace CSkies.NPCs.Bosses.Novacore
                 {
                     Color Alpha = new Color(255 - Fadeout, 120 - Fadeout, 255 - Fadeout, ShineAlpha) * (npc.oldPos.Length - k / npc.oldPos.Length);
 
-                    spriteBatch.Draw(BladeGlowTex, npc.position - Main.screenPosition + drawOrigin, npc.frame, Alpha, npc.rotation, drawOrigin, 1f + k, SpriteEffects.None, 0f);
+                    //spriteBatch.Draw(BladeGlowTex, npc.position - Main.screenPosition + drawOrigin, npc.frame, Alpha, npc.rotation, drawOrigin, 1f + k, SpriteEffects.None, 0f);
 
-                    spriteBatch.Draw(BaseGlow, npc.position - Main.screenPosition + drawOrigin, npc.frame, Alpha, 0, drawOrigin, 1f + k, SpriteEffects.None, 0f);
+                    //spriteBatch.Draw(BaseGlow, npc.position - Main.screenPosition + drawOrigin, npc.frame, Alpha, 0, drawOrigin, 1f + k, SpriteEffects.None, 0f);
                 }
             }
 

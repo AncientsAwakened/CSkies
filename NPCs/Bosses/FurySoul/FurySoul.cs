@@ -8,6 +8,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using CSkies.NPCs.Bosses.Heartcore;
+using Terraria.Graphics.Effects;
 
 namespace CSkies.NPCs.Bosses.FurySoul
 {
@@ -125,7 +126,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 }
                 music = mod.GetSoundSlot(Terraria.ModLoader.SoundType.Music, "Sounds/Music/Pinch");
             }
-
+            
             if (npc.life < npc.lifeMax / 2 && NPC.CountNPCS(ModContent.NPCType<FuryMinion>()) < 2)
             {
                 InternalAI[1]++;
