@@ -68,7 +68,7 @@ namespace CSkies.NPCs.Bosses.Void
         public override bool PreDraw(SpriteBatch spritebatch, Color lightColor)
         {
             Texture2D Tex = Main.projectileTexture[projectile.type];
-            Rectangle frame = new Rectangle(projectile.frame, 0, Tex.Width, Tex.Height / 4);
+            Rectangle frame = BaseDrawing.GetFrame(projectile.frame, Tex.Width, Tex.Height / 4, 0, 0);
 
             if (auraDirection) { auraPercent += 0.1f; auraDirection = auraPercent < 1f; }
             else { auraPercent -= 0.1f; auraDirection = auraPercent <= 0f; }

@@ -49,6 +49,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
         public float TeleportTimer = 0;
         public bool IsTeleporting = false;
         public float[] InternalAI = new float[4];
+        float scale = 0;
 
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -63,6 +64,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 writer.Write(InternalAI[1]);
                 writer.Write(InternalAI[2]);
                 writer.Write(InternalAI[3]);
+                writer.Write(scale);
             }
         }
 
@@ -79,6 +81,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 InternalAI[1] = reader.ReadFloat();
                 InternalAI[2] = reader.ReadFloat();
                 InternalAI[3] = reader.ReadFloat();
+                scale = reader.ReadFloat();
             }
         }
 
@@ -106,8 +109,6 @@ namespace CSkies.NPCs.Bosses.FurySoul
         }
 
         public static Color Flame => BaseUtility.MultiLerpColor(Main.LocalPlayer.miscCounter % 100 / 100f, Color.Orange, Color.Red, Color.Orange);
-
-        float scale = 0;
 
         float Changerate;
 
@@ -385,6 +386,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 0)
                         {
                             InternalAI[3] += 1;
+                            SetTeleportLocation();
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -393,7 +395,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 1)
                         {
-                            Teleport(); InternalAI[3] += 1;
+                            FuryrangTeleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -402,7 +404,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 2)
                         {
-                            Teleport(); InternalAI[3] += 1;
+                            FuryrangTeleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 12), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -411,7 +413,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 3)
                         {
-                            Teleport(); InternalAI[3] += 1;
+                            FuryrangTeleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-12, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -420,7 +422,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
                         }
                         if (!CUtils.AnyProjectiles(ModContent.ProjectileType<Furyrang>()) && InternalAI[3] == 4)
                         {
-                            Teleport(); InternalAI[3] += 1;
+                            FuryrangTeleport(); InternalAI[3] += 1;
                             Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Sounds/FireCast"), npc.position);
                             Projectile.NewProjectile(npc.Center, new Vector2(14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
                             Projectile.NewProjectile(npc.Center, new Vector2(-14, 0), ModContent.ProjectileType<Furyrang>(), npc.damage / 2, 0f, Main.myPlayer, 0, npc.whoAmI);
@@ -517,7 +519,7 @@ namespace CSkies.NPCs.Bosses.FurySoul
 
             SetTeleportLocation();
 
-            if (TeleportTimer >= 60 || npc.ai[0] == 4)
+            if (scale <= 0 || npc.ai[0] == 4)
             {
                 scale = 0;
                 TeleportTimer = 0;
@@ -540,6 +542,29 @@ namespace CSkies.NPCs.Bosses.FurySoul
                 IsTeleporting = true;
                 return;
             }
+        }
+
+        public void FuryrangTeleport()
+        {
+            scale = 0;;
+
+            TPDust();
+
+            int Reticle = BaseAI.GetNPC(npc.Center, ModContent.NPCType<TeleportLocation>(), -1);
+
+            npc.Center = Main.npc[Reticle].Center;
+            Main.npc[Reticle].active = false;
+            Main.npc[Reticle].netUpdate = true;
+
+            if (InternalAI[3] != 4)
+            {
+                SetTeleportLocation();
+            }
+
+            IsTeleporting = false;
+            npc.netUpdate = true;
+
+            TPDust();
         }
 
         private void AIChange()
