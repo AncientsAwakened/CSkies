@@ -58,8 +58,25 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         public float ChangeRate = Main.expertMode ? 180 : 240;
 
-        public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11, despawn = 12;
+        //public const int Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, ShockPrep = 8, Shock = 9, StaticPrep = 10, Static = 11, despawn = 12;
         
+		private enum AIPhase : byte
+		{
+			Idle = 0, 
+			HomingMagic = 1, 
+			LightningStorm = 2, 
+			BeamPrep = 3, 
+			Beam = 4, 
+			Construct = 5, 
+			Vortexes = 6, 
+			Grenades = 7, 
+			ShockPrep = 8, 
+			Shock = 9, 
+			StaticPrep = 10, 
+			Static = 11, 
+			despawn = 12
+		}
+		
         bool title = false;
 
         public override void AI()
@@ -111,15 +128,15 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             BaseAI.AISpaceOctopus(npc, ref EAI, Movespeed, VelMax, 300); 
 
-            switch ((int)npc.ai[0])
+            switch ((AIPhase)npc.ai[0])
             {
-                case 0:
+                case AIPhase.Idle:
                     if (npc.ai[1] > ChangeRate * 1.5f)
                     {
                         AIChange();
                     }
                     break;
-                case 1:
+                case AIPhase.HomingMagic:
 
                     if (npc.ai[1] % (ChangeRate / 6) == 0)
                     {
@@ -135,7 +152,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         AIReset();
                     }
                     break;
-                case 2:
+                case AIPhase.LightningStorm:
 
                     if (npc.ai[1] % (ChangeRate / 4) == 0)
                     {
@@ -151,8 +168,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         AIReset();
                     }
                     break;
-                case 3:
-
+                case AIPhase.BeamPrep:
                     for (int num468 = 0; num468 < 3; num468++)
                     {
                         int num469 = Dust.NewDust(npc.Center, 0, 0, DustID.Electric, 0, 0, 100, default, 1f);
@@ -171,15 +187,14 @@ namespace CSkies.NPCs.Bosses.Enigma
                         npc.ai[3] = 0;
                     }
                     break;
-                case 4:
+                case AIPhase.Beam:
                     if (npc.ai[1] > ChangeRate + 60)
                     {
                         AIReset();
                     }
                     break;
 
-                case 5:
-
+                case AIPhase.Construct:
                     if (Main.rand.Next(10) == 0)
                     {
                         int x = Main.rand.Next(-6, 6);
@@ -205,7 +220,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
 
                     break;
-                case 6:
+                case AIPhase.Vortexes :
                     if (npc.ai[1] == 45)
                     {
                         Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Sounds/Zap"), npc.position);
@@ -220,7 +235,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         AIReset();
                     }
                     break;
-                case 7:
+                case AIPhase.Grenades:
                     npc.ai[2]++;
 
                     if (npc.ai[2] < 10)
@@ -254,7 +269,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         AIReset();
                     }
                     break;
-                case 8:
+                case AIPhase.ShockPrep:
 
                     for (int num468 = 0; num468 < 3; num468++)
                     {
@@ -272,15 +287,14 @@ namespace CSkies.NPCs.Bosses.Enigma
                     }
 
                     break;
-                case 9:
-
+                case AIPhase.Shock:
                     if (npc.ai[1] > 60)
                     {
                         AIReset();
                     }
 
                         break;
-                case 10:
+                case AIPhase.StaticPrep:
 
                     if (npc.ai[1] > ChangeRate)
                     {
@@ -290,7 +304,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                         npc.ai[3] = 0;
                     }
                     break;
-                case 11:
+                case AIPhase.Static:
                     handRot = npc.DirectionFrom(player.Center).ToRotation() - 0.001f;
                     if (npc.ai[1] % 10 == 0)
                     {
@@ -338,8 +352,7 @@ namespace CSkies.NPCs.Bosses.Enigma
                     npc.ai[0] = 0;
                     goto case 0;
             }
-
-            if (npc.ai[0] == 4 || npc.ai[0] == 11)
+            if (npc.ai[0] == (int)AIPhase.Beam || npc.ai[0] == (int)AIPhase.Static)
             {
                 handRot -= GetSpinOffset();
             }
@@ -368,7 +381,7 @@ namespace CSkies.NPCs.Bosses.Enigma
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                npc.ai[0] = AIType();
+                npc.ai[0] = (float)AIType();
                 npc.ai[1] = 0;
                 npc.ai[2] = 0;
                 npc.ai[3] = 0;
@@ -390,28 +403,27 @@ namespace CSkies.NPCs.Bosses.Enigma
 
         //Idle = 0, HomingMagic = 1, LightningStorm = 2, BeamPrep = 3, Beam = 4, Construct = 5, Vortexes = 6, Grenades = 7, StaticPrep = 10, Static = 11;
 
-        public int AIType()
+        private AIPhase AIType()
         {
             int aitype = Main.rand.Next(Unhooded ? 8 : 7);
-
             switch (aitype)
             {
                 case 0:
-                    return HomingMagic;
+                    return AIPhase.HomingMagic;
                 case 1:
-                    return LightningStorm;
+                    return AIPhase.LightningStorm;
                 case 2:
-                    return BeamPrep;
+                    return AIPhase.BeamPrep;
                 case 3:
-                    return Construct;
+                    return AIPhase.Construct;
                 case 4:
-                    return Vortexes;
+                    return AIPhase.Vortexes;
                 case 5:
-                    return Grenades;
+                    return AIPhase.Grenades;
                 case 6:
-                    return ShockPrep;
+                    return AIPhase.ShockPrep;
                 default:
-                    return StaticPrep;
+                    return AIPhase.StaticPrep;
             }
         }
 
@@ -503,46 +515,46 @@ namespace CSkies.NPCs.Bosses.Enigma
 
             switch ((int)npc.ai[0])
             {
-                case Idle:
+                case (int)AIPhase.Idle:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHands");
                     break;
 
-                case HomingMagic:
-                case Vortexes:
+                case (int)AIPhase.HomingMagic:
+                case (int)AIPhase.Vortexes:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsBlast");
                     break;
 
-                case LightningStorm:
+                case (int)AIPhase.LightningStorm:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCast");
                     break;
 
-                case BeamPrep:
-                case ShockPrep:
+                case (int)AIPhase.BeamPrep:
+                case (int)AIPhase.ShockPrep:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsPrep");
                     break;
 
-                case Beam:
-                case Shock:
+                case (int)AIPhase.Beam:
+                case (int)AIPhase.Shock:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsLaser");
                     break;
 
-                case Construct:
+                case (int)AIPhase.Construct:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAssemble");
                     break;
 
-                case Grenades:
+                case (int)AIPhase.Grenades:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsThrow");
                     break;
 
-                case StaticPrep:
+                case (int)AIPhase.StaticPrep:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsCharge");
                     break;
 
-                case Static:
+                case (int)AIPhase.Static:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsAim");
                     break;
 
-                case despawn:
+                case (int)AIPhase.despawn:
                     hand = mod.GetTexture("NPCs/Bosses/Enigma/EnigmaHandsPrelude");
                     break;
 
