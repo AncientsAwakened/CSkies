@@ -146,7 +146,7 @@ namespace CSkies.Projectiles.Comet
         // chain voodoo
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         { 
-            Texture2D texture = ModContent.GetTexture("CSkies/Projectiles/Comet_Chain");
+            Texture2D texture = ModContent.GetTexture("CSkies/Projectiles/Comet/Comet_Chain");
  
             Vector2 position = projectile.Center;
             Vector2 mountedCenter = Main.player[projectile.owner].MountedCenter;

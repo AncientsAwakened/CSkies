@@ -45,10 +45,10 @@ namespace CSkies.NPCs.Bosses.Novacore
             npc.velocity *= 0;
             npc.ai[0]++;
             if (Main.netMode != NetmodeID.Server && !Filters.Scene["WhiteFlash"].IsActive())
-                {
-                    Filters.Scene.Activate("WhiteFlash", npc.Center).GetShader().UseOpacity(npc.ai[0] * 5);
-                }
-                Filters.Scene["WhiteFlash"].GetShader().UseOpacity(npc.ai[0]*5);
+            {
+                Filters.Scene.Activate("WhiteFlash", npc.Center).GetShader().UseOpacity(npc.ai[0] * 5);
+            }
+            Filters.Scene["WhiteFlash"].GetShader().UseOpacity(npc.ai[0] * 5);
 
             if (npc.ai[0] == 120 && Main.netMode != NetmodeID.Server)
             {
@@ -95,18 +95,22 @@ namespace CSkies.NPCs.Bosses.Novacore
                 }
             }
 
-            if (++npc.ai[0] > 360 && Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (Main.netMode != NetmodeID.Server && Filters.Scene["WhiteFlash"].IsActive())
+                if (npc.ai[0] > 300 && Main.netMode != NetmodeID.Server && Filters.Scene["WhiteFlash"].IsActive())
                 {
                     Filters.Scene["WhiteFlash"].Deactivate();
                 }
-                int n = NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, ModContent.NPCType<Novacore>(), 0, 10);
-                Main.npc[n].Center = npc.Center;
-                Main.npc[n].velocity = npc.velocity;
-                Main.npc[n].frame.Y = npc.frame.Y;
-                npc.active = false;
-                npc.netUpdate = true;
+                if (npc.ai[0] > 360)
+                {
+                    int n = NPC.NewNPC((int)npc.position.X, (int)npc.position.Y, ModContent.NPCType<Novacore>(), 0, 10);
+                    Main.npc[n].Center = npc.Center;
+                    Main.npc[n].velocity = npc.velocity;
+                    Main.npc[n].frame.Y = npc.frame.Y;
+                    npc.active = false;
+                    npc.netUpdate = true;
+                }
+                
             }
         }
 
