@@ -43,7 +43,7 @@ namespace CSkies.NPCs.Bosses.ObserverVoid
 
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(new LegacySoundStyle(2, 89, Terraria.Audio.SoundType.Sound));
+            Main.PlaySound(new LegacySoundStyle(2, 89, Terraria.Audio.SoundType.Sound), projectile.position);
             Projectile.NewProjectile(projectile.Center.X, projectile.Center.Y - 35, projectile.velocity.X, projectile.velocity.Y, mod.ProjectileType("ShadowBoom"), projectile.damage, projectile.knockBack, projectile.owner, 0f, 0f);
         }
 
