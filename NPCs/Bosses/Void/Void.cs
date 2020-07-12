@@ -20,8 +20,8 @@ namespace CSkies.NPCs.Bosses.Void
 
         public override void SetDefaults()
         {
-            npc.width = 70;
-            npc.height = 136;
+            npc.width = 198;
+            npc.height = 138;
             npc.value = BaseUtility.CalcValue(0, 10, 0, 0);
             npc.npcSlots = 1000;
             npc.aiStyle = -1;
@@ -330,49 +330,45 @@ namespace CSkies.NPCs.Bosses.Void
 
                     npc.velocity *= 0;
 
-                    if (++npc.ai[2] > 45)
+                    if (++npc.ai[2] > 60)
                     {
                         Teleport();
                         npc.ai[2] = 0;
                         if (Main.netMode != NetmodeID.MultiplayerClient) //spawn lightning
                         {
-                            for (int l = 0; l < Repeats(); l++)
+                            if (npc.life < npc.lifeMax / 2)
                             {
-                                int speed = 8;
-                                int DirectionX = Main.rand.Next(3);
-                                switch (DirectionX)
+                                float dir = Pi2 / 8;
+
+                                if (Main.rand.NextBool())
                                 {
-                                    case 0:
-                                        DirectionX = speed;
-                                        break;
-                                    case 1:
-                                        DirectionX = -speed;
-                                        break;
-                                    case 2:
-                                        DirectionX = 0;
-                                        break;
-                                }
-                                int DirectionY = DirectionX == 0 ? Main.rand.Next(2) : Main.rand.Next(3);
-                                switch (DirectionY)
-                                {
-                                    case 0:
-                                        DirectionY = speed;
-                                        break;
-                                    case 1:
-                                        DirectionY = -speed;
-                                        break;
-                                    case 2:
-                                        DirectionY = 0;
-                                        break;
+                                    dir = 0;
                                 }
 
+                                for (int l = 0; l < 4; l++)
+                                {
+                                    float LaserPos = Pi2 / 4;
+                                    float laserDir = LaserPos * l + dir;
+                                    Vector2 velocity = (npc.rotation + laserDir).ToRotationVector2();
+                                    Projectile.NewProjectile(npc.Center, velocity, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, velocity.ToRotation(), 0f);
+                                }
+                            }
+                            else
+                            {
+                                float dir = (float)Math.PI;
 
-                                Vector2 vel = new Vector2(DirectionX, DirectionY);
+                                if (Main.rand.NextBool())
+                                {
+                                    dir = 0;
+                                }
 
-                                DirectionX += DirectionX == 0 ?  0 : Main.rand.Next(-2, 2);
-                                DirectionY += DirectionY == 0 ? 0 : Main.rand.Next(-2, 2);
-
-                                Projectile.NewProjectile((int)npc.Center.X + DirectionX, (int)npc.Center.Y + DirectionY, vel.X, vel.Y, ModContent.ProjectileType<VoidShock>(), npc.damage / 2, 0f, Main.myPlayer, vel.ToRotation(), 0f);
+                                for (int l = 0; l < 2; l++)
+                                {
+                                    float LaserPos = Pi2 / 2;
+                                    float laserDir = LaserPos * l + dir;
+                                    Vector2 velocity = (npc.rotation + laserDir).ToRotationVector2();
+                                    Projectile.NewProjectile(npc.Center, velocity, ModContent.ProjectileType<VoidShock>(), npc.damage / 4, 0f, Main.myPlayer, velocity.ToRotation(), 0f);
+                                }
                             }
                         }
                     }
