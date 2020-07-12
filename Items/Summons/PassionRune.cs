@@ -57,30 +57,15 @@ Can only be used at night");
         {
             int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
             Texture2D texture = mod.GetTexture("Glowmasks/" + GetType().Name + "_Glow");
-            BaseDrawing.DrawTexture(spriteBatch, texture, r, item, null, false);
-            /*spriteBatch.Draw
-                (
-                texture,
-                new Vector2
-                (
-                    item.position.X - Main.screenPosition.X + item.width * 0.5f,
-                    item.position.Y - Main.screenPosition.Y + item.height - texture.Height * 0.5f + 2f
-                ),
-                new Rectangle(0, 0, texture.Width, texture.Height),
-                AAColor.Shen3,
-                rotation,
-                texture.Size() * 0.5f,
-                scale,
-                SpriteEffects.None,
-                0f
-                );*/
-        }
+			Rectangle frame = BaseDrawing.GetFrame(0, texture.Width, texture.Height, 0, 0);
+			BaseDrawing.DrawTexture(spriteBatch, texture, r, item.position, item.width, item.height, item.scale, 0f, 0, 1, frame);
+		}
 
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             int r = GameShaders.Armor.GetShaderIdFromItemId(ItemID.LivingFlameDye);
             Texture2D texture = mod.GetTexture("Glowmasks/" + GetType().Name + "_Glow");
-            BaseDrawing.DrawTexture(spriteBatch, texture, r, item, null, false);
+            BaseDrawing.DrawTexture(spriteBatch, texture, r, position, item.width, item.height, item.scale, 0f, 0, 1, frame);
         }
     }
 }
