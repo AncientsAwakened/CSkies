@@ -36,6 +36,7 @@ namespace CSkies.Projectiles.Minions
 
         public override void AI()
         {
+          
             bool flag64 = projectile.type == mod.ProjectileType("Watcher");
             Player player = Main.player[projectile.owner];
             CPlayer modPlayer = player.GetModPlayer<CPlayer>();

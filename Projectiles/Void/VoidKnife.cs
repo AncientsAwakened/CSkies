@@ -19,12 +19,12 @@ namespace CSkies.Projectiles.Void
 			projectile.timeLeft = 60;
             projectile.extraUpdates = 1;
 		}
-		
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Void Knife");
 		}
-		
+
 		public override Color? GetAlpha(Color lightColor)
 		{
 			return Color.White;
@@ -73,7 +73,7 @@ namespace CSkies.Projectiles.Void
             projectile.ai[0] += 0.1f;
             projectile.velocity *= 0.75f;
         }
-		
+
 		int HomeOnTarget()
 		{
 			const bool homingCanAimAtWetEnemies = true;
@@ -100,7 +100,17 @@ namespace CSkies.Projectiles.Void
 		}
 
         public override void AI()
-        {
+        {//start of dust code
+          int accuracyOfDust = 20;
+          for (int j = 0; j < accuracyOfDust; j++)
+          {
+              double deg = j * (360/accuracyOfDust); //The degrees, you can multiply projectile.ai[1] to make it orbit faster, may be choppy depending on the value
+              double rad = deg * (Math.PI / 180); //Convert degrees to radians
+              int dustTimeBois = Dust.NewDust(new Vector2(projectile.position.X, projectile.position.Y), 1, 1, ModContent.DustType<Dusts.VoidDust>(), 0f, 0f, 0, new Color(255, 217, 184, 255), 0.5f);
+              Main.dust[dustTimeBois].position.X = projectile.Center.X - (int)(Math.Cos(rad) * 70);// the *100 part is the radius
+              Main.dust[dustTimeBois].position.Y = projectile.Center.Y - (int)(Math.Sin(rad) * 70);
+          }
+          //end of dust code
             const int aislotHomingCooldown = 0;
             const int homingDelay = 10;
             const float desiredFlySpeedInPixelsPerFrame = 20; //How fast can it go once in homing mode?
@@ -109,7 +119,7 @@ namespace CSkies.Projectiles.Void
             projectile.ai[aislotHomingCooldown]++;
             if (projectile.ai[aislotHomingCooldown] > homingDelay)
             {
-                projectile.ai[aislotHomingCooldown] = homingDelay; //cap this value 
+                projectile.ai[aislotHomingCooldown] = homingDelay; //cap this value
 
                 int foundTarget = HomeOnTarget();
                 if (foundTarget != -1)
